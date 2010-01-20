@@ -1,7 +1,37 @@
-on debian squeeze (and etch):
+#!/bin/bash
+installing jarvis: (on lenny)
+apt-get install -y dh-make-perl build-essential \
+                   libappconfig-perl liblog-dispatch-perl libio-stringy-perl \
+                   libpoe-perl libfilter-perl libnet-ldap-perl libconvert-asn1-perl \
+                   libpoe-component-irc-perl
 
-instance:
-   apt-get install -y libjson-perl libyaml-perl libwww-mechanize-perl \
-                      libcrypt-ssleay-perl
-jarvis:
-   apt-get install -y libpoe-perl libpoe-component-irc-perl
+[ -d /opt/local/src/CPAN ] || mkdir -p /opt/local/src/CPAN
+cd /opt/local/src/CPAN
+wget http://search.cpan.org/CPAN/authors/id/M/MI/MIYAGAWA/Log-Dispatch-Config-1.02.tar.gz
+[ -d Log-Dispatch-Config-1.02 ] && rm -fr Log-Dispatch-Config-1.02
+tar xvzf Log-Dispatch-Config-1.02.tar.gz
+(cd Log-Dispatch-Config-1.02; dh-make-perl; debian/rules binary)
+dpkg -i liblog-dispatch-config-perl_1.02-1_all.deb
+
+# libpoe-wheel-null-perl
+wget http://search.cpan.org/CPAN/authors/id/H/HA/HACHI/POE-Wheel-Null-0.01.tar.gz
+[ -d POE-Wheel-Null-0.01 ] && rm -fr POE-Wheel-Null-0.01
+tar xvzf POE-Wheel-Null-0.01.tar.gz
+(cd POE-Wheel-Null-0.01; dh-make-perl; debian/rules binary)
+dpkg -i libpoe-wheel-null-perl_0.01-1_all.deb
+
+# libpoe-component-client-ldap-perl 
+apt-get install -y libpoe-wheel-null-perl
+wget http://search.cpan.org/CPAN/authors/id/H/HA/HACHI/POE-Component-Client-LDAP-0.04.tar.gz
+[ -d POE-Component-Client-LDAP-0.04 ] && rm -fr POE-Component-Client-LDAP-0.04
+tar xvzf POE-Component-Client-LDAP-0.04.tar.gz
+(cd POE-Component-Client-LDAP-0.04; dh-make-perl; debian/rules binary)
+dpkg -i libpoe-component-client-ldap-perl_0.04-1_all.deb
+
+# libpoe-component-logger-perl
+wget http://search.cpan.org/CPAN/authors/id/M/MS/MSERGEANT/POE-Component-Logger-1.00.tar.gz
+[ -d POE-Component-Logger-1.00 ] && rm -fr POE-Component-Logger-1.00
+tar xvzf POE-Component-Logger-1.00.tar.gz
+(cd POE-Component-Logger-1.00; dh-make-perl ; debian/rules binary)
+dpkg -i libpoe-component-logger-perl_1.00-1_all.deb
+
