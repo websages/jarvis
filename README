@@ -1,0 +1,7 @@
+on debian squeeze (and etch):
+
+instance:
+   apt-get install -y libjson-perl libyaml-perl libwww-mechanize-perl \
+                      libcrypt-ssleay-perl
+jarvis:
+   apt-get install -y libpoe-perl libpoe-component-irc-perl

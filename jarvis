@@ -1,0 +1,440 @@
+#!/usr/bin/perl -wT
+BEGIN { unshift @INC, './lib' if -d './lib'; }
+use strict;
+use warnings;
+use AppConfig;
+use FileHandle;
+use File::Temp qw/ :mktemp  /;
+use Log::Dispatch::Config;
+use Log::Dispatch::Configurator::Hardwired;
+use POE qw(Wheel::Run);
+use POE qw(Component::IRC);
+use POE qw(Component::IRC::State);
+use POE qw(Component::Client::LDAP);
+use POE qw(Component::Logger);
+use Time::Local;
+use Data::Dumper;
+use YAML;
+
+$ENV{'PATH'}='/usr/local/bin:/usr/bin:/bin';
+$ENV{'IFS'}=' \t\n';
+
+my $cfg;
+if(-f "./.jarvisrc"){ 
+    $cfg=YAML::LoadFile("./.jarvisrc"); 
+}else{
+    # in the absence of a .jarvisrc, load this config, this is ignored if a .jarvisrc exists
+    $cfg=YAML::Load(<<"---"); 
+bot:
+  nickname: jarvis
+  ircname: Just Another Really Vigilant Infrastruture Sysadmin
+  server: 127.0.0.1
+  channels:
+    - '#puppies'
+  commands:
+    - regex: ls
+      command: 'ls -l [% ARG1 %]'
+    - regex: redeploy
+      command: './instance -n loki -f loki.websages.com -backr "Debian 5.0" -t linode'
+      description: 'Redeploy an instance'
+    - regex: say
+      command: 'echo [% ARGS %]'
+      description: 'parrot something back'
+logdir: /var/log/irc/
+---
+}
+
+my $protected_cmds=YAML::Load(<<"---"); 
+- regex: help
+  description: Get a list of commands. 
+- regex: savestate
+  description: Save the current commands and channels to the startup config.
+- regex: showstate
+  description: Display the current configuration
+- regex: addchannel
+  description: Add a new channel for the bot to monitor
+- regex: delchannel
+  description: Remove a channel from the bot's monitor list
+#- regex: addcommand
+#  description: Add a command to the bot
+#- regex: delcommand
+#  description: Remove a command from the bot
+- regex: gist
+  description: gist <lines>|<[[[H]H:][M]M]:[S]S> (e.g. 30 lines or :30 seconds)
+- regex: update
+  description: update pulls the latest and greatest code from version control
+- regex: reload
+  description: Re-load jarvis (will log out, restart and log back in)
+---
+foreach my $pc (reverse((@{ $protected_cmds }))){
+    unshift(@{ $cfg->{'bot'}->{'protected_commands'} },$pc);
+}
+
+if($cfg->{'logdir'}){
+    if(! -d $cfg->{'logdir'}){
+        my $pdir=$cfg->{'logdir'};
+        $pdir=~s/\/[^\/]*//;
+        if(-w $pdir){
+            mkdir("$cfg->{'logdir'}",0700);
+        }else{
+            print STDERR "cannot create $cfg->{'logdir'}. Logging will be disabled.\n";
+            $cfg->{'logdir'}=undef;
+        }
+   
+    }
+    if(! -w $cfg->{'logdir'}){
+            print STDERR "$cfg->{'logdir'} not writeable. Logging will be disabled.\n";
+            $cfg->{'logdir'}=undef;
+    }
+}
+
+my $log=undef;
+my $irc=undef;
+
+# We create a new PoCo-Logger object for each chatroom and one for private conversations...
+if($cfg->{'logdir'}){
+    $log = POE::Component::Logger->spawn(
+        ConfigFile => Log::Dispatch::Config->configure(
+                          Log::Dispatch::Configurator::Hardwired->new(
+                              # convert me to yaml and put me in the main config
+                              { 
+                                'file'   => {
+                                              'class'    => 'Log::Dispatch::File',
+                                              'min_level'=> 'debug',
+                                              'filename' => "$cfg->{'logdir'}/channel.log",
+                                              'mode'     => 'append',
+                                              'format'   => '%d{%Y%m%d %H:%M:%S} %m %n',
+                                            },
+                                'screen' => {
+                                               'class'    => 'Log::Dispatch::Screen',
+                                               'min_level'=> 'info',
+                                               'stderr'   => 0,
+                                               'format'   => '%m',
+                                            }
+                               }
+                               )), 'log') or warn "Cannot start Logging $!";
+}
+
+# We create a new PoCo-IRC object
+$irc = POE::Component::IRC->spawn( 
+                                      nick => $cfg->{'bot'}->{'nickname'},
+                                      ircname => $cfg->{'bot'}->{'ircname'},
+                                      server => $cfg->{'bot'}->{'server'},
+                                    ) or die "Cannot connect to $cfg->{'bot'}->{'server'} $!";
+
+POE::Session->create(
+                      inline_states => {
+                                         _start           => \&on_start,
+                                         got_child_stdout => \&on_child_stdout,
+                                         got_child_stderr => \&on_child_stderr,
+                                         got_child_close  => \&on_child_close,
+                                         got_child_signal => \&on_child_signal,
+                                       },
+                      package_states => [
+                                          main => [ qw(_default irc_001 irc_public irc_ping irc_msg) ],
+                                        ],
+                      heap           => { 
+                                          'irc' => $irc,
+                                          'log' => $log,
+                                         },
+                    );
+$poe_kernel->run();
+################################################################################
+# irc methods;
+################################################################################
+sub on_start {
+    my $heap = $_[HEAP];
+    # retrieve our component's object from the heap where we stashed it
+    
+    my $irc = $heap->{irc};
+    $irc->yield( register => 'all' );
+    $irc->yield( connect => { } );
+}
+
+sub irc_001 {
+    my $sender = $_[SENDER];
+    # Since this is an irc_* event, we can get the component's object by
+    # accessing the heap of the sender. Then we register and connect to the
+    # specified server.
+    my $irc = $sender->get_heap();
+    print "Connected to ", $irc->server_name(), "\n";
+    # we join our channels
+    $irc->yield( join => $_ ) for (@{ $cfg->{'bot'}->{'channels'} });
+    return;
+}
+
+sub irc_ping {
+    # do nothing.
+    return;
+}
+
+sub irc_public {
+    my ($sender, $who, $where, $what) = @_[SENDER, ARG0 .. ARG2];
+    my $nick = ( split /!/, $who )[0];
+    my $channel = $where->[0];
+    #log everything before we do anything with it.
+    $_[KERNEL]->post('logger', 'log', "$channel <$nick> $what");
+    $what=~s/[^a-zA-Z0-9:!\@#\%^&*\[\]_+=\- ]//g;
+    $what=~s/[\$\`\(]//g;
+    $what=~s/[)]//g;
+
+    my $shellcommand;
+    if(($what=~m/^$cfg->{'bot'}->{'nickname'}\s*:(.*)/)||($what=~m/!(.*)/)){
+        my $request=$1;
+        $request=~s/^\s+//; 
+        my @args=split(/\s+/,$request);
+        if($args[0]=~/addcommand/){
+         print;
+        }elsif($args[0]=~/delcommand/){
+         print;
+        }elsif($args[0]=~/showstate/){
+            my $tmpconf=YAML::Load(YAML::Dump($cfg)); 
+            delete $tmpconf->{'bot'}->{'protected_commands'};
+            foreach my $line (split(/\n/,YAML::Dump($tmpconf))){
+               $irc->yield( privmsg => $channel => "$line" );
+               $_[KERNEL]->post('logger', 'log', "$channel <$cfg->{'bot'}->{'nickname'}> $line");
+            }
+        }elsif($args[0]=~/savestate/){
+            my $tmpconf=YAML::Load(YAML::Dump($cfg)); 
+            delete $tmpconf->{'bot'}->{'protected_commands'};
+            open(CFG,">.jarvisrc")|| warn $!;
+            print CFG YAML::Dump($tmpconf);
+            close(CFG);
+        }elsif($args[0]=~/addchannel/){
+            for(my $i=1; $i<=$#args;$i++){
+                push(@{ $cfg->{'bot'}->{'channels'} },$args[$i]);
+                $irc->yield( join => $args[$i] );
+            }
+        }elsif($args[0]=~/delchannel/){
+            for(my $i=1; $i<=$#args;$i++){
+                $irc->yield( part => $args[$i] );
+            }
+            my @newchannels;
+            while(my $chan=shift(@{ $cfg->{'bot'}->{'channels'} })){
+                my $found=0;
+                for(my $i=1; $i<=$#args;$i++){
+                    if($chan eq $args[$i]){ $found=1; }
+                }
+                push(@newchannels,$chan) unless $found;
+            }
+            $cfg->{'bot'}->{'channels'} = [ @newchannels ];
+        }elsif($args[0]=~/update/){
+            external_command(\@_, "/bin/bash -c '/usr/bin/git pull'",$channel);
+        }elsif($args[0]=~/reload/){
+            exec './jarvis';
+        }elsif($args[0]=~/gist/){
+            my @gistlist;
+            my ($from, $now,$type,$unixlogtime);
+            my ($second, $minute, $hour, $dayOfMonth, $month, 
+                $yearOffset, $dayOfWeek, $dayOfYear, $daylightSavings) = localtime(time);
+            $now=timelocal($second,$minute,$hour,$dayOfMonth,$month,$yearOffset);
+            my $huh=1;
+            if($args[1]=~m/:/){
+                my @timespec=split(/:/,$args[1]);
+                my $s=pop(@timespec)||0;
+                my $m=pop(@timespec)||0;
+                my $h=pop(@timespec)||0;
+                my $deltat=(3600*$h+60*$m+$s);
+                $from=$now-$deltat;
+                $type='time';
+                print STDERR "gisting from $from to $now\n";
+                $huh=0;
+            }elsif($args[1]=~m/^\d+$/){
+                $huh=0;
+                $type='lines';
+                print STDERR "gisting last $args[1] lines\n";
+            }
+            if(!$huh){ 
+            my $fh = FileHandle->new("$cfg->{'logdir'}/channel.log", "r");
+            if (defined $fh){
+                while(my $logline=<$fh>){
+                    if($logline){
+                        chomp($logline);
+                        my @parts=split(" ",$logline);
+                        #skipped blank and bitched lines
+                        if($#parts>2){
+                            my $logdate=shift @parts;
+                            my $logtime=shift @parts;
+                            my $logevent=shift @parts;
+                            my $logtext=join(" ",@parts);
+                            my $logthen=$logdate." ".$logtime;
+                            if ($logthen=~m/(\d\d\d\d)(\d\d)(\d\d) (\d\d):(\d\d):(\d\d)/){
+                                # and it better.
+                                $unixlogtime=timelocal($6,$5,$4,$3,$2-1,$1-1900);
+                            }
+                            if($logevent eq $channel){
+                                if($type eq 'lines'){
+                                    push(@gistlist, join(" ",($logdate,$logtime,$logevent,$logtext)));
+                                }elsif(($from<=$unixlogtime)&&($unixlogtime<=$now)){ 
+                                    push(@gistlist, join(" ",($logdate,$logtime,$logevent,$logtext)));
+                                }
+                            }
+                        }
+                    }
+                }   
+                $fh->close;
+            }
+            }
+            if($type eq 'lines'){
+                my @trash=splice(@gistlist,0,$#gistlist-($args[1]-1));
+            }
+            my ($fh, $file) = mkstemp( "/dev/shm/gisttmp-XXXXX" );
+            open(GISTTMP,">$file");
+            foreach my $gistline (@gistlist){
+                print GISTTMP "$gistline\n";
+            }
+            close(GISTTMP);
+            open(GIST, "/usr/local/bin/gist -p < $file |");
+            chomp(my $url=<GIST>);
+            close(GIST);
+            $irc->yield( privmsg => $channel => "$url" );
+            $_[KERNEL]->post('logger', 'log', "$channel <$cfg->{'bot'}->{'nickname'}> $url");
+        }elsif($args[0]=~/help/){
+            my $line; my $command;
+            if(! defined $args[1]){
+                $line.="available commands:";
+                foreach $command (@{ $cfg->{'bot'}->{'protected_commands'} }, @{ $cfg->{'bot'}->{'commands'} }){
+                    $line.=" $command->{'regex'}";
+                }
+                $line.=" all";
+                $irc->yield( privmsg => $channel => "$line" );
+                $_[KERNEL]->post('logger', 'log', "$channel <$cfg->{'bot'}->{'nickname'}> $line");
+            }elsif($args[1] eq "all"){
+                foreach $command (@{ $cfg->{'bot'}->{'protected_commands'} }, @{ $cfg->{'bot'}->{'commands'} }){
+                    $line="$command->{'regex'}: ";
+                    $line.="$command->{'description'}" if $command->{'description'};
+                    $irc->yield( privmsg => $channel => "$line" );
+                    $_[KERNEL]->post('logger', 'log', "$channel <$cfg->{'bot'}->{'nickname'}> $line");
+                }
+            }else{
+                foreach $command (@{ $cfg->{'bot'}->{'protected_commands'} }, @{ $cfg->{'bot'}->{'commands'} }){
+                    if($args[1] eq $command->{'regex'}){
+                        $line.="$command->{'regex'}: ";
+                        $line.="$command->{'description'}\n" if $command->{'description'};
+                    }
+                }
+                $irc->yield( privmsg => $channel => "$line" );
+                $_[KERNEL]->post('logger', 'log', "$channel <$cfg->{'bot'}->{'nickname'}> $line");
+            }
+        }else{
+            foreach my $cmd (@{ $cfg->{'bot'}->{'commands'} }){
+                if($args[0] =~m/$cmd->{'regex'}/){
+                    my $tmp=shift @args;
+                    $tmp=join(" ",@args);
+                    $shellcommand=$cmd->{'command'};
+                    for(my $i=1;$i<=$#args;$i++){
+                        $shellcommand=~s/\[\% ARG$i \%\]/$args[$i-1]/g; 
+                    }
+                    $shellcommand=~s/\[\% ARGS \%\]/$tmp/g; 
+                    if($shellcommand=~m/\[\% ARG\S* \%\]/){
+                        $irc->yield( privmsg => $channel => "[$cmd->{'regex'}]: Too few arguments" );
+                        $_[KERNEL]->post('logger','log',"$channel <$cfg->{'bot'}->{'nickname'}> $cmd->{'regex'}: Too few arguments");
+                    }else{
+                        external_command(\@_, $shellcommand ,$channel);
+                    }
+                }
+            }
+            #$irc->yield( privmsg => $channel => "[$shellcommand]" );
+            #$_[KERNEL]->post('logger', 'log', "$channel <$cfg->{'bot'}->{'nickname'}> [$shellcommand]");
+        }
+    }
+    return;
+}
+
+sub irc_msg {
+    my ($sender, $who, $where, $what) = @_[SENDER, ARG0 .. ARG2];
+    my $nick = ( split /!/, $who )[0];
+    my $channel = $where->[0];
+    if ( $what =~m/(.+)/ ) {
+        $_[KERNEL]->post('logger', 'log', "#privmsg [$nick($cfg->{'bot'}->{'nickname'})] $what");
+        $irc->yield( privmsg => $nick => "I don't really do private messages." );
+        $_[KERNEL]->post('logger', 'log', "#privmsg [$cfg->{'bot'}->{'nickname'}($who)] I don't really do private messages.");
+    }
+    return;
+}
+
+# We registered for all events, this will produce some debug info.
+sub _default {
+    my ($event, $args) = @_[ARG0 .. $#_];
+    my @output = ( "$event: " );
+
+    my ($sender, $who, $where, $what) = @_[SENDER, ARG0 .. ARG2];
+    my $nick = ( split /!/, $who )[0];
+    for my $arg (@$args) {
+        if ( ref $arg eq 'ARRAY' ) {
+            push( @output, '[' . join(', ', @$arg ) . ']' );
+        }
+        else {
+            push ( @output, "'$arg'");
+        }
+    }
+    $_[KERNEL]->post('logger', 'log', join ' ', @output);
+    return 0;
+}
+
+################################################################################
+# shellout methods;
+################################################################################
+sub external_command {
+    my $poe=shift if@_;
+    my $command=shift if@_;
+    my $channel=shift if@_;
+    return undef unless $command;
+    my $child = POE::Wheel::Run->new(
+                                      Program => [ $command ],
+                                      StdoutEvent  => "got_child_stdout",
+                                      StderrEvent  => "got_child_stderr",
+                                      CloseEvent   => "got_child_close",
+                                    );
+    $poe->[KERNEL]->sig_child($child->PID, "got_child_signal");
+    # Wheel events include the wheel's ID.
+    $poe->[HEAP]{children_by_wid}{$child->ID} = $child;
+    $poe->[HEAP]{children_by_wid}{'channel'} = $channel;
+    # Signal events include the process ID.
+    $poe->[HEAP]{children_by_pid}{$child->PID} = $child;
+    print( "Child pid ", $child->PID, " started as wheel ", $child->ID, ".\n");
+    return 1;
+}
+
+# Wheel event, including the wheel's ID.
+sub on_child_stdout {
+    my ($stdout_line, $wheel_id) = @_[ARG0, ARG1];
+    my $child = $_[HEAP]{children_by_wid}{$wheel_id};
+    $irc->yield( privmsg => $_[HEAP]{children_by_wid}{'channel'} => "$stdout_line" );
+    $_[KERNEL]->post('logger', 'log', $_[HEAP]{children_by_wid}{'channel'}." <$cfg->{'bot'}->{'nickname'}> $stdout_line");
+    print "pid ", $child->PID, " STDOUT: $stdout_line\n";
+}
+
+# Wheel event, including the wheel's ID.
+sub on_child_stderr {
+    my ($stderr_line, $wheel_id) = @_[ARG0, ARG1];
+    my $child = $_[HEAP]{children_by_wid}{$wheel_id};
+    #$irc->yield( privmsg => $_[HEAP]{children_by_wid}{'channel'} => "$stderr_line" );
+    #$_[KERNEL]->post('logger', 'log', $_[HEAP]{children_by_wid}{'channel'}." <$cfg->{'bot'}->{'nickname'}> $stderr_line");
+    print "pid ", $child->PID, " STDERR: $stderr_line\n";
+}
+
+# Wheel event, including the wheel's ID.
+sub on_child_close {
+    my $wheel_id = $_[ARG0];
+    my $child = delete $_[HEAP]{children_by_wid}{$wheel_id};
+
+    # May have been reaped by on_child_signal().
+    unless (defined $child) {
+      print "wid $wheel_id closed all pipes.\n";
+      return;
+    }
+
+    print "pid ", $child->PID, " closed all pipes.\n";
+    delete $_[HEAP]{children_by_pid}{$child->PID};
+}
+
+sub on_child_signal {
+    print "pid $_[ARG1] exited with status $_[ARG2].\n";
+    my $child = delete $_[HEAP]{children_by_pid}{$_[ARG1]};
+
+    # May have been reaped by on_child_close().
+    return unless defined $child;
+
+    delete $_[HEAP]{children_by_wid}{$child->ID};
+}
