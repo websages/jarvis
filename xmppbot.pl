@@ -77,7 +77,7 @@ POE::Session->create(
 				# StateParent is optional unless you want another session
 				# to receive events from PCJ
 
-						#StateParent => 'Tester',
+						StateParent => 'Tester',
 						States => {
 							StatusEvent => 'status_event',
 							InputEvent => 'input_event',

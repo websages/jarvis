@@ -148,7 +148,6 @@ sub irc_msg {
     return;
 }
 
-
 sub irc_ping {
     my $self = $_[OBJECT];
     # do nothing.
