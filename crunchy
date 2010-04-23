@@ -1,0 +1,452 @@
+#!/usr/bin/perl -w
+
+BEGIN { unshift @INC, './lib'; }
+
+use IRCBot::Chatbot::Pirate;
+use AI::MegaHAL;
+use LWP::UserAgent;
+use POE;
+use POE::Component::IRC;
+use POE::Wheel::FollowTail;
+use POSIX qw( setsid );
+
+use warnings;
+use strict;
+
+# ---
+
+#daemonize();
+
+# ---
+
+$| = 1;
+
+POE::Session->create(
+    inline_states => {
+        _start => sub {
+            $_[HEAP]->{'first'} = 0;
+
+#        $_[HEAP]->{'mail'} =
+#            POE::Wheel::FollowTail->new(
+#            Filename   => '/opt/crunchy/messages',
+#            InputEvent => 'mailGotLine',
+#            SeekBack   => 0
+#        );
+
+            $_[HEAP]->{'irc'} =
+                POE::Component::IRC->new( 'localhost' );
+
+            $_[KERNEL]->post(
+                localhost => register => 'all'
+            );
+
+            $_[KERNEL]->post(
+                localhost => connect => {
+                    Nick       => 'crunchy',
+                    Username   => 'crunchy',
+                    Ircname    => 'Cap\'n Crunchbot',
+                    Server     => 'localhost',
+                    Port       => '6667'
+                }
+            );
+        },
+
+        mailGotLine => \&mailGotLine,
+
+        irc_001    => \&ircConnect,
+        irc_public => \&ircGotMsgPub,
+        irc_msg    => \&ircGotMsgPriv,
+        irc_join   => \&ircJoin,
+#        irc_whois  => \&ircWhois
+    }
+);
+
+my $megahal = new AI::MegaHAL(
+    'Path'     => '/usr/lib/share/crunchy',
+    'Banner'   => 0,
+    'Prompt'   => 0,
+    'Wrap'     => 0,
+    'AutoSave' => 1
+);
+
+$poe_kernel->run();
+
+# --
+
+sub daemonize {
+    defined( my $pid = fork() ) or die "Can't fork: $!\n";
+    exit if $pid;
+    setsid or die "Can't start a new session: $!\n";
+}
+
+# --
+
+#sub mailGotLine {
+#    return unless $_[HEAP]->{'first'}++;
+#
+#    $_[KERNEL]->post(
+#        localhost => privmsg => '#soggies', "[mobile/$1]: $2"
+#    ) if $_[ARG0] =~ /^(.+?):\s+(.*)$/;
+#
+#    ircHandleMsg(
+#        nick   => $1,
+#        msg    => $2,
+#        type   => 'public',
+#        where  => '#soggies',
+#        kernel => $_[KERNEL],
+#        heap   => $_[HEAP]
+#    );
+#}
+
+sub ircConnect { $_[KERNEL]->post( localhost => join => '#soggies' ); }
+
+#sub ircWhois {
+#    print "got a irc_whois event.\n";
+#    $_[KERNEL]->post(
+#        localhost => privmsg => '#soggies', "$_[ARG0]{'user'}"
+#    );
+#}
+
+sub ircGotMsgPub {
+    ircHandleMsg(
+        nick   => ( split /!/, $_[ARG0] )[0],
+        user   => ( split /!/, $_[ARG0] )[1],
+        msg    => $_[ARG2],
+        type   => 'public',
+        where  => $_[ARG1],
+        kernel => $_[KERNEL],
+        heap   => $_[HEAP]
+    );
+
+#    $_[KERNEL]->post(
+#        localhost => privmsg => '#soggies', $_[ARG0]
+#    );
+
+}
+
+sub ircGotMsgPriv {
+    ircHandleMsg(
+        nick   => ( split /!/, $_[ARG0] )[0],
+        msg    => $_[ARG2],
+        type   => 'private',
+        where  => $_[ARG1],
+        kernel => $_[KERNEL],
+        heap   => $_[HEAP]
+    );
+}
+
+sub ircJoin {
+    my @o = qw(
+        bradejr
+        bradley
+        chris
+        cluckcj
+        geoff
+        heath
+        james
+        kevin
+        scott
+        teyo
+    );
+
+    my $nick = ( split /!/, $_[ARG0] )[0];
+
+    if ( grep /$nick/, @o ) {
+        $_[KERNEL]->post( 'localhost', 'mode', '#soggies' . " +o $nick" );
+    }
+}
+
+# --
+
+sub ircHandleMsg {
+    my %arg = @_;
+
+    my $r;
+
+    $arg{'user'} = ( split /@/, $arg{'user'} )[0];
+
+    for ( $arg{'msg'} ) {
+        /^crunchy/ and do {
+            $_ =~ s/^crunchy(.+?)/$1/;
+            $_ =~ s/^\s+//;
+            $_ =~ s/^://;
+            $_ =~ s/^\s+//;
+
+            /^help$/ && do {
+                $r = "Available help topics: fortune soggies image insult quote link shoutout standings weather tell tumble";
+                next;
+            };
+
+            /^help (.*)/ && do {
+                my $topic = $1;
+
+                for ( $topic ) {
+                    my ($r1);     
+
+                    /fortune/ && do {
+                        $r  = "description: Display a random fortune\n";
+                        $r .= "syntax/use : fortune";
+                     };
+
+                    /image/ && do {
+                        $r  = "description: Add an image to tumble\n";
+                        $r .= "syntax/use : e-mail to tumble\@wcyd.org";
+                    };
+
+                    /quote/ && do {
+                        $r  = "description: Add a quote to tumble\n";
+                        $r .= "syntax/use : \"Quote quote quote...\" -- Author";
+                    };
+
+                    /link/ && do {
+                        $r  = "description: Add a link to tumble\n";
+                        $r .= "syntax/use : Cut and paste a link into irc, stupid.";
+                    };
+
+                    /shoutout/ && do {
+                        $r  = "description: Send a textpage to everyone\n";
+                        $r .= "syntax/use : !shoutout beer @ bbh now, bitches.";
+                    };
+
+                    /standings/ && do {
+                        $r  = "description: Baseball standings\n";
+                        $r .= "syntax/use : To piss off Heath.";
+                    };
+
+		    /weather/ && do {
+		        $r  = "description: Weather report\n";
+			$r .= "syntax/use : !weather <zip/city/whatevah>.";
+		    };
+
+		    /insult/ && do {
+		        $r  = "description: Insult someone\n";
+			$r .= "syntax/use : !insult <target (optional)>";
+		    };
+                    
+		    /tell/ && do {
+                        $r .= "description: Send a textpage to an individual\n";
+                        $r  = "syntax/use : !tell james: you are a fag.";
+                    };
+
+                    /tumble/ && do {
+                        $r  = "description: Our tumblelog\n";
+                        $r .= "syntax/use : http://tumble.wcyd.org/";
+                    };
+
+                    if ( $r ) {
+                        my ( $d );
+ 
+                        for ( $arg{'type'} ) {
+                            /private/ and $d = $arg{'nick'};
+                            /public/  and $d = '#soggies';
+                        }
+
+                        my ( @l ) = split /\n/, $r;
+
+                        map {
+                            $arg{'kernel'}->post(
+                                localhost => privmsg => $d, $_
+                            );
+                        } @l;
+
+                        $r = undef;
+
+                        next;
+                    } else {
+                        $r = "Topic $topic not found.";
+                    }
+                };
+
+                next;
+            };
+
+            $r = lc $megahal->do_reply( $_ );
+            next;
+        };
+
+        /^fortune$/ and do {
+            $r = qx( /usr/local/bin/fortune -s );
+            next;
+        };
+
+        /^^!shoutout/ and do {
+            $_ =~ s/^!shoutout (.+?)/$1/;
+            $r = qx( /usr/local/bin/shoutout "[from $arg{'nick'}] $_" );
+            next;
+        };
+
+        /^^!tell\s+(.+?):\s+(.+?)$/ and do {
+            $arg{'kernel'}->post( localhost => whois => $1 );
+
+            $r = qx( /usr/local/bin/page $arg{'nick'} $1 "$2" );
+            next;
+        };
+
+        /^^!weather\s+(.+?)$/ and do {
+            $r = qx( ruby /usr/local/bin/weather.rb $1 );
+            next;
+        };
+        
+	/^^!insult\s?(.+?)$/ and do {
+            $r = qx( ruby /usr/local/bin/insult.rb $1 );
+            next;
+        };
+        
+	/^^!standings/ and do {
+#            $r = qx( /usr/local/bin/standings );
+            use LWP::Simple;
+            use HTML::Parser;
+
+            my $content = get( 'http://sports.yahoo.com/mlb/standings' );
+
+            my $p = HTML::Parser->new(
+                api_version => 3,
+                start_h     => [ \&tr_start_handler, 'self,tagname,attr' ],
+                report_tags => [ qw( tr ) ],
+            );
+            
+            my ( $d );
+                                                
+            for ( $arg{'type'} ) { 
+                /private/ and $d = $arg{'nick'};
+                /public/  and $d = '#soggies';
+            }
+
+            my $h = sprintf "%-20s %-5s %-5s %-7s %-6s %-7s\n",
+                '', 'W', 'L', ' Pct', 'GB', 'L10';
+
+            $arg{'kernel'}->post( localhost => privmsg => $d, $h);
+
+            $p->parse( $content );
+
+            sub tr_start_handler {
+                my ( $self, $tag, $attr ) = @_;
+
+                return unless $tag eq 'tr';
+
+                $self->handler( text => [], '@{dtext}' );
+                $self->handler( end  => \&tr_end_handler, 'self,tagname' );
+            }
+            next;
+
+            sub tr_end_handler {
+                my ( $self, $tag ) = @_;
+
+                my $text = join( '', @{$self->handler( 'text' )} );
+                $text =~ s/^\s+//;
+                $text =~ s/\s+$//;
+                $text =~ s/\s+/ /g;
+
+                return unless (
+                    $text =~ /Atlanta Braves/   ||
+                    $text =~ /New York Mets/ ||
+                    $text =~ /Washington Nationals/ ||
+                    $text =~ /Chicago Cubs/
+                );
+
+                if ( $text =~m/(Chicago Cubs|Atlanta Braves|New York Mets|Washington Nationals)\s+(\d+.*)/ ) {
+                    my $team = $1;
+                    my $other = $2;
+                    if ( $other =~ /(\d+)\s(\d+)\s(\d{0,1}\.\d+)\s+(.+?)\s+(\d+\-\d+)\s+(\d+\-\d+)\s+(\d+\-\d+)\s+(\d+\-\d+)\s+(\d+\-\d+)\s+(.+?)\s+(\d+\-\d+)/ ) {
+                        my $wins = $1;
+                        my $losses = $2;
+                        my $pct = $3;
+                        my $gb = $4;
+                        my $home = $5;
+                        my $road = $6;
+                        my $east = $7;
+                        my $west = $8;
+                        my $central = $9;
+                        my $streak = $10;
+                        my $l10 = $11;
+
+                        my $q = sprintf "%-20s %-5s %-5s %-7s %-6s %-7s\n",
+                            $team, $wins, $losses, $pct, $gb, $l10;
+
+                        $arg{'kernel'}->post(
+                            localhost => privmsg => $d, $q
+                        );
+                    }
+                }
+            }
+
+            next;
+        };
+
+        /(http:\S+)/ and do {
+            my $url = $1;
+
+            my $agent;
+
+            unless ( $agent = $arg{'heap'}->{'useragent'} ) {
+                $agent = LWP::UserAgent->new();
+                $agent->agent( 'Mozilla/5.0' );
+                $arg{'heap'}->{'useragent'} = $agent;
+            }
+
+            $url =~ s/\&/\%26/g;
+
+            my $response = $agent->get(
+                "http://tumble.wcyd.org/irclink/?user="
+                . $arg{'nick'}
+                . "&source=irc&url=$url"
+            );
+
+            if ( $response->content eq '0' ) {
+                $r = 'Invalid link!'
+            }
+            else {
+                $r = 'http://tumble.wcyd.org/irclink/?' . $response->content;
+            }
+
+            next;
+        };
+
+        /\"(.+?)\"\s--(.+?)$/ and do {
+            my $quote  = $1;
+            my $author = $2;
+
+            my $agent;
+
+            unless ($agent = $arg{'heap'}->{'useragent'}) {
+                $agent = LWP::UserAgent->new();
+                $agent->agent( 'Mozilla/5.0' );
+                $arg{'heap'}->{'useragent'} = $agent;
+            }   
+
+            $quote  =~ s/\&/\%26/g;
+            $author =~ s/\&/\%26/g;
+
+            my $response = $agent->get(
+                'http://tumble.wcyd.org/quote/?quote='
+                . $quote 
+               . "&author=$author"
+            );
+
+            next;
+        };
+
+        /(.*)/ and do {
+            $r = lc $megahal->do_reply( $_ );
+           undef $r;
+           next;
+       };
+
+    }
+
+    if ($r) {
+        $r =~ s/\n/ /g;
+        $r = piratespeak( $r );
+
+        my ( $d );
+
+        for ( $arg{'type'} ) {
+            /private/ and $d = $arg{'nick'};
+            /public/  and $d = '#soggies';
+        }
+
+        $arg{'kernel'}->post( localhost => privmsg => $d, $r );
+    }
+}
+
+

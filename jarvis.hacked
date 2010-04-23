@@ -1,8 +1,4 @@
 #!/usr/bin/perl -wT
-$ENV{'PATH'}='/usr/local/bin:/usr/bin:/bin';
-$ENV{'IFS'}=' \t\n';
-BEGIN { unshift @INC, './lib' if -d './lib'; }
-
 package Jarvis::IRC;
 use strict;
 use warnings;
@@ -26,11 +22,12 @@ sub new{
     my $self  = {};
     my $construct = shift if @_;
     bless($self, $class);
-    if $construct{
+    if($construct){
         $self->load_config($construct);
     }else{
         $self->load_config();
     }
+    $self->load_protected_commands();
     return $self;
 }
 
@@ -41,14 +38,14 @@ sub indented_yaml{
      my @lines = split('\n', $iyaml);
      my $min_indent=-1;
      foreach my $line (@lines){
-         my $chars = split('',$line);
+         my @chars = split('',$line);
          my $spcidx=0;
          foreach my $char (@chars){
              if($char eq ' '){
                  $spcidx++;
              }else{
-                 if(($minidx == -1) || ($minidx > $spcidx)){
-                     $minidx=$spcidx;
+                 if(($min_indent == -1) || ($min_indent > $spcidx)){
+                     $min_indent=$spcidx;
                  }
              } 
          }
@@ -56,114 +53,127 @@ sub indented_yaml{
      foreach my $line (@lines){
          $line=~s/ {$min_indent}//;
      }
-     my $yaml=join('\n',$yaml);
+     my $yaml=join('\n',$iyaml);
      return YAML::Load($yaml);
 
 }
 
 sub load_config{
-    if(-f "./.jarvisrc"){ 
-        $cfg=YAML::LoadFile("./.jarvisrc"); 
+    my $self=shift; 
+    my $construct = shift if @_;
+    $self->{'cfg_file'}="./.jarvisrc";
+    if(defined($construct->{'config'})){
+        $self->{'cfg_file'} = $construct->{'config'};    
+    }
+    if(-f $self->{'cfg_file'} ){ 
+        $self->{'cfg'}=YAML::LoadFile($self->{'cfg_file'}); 
     }else{
         # in the absence of a .jarvisrc, load this config, this is ignored if a .jarvisrc exists
-        $cfg=YAML::Load(<<"    ---"); 
-    bot:
-      nickname: jarvis
-      ircname: Just Another Really Vigilant Infrastruture Sysadmin
-      server: 127.0.0.1
-      channels:
-        - '#puppies'
-      commands:
-        - regex: ls
-          command: 'ls -l [% ARG1 %]'
-        - regex: redeploy
-          command: './instance -n loki -f loki.websages.com -backr "Debian 5.0" -t linode'
-          description: 'Redeploy an instance'
-        - regex: say
-          command: 'echo [% ARGS %]'
-          description: 'parrot something back'
-    logdir: /var/log/irc/
-    ---
+        $self->{'cfg'}=$self->indented_yaml(<<"            ---"); 
+            bot:
+              nickname: jarvis
+              ircname: Just Another Really Vigilant Infrastruture Sysadmin
+              server: irc.eftdomain.net
+              channels:
+                - '#puppies'
+              commands:
+                - regex: ls
+                  command: 'ls -l [% ARG1 %]'
+                - regex: redeploy
+                  command: './instance -n loki -f loki.websages.com -backr "Debian 5.0" -t linode'
+                  description: 'Redeploy an instance'
+                - regex: say
+                  command: 'echo [% ARGS %]'
+                  description: 'parrot something back'
+            logdir: /var/log/irc/
+            ---
+   }
 }
 
-}
-my $protected_cmds=YAML::Load(<<"---"); 
-- regex: help
-  description: Get a list of commands. 
-- regex: savestate
-  description: Save the current commands and channels to the startup config.
-- regex: showstate
-  description: Display the current configuration
-- regex: addchannel
-  description: Add a new channel for the bot to monitor
-- regex: delchannel
-  description: Remove a channel from the bot's monitor list
-#- regex: addcommand
-#  description: Add a command to the bot
-#- regex: delcommand
-#  description: Remove a command from the bot
-- regex: gist
-  description: gist <lines>|<[[[H]H:][M]M]:[S]S> (e.g. 30 lines or :30 seconds)
-- regex: update
-  description: update pulls the latest and greatest code from version control
-- regex: reload
-  description: Re-load jarvis (will log out, restart and log back in)
----
-foreach my $pc (reverse((@{ $protected_cmds }))){
-    unshift(@{ $cfg->{'bot'}->{'protected_commands'} },$pc);
-}
-
-if($cfg->{'logdir'}){
-    if(! -d $cfg->{'logdir'}){
-        my $pdir=$cfg->{'logdir'};
-        $pdir=~s/\/[^\/]*//;
-        if(-w $pdir){
-            mkdir("$cfg->{'logdir'}",0700);
-        }else{
-            print STDERR "cannot create $cfg->{'logdir'}. Logging will be disabled.\n";
-            $cfg->{'logdir'}=undef;
-        }
-   
+sub load_protected_commands{
+    my $self = shift;
+    $protected_cmds = $self->indented_yaml(<<"        ---"); 
+        - regex: help
+          description: Get a list of commands. 
+        - regex: savestate
+          description: Save the current commands and channels to the startup config.
+        - regex: showstate
+          description: Display the current configuration
+        - regex: addchannel
+          description: Add a new channel for the bot to monitor
+        - regex: delchannel
+          description: Remove a channel from the bot's monitor list
+        #- regex: addcommand
+        #  description: Add a command to the bot
+        #- regex: delcommand
+        #  description: Remove a command from the bot
+        - regex: gist
+          description: gist <lines>|<[[[H]H:][M]M]:[S]S> (e.g. 30 lines or :30 seconds)
+        - regex: update
+          description: update pulls the latest and greatest code from version control
+        - regex: reload
+          description: Re-load jarvis (will log out, restart and log back in)
+        ---
+    foreach my $pc (reverse((@{ $protected_cmds }))){
+        unshift(@{ $self->{'bot'}->{'protected_commands'} },$pc);
     }
-    if(! -w $cfg->{'logdir'}){
-            print STDERR "$cfg->{'logdir'} not writeable. Logging will be disabled.\n";
-            $cfg->{'logdir'}=undef;
-    }
+    return $self;
 }
 
-my $log=undef;
-my $irc=undef;
-
-# We create a new PoCo-Logger object for each chatroom and one for private conversations...
-if($cfg->{'logdir'}){
-    $log = POE::Component::Logger->spawn(
-        ConfigFile => Log::Dispatch::Config->configure(
-                          Log::Dispatch::Configurator::Hardwired->new(
-                              # convert me to yaml and put me in the main config
-                              { 
-                                'file'   => {
-                                              'class'    => 'Log::Dispatch::File',
-                                              'min_level'=> 'debug',
-                                              'filename' => "$cfg->{'logdir'}/channel.log",
-                                              'mode'     => 'append',
-                                              'format'   => '%d{%Y%m%d %H:%M:%S} %m %n',
-                                            },
-                                'screen' => {
-                                               'class'    => 'Log::Dispatch::Screen',
-                                               'min_level'=> 'info',
-                                               'stderr'   => 0,
-                                               'format'   => '%m',
-                                            }
-                               }
-                               )), 'log') or warn "Cannot start Logging $!";
-}
+#sub setup_logs{
+#    my $self = shift;
+#    my $logdir=shift if @_;
+#    if($cfg->{'logdir'}){
+#    if(! -d $cfg->{'logdir'}){
+#        my $pdir=$cfg->{'logdir'};
+#        $pdir=~s/\/[^\/]*//;
+#        if(-w $pdir){
+#            mkdir("$cfg->{'logdir'}",0700);
+#        }else{
+#            print STDERR "cannot create $cfg->{'logdir'}. Logging will be disabled.\n";
+#            $cfg->{'logdir'}=undef;
+#        }
+#   
+#    }
+#    if(! -w $cfg->{'logdir'}){
+#            print STDERR "$cfg->{'logdir'} not writeable. Logging will be disabled.\n";
+#            $cfg->{'logdir'}=undef;
+#    }
+#}
+#
+##my $log=undef;
+#my $irc=undef;
+#
+## We create a new PoCo-Logger object for each chatroom and one for private conversations...
+#if($cfg->{'logdir'}){
+#    $log = POE::Component::Logger->spawn(
+#        ConfigFile => Log::Dispatch::Config->configure(
+#                          Log::Dispatch::Configurator::Hardwired->new(
+#                              # convert me to yaml and put me in the main config
+#                              { 
+#                                'file'   => {
+#                                              'class'    => 'Log::Dispatch::File',
+#                                              'min_level'=> 'debug',
+#                                              'filename' => "$cfg->{'logdir'}/channel.log",
+#                                              'mode'     => 'append',
+#                                              'format'   => '%d{%Y%m%d %H:%M:%S} %m %n',
+#                                            },
+#                                'screen' => {
+#                                               'class'    => 'Log::Dispatch::Screen',
+#                                               'min_level'=> 'info',
+#                                               'stderr'   => 0,
+#                                               'format'   => '%m',
+#                                            }
+#                               }
+#                               )), 'log') or warn "Cannot start Logging $!";
+#}
 
 # We create a new PoCo-IRC object
-$irc = POE::Component::IRC->spawn( 
-                                      nick => $cfg->{'bot'}->{'nickname'},
-                                      ircname => $cfg->{'bot'}->{'ircname'},
-                                      server => $cfg->{'bot'}->{'server'},
-                                    ) or die "Cannot connect to $cfg->{'bot'}->{'server'} $!";
+#$irc = POE::Component::IRC->spawn(
+#                                      nick => $cfg->{'bot'}->{'nickname'},
+#                                      ircname => $cfg->{'bot'}->{'ircname'},
+#                                      server => $cfg->{'bot'}->{'server'},
+#                                    ) or die "Cannot connect to $cfg->{'bot'}->{'server'} $!";
 
 POE::Session->create(
                       inline_states => {
@@ -185,31 +195,31 @@ $poe_kernel->run();
 ################################################################################
 # irc methods;
 ################################################################################
-sub on_start {
-    my $heap = $_[HEAP];
-    # retrieve our component's object from the heap where we stashed it
-    
-    my $irc = $heap->{irc};
-    $irc->yield( register => 'all' );
-    $irc->yield( connect => { } );
-}
+#sub on_start {
+#    my $heap = $_[HEAP];
+#    # retrieve our component's object from the heap where we stashed it
+#    
+#    my $irc = $heap->{irc};
+#    $irc->yield( register => 'all' );
+#    $irc->yield( connect => { } );
+#}
 
-sub irc_001 {
-    my $sender = $_[SENDER];
-    # Since this is an irc_* event, we can get the component's object by
-    # accessing the heap of the sender. Then we register and connect to the
-    # specified server.
-    my $irc = $sender->get_heap();
-    print "Connected to ", $irc->server_name(), "\n";
-    # we join our channels
-    $irc->yield( join => $_ ) for (@{ $cfg->{'bot'}->{'channels'} });
-    return;
-}
+#sub irc_001 {
+#    my $sender = $_[SENDER];
+#    # Since this is an irc_* event, we can get the component's object by
+#    # accessing the heap of the sender. Then we register and connect to the
+#    # specified server.
+#    my $irc = $sender->get_heap();
+#    print "Connected to ", $irc->server_name(), "\n";
+#    # we join our channels
+#    $irc->yield( join => $_ ) for (@{ $cfg->{'bot'}->{'channels'} });
+#    return;
+#}
 
-sub irc_ping {
-    # do nothing.
-    return;
-}
+#sub irc_ping {
+#    # do nothing.
+#    return;
+#}
 
 sub irc_public {
     my ($sender, $who, $where, $what) = @_[SENDER, ARG0 .. ARG2];
@@ -481,3 +491,6 @@ sub on_child_signal {
 
     delete $_[HEAP]{children_by_wid}{$child->ID};
 }
+
+my $j = new Jarvis::IRC;
+print Data::Dumper->Dump([$j]);
