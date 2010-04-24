@@ -20,7 +20,7 @@ sub new   {
              my $class = shift; 
              my $self = {}; 
              my $construct = shift if @_;
-             foreach my $attr ("ip", "port", "domain", "username" "password","alias","connection_type"){
+             foreach my $attr ("ip", "port", "domain", "username", "password", "alias", "connection_type"){
                  if(defined($construct->{$attr})){ 
                      $self->{$attr} = $construct->{$attr}; 
                  }else{
