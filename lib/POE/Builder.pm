@@ -5,7 +5,7 @@ sub new {
     my $self = {}; 
     my $construct = shift if @_;
     $self->{'session_struct'}={};
-    foreach my $attr ("alias","debug"){
+    foreach my $attr ("alias","debug","trace"){
          if(defined($construct->{$attr})){
              $self->{$attr} = $construct->{$attr};
          }else{
@@ -73,7 +73,7 @@ sub create(){
                                                               },
     
                                             },
-                          heap           => { 'objects'  => $self->heap_objects() }
+                          #heap           => { 'objects'  => $self->heap_objects() }
                     );
 }
 
