@@ -47,7 +47,7 @@ sub object_session(){
             $aliased_object_states->{$event} = $object_states->{$event};
         }
     }
-    POE::Session->create(
+    push( @{ $self->{'sessions'} }, POE::Session->create(
                           options => { debug => $self->{'debug'}, trace => $self->{'trace'} },
                           object_states =>  [ $object => $object_states ],
                           inline_states =>  {
@@ -64,7 +64,7 @@ sub object_session(){
     
                                             },
                           heap           => { $self->{'alias'} => $object }
-                    );
+                    ));
 }
 
 
