@@ -37,9 +37,9 @@ sub object_session(){
     my $object_states = $self->object_states();
     my $aliased_object_states;
     foreach my $event (keys(%{ $object_states })){
-        if($key=!m/^_/){
+        if($event=!m/^_/){
             # if it starts with and _underscore, prepend the alias to it, so we don't collide
-            $aliased_object_states->{$alias.$event} = $object_states->{$event};
+            $aliased_object_states->{$object->alias().$event} = $object_states->{$event};
         }else{
             # otherwise, just pass the event straight through.
             $aliased_object_states->{$event} = $object_states->{$event};
