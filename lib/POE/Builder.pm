@@ -34,7 +34,7 @@ sub heap_objects{
 sub object_session(){
     my $self=shift;
     my $object = shift if @_;
-    my $object_states = $self->object_states();
+    my $object_states = $object->states();
     my $aliased_object_states;
     foreach my $event (keys(%{ $object_states })){
         if($event=!m/^_/){
