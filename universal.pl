@@ -26,6 +26,7 @@ my $session = new POE::Builder;
                                             ), 
                              'irc'
                            );
+   $session->create();
    $session->add_poe_object( new Jarvis::Jabber(
                                                  {
                                                    'ip'              => 'thor.websages.com',
@@ -38,7 +39,6 @@ my $session = new POE::Builder;
                                                ), 
                              'xmpp'
                            );
-   $session->create();
 
 POE::Kernel->run();
 
