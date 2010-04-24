@@ -5,6 +5,14 @@ sub new {
     my $self = {}; 
     my $construct = shift if @_;
     $self->{'session_struct'}={};
+    foreach my $attr ("alias"){
+         if(defined($construct->{$attr})){
+             $self->{$attr} = $construct->{$attr};
+         }else{
+             print STDERR "Required session constructor attribute [$attr] not defined. Terminating POE::Builder->create() session\n";
+             return undef;
+         }
+    }
     bless($self,$class);
     return $self;
 }
@@ -43,14 +51,6 @@ sub heap_objects{
 
 sub create(){
     my $self=shift;
-    foreach my $attr ("alias"){
-         if(defined($construct->{$attr})){
-             $self->{$attr} = $construct->{$attr};
-         }else{
-             print STDERR "Required session constructor attribute [$attr] not defined. Terminating POE::Builder->create() session\n";
-             return undef;
-         }
-    }
     POE::Session->create(
                           options => { debug => 1, trace => 1 },
                           object_states =>  $self->object_states(), 
