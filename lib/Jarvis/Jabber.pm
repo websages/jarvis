@@ -66,7 +66,7 @@ sub _start {
                                                                              }
                                                          );
 
-    $kernel->post($_[SESSION],"connect"); 
+    $kernel->post($self->alias();,"connect"); 
 }
 sub _stop  { my $self = $_[OBJECT]; print STDERR ref($self)." stop\n";  }
 sub states { my $self = $_[OBJECT]; return $self->{'states'}; }
