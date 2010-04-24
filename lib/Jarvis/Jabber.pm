@@ -128,6 +128,7 @@ sub status_event {
 sub error_event()
 {
         my ($kernel, $sender, $heap, $error, $self) = @_[KERNEL, SENDER, HEAP, ARG0, OBJECT];
+print Data::Dumper->Dump([$error]);
         die();
 
         if($error == +PCJ_SOCKETFAIL)
