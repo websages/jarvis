@@ -4,7 +4,7 @@ sub new {
     my $class = shift; 
     my $self = {}; 
     my $construct = shift if @_;
-    foreach my $attr ("alias"),{
+    foreach my $attr ("alias"){
          if(defined($construct->{$attr})){
              $self->{$attr} = $construct->{$attr};
          }else{
