@@ -45,6 +45,6 @@ $poe->object_session(
                                         ), 
                     );
 
-print STDERR "\n\n\n\n\n".Data::Dumper->Dump([$poe]);
+#print STDERR "\n\n\n\n\n".Data::Dumper->Dump([$poe]);
 POE::Kernel->run();
 
