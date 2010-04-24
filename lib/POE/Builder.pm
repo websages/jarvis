@@ -54,11 +54,11 @@ print Data::Dumper->Dump([ $aliased_object_states ]);
                                               _start   => sub { 
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];
                                                                 $kernel->alias_set($self->{'alias'});
-                                                                $kernel->yield($object->alias()."_start");
+                                                                $kernel->post($object->alias()."_start");
                                                               },
                                               _stop    => sub {
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];
-                                                                $kernel->yield($object->alias()."_stop");
+                                                                $kernel->post($object->alias()."_stop");
                                                                 $kernel->alias_remove(); 
                                                               }
     
