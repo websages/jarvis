@@ -35,9 +35,9 @@ sub new   {
                                    input_event          => 'input_event',
                                    error_event          => 'error_event',
                                    status_event         => 'status_event',
-                                   #test_message         => 'test_message',
-                                   #output_event         => 'output_event',
-                                   #join_channel         => 'join_channel',
+                                   test_message         => 'test_message',
+                                   output_event         => 'output_event',
+                                   join_channel         => 'join_channel',
                                    #leave_channel        => 'leave_channel',
                                    #send_presence        => 'send_presence',
                                    #presence_subscribe   => 'presence_subscribe',
@@ -66,9 +66,9 @@ sub _start {
                 input_event => sub { $self->input_event },
                 error_event => sub { $self->error_event },
                 status_event => sub { $self->status_event },
-#                test_message => \&$self->test_message,
-#                output_event => \&$self->output_event,
-#                join_channel => \&$self->join_channel,
+                test_message => \&$self->test_message,
+                output_event => \&$self->output_event,
+                join_channel => \&$self->join_channel,
 #                leave_channel => \&$self->leave_channel,
 #                send_presence => \&$self->send_presence,
 #                presence_subscribe => \&$self->presence_subscribe,
@@ -197,6 +197,47 @@ sub input_event()
         print "=====================\n";
         #$kernel->delay_add('test_message', int(rand(10)));
 }
+
+sub test_message()
+{
+        my ($kernel, $heap, $self) = @_[KERNEL, HEAP, OBJECT];
+
+        my $node = XNode->new('message');
+
+        # get_bare_jid is a helper method included from POE::Filter::XML::Utils.
+        # It returns the user@domain part of the jid (ie. no resources)
+
+        #$node->attr('to', get_bare_jid($heap->{'jid'}));
+        $node->attr('to', 'whitejs@websages.com');
+
+        $node->insert_tag('body')->data('This is a test sent at: ' . time());
+
+        $kernel->yield('output_event', $node, $heap->{'sid'});
+
+}
+
+sub output_event()
+{
+        my ($kernel, $heap, $node, $sid, $self) = @_[KERNEL, HEAP, ARG0, ARG1, OBJECT];
+
+        print "\n===PACKET SENT===\n";
+        print $node->to_str() . "\n";
+        print "=================\n";
+
+        $kernel->post($sid, 'output_handler', $node);
+}
+
+sub join_channel() {
+    my ($kernel, $heap, $room, $self) = @_[KERNEL, HEAP, ARG0, OBJECT];
+    $heap->{'starttime'} = time;
+    #$heap->{'roomnick'} = $room.'@conference.websages.com/crunchy';
+    my $node=XNode->new('presence', [ 'to', $heap->{'roomnick'}, 'from', $heap->{'component'}->jid(), ]);
+    my $child_node=XNode->new('x',[xmlns=>"http://jabber.org/protocol/muc"]);
+    $node->insert_tag($child_node);
+    $kernel->yield('output_event',$node,$heap->{'sid'});
+} # join channel
+
+
 
 
 1;
