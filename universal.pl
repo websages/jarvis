@@ -32,6 +32,7 @@ exit unless $poe;
 #                                     ), 
 #                    );
 
+print $ENV{'XMPP_PASSWORD'}."\n";
 $poe->object_session( 
                       new Jarvis::Jabber(
                                           {

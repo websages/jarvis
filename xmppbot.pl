@@ -48,7 +48,7 @@ POE::Session->create(
 				
 				$heap->{'component'} = 
 					POE::Component::Jabber->new(
-						IP => 'thor.websages.com',
+						IP => 'loki.websages.com',
 						Port => '5222',
 						Hostname => 'websages.com',
 						Username => 'crunchy',
