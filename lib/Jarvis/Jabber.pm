@@ -63,18 +63,6 @@ sub _start {
                                                                                StatusEvent => 'status_event',
                                                                                InputEvent => 'input_event',
                                                                                ErrorEvent => 'error_event',
-                input_event => sub { $self->input_event },
-                error_event => sub { $self->error_event },
-                status_event => sub { $self->status_event },
-                test_message => sub { $self->test_message },
-                output_event => sub { $self->output_event },
-                join_channel => sub { $self->join_channel },
-#                leave_channel => \&$self->leave_channel,
-#                send_presence => \&$self->send_presence,
-#                presence_subscribe => \&$self->presence_subscribe,
-#                approve_subscription => \&$self->approve_subscription,
-#                refuse_subscription=> \&$self->refuse_subscription,
-
                                                                              }
                                                          );
 
@@ -140,6 +128,7 @@ sub status_event {
 sub error_event()
 {
         my ($kernel, $sender, $heap, $error, $self) = @_[KERNEL, SENDER, HEAP, ARG0, OBJECT];
+        die();
 
         if($error == +PCJ_SOCKETFAIL)
         {
@@ -176,7 +165,6 @@ sub error_event()
 
                 print "Failed to establish a session\n";
         }
-        die();
 }
 
 sub input_event()
