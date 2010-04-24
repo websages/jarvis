@@ -71,8 +71,6 @@ sub _start {
 sub _stop  { my $self = $_[OBJECT]; print STDERR ref($self)." stop\n";  }
 sub states { my $self = $_[OBJECT]; return $self->{'states'}; }
 sub alias { my $self = $_[OBJECT]; return $self->{'alias'};           }
-sub input_event  { my $self = $_[OBJECT]; print STDERR "xmpp input_event\n"; }
-sub error_event  { my $self = $_[OBJECT]; print STDERR "xmpp error_event\n"; }
 sub status_event { 
     my ($kernel, $sender, $heap, $state, $self) = @_[KERNEL, SENDER, HEAP, ARG0, OBJECT]; 
     my $jabstat= [ 'PCJ_CONNECT', 'PCJ_CONNECTING', 'PCJ_CONNECTED',
@@ -167,5 +165,26 @@ sub error_event()
                 print "Failed to establish a session\n";
         }
 }
+
+sub input_event()
+{
+        my ($kernel, $heap, $node, $self) = @_[KERNEL, HEAP, ARG0, OBJECT];
+
+
+        print "\n===PACKET RECEIVED===\n";
+        print $node->to_str() . "\n";
+        print $node->get_id() . "\n";
+        if($node->name() eq 'presence'){
+            print Data::Dumper->Dump([$node->get_attrs()]) . "\n";
+            if($node->attr('type') eq 'subscribe'){
+                if($node->attr('from') eq 'whitejs@websages.com'){
+                    $kernel->yield('approve_subscription',$node->attr('from'));
+                }
+            }
+        }
+        print "=====================\n";
+        #$kernel->delay_add('test_message', int(rand(10)));
+}
+
 
 1;
