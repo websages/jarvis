@@ -34,7 +34,7 @@ my $session = new POE::Builder;
                                                    'username'        => 'crunchy',
                                                    'password'        => $ENV{'XMPP_PASSWORD'},
                                                    'alias'           => 'xmpp_client',
-                                                   'connection_type' => '+XMPP',
+                                                   'connection_type' => +XMPP,
                                                  }
                                                ), 
                              'xmpp'
