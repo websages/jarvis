@@ -22,7 +22,7 @@ $poe->object_session(
                       new Jarvis::IRC(
                                        {
                                          'alias'        => 'irc_client',
-                                         'nickname'     => 'fapestniegd',
+                                         'nickname'     => 'crunchy',
                                          'ircname'      => 'Optimus Prime',
                                          'server'       => '127.0.0.1',
                                          'channel_list' => [ 
