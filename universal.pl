@@ -18,6 +18,7 @@ my $poe = new POE::Builder(
                             } 
                           );
 exit unless $poe;
+
 $poe->object_session(  
                       new Jarvis::IRC(
                                        {
