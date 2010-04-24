@@ -103,12 +103,12 @@ sub status_event {
                 $heap->{'jid'} = $jid;
                 $heap->{'sid'} = $sender->ID();
 
-                $kernel->post('COMPONENT', 'output_handler', XNode->new('presence'));
+                $kernel->post($self->alias(), 'output_handler', XNode->new('presence'));
 
                 # And here is the purge_queue. This is to make sure we haven't sent
                 # nodes while something catastrophic has happened (like reconnecting).
 
-                $kernel->post('COMPONENT', 'purge_queue');
+                $kernel->post($self->alias(), 'purge_queue');
 
                 $heap->{'roomnick'} = 'system@conference.websages.com/crunchy';
                 #$kernel->yield('presence_subscribe','whitejs@websages.com');
