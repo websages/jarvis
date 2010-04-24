@@ -24,7 +24,7 @@ my $session = new POE::Builder(
                                                 'handle'        => 'irc',
                                                 'nickname'     => 'fapestniegd',
                                                 'ircname'      => 'Optimus Prime',
-                                                'server'       => 'irc.feenode.net',
+                                                'server'       => 'irc.debian.org',
                                                 'channel_list' => [ 
                                                                     '#puppies',
                                                                   ]
