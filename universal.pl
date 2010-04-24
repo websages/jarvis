@@ -36,14 +36,13 @@ $poe->object_session(
                       new Jarvis::Jabber(
                                           {
                                             'alias'           => 'xmpp_client',
-                                            'ip'              => '127.0.0.1',
+                                            'ip'              => 'thor.websages.com',
                                             'port'            => '5222',
-                                            'domain'          => 'websages.com',
+                                            'hostname'        => 'websages.com',
                                             'username'        => 'crunchy',
                                             'password'        => $ENV{'XMPP_PASSWORD'},
                                           }
                                         ), 
                     );
 
-#print STDERR "\n\n\n\n\n".Data::Dumper->Dump([$poe]);
 POE::Kernel->run();
