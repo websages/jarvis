@@ -15,27 +15,26 @@ my $session = new POE::Builder;
    $session->add_poe_object( 
                              new Jarvis::IRC(
                                               {
-                                                'handle'    => 'irc',
-                                                'nickname' => 'autobot',
-                                                'ircname'  => 'Optimus Prime',
-                                                'server'   => 'irc.eftdomain.net',
-                                                'channels' => [ 
-                                                                '#puppies',
-                                                              ]
+                                                'handle'        => 'irc',
+                                                'nickname'     => 'fapestniegd',
+                                                'ircname'      => 'Optimus Prime',
+                                                'server'       => 'irc.domain.net',
+                                                'channel_list' => [ 
+                                                                    '#puppies',
+                                                                  ]
                                               }
                                             ), 
                              'irc'
                            );
    $session->add_poe_object( new Jarvis::Jabber(
                                                  {
-                                                   'handle'   => 'xmpp',
-                                                   'IP'       => 'thor.websages.com',
-                                                   'Port'     => '5222',
-                                                   'Hostname' => 'websages.com',
-                                                   'Username' => 'crunchy',
-                                                   'Password' => $ENV{'XMPP_PASSWORD'},
-                                                   'Alias'    => 'xmpp_client',
-                                                   'ConnectionType' => +XMPP,
+                                                   'ip'              => 'thor.websages.com',
+                                                   'port'            => '5222',
+                                                   'domain'          => 'websages.com',
+                                                   'username'        => 'crunchy',
+                                                   'password'        => $ENV{'XMPP_PASSWORD'},
+                                                   'alias'           => 'xmpp_client',
+                                                   'connection_type' => '+XMPP',
                                                  }
                                                ), 
                              'xmpp'
