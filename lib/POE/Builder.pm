@@ -49,7 +49,7 @@ sub object_session(){
     }
     push( @{ $self->{'sessions'} }, POE::Session->create(
                           options => { debug => $self->{'debug'}, trace => $self->{'trace'} },
-                          object_states =>  [ $object => $object_states ],
+                          object_states =>  [ $object => $aliased_object_states ],
                           inline_states =>  {
                                               _start   => sub { 
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];
