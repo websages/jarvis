@@ -11,7 +11,13 @@ use Jarvis::Jabber;
 #use Jarvis::Personality::Watcher;
 use POE::Builder;
 
-my $session = new POE::Builder( {'alias' => 'interactive'} );
+my $session = new POE::Builder( 
+                                {
+                                  'alias' => 'interactive', 
+                                  'debug' => '0',
+                                  'trace' => '0',
+                                } 
+                              );
    $session->add_poe_object( 
                              new Jarvis::IRC(
                                               {

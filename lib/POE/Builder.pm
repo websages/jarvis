@@ -5,7 +5,7 @@ sub new {
     my $self = {}; 
     my $construct = shift if @_;
     $self->{'session_struct'}={};
-    foreach my $attr ("alias"){
+    foreach my $attr ("alias","debug"){
          if(defined($construct->{$attr})){
              $self->{$attr} = $construct->{$attr};
          }else{
@@ -52,7 +52,7 @@ sub heap_objects{
 sub create(){
     my $self=shift;
     POE::Session->create(
-                          options => { debug => 1, trace => 1 },
+                          options => { debug => $self->{'debug'}, trace => $self->{'trace'} },
                           object_states =>  $self->object_states(), 
                           inline_states =>  {
                                               # loop through all the object's _start methods (_start is required)
