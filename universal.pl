@@ -26,7 +26,7 @@ my $session = new POE::Builder;
                                             ), 
                              'irc'
                            );
-   $session->create({'alias' => 'interactive');
+   $session->create( {'alias' => 'interactive'} );
    $session->add_poe_object( new Jarvis::Jabber(
                                                  {
                                                    'ip'              => 'thor.websages.com',
