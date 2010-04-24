@@ -48,7 +48,7 @@ sub new   {
              return $self 
            }
 sub _start { 
-    my $self = $_[OBJECT]; 
+    my ($kernel, $heap, $self) = @_[KERNEL, HEAP, OBJECT]; 
     print STDERR ref($self)." start\n"; 
     $self->{'xmpp_client'} =  POE::Component::Jabber->new(
                                                            IP             => $self->{'ip'},
@@ -66,7 +66,7 @@ sub _start {
                                                                              }
                                                          );
 
-    $self->{'xmpp_client'}->yield("connect"); 
+    $kernel->post($_[SESSION],"connect"); 
 }
 sub _stop  { my $self = $_[OBJECT]; print STDERR ref($self)." stop\n";  }
 sub states { my $self = $_[OBJECT]; return $self->{'states'}; }
