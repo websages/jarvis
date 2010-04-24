@@ -63,7 +63,7 @@ sub object_session(){
                                                               }
     
                                             },
-                          heap           => $self->{'alias'} => $object,
+                          heap           => { $self->{'alias'} => $object }
                     );
 }
 
