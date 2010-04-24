@@ -20,7 +20,7 @@ sub new   {
              my $class = shift; 
              my $self = {}; 
              my $construct = shift if @_;
-             foreach my $attr ("ip", "port", "domain", "username", "password", "alias"){
+             foreach my $attr ("ip", "port", "domain", "username", "password", "alias", "parent_session"){
                  if(defined($construct->{$attr})){ 
                      $self->{$attr} = $construct->{$attr}; 
                  }else{
@@ -52,6 +52,7 @@ sub new   {
                                                                     Password       => $self->{'password'},
                                                                     Alias          => $self->{'alias'},
                                                                     ConnectionType => +XMPP,
+                                                                    StateParent    => $self->{'parent_session'},
                                                                     States         => {
                                                                                         StatusEvent => 'status_event',
                                                                                         InputEvent => 'input_event',

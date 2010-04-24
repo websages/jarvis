@@ -3,6 +3,15 @@ use POE;
 sub new { 
     my $class = shift; 
     my $self = {}; 
+    my $construct = shift if @_;
+    foreach my $attr ("alias"),{
+         if(defined($construct->{$attr})){
+             $self->{$attr} = $construct->{$attr};
+         }else{
+             print STDERR "Required constructor attribute [$attr] not defined. Terminating XMPP session\n";
+             return undef;
+         }
+    }
     $self->{'session_struct'}={};
     bless($self,$class);
     return $self;
@@ -49,6 +58,7 @@ sub create(){
                                               # loop through all the object's _start methods (_start is required)
                                               _start   => sub { 
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];
+                                                                $kernel->alias_set($self->{'alias'});
                                                                 foreach my $poe_handle (keys(%{ $self->heap_objects })){
                                                                     $kernel->yield( $poe_handle."_start");
                                                                 } 
