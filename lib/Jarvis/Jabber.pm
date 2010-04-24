@@ -44,26 +44,30 @@ sub new   {
                                    #approve_subscription => 'approve_subscription',
                                    #refuse_subscription  => 'refuse_subscription',
                                  };
-             $self->{'xmpp_client'} =  POE::Component::Jabber->new(
-                                                                    IP             => $self->{'ip'},
-                                                                    Port           => $self->{'port'},
-                                                                    Hostname       => $self->{'domain'},
-                                                                    Username       => $self->{'username'},
-                                                                    Password       => $self->{'password'},
-                                                                    Alias          => $self->{'alias'},
-                                                                    ConnectionType => +XMPP,
-                                                                    StateParent    => $self->{'parent_session'},
-                                                                    States         => {
-                                                                                        StatusEvent => 'status_event',
-                                                                                        InputEvent => 'input_event',
-                                                                                        ErrorEvent => 'error_event',
-                                                                                      }
-                                                                  );
-
              bless($self,$class); 
              return $self 
            }
-sub _start { my $self = $_[OBJECT]; print STDERR ref($self)." start\n"; $self->{'xmpp_client'}->yield("connect"); }
+sub _start { 
+    my $self = $_[OBJECT]; 
+    print STDERR ref($self)." start\n"; 
+    $self->{'xmpp_client'} =  POE::Component::Jabber->new(
+                                                           IP             => $self->{'ip'},
+                                                           Port           => $self->{'port'},
+                                                           Hostname       => $self->{'domain'},
+                                                           Username       => $self->{'username'},
+                                                           Password       => $self->{'password'},
+                                                           Alias          => $self->{'alias'},
+                                                           ConnectionType => +XMPP,
+#                                                           StateParent    => $self->{'parent_session'},
+                                                           States         => {
+                                                                               StatusEvent => 'status_event',
+                                                                               InputEvent => 'input_event',
+                                                                               ErrorEvent => 'error_event',
+                                                                             }
+                                                         );
+
+    $self->{'xmpp_client'}->yield("connect"); 
+}
 sub _stop  { my $self = $_[OBJECT]; print STDERR ref($self)." stop\n";  }
 sub states { my $self = $_[OBJECT]; return $self->{'states'}; }
 sub alias { my $self = $_[OBJECT]; return $self->{'alias'};           }
