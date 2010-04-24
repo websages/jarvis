@@ -24,7 +24,7 @@ $poe->object_session(
                                          'alias'        => 'irc_client',
                                          'nickname'     => 'fapestniegd',
                                          'ircname'      => 'Optimus Prime',
-                                         'server'       => 'irc.debian.org',
+                                         'server'       => '127.0.0.1',
                                          'channel_list' => [ 
                                                              '#puppies',
                                                            ]
@@ -36,7 +36,7 @@ $poe->object_session(
                       new Jarvis::Jabber(
                                           {
                                             'alias'           => 'xmpp_client',
-                                            'ip'              => 'thor.websages.com',
+                                            'ip'              => '127.0.0.1',
                                             'port'            => '5222',
                                             'domain'          => 'websages.com',
                                             'username'        => 'crunchy',
