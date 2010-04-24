@@ -15,13 +15,14 @@ my $session = new POE::Builder(
                                 {
                                   'alias' => 'interactive', 
                                   'debug' => '0',
-                                  'trace' => '0',
+                                  'trace' => '1',
                                 } 
                               );
+   $session->create();
    $session->add_poe_object( 
                              new Jarvis::IRC(
                                               {
-                                                'handle'        => 'irc',
+                                                'alias'        => 'irc_client',
                                                 'nickname'     => 'fapestniegd',
                                                 'ircname'      => 'Optimus Prime',
                                                 'server'       => 'irc.debian.org',
@@ -30,10 +31,9 @@ my $session = new POE::Builder(
                                                                   ]
                                               }
                                             ), 
-                             'irc'
                            );
-   $session->create();
-   $session->add_poe_object( new Jarvis::Jabber(
+   $session->add_poe_object( 
+                             new Jarvis::Jabber(
                                                  {
                                                    'ip'              => 'thor.websages.com',
                                                    'port'            => '5222',
@@ -44,7 +44,6 @@ my $session = new POE::Builder(
                                                    'parent_session'  => 'interactive',
                                                  }
                                                ), 
-                             'xmpp'
                            );
 
 POE::Kernel->run();
