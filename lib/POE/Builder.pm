@@ -36,7 +36,6 @@ sub object_session(){
     my $object = shift if @_;
     my $object_states = $object->states();
     my $aliased_object_states;
-print Data::Dumper->Dump([ $object_states ]);
     foreach my $event (keys(%{ $object_states })){
         if($event =~m /^_/){
             # if it starts with and _underscore, prepend the alias to it, so we don't collide
@@ -54,11 +53,11 @@ print Data::Dumper->Dump([ $aliased_object_states ]);
                                               _start   => sub { 
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];
                                                                 $kernel->alias_set($self->{'alias'});
-                                                                $kernel->post($object->alias()."_start");
+                                                                $kernel->post($_[SESSION],$object->alias()."_start");
                                                               },
                                               _stop    => sub {
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];
-                                                                $kernel->post($object->alias()."_stop");
+                                                                $kernel->post($_[SESSION],$object->alias()."_stop");
                                                                 $kernel->alias_remove(); 
                                                               }
     
