@@ -18,19 +18,19 @@ my $poe = new POE::Builder(
                             } 
                           );
 exit unless $poe;
-$poe->object_session(  
-                      new Jarvis::IRC(
-                                       {
-                                         'alias'        => 'irc_client',
-                                         'nickname'     => 'fapestniegd',
-                                         'ircname'      => 'Optimus Prime',
-                                         'server'       => '127.0.0.1',
-                                         'channel_list' => [ 
-                                                             '#puppies',
-                                                           ]
-                                       }
-                                     ), 
-                    );
+#$poe->object_session(  
+#                      new Jarvis::IRC(
+#                                       {
+#                                         'alias'        => 'irc_client',
+#                                         'nickname'     => 'fapestniegd',
+#                                         'ircname'      => 'Optimus Prime',
+#                                         'server'       => '127.0.0.1',
+#                                         'channel_list' => [ 
+#                                                             '#puppies',
+#                                                           ]
+#                                       }
+#                                     ), 
+#                    );
 
 $poe->object_session( 
                       new Jarvis::Jabber(
