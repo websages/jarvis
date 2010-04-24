@@ -41,7 +41,7 @@ $poe->object_session(
                                             'port'            => '5222',
                                             'domain'          => 'websages.com',
                                             'username'        => 'crunchy',
-                                            'password'        => 'nottherealpassword',
+                                            'password'        => $ENV{'XMPP_PASSWORD'},
                                           }
                                         ), 
                     );
