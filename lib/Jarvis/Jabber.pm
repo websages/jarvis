@@ -121,4 +121,51 @@ sub status_event {
         }
         print "Status received: $jabstat->[$state] \n";
 }
+
+# This is the error event. Any error conditions that arise from any point 
+# during connection or negotiation to any time during normal operation will be
+# send to this event from PCJ. For a list of possible error events and exported
+# constants, please see PCJ::Error
+
+sub error_event()
+{
+        my ($kernel, $sender, $heap, $error, $self) = @_[KERNEL, SENDER, HEAP, ARG0, OBJECT];
+
+        if($error == +PCJ_SOCKETFAIL)
+        {
+                my ($call, $code, $err) = @_[ARG1..ARG3];
+                print "Socket error: $call, $code, $err\n";
+                print "Reconnecting!\n";
+                $kernel->post($sender, 'reconnect');
+
+        } elsif($error == +PCJ_SOCKETDISCONNECT) {
+
+                print "We got disconneted\n";
+                print "Reconnecting!\n";
+                $kernel->post($sender, 'reconnect');
+
+        } elsif($error == +PCJ_CONNECTFAIL) {
+
+                print "Connect failed\n";
+                print "Retrying connection!\n";
+                $kernel->post($sender, 'reconnect');
+
+        } elsif ($error == +PCJ_SSLFAIL) {
+
+                print "TLS/SSL negotiation failed\n";
+
+        } elsif ($error == +PCJ_AUTHFAIL) {
+
+                print "Failed to authenticate\n";
+
+        } elsif ($error == +PCJ_BINDFAIL) {
+
+                print "Failed to bind a resource\n";
+
+        } elsif ($error == +PCJ_SESSIONFAIL) {
+
+                print "Failed to establish a session\n";
+        }
+}
+
 1;
