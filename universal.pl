@@ -11,40 +11,39 @@ use Jarvis::Jabber;
 #use Jarvis::Personality::Watcher;
 use POE::Builder;
 
-my $session = new POE::Builder( 
-                                {
-                                  'alias' => 'interactive', 
-                                  'debug' => '0',
-                                  'trace' => '1',
-                                } 
-                              );
-   $session->create();
-   $session->add_poe_object( 
-                             new Jarvis::IRC(
-                                              {
-                                                'alias'        => 'irc_client',
-                                                'nickname'     => 'fapestniegd',
-                                                'ircname'      => 'Optimus Prime',
-                                                'server'       => 'irc.debian.org',
-                                                'channel_list' => [ 
-                                                                    '#puppies',
-                                                                  ]
-                                              }
-                                            ), 
-                           );
-   $session->add_poe_object( 
-                             new Jarvis::Jabber(
-                                                 {
-                                                   'ip'              => 'thor.websages.com',
-                                                   'port'            => '5222',
-                                                   'domain'          => 'websages.com',
-                                                   'username'        => 'crunchy',
-                                                   'password'        => $ENV{'XMPP_PASSWORD'},
-                                                   'alias'           => 'xmpp_client',
-                                                   'parent_session'  => 'interactive',
-                                                 }
-                                               ), 
-                           );
+my $poe = new POE::Builder( 
+                            {
+                              'debug' => '0',
+                              'trace' => '1',
+                            } 
+                          );
+exit unless $poe;
+$poe->object_session( 
+                      new Jarvis::IRC(
+                                       {
+                                         'alias'        => 'irc_client',
+                                         'nickname'     => 'fapestniegd',
+                                         'ircname'      => 'Optimus Prime',
+                                         'server'       => 'irc.debian.org',
+                                         'channel_list' => [ 
+                                                             '#puppies',
+                                                           ]
+                                       }
+                                     ), 
+                    );
+
+#$poe->object_session( 
+#                      new Jarvis::Jabber(
+#                                          {
+#                                            'alias'           => 'xmpp_client',
+#                                            'ip'              => 'thor.websages.com',
+#                                            'port'            => '5222',
+#                                            'domain'          => 'websages.com',
+#                                            'username'        => 'crunchy',
+#                                            'password'        => $ENV{'XMPP_PASSWORD'},
+#                                          }
+#                                        ), 
+#                    );
 
 POE::Kernel->run();
 

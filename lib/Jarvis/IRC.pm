@@ -21,16 +21,23 @@ sub new {
           $class = ref($class)||$class;
           my $self = {}; 
           my $construct = shift if @_;
-          if(defined($construct->{'handle'})){ $self->{'handle'} = $construct->{'handle'}; }
+          foreach my $attr ("channel_list","nickname","alias"),{
+               if(defined($construct->{$attr})){
+                   $self->{$attr} = $construct->{$attr};
+               }else{
+                   print STDERR "Required constructor attribute [$attr] not defined. Terminating Jarvis::IRC session\n";
+                   return undef;
+               }
+           }
           bless($self,$class); 
           $self->{'states'} = { 
                                 _start               => '_start',
                                 _stop                => '_stop',
-                                _default             => '_default',
-                                _001                  => 'irc_001',
-                                _public           => 'irc_public',
-                                _ping             => 'irc_ping',
-                                _msg              => 'irc_msg',
+                                irc_default          => '_default',
+                                irc_001              => 'irc_001',
+                                irc_public           => 'irc_public',
+                                irc_ping             => 'irc_ping',
+                                irc_msg              => 'irc_msg',
                              };
           $self->{'irc_client'} = POE::Component::IRC->spawn(
                                                               nick    => $construct->{'nickname'},
@@ -38,17 +45,15 @@ sub new {
                                                               server  => $construct->{'server'},
                                                             ) 
               or $self->error("Cannot connect to IRC $construct->{'server'} $!");
-          if(defined($construct->{'channels'})){ $self->{'channel_list'} = $construct->{'channels'}; }
-          if(defined($construct->{'nickname'})){ $self->{'nickname'} = $construct->{'nickname'}; }
           return $self 
         }
 ################################################################################
-# POE::Builder expects '_stop', '_start', and 'states', and 'handle'
+# POE::Builder expects '_stop', '_start', and 'states', and 'alias'
 ################################################################################
 sub _start { my $self = $_[OBJECT]; print STDERR ref($self)." start\n"; $self->on_start(); }
 sub _stop  { my $self = $_[OBJECT]; print STDERR ref($self)." stop \n"; }
 sub states { my $self = $_[OBJECT]; return $self->{'states'};           }
-sub handle { my $self = $_[OBJECT]; return $self->{'handle'};           }
+sub alias { my $self = $_[OBJECT]; return $self->{'alias'};           }
 
 # A formatting function so we can use "here" statements and still have readable code
 sub indented_yaml{

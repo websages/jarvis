@@ -28,7 +28,6 @@ sub new   {
                      return undef;
                  }
              }
-             if(defined($construct->{'handle'})){ $self->{'handle'} = $construct->{'handle'}; }
              $self->{'states'} = { 
                                    _start               => '_start',
                                    _stop                => '_stop',
@@ -60,16 +59,13 @@ sub new   {
                                                                                       }
                                                                   );
 
-                                                
-
-
              bless($self,$class); 
              return $self 
            }
 sub _start { my $self = $_[OBJECT]; print STDERR ref($self)." start\n"; $self->{'xmpp_client'}->yield("connect"); }
 sub _stop  { my $self = $_[OBJECT]; print STDERR ref($self)." stop\n";  }
 sub states { my $self = $_[OBJECT]; return $self->{'states'}; }
-sub handle { my $self = $_[OBJECT]; return $self->{'handle'};           }
+sub alias { my $self = $_[OBJECT]; return $self->{'alias'};           }
 sub input_event  { my $self = $_[OBJECT]; print STDERR "xmpp input_event\n"; }
 sub error_event  { my $self = $_[OBJECT]; print STDERR "xmpp error_event\n"; }
 sub status_event { my $self = $_[OBJECT]; print STDERR "xmpp status_event\n"; }

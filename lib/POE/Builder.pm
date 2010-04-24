@@ -5,7 +5,7 @@ sub new {
     my $self = {}; 
     my $construct = shift if @_;
     $self->{'session_struct'}={};
-    foreach my $attr ("alias","debug","trace"){
+    foreach my $attr ("debug","trace"){
          if(defined($construct->{$attr})){
              $self->{$attr} = $construct->{$attr};
          }else{
@@ -18,21 +18,6 @@ sub new {
 }
 
 sub add_poe_object {
-use YAML;
-    my $self = shift;
-    my $object = shift if @_;
-    my $handle = shift if @_;
-    if(defined($self->{'session_struct'}->{'objects'}->{$handle})){
-       print STDERR "Unable to add duplicate handle $handle. Skipping...\n";
-       return $self;
-    }else{
-        $self->{'session_struct'}->{'objects'}->{$handle} = $object;
-    }
-    my $object_states=$object->states();
-    my $handled_object_states;
-    foreach my $event (keys(%{ $object_states })){
-       $handled_object_states->{$handle.$event} = $object_states->{$event};
-    }
     push(@{ $self->{'session_struct'}->{'object_states'} }, $object => $handled_object_states );
     return $self;
 }
@@ -49,22 +34,36 @@ sub heap_objects{
     return undef;
 }
 
-sub create(){
+sub object_session(){
     my $self=shift;
+    my $object = shift if @_;
+    my $aliased_object_states;
+    foreach my $event (keys(%{ $object_states })){
+        if($key=!m/^_/){
+            # if it starts with and _underscore, prepend the alias to it, so we don't collide
+            $aliased_object_states->{$alias.$event} = $object_states->{$event};
+        }else{
+            # otherwise, just pass the event straight through.
+            $aliased_object_states->{$event} = $object_states->{$event};
+        }
+    }
     POE::Session->create(
                           options => { debug => $self->{'debug'}, trace => $self->{'trace'} },
+                          object_states =>  [ $object => $object_states ],
                           inline_states =>  {
                                               _start   => sub { 
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];
                                                                 $kernel->alias_set($self->{'alias'});
+                                                                $kernel->yield($object->alias()."_start");
                                                               },
                                               _stop    => sub {
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];
+                                                                $kernel->yield($object->alias()."_stop");
                                                                 $kernel->alias_remove(); 
                                                               }
     
                                             },
-                          heap           => [] 
+                          heap           => $self->{'alias'} => $object,
                     );
 }
 
