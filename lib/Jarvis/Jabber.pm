@@ -82,7 +82,8 @@ sub status_event {
                        'PCJ_NODESENT', 'PCJ_NODERECEIVED', 'PCJ_NODEQUEUED',
                        'PCJ_RTS_START', 'PCJ_RTS_FINISH', 'PCJ_INIT_FINISHED',
                        'PCJ_STREAMEND', 'PCJ_SHUTDOWN_START', 'PCJ_SHUTDOWN_FINISH', ];
-   n the example we only watch to see when PCJ is finished building the
+
+        # In the example we only watch to see when PCJ is finished building the
         # connection. When PCJ_INIT_FINISHED occurs, the connection ready for use.
         # Until this status event is fired, any nodes sent out will be queued. It's
         # the responsibility of the end developer to purge the queue via the 
