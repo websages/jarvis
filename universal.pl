@@ -13,7 +13,7 @@ use POE::Builder;
 
 my $poe = new POE::Builder( 
                             {
-                              'debug' => '0',
+                              'debug' => '1',
                               'trace' => '1',
                             } 
                           );
