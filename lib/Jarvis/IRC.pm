@@ -21,7 +21,7 @@ sub new {
           $class = ref($class)||$class;
           my $self = {}; 
           my $construct = shift if @_;
-          foreach my $attr ("channel_list","nickname","alias"),{
+          foreach my $attr ("channel_list","nickname","alias"){
                if(defined($construct->{$attr})){
                    $self->{$attr} = $construct->{$attr};
                }else{
