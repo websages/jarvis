@@ -18,7 +18,7 @@ my $session = new POE::Builder( {'alias' => 'interactive'} );
                                                 'handle'        => 'irc',
                                                 'nickname'     => 'fapestniegd',
                                                 'ircname'      => 'Optimus Prime',
-                                                'server'       => 'irc.domain.net',
+                                                'server'       => 'irc.feenode.net',
                                                 'channel_list' => [ 
                                                                     '#puppies',
                                                                   ]
