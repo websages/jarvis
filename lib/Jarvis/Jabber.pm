@@ -73,6 +73,51 @@ sub states { my $self = $_[OBJECT]; return $self->{'states'}; }
 sub alias { my $self = $_[OBJECT]; return $self->{'alias'};           }
 sub input_event  { my $self = $_[OBJECT]; print STDERR "xmpp input_event\n"; }
 sub error_event  { my $self = $_[OBJECT]; print STDERR "xmpp error_event\n"; }
-sub status_event { my $self = $_[OBJECT]; print STDERR "xmpp status_event\n"; }
+sub status_event { 
+    my ($kernel, $sender, $heap, $state, $self) = @_[KERNEL, SENDER, HEAP, ARG0, OBJECT]; 
+    my $jabstat= [ 'PCJ_CONNECT', 'PCJ_CONNECTING', 'PCJ_CONNECTED',
+                       'PCJ_STREAMSTART', 'PCJ_SSLNEGOTIATE', 'PCJ_SSLSUCCESS',
+                       'PCJ_AUTHNEGOTIATE', 'PCJ_AUTHSUCCESS', 'PCJ_BINDNEGOTIATE',
+                       'PCJ_BINDSUCCESS', 'PCJ_SESSIONNEGOTIATE', 'PCJ_SESSIONSUCCESS',
+                       'PCJ_NODESENT', 'PCJ_NODERECEIVED', 'PCJ_NODEQUEUED',
+                       'PCJ_RTS_START', 'PCJ_RTS_FINISH', 'PCJ_INIT_FINISHED',
+                       'PCJ_STREAMEND', 'PCJ_SHUTDOWN_START', 'PCJ_SHUTDOWN_FINISH', ];
+   n the example we only watch to see when PCJ is finished building the
+        # connection. When PCJ_INIT_FINISHED occurs, the connection ready for use.
+        # Until this status event is fired, any nodes sent out will be queued. It's
+        # the responsibility of the end developer to purge the queue via the 
+        # purge_queue event.
 
+        if($state == +PCJ_INIT_FINISHED)
+        {
+                # Notice how we are using the stored PCJ instance by calling the jid()
+                # method? PCJ stores the jid that was negotiated during connecting and 
+                # is retrievable through the jid() method
+
+                my $jid = $heap->{'component'}->jid();
+                print "INIT FINISHED! \n";
+                print "JID: $jid \n";
+                print "SID: ". $sender->ID() ." \n\n";
+
+                $heap->{'jid'} = $jid;
+                $heap->{'sid'} = $sender->ID();
+
+                $kernel->post('COMPONENT', 'output_handler', XNode->new('presence'));
+
+                # And here is the purge_queue. This is to make sure we haven't sent
+                # nodes while something catastrophic has happened (like reconnecting).
+
+                $kernel->post('COMPONENT', 'purge_queue');
+
+                $heap->{'roomnick'} = 'system@conference.websages.com/crunchy';
+                #$kernel->yield('presence_subscribe','whitejs@websages.com');
+                $kernel->yield('join_channel','system');
+
+                #for(1..10)
+                #{
+                #       $kernel->delay_add('test_message', int(rand(10)));
+                #}
+        }
+        print "Status received: $jabstat->[$state] \n";
+}
 1;
