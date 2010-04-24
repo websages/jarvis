@@ -8,7 +8,7 @@ sub new {
          if(defined($construct->{$attr})){
              $self->{$attr} = $construct->{$attr};
          }else{
-             print STDERR "Required constructor attribute [$attr] not defined. Terminating XMPP session\n";
+             print STDERR "Required constructor attribute [$attr] not defined. Terminating __PACKAGE__ session\n";
              return undef;
          }
     }
