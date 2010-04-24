@@ -19,12 +19,6 @@ sub new {
     return $self;
 }
 
-sub add_poe_object {
-    my $self = shift;
-    push(@{ $self->{'session_struct'}->{'object_states'} }, $object => $handled_object_states );
-    return $self;
-}
-
 sub object_states{
     my $self = shift; 
     return $self->{'session_struct'}->{'object_states'} if $self->{'session_struct'}->{'object_states'};
