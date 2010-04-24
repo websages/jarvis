@@ -36,6 +36,7 @@ sub object_session(){
     my $object = shift if @_;
     my $object_states = $object->states();
     my $aliased_object_states;
+print Data::Dumper->Dump([ $object_states ]);
     foreach my $event (keys(%{ $object_states })){
         if($event =~m /^_/){
             # if it starts with and _underscore, prepend the alias to it, so we don't collide
@@ -45,7 +46,6 @@ sub object_session(){
             $aliased_object_states->{$event} = $object_states->{$event};
         }
     }
-print Data::Dumper->Dump([ $object_states ]);
 print Data::Dumper->Dump([ $aliased_object_states ]);
     push( @{ $self->{'sessions'} }, POE::Session->create(
                           options => { debug => $self->{'debug'}, trace => $self->{'trace'} },
@@ -63,7 +63,7 @@ print Data::Dumper->Dump([ $aliased_object_states ]);
                                                               }
     
                                             },
-                          heap           => { $self->{'alias'} => $object }
+                          heap           => { $object->alias() => $object }
                     ));
 }
 
