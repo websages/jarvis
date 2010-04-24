@@ -1,4 +1,6 @@
 package POE::Builder;
+use strict;
+use warnings;
 use POE;
 sub new { 
     my $class = shift; 
@@ -38,7 +40,7 @@ sub object_session(){
     my $self=shift;
     my $object = shift if @_;
     my $aliased_object_states;
-    foreach my $event (keys(%{ $object_states })){
+    foreach my $event (keys(%{ $self->object_states })){
         if($key=!m/^_/){
             # if it starts with and _underscore, prepend the alias to it, so we don't collide
             $aliased_object_states->{$alias.$event} = $object_states->{$event};
@@ -47,9 +49,10 @@ sub object_session(){
             $aliased_object_states->{$event} = $object_states->{$event};
         }
     }
+print Data::Dumper->Dump([ $aliased_object_states ]);
     push( @{ $self->{'sessions'} }, POE::Session->create(
                           options => { debug => $self->{'debug'}, trace => $self->{'trace'} },
-                          object_states =>  [ $object => $aliased_object_states ],
+                          object_states =>  [ $object => $object_states ],
                           inline_states =>  {
                                               _start   => sub { 
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];
