@@ -63,6 +63,18 @@ sub _start {
                                                                                StatusEvent => 'status_event',
                                                                                InputEvent => 'input_event',
                                                                                ErrorEvent => 'error_event',
+                input_event => \&$self->input_event,
+                error_event => \&$self->error_event,
+                status_event => \&$self->status_event,
+#                test_message => \&$self->test_message,
+#                output_event => \&$self->output_event,
+#                join_channel => \&$self->join_channel,
+#                leave_channel => \&$self->leave_channel,
+#                send_presence => \&$self->send_presence,
+#                presence_subscribe => \&$self->presence_subscribe,
+#                approve_subscription => \&$self->approve_subscription,
+#                refuse_subscription=> \&$self->refuse_subscription,
+
                                                                              }
                                                          );
 
