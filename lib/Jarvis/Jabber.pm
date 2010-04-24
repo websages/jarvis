@@ -176,6 +176,7 @@ sub error_event()
 
                 print "Failed to establish a session\n";
         }
+        die();
 }
 
 sub input_event()
