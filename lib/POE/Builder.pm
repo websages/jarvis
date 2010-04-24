@@ -53,27 +53,19 @@ sub create(){
     my $self=shift;
     POE::Session->create(
                           options => { debug => $self->{'debug'}, trace => $self->{'trace'} },
-                          object_states =>  $self->object_states(), 
                           inline_states =>  {
                                               # loop through all the object's _start methods (_start is required)
                                               _start   => sub { 
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];
                                                                 $kernel->alias_set($self->{'alias'});
-                                                                foreach my $poe_handle (keys(%{ $self->heap_objects })){
-                                                                    $kernel->yield( $poe_handle."_start");
-                                                                } 
-                                                                $kernel->yield("_stop");
-                                                              }, # loop through all the object's _start methods (_stop is required) # none of these run for some reason, ugh.
+                                                              },
                                               _stop    => sub {
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];
-                                                                #foreach my $poe_handle (keys(%{ $self->heap_objects })){
-                                                                    $kernel->yield('irc_stop');
-                                                                    $kernel->yield('xmpp_stop');
-                                                                #} 
-                                                              },
+                                                                $kernel->alias_remove(); }
+                                                              }
     
                                             },
-                          #heap           => { 'objects'  => $self->heap_objects() }
+                          heap           => [] 
                     );
 }
 

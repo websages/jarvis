@@ -19,6 +19,7 @@ my $session = new POE::Builder(
                                 } 
                               );
    $session->create();
+
    $session->add_poe_object( 
                              new Jarvis::IRC(
                                               {
