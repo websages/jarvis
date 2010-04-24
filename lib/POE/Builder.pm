@@ -54,14 +54,13 @@ sub create(){
     POE::Session->create(
                           options => { debug => $self->{'debug'}, trace => $self->{'trace'} },
                           inline_states =>  {
-                                              # loop through all the object's _start methods (_start is required)
                                               _start   => sub { 
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];
                                                                 $kernel->alias_set($self->{'alias'});
                                                               },
                                               _stop    => sub {
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];
-                                                                $kernel->alias_remove(); }
+                                                                $kernel->alias_remove(); 
                                                               }
     
                                             },
