@@ -6,8 +6,9 @@ BEGIN { unshift @INC, './lib' if -d './lib'; }
 use Data::Dumper;
 use Jarvis::IRC;
 use Jarvis::Jabber;
-#use Jarvis::Personality::Jarvis;
 #use Jarvis::Personality::Crunchy;
+#use Jarvis::Personality::Jarvis;
+#use Jarvis::Personality::System;
 #use Jarvis::Personality::Watcher;
 use POE::Builder;
 
@@ -19,6 +20,7 @@ my $poe = new POE::Builder(
                           );
 exit unless $poe;
 
+# irc bot sessions are 1:1 session:nick, but that nick may be in several chats
 $poe->object_session(  
                       new Jarvis::IRC(
                                        {
@@ -36,16 +38,21 @@ $poe->object_session(
 $poe->object_session(  
                       new Jarvis::IRC(
                                        {
-                                         'alias'        => 'host_session',
+                                         'alias'        => 'system_session',
                                          'nickname'     => 'loki',
                                          'ircname'      => 'loki.websages.com',
                                          'server'       => '127.0.0.1',
                                          'channel_list' => [ 
+                                                             '#global',
                                                              '#puppies',
                                                            ]
                                        }
                                      ), 
                     );
+
+# xmpp bot sessions are 1:n for session:room_nick, #
+# (one login can become different nicks in group chats on the same server)
+
 $poe->object_session( 
                       new Jarvis::Jabber(
                                           {
@@ -55,6 +62,10 @@ $poe->object_session(
                                             'hostname'        => 'websages.com',
                                             'username'        => 'crunchy',
                                             'password'        => $ENV{'XMPP_PASSWORD'},
+                                            'channel_list' => [ 
+                                                                'crunchy@system',
+                                                                'loki@system',
+                                                              ]
                                           }
                                         ), 
                     );
