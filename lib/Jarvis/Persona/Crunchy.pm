@@ -79,13 +79,12 @@ sub alias{
 }
 
 sub input{
-     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, $ARG0 .. $#_];
-     my $what = $args[$#args];
+     my ($self, $kernel, $heap, $sender, $who, $where, $what) = @_[OBJECT, KERNEL, HEAP, SENDER, $ARG0 .. $#_];
      #print STDERR Data::Dumper->Dump([ $sender, $args[$#args -2 ], $args[$#args - 1], $args[$#args] ]);
-     print STDERR "-=[ $what ]=-\n";
+     print STDERR "-=[ $who said $what ]=-\n";
      if(defined($what)){
-         print STDERR piratespeak( $self->{'megahal'}->do_reply( $what ))."\n";
-         $kernel->post($sender, 'persona_reply', piratespeak( $self->{'megahal'}->do_reply( $what ) ) );
+         print STDERR piratespeak( chomp( $self->{'megahal'}->do_reply( $what ) ) )."\n";
+         $kernel->post($sender, 'persona_reply', $who, $where, piratespeak( chomp ($self->{'megahal'}->do_reply( $what ) ) ) );
      }
      return $self->{'alias'};
 }
