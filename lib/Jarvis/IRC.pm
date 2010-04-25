@@ -149,7 +149,7 @@ sub irc_public {
     my $nick = ( split /!/, $who )[0];
     my $channel = $where->[0];
 
-print STDERR $self->{'persona'}."_input ".$who."  ".Data::Dumper->Dump([$where])." ".$what."\n"; 
+print STDERR $self->{'persona'}."_input:\n   ".$who."\n     ".Data::Dumper->Dump([$where])."   ".$what."\n"; 
 
     #log everything before we do anything with it.
     $_[KERNEL]->post('logger', 'log', "$channel <$nick> $what");
