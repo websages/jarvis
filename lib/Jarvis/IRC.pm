@@ -56,7 +56,7 @@ sub new {
                           irc_public           => 'irc_public',
                           irc_ping             => 'irc_ping',
                           irc_msg              => 'irc_msg',
-                          irc_persona_reply    => 'persona_reply',
+                          irc_public_reply     => 'irc_public_reply',
                        };
     $self->{'irc_client'} = POE::Component::IRC->spawn(
                                                         nick    => $construct->{'nickname'},
@@ -160,7 +160,7 @@ sub irc_public {
     $what=~s/[\$\`\(]//g;
     $what=~s/[)]//g;
 
-    $_[KERNEL]->post("$self->{'persona'}", "$self->{'persona'}_input",$who, $where, $what, 'persona_reply');
+    $_[KERNEL]->post("$self->{'persona'}", "$self->{'persona'}_input",$who, $where, $what, 'irc_public_reply');
 
     #if(($what=~m/^$self->{'nickname'}\s*:(.*)/)||($what=~m/!(.*)/)){
     #    my $request=$1;
@@ -171,7 +171,7 @@ sub irc_public {
 
 }
 
-sub persona_reply{
+sub irc_public_reply{
     my ($self, $kernel, $heap, $sender, $who, $where, $what) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     foreach my $channel (@{ $where }){
         $self->{'irc_client'}->yield( privmsg => $channel => $what );
