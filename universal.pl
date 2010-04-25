@@ -19,8 +19,9 @@ use POE::Builder;
 # which the reply is intended. Repeat for multiple chat sesions and personas.
 ################################################################################
 
-my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
+my $poe = new POE::Builder({ 'debug' => '1','trace' => '1' });
 exit unless $poe;
+
 
 #$poe->object_session(
 #                      new Jarvis::Persona::Crunchy(
