@@ -48,7 +48,6 @@ sub new {
 sub _start{
      my $self = $_[OBJECT]||shift;
      print STDERR __PACKAGE__ ." start\n";
-     $kernel->post($self->{'alias'}, 'connect');
      return $self;
 }
 
