@@ -68,15 +68,14 @@ sub object_session(){
             $aliased_object_states->{$event} = $object_states->{$event};
         }
     }
-    print Data::Dumper->Dump([$object->alias(),$aliased_object_states]);
-
+    #print Data::Dumper->Dump([$object->alias(),$aliased_object_states]);
     push( @{ $self->{'sessions'} }, POE::Session->create(
                           options => { debug => $self->{'debug'}, trace => $self->{'trace'} },
                           object_states =>  [ $object => $aliased_object_states ],
                           inline_states =>  {
                                               _start   => sub { 
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];
-                                                                $kernel->alias_set($object->{'alias'});
+                                                                $kernel->alias_set($object->alias());
                                                                 $kernel->post($_[SESSION],$object->alias()."_start");
                                                               },
                                               _stop    => sub {

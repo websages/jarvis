@@ -53,19 +53,19 @@ sub new{
         $self->{$key} = $construct->{$key};
     }
     $self->{'states'} = {
-                          '_start' => '_start',
-                          '_stop'  => '_stop',
-                          input_event               => 'input_event',
-                          error_event               => 'error_event',
-                          status_event              => 'status_event',
-                          test_message              => 'test_message',
-                          output_event              => 'output_event',
-                          join_channel              => 'join_channel',
-                          leave_channel             => 'leave_channel',
-                          send_presence             => 'send_presence',
-                          presence_subscribe        => 'presence_subscribe',
-                          approve_subscription      => 'approve_subscription',
-                          refuse_subscription       => 'refuse_subscription',
+                          _start               => '_start',
+                          _stop                => '_stop',
+                          input_event          => 'input_event',
+                          error_event          => 'error_event',
+                          status_event         => 'status_event',
+                          test_message         => 'test_message',
+                          output_event         => 'output_event',
+                          join_channel         => 'join_channel',
+                          leave_channel        => 'leave_channel',
+                          send_presence        => 'send_presence',
+                          presence_subscribe   => 'presence_subscribe',
+                          approve_subscription => 'approve_subscription',
+                          refuse_subscription  => 'refuse_subscription',
                         };
 
     return $self;
