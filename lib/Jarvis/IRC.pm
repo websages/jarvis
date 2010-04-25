@@ -150,7 +150,7 @@ sub irc_public {
     my $channel = $where->[0];
 
 print STDERR $self->{'persona'}."_input:\n   ".$who."\n     ".Data::Dumper->Dump([$where])."   ".$what."\n"; 
-$kernel->post( $self->{'persona'}."_input", $who, $where, $what );
+$kernel->yield( $self->{'persona'}."_input", $who, $where, $what );
 
     #log everything before we do anything with it.
     $_[KERNEL]->post('logger', 'log', "$channel <$nick> $what");
