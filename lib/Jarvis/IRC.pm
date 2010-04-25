@@ -145,7 +145,7 @@ sub irc_001 {
 }
 
 sub irc_public {
-    my ($self, $sender, $who, $where, $what) = @_[OBJECT, SENDER, ARG0 .. ARG2];
+    my ($self, $kernel, $sender, $who, $where, $what) = @_[OBJECT, KERNEL, SENDER, ARG0 .. ARG2];
     my $nick = ( split /!/, $who )[0];
     my $channel = $where->[0];
     #log everything before we do anything with it.
