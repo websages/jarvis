@@ -148,6 +148,7 @@ sub irc_public {
     my ($self, $kernel, $sender, $who, $where, $what) = @_[OBJECT, KERNEL, SENDER, ARG0 .. ARG2];
     my $nick = ( split /!/, $who )[0];
     my $channel = $where->[0];
+print STDERR $self->{'persona'}."_input".$who." ".$where." ".$what."\n"; 
     #log everything before we do anything with it.
     $_[KERNEL]->post('logger', 'log', "$channel <$nick> $what");
     $what=~s/[^a-zA-Z0-9:!\@#\%^&*\[\]_+=\- ]//g;
@@ -157,7 +158,6 @@ sub irc_public {
         my $request=$1;
         $request=~s/^\s+//;
         my @args=split(/\s+/,$request);
-print STDERR $self->{'persona'}."_input".$who." ".$where." ".$what."\n"; 
         $kernel->post( $self->{'persona'}."_input", $who, $where, $what );
         $self->{'irc_client'}->yield( privmsg => $channel => "reply..." );
     }
