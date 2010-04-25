@@ -56,7 +56,7 @@ sub new {
                           irc_public           => 'irc_public',
                           irc_ping             => 'irc_ping',
                           irc_msg              => 'irc_msg',
-                          persona_reply        => 'persona_reply',
+                          irc_persona_reply    => 'persona_reply',
                        };
     $self->{'irc_client'} = POE::Component::IRC->spawn(
                                                         nick    => $construct->{'nickname'},
@@ -183,7 +183,7 @@ sub irc_msg {
     my $nick = ( split /!/, $who )[0];
     my $channel = $where->[0];
     if ( $what =~m/(.+)/ ) {
-        $self->{'irc_client'}->yield( privmsg => $nick => "I don't really do private messages." );
+        $_[KERNEL]->post("$self->{'persona'}", "$self->{'persona'}_input",$who, $where, $what);
     }
     return;
 }
