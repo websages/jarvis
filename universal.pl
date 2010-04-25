@@ -6,7 +6,7 @@ BEGIN { unshift @INC, './lib' if -d './lib'; }
 use Data::Dumper;
 use Jarvis::IRC;
 use Jarvis::Jabber;
-#use Jarvis::Persona::Crunchy;
+use Jarvis::Persona::Crunchy;
 #use Jarvis::Persona::Jarvis;
 #use Jarvis::Persona::System;
 #use Jarvis::Persona::Watcher;
@@ -15,21 +15,22 @@ use POE::Builder;
 ################################################################################
 # We create a persona session, and give it an alias. We then create IRC/XMPP
 # sessions, and tell them to which persona alias to direct incoming messages.
-# The persona session will reply to the session that sent it the message for
-# which the reply is intended. Repeat for multiple chat sesions and personas.
+# The 'persona' session will reply to the 'chat' session that sent it the 
+# message for which the reply is intended. 
+#
+# Repeat for multiple chat sesions and personas...
 ################################################################################
 
 my $poe = new POE::Builder({ 'debug' => '1','trace' => '1' });
 exit unless $poe;
 
-
-#$poe->object_session(
-#                      new Jarvis::Persona::Crunchy(
-#                                                    { 
-#                                                      'alias' => 'crunchy',
-#                                                    }
-#                                                  )
-#                    );
+$poe->object_session(
+                      new Jarvis::Persona::Crunchy(
+                                                    { 
+                                                      'alias' => 'crunchy',
+                                                    }
+                                                  )
+                    );
 
 # irc bot sessions are 1:1 session:nick, but that nick may be in several chats
 $poe->object_session(  
@@ -67,6 +68,10 @@ $poe->object_session(
 # xmpp bot sessions are 1:n for session:room_nick, #
 # (one login can become different nicks in group chats on the same server)
 
+# Adding additional multi-user-chats works, but direct-messages will not go to the chat-persona, 
+# but to the last chat persona instanciated, so it's best to define a accout-persona for
+# xmpp bots with the 'account-persona' attribute and to keep it the same persona for all xmpp sessions.
+
 $poe->object_session( 
                       new Jarvis::Jabber(
                                           {
@@ -81,6 +86,7 @@ $poe->object_session(
                                                                    'global@conference.websages.com/loki',
                                                                  ],
                                             'persona'         => 'system',
+                                            'account-persona' => 'crunchy',
                                           }
                                         ), 
                     );
@@ -99,6 +105,7 @@ $poe->object_session(
                                                                    'global@conference.websages.com/crunchy',
                                                                  ],
                                             'persona'         => 'crunchy',
+                                            'account-persona' => 'crunchy',
                                           }
                                         ), 
                     );
