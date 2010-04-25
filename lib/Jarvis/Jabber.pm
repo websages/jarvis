@@ -75,6 +75,7 @@ sub _start{
     my $self = $_[OBJECT]||shift;
     my $heap = $_[HEAP];
     my $kernel = $_[KERNEL];
+    print STDERR __PACKAGE__ ." start\n";
     $heap->{'component'} = POE::Component::Jabber->new(
                                                         IP             => $self->{'ip'},
                                                         Port           => $self->{'port'},
@@ -95,6 +96,7 @@ sub _start{
 
 sub _stop{
      my $self = $_[OBJECT]||shift;
+    print STDERR __PACKAGE__ ." stop\n";
      return $self;
 }
 
