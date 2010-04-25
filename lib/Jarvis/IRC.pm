@@ -56,6 +56,7 @@ sub new {
                           irc_public           => 'irc_public',
                           irc_ping             => 'irc_ping',
                           irc_msg              => 'irc_msg',
+                          persona_reply        => 'persona_reply',
                        };
     $self->{'irc_client'} = POE::Component::IRC->spawn(
                                                         nick    => $construct->{'nickname'},
