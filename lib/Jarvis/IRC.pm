@@ -75,7 +75,7 @@ sub _start {
     my $self = $_[OBJECT]; 
     my $kernel = $_[KERNEL];
     print STDERR ref($self)." start\n"; 
-    $kernel->alias_set($object->alias());
+    $kernel->alias_set($self->alias());
     $self->on_start(); 
 }
 
