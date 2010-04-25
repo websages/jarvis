@@ -152,8 +152,8 @@ sub irc_public {
     my $channel = $where->[0];
 
 
-    print STDERR "KERNEL->post($self->{'persona'}, $self->{'persona'}_input, $who, $where, $what)\n";
-    $_[KERNEL]->post( "$self->{'persona'}", "$self->{'persona'}_input", $who, $where, $what );
+    print STDERR "KERNEL->yield($self->{'persona'}, $self->{'persona'}_input, $who, $where, $what)\n";
+    $_[KERNEL]->yield( "$self->{'persona'}", "$self->{'persona'}_input", $who, $where, $what );
 
     #log everything before we do anything with it.
     $_[KERNEL]->post('logger', 'log', "$channel <$nick> $what");
