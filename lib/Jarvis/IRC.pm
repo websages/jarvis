@@ -166,7 +166,7 @@ sub irc_public {
     #    $request=~s/^\s+//;
     #    my @args=split(/\s+/,$request);
     #    $self->{'irc_client'}->yield( privmsg => $channel => "reply..." );
-    }
+    #}
 
 }
 
