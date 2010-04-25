@@ -1,4 +1,5 @@
 package Jarvis::Persona::Crunchy;
+use POE;
 
 sub new {
     my $class = shift;
