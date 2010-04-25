@@ -81,7 +81,6 @@ sub alias{
 sub input{
      my ($self, $kernel, $heap, $sender, $who, $where, $what, $respond_event) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
      if(defined($what)){
-         print STDERR piratespeak( $self->{'megahal'}->do_reply( $what ) )."\n";
          $kernel->post($sender, $respond_event, $who, $where, piratespeak( $self->{'megahal'}->do_reply( $what ) ) );
      }
      return $self->{'alias'};
