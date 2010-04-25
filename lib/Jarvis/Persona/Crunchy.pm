@@ -83,8 +83,8 @@ sub input{
      #print STDERR Data::Dumper->Dump([ $sender, $args[$#args -2 ], $args[$#args - 1], $args[$#args] ]);
      print STDERR "-=[ $who said $what ]=-\n";
      if(defined($what)){
-         print STDERR piratespeak( chomp( $self->{'megahal'}->do_reply( $what ) ) )."\n";
-         $kernel->post($sender, 'persona_reply', $who, $where, piratespeak( chomp ($self->{'megahal'}->do_reply( $what ) ) ) );
+         print STDERR piratespeak( $self->{'megahal'}->do_reply( $what ) )."\n";
+         $kernel->post($sender, 'persona_reply', $who, $where, piratespeak( $self->{'megahal'}->do_reply( $what ) ) );
      }
      return $self->{'alias'};
 }
