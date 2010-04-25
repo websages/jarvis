@@ -13,10 +13,10 @@ use Jarvis::Jabber;
 use POE::Builder;
 
 my $poe = new POE::Builder( 
-                            {
-                              'debug' => '1',
-                              'trace' => '1',
-                            } 
+                           # {
+                           #   'debug' => '1',
+                           #   'trace' => '1',
+                           # } 
                           );
 exit unless $poe;
 
