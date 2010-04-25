@@ -79,7 +79,7 @@ sub alias{
 }
 
 sub input{
-     my ($self, $kernel, $heap, $sender, $who, $where, $what) = @_[OBJECT, KERNEL, HEAP, SENDER, $ARG0 .. $#_];
+     my ($self, $kernel, $heap, $sender, $who, $where, $what) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
      #print STDERR Data::Dumper->Dump([ $sender, $args[$#args -2 ], $args[$#args - 1], $args[$#args] ]);
      print STDERR "-=[ $who said $what ]=-\n";
      if(defined($what)){

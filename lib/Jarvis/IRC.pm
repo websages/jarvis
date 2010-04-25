@@ -171,7 +171,7 @@ sub irc_public {
 }
 
 sub persona_reply{
-    my ($self, $kernel, $heap, $sender, $who, $where, $what) = @_[OBJECT, KERNEL, HEAP, SENDER, $ARG0 .. $#_];
+    my ($self, $kernel, $heap, $sender, $who, $where, $what) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     foreach my $channel (@{ $where }){
         $self->{'irc_client'}->yield( privmsg => $channel => $what );
     }
