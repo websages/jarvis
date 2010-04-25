@@ -12,8 +12,23 @@ use Jarvis::Jabber;
 #use Jarvis::Persona::Watcher;
 use POE::Builder;
 
+################################################################################
+# We create a persona session, and give it an alias. We then create IRC/XMPP
+# sessions, and tell them to which persona alias to direct incoming messages.
+# The persona session will reply to the session that sent it the message for
+# which the reply is intended. Repeat for multiple chat sesions and personas.
+################################################################################
+
 my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
 exit unless $poe;
+
+#$poe->object_session(
+#                      new Jarvis::Persona::Crunchy(
+#                                                    { 
+#                                                      'alias' => 'crunchy',
+#                                                    }
+#                                                  )
+#                    );
 
 # irc bot sessions are 1:1 session:nick, but that nick may be in several chats
 $poe->object_session(  
@@ -24,7 +39,7 @@ $poe->object_session(
                                          'ircname'      => 'Cap\'n Crunchbot',
                                          'server'       => '127.0.0.1',
                                          'channel_list' => [ 
-                                                             '#puppies',
+                                                             '#soggies',
                                                            ],
                                          'persona'      => 'crunchy',
                                        }
@@ -39,7 +54,8 @@ $poe->object_session(
                                          'ircname'      => 'loki.websages.com',
                                          'server'       => '127.0.0.1',
                                          'channel_list' => [ 
-                                                             '#global',
+                                                             '#asgard',
+                                                             '#migard',
                                                              '#puppies',
                                                            ],
                                          'persona'      => 'system',
@@ -60,11 +76,29 @@ $poe->object_session(
                                             'username'        => 'crunchy',
                                             'password'        => $ENV{'XMPP_PASSWORD'},
                                             'channel_list'    => [ 
-                                                                   'loki@system',
+                                                                   'system@conference.websages.com/loki',
+                                                                   'global@conference.websages.com/loki',
                                                                  ],
                                             'persona'         => 'system',
                                           }
                                         ), 
                     );
 
+$poe->object_session( 
+                      new Jarvis::Jabber(
+                                          {
+                                            'alias'           => 'xmpp_client',
+                                            'ip'              => 'thor.websages.com',
+                                            'port'            => '5222',
+                                            'hostname'        => 'websages.com',
+                                            'username'        => 'crunchy',
+                                            'password'        => $ENV{'XMPP_PASSWORD'},
+                                            'channel_list'    => [ 
+                                                                   'soggies@conference.websages.com/crunchy',
+                                                                   'global@conference.websages.com/crunchy',
+                                                                 ],
+                                            'persona'         => 'crunchy',
+                                          }
+                                        ), 
+                    );
 POE::Kernel->run();

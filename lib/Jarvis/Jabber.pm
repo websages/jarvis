@@ -178,10 +178,14 @@ sub status_event()
 #                $node->insert_tag($child_node);
 #
 #                $kernel->yield('output_event',$node);
-
-                $heap->{'roomnick'} = 'system@conference.websages.com/crunchy';
-                #$kernel->yield('presence_subscribe','whitejs@websages.com');
-                $kernel->yield('join_channel','system');
+               
+                if(defined($self->{'channel_list'})){
+                    foreach my $muc (@{ $self->{'channel_list'} }){
+                        #$heap->{'roomnick'} = 'system@conference.websages.com/crunchy';
+                        #$kernel->yield('presence_subscribe','whitejs@websages.com');
+                        $kernel->yield('join_channel', $muc);
+                    }
+                }
 
                 #for(1..10)
                 #{
@@ -297,8 +301,7 @@ sub error_event()
 sub join_channel() {
     my ($self, $kernel, $heap, $room) = @_[OBJECT, KERNEL, HEAP, ARG0];
     $heap->{'starttime'} = time;
-    #$heap->{'roomnick'} = $room.'@conference.websages.com/crunchy';
-    my $node=XNode->new('presence', [ 'to', $heap->{'roomnick'}, 'from', $heap->{'component'}->jid(), ]);
+    my $node=XNode->new('presence', [ 'to', $room, 'from', $heap->{'component'}->jid(), ]);
     my $child_node=XNode->new('x',[xmlns=>"http://jabber.org/protocol/muc"]);
     $node->insert_tag($child_node);
     $kernel->yield('output_event',$node,$heap->{'sid'});
