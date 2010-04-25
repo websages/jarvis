@@ -81,7 +81,8 @@ sub input{
      my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, $ARG0 .. $#_];
      my $what = $args[$#args];
      #print STDERR Data::Dumper->Dump([ $sender, $args[$#args -2 ], $args[$#args - 1], $args[$#args] ]);
-     if($what){
+     print STDERR "-=[ $what ]=-\n";
+     if(defined($what)){
          print STDERR piratespeak( $self->{'megahal'}->do_reply( $what ))."\n";
          $kernel->post($sender, piratespeak( $self->{'megahal'}->do_reply( $what ) ) );
      }
