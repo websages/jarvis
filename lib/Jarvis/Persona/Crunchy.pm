@@ -51,13 +51,13 @@ sub new {
 sub _start{
      my $self = $_[OBJECT]||shift;
      print STDERR __PACKAGE__ ." start\n";
-     my $self->{'megahal'} = new AI::MegaHAL(
-                                              'Path'     => '/usr/lib/share/crunchy',
-                                              'Banner'   => 0,
-                                              'Prompt'   => 0,
-                                              'Wrap'     => 0,
-                                              'AutoSave' => 1
-                                            );
+     $self->{'megahal'} = new AI::MegaHAL(
+                                           'Path'     => '/usr/lib/share/crunchy',
+                                           'Banner'   => 0,
+                                           'Prompt'   => 0,
+                                           'Wrap'     => 0,
+                                           'AutoSave' => 1
+                                         );
      return $self;
 }
 
