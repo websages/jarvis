@@ -76,7 +76,7 @@ sub _start{
     my $heap = $_[HEAP];
     my $kernel = $_[KERNEL];
     print STDERR __PACKAGE__ ." start\n";
-    $heap->{'component'} = POE::Component::Jabber->new(
+    $heap->{$self->alias()} = POE::Component::Jabber->new(
                                                         IP             => $self->{'ip'},
                                                         Port           => $self->{'port'},
                                                         Hostname       => $self->{'hostname'},
@@ -138,7 +138,7 @@ sub status_event()
                 # method? PCJ stores the jid that was negotiated during connecting and 
                 # is retrievable through the jid() method
 
-                my $jid = $heap->{'component'}->jid();
+                my $jid = $heap->{$self->alias()}->jid();
                 print "INIT FINISHED! \n";
                 print "JID: $jid \n";
                 print "SID: ". $sender->ID() ." \n\n";
@@ -303,7 +303,7 @@ sub error_event()
 sub join_channel() {
     my ($self, $kernel, $heap, $room) = @_[OBJECT, KERNEL, HEAP, ARG0];
     $heap->{'starttime'} = time;
-    my $node=XNode->new('presence', [ 'to', $room, 'from', $heap->{'component'}->jid(), ]);
+    my $node=XNode->new('presence', [ 'to', $room, 'from', $heap->{$self->alias()}->jid(), ]);
     my $child_node=XNode->new('x',[xmlns=>"http://jabber.org/protocol/muc"]);
     $node->insert_tag($child_node);
     $kernel->yield('output_event',$node,$heap->{'sid'});
@@ -336,7 +336,7 @@ sub send_presence() {
     my ($self, $kernel, $heap, $tgt_jid, $type) = @_[OBJECT, KERNEL, HEAP, ARG0, ARG1];
     my $node=XNode->new('presence');
     $node->attr('to',$tgt_jid );
-    $node->attr('from', $heap->{'component'}->jid() );
+    $node->attr('from', $heap->{$self->alias()}->jid() );
     $node->attr('type',$type) if $type;
     $kernel->yield('output_event',$node,$heap->{'sid'});
 } # send_presence
