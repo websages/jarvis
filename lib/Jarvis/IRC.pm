@@ -157,6 +157,7 @@ sub irc_public {
         my $request=$1;
         $request=~s/^\s+//;
         my @args=split(/\s+/,$request);
+print STDERR "$self->{'persona'}."_input", $who, $where, $what\n"; 
         $kernel->post( $self->{'persona'}."_input", $who, $where, $what );
         $self->{'irc_client'}->yield( privmsg => $channel => "reply..." );
     }
