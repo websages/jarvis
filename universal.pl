@@ -24,7 +24,21 @@ $poe->object_session(
                                        {
                                          'alias'        => 'irc_client',
                                          'nickname'     => 'crunchy',
-                                         'ircname'      => 'Optimus Prime',
+                                         'ircname'      => 'Cap\'n Crunchbot',
+                                         'server'       => '127.0.0.1',
+                                         'channel_list' => [ 
+                                                             '#puppies',
+                                                           ]
+                                       }
+                                     ), 
+                    );
+
+$poe->object_session(  
+                      new Jarvis::IRC(
+                                       {
+                                         'alias'        => 'host_session',
+                                         'nickname'     => 'loki',
+                                         'ircname'      => 'loki.websages.com',
                                          'server'       => '127.0.0.1',
                                          'channel_list' => [ 
                                                              '#puppies',
