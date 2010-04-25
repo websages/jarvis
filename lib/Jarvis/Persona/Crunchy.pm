@@ -98,6 +98,7 @@ sub output{
 sub process{
      my ($self, $kernel, $heap, $sender, $what) = @_[OBJECT, KERNEL, HEAP, SENDER, ARGV0];
      return $self->{'alias'};
+}
 
 
 1;
