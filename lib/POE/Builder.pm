@@ -75,6 +75,7 @@ sub object_session(){
                           inline_states =>  {
                                               _start   => sub { 
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];
+print STDERR "\n\n\n\n-=[ $self->{'alias'} ]=-\n\n\n\n\n";
                                                                 $kernel->alias_set($self->{'alias'});
                                                                 $kernel->post($_[SESSION],$object->alias()."_start");
                                                               },
