@@ -160,7 +160,7 @@ sub irc_public {
     $what=~s/[\$\`\(]//g;
     $what=~s/[)]//g;
 
-    $_[KERNEL]->post("$self->{'persona'}", "$self->{'persona'}_input",$who, $where, $what);
+    $_[KERNEL]->post("$self->{'persona'}", "$self->{'persona'}_input",$who, $where, $what, 'persona_reply');
 
     #if(($what=~m/^$self->{'nickname'}\s*:(.*)/)||($what=~m/!(.*)/)){
     #    my $request=$1;
@@ -184,6 +184,7 @@ sub irc_msg {
     my $channel = $where->[0];
     if ( $what =~m/(.+)/ ) {
         $_[KERNEL]->post("$self->{'persona'}", "$self->{'persona'}_input",$who, $where, $what);
+        $self->{'irc_client'}->yield( privmsg => $nick => "I don't really do private messages." );
     }
     return;
 }
