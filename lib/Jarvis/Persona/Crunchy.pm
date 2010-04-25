@@ -34,8 +34,9 @@ sub new {
     $self->{'states'} = { 
                           $self->{'alias'}.'_start' => '_start',
                           $self->{'alias'}.'_stop'  => '_stop',
-                        #  input_event               => 'input_event',
-                        #  output_event              => 'output_event',
+                          $self->{'alias'}.'input'  => 'input',
+                          $self->{'alias'}.'output' => 'output',
+                          # special_events go here...
                         };
 
 
@@ -61,6 +62,17 @@ sub states{
 }
 
 sub alias{
+     my $self = $_[OBJECT]||shift;
+     return $self->{'alias'};
+}
+
+sub input{
+     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, $ARG0 .. $#_];
+     print STDERR Data::Dumper->Dump([$sender, @args]);
+     return $self->{'alias'};
+}
+
+sub output{
      my $self = $_[OBJECT]||shift;
      return $self->{'alias'};
 }

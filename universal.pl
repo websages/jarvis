@@ -72,41 +72,41 @@ $poe->object_session(
 # but to the last chat persona instanciated, so it's best to define a accout-persona for
 # xmpp bots with the 'account-persona' attribute and to keep it the same persona for all xmpp sessions.
 
-$poe->object_session( 
-                      new Jarvis::Jabber(
-                                          {
-                                            'alias'           => 'loki_xmpp',
-                                            'ip'              => 'thor.websages.com',
-                                            'port'            => '5222',
-                                            'hostname'        => 'websages.com',
-                                            'username'        => 'crunchy',
-                                            'password'        => $ENV{'XMPP_PASSWORD'},
-                                            'channel_list'    => [ 
-                                                                   'system@conference.websages.com/loki',
-                                                                   'global@conference.websages.com/loki',
-                                                                 ],
-                                            'persona'         => 'system',
-                                            'account-persona' => 'crunchy',
-                                          }
-                                        ), 
-                    );
-
-$poe->object_session( 
-                      new Jarvis::Jabber(
-                                          {
-                                            'alias'           => 'crunchy_xmpp',
-                                            'ip'              => 'thor.websages.com',
-                                            'port'            => '5222',
-                                            'hostname'        => 'websages.com',
-                                            'username'        => 'crunchy',
-                                            'password'        => $ENV{'XMPP_PASSWORD'},
-                                            'channel_list'    => [ 
-                                                                   'soggies@conference.websages.com/crunchy',
-                                                                   'global@conference.websages.com/crunchy',
-                                                                 ],
-                                            'persona'         => 'crunchy',
-                                            'account-persona' => 'crunchy',
-                                          }
-                                        ), 
-                    );
+#$poe->object_session( 
+#                      new Jarvis::Jabber(
+#                                          {
+#                                            'alias'           => 'loki_xmpp',
+#                                            'ip'              => 'thor.websages.com',
+#                                            'port'            => '5222',
+#                                            'hostname'        => 'websages.com',
+#                                            'username'        => 'crunchy',
+#                                            'password'        => $ENV{'XMPP_PASSWORD'},
+#                                            'channel_list'    => [ 
+#                                                                   'system@conference.websages.com/loki',
+#                                                                   'global@conference.websages.com/loki',
+#                                                                 ],
+#                                            'persona'         => 'system',
+#                                            'account-persona' => 'crunchy',
+#                                          }
+#                                        ), 
+#                    );
+#
+#$poe->object_session( 
+#                      new Jarvis::Jabber(
+#                                          {
+#                                            'alias'           => 'crunchy_xmpp',
+#                                            'ip'              => 'thor.websages.com',
+#                                            'port'            => '5222',
+#                                            'hostname'        => 'websages.com',
+#                                            'username'        => 'crunchy',
+#                                            'password'        => $ENV{'XMPP_PASSWORD'},
+#                                            'channel_list'    => [ 
+#                                                                   'soggies@conference.websages.com/crunchy',
+#                                                                   'global@conference.websages.com/crunchy',
+#                                                                 ],
+#                                            'persona'         => 'crunchy',
+#                                            'account-persona' => 'crunchy',
+#                                          }
+#                                        ), 
+#                    );
 POE::Kernel->run();
