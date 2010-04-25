@@ -36,10 +36,11 @@ sub new {
          }
     }
     $self->{'states'} = { 
-                          $self->{'alias'}.'_start' => '_start',
-                          $self->{'alias'}.'_stop'  => '_stop',
-                          $self->{'alias'}.'_input'  => 'input',
-                          $self->{'alias'}.'_output' => 'output',
+                          $self->{'alias'}.'_start'   => '_start',
+                          $self->{'alias'}.'_stop'    => '_stop',
+                          $self->{'alias'}.'_input'   => 'input',
+                          $self->{'alias'}.'_output'  => 'output',
+                          $self->{'alias'}.'_process' => 'process',
                           # special_events go here...
                         };
 
@@ -84,7 +85,7 @@ sub input{
      print STDERR "-=[ $what ]=-\n";
      if(defined($what)){
          print STDERR piratespeak( $self->{'megahal'}->do_reply( $what ))."\n";
-         $kernel->post($sender, piratespeak( $self->{'megahal'}->do_reply( $what ) ) );
+         $kernel->post($sender, 'persona_reply', piratespeak( $self->{'megahal'}->do_reply( $what ) ) );
      }
      return $self->{'alias'};
 }
