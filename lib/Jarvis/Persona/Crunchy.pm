@@ -82,7 +82,7 @@ sub input{
      my $what = $args[$#args];
      #print STDERR Data::Dumper->Dump([ $sender, $args[$#args -2 ], $args[$#args - 1], $args[$#args] ]);
      print STDERR piratespeak( $self->{'megahal'}->do_reply( $what ))."\n";
-     $kernel->post($sender, piratespeak( $self->{'megahal'}->do_reply( $what ));
+     $kernel->post($sender, piratespeak( $self->{'megahal'}->do_reply( $what ) ) );
      return $self->{'alias'};
 }
 
