@@ -69,7 +69,7 @@ sub alias{
 
 sub input{
      my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, $ARG0 .. $#_];
-     print STDERR Data::Dumper->Dump([$sender, @args]);
+     print STDERR Data::Dumper->Dump([$sender, $args[$#args]]);
      return $self->{'alias'};
 }
 
