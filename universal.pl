@@ -13,7 +13,7 @@ use Jarvis::Persona::Crunchy;
 use POE::Builder;
 $|++;
 
-my $IRC=0;
+my $IRC=1;
 my $XMPP=1;
 
 ################################################################################
@@ -28,13 +28,13 @@ my $XMPP=1;
 my $poe = new POE::Builder({ 'debug' => '1','trace' => '1' });
 exit unless $poe;
 
-#$poe->object_session(
-#                      new Jarvis::Persona::Crunchy(
-#                                                    { 
-#                                                      'alias' => 'crunchy',
-#                                                    }
-#                                                  )
-#                    );
+$poe->object_session(
+                      new Jarvis::Persona::Crunchy(
+                                                    { 
+                                                      'alias' => 'crunchy',
+                                                    }
+                                                  )
+                    );
 
 # irc bot sessions are 1:1 session:nick, but that nick may be in several chats
 if($IRC){
