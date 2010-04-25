@@ -7,7 +7,7 @@ sub new {
     $self->{'session_struct'}={};
 
     # list of required constructor elements
-    $self->{'must'} = [ 'alias', 'bleh' ];
+    $self->{'must'} = [ 'alias' ];
 
     # hash of optional constructor elements (key), and their default (value) if not specified
     $self->{'may'} = {};
