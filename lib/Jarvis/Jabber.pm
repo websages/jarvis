@@ -88,7 +88,7 @@ sub _start{
                                                                             InputEvent  => 'input_event',
                                                                             ErrorEvent  => 'error_event',
                                                                           },
-                                                     );
+                                                      );
     $kernel->post($self->{'alias'}, 'connect');
     return $self;
 }

@@ -1,5 +1,8 @@
 package Jarvis::Persona::Crunchy;
+use AI::MegaHAL;
+use IRCBot::Chatbot::Pirate;
 use POE;
+use POSIX qw( setsid );
 
 sub new {
     my $class = shift;
@@ -48,6 +51,13 @@ sub new {
 sub _start{
      my $self = $_[OBJECT]||shift;
      print STDERR __PACKAGE__ ." start\n";
+     my $self->{'megahal'} = new AI::MegaHAL(
+                                              'Path'     => '/usr/lib/share/crunchy',
+                                              'Banner'   => 0,
+                                              'Prompt'   => 0,
+                                              'Wrap'     => 0,
+                                              'AutoSave' => 1
+                                            );
      return $self;
 }
 
@@ -69,12 +79,15 @@ sub alias{
 
 sub input{
      my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, $ARG0 .. $#_];
-     print STDERR Data::Dumper->Dump([ $sender, $args[$#args -2 ], $args[$#args - 1], $args[$#args] ]);
+     my $what = $args[$#args];
+     #print STDERR Data::Dumper->Dump([ $sender, $args[$#args -2 ], $args[$#args - 1], $args[$#args] ]);
+     print STDERR piratespeak( $self->{'megahal'}->do_reply( $what ))."\n";
+     $kernel->post($sender, piratespeak( $self->{'megahal'}->do_reply( $what ));
      return $self->{'alias'};
 }
 
 sub output{
-     my $self = $_[OBJECT]||shift;
+     my ($self, $kernel, $heap, $sender, $what = @_[OBJECT, KERNEL, HEAP, SENDER, ARGV0];
      return $self->{'alias'};
 }
 

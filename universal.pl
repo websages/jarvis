@@ -11,6 +11,7 @@ use Jarvis::Persona::Crunchy;
 #use Jarvis::Persona::System;
 #use Jarvis::Persona::Watcher;
 use POE::Builder;
+$|++;
 
 ################################################################################
 # We create a persona session, and give it an alias. We then create IRC/XMPP
