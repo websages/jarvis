@@ -34,8 +34,8 @@ sub new {
     $self->{'states'} = { 
                           $self->{'alias'}.'_start' => '_start',
                           $self->{'alias'}.'_stop'  => '_stop',
-                          $self->{'alias'}.'input'  => 'input',
-                          $self->{'alias'}.'output' => 'output',
+                          $self->{'alias'}.'_input'  => 'input',
+                          $self->{'alias'}.'_output' => 'output',
                           # special_events go here...
                         };
 
