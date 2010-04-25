@@ -31,9 +31,39 @@ sub new {
              $self->{$attr} = $self->{'may'}->{$attr};
          }
     }
+    $self->{'states'} = { 
+                          $self->{'alias'}.'_start' => '_start',
+                          $self->{'alias'}.'_stop'  => '_stop',
+                        #  input_event               => 'input_event',
+                        #  output_event              => 'output_event',
+                        };
+
 
     bless($self,$class);
     return $self;
 }
+
+sub _start{
+     my $self = $_[OBJECT]||shift;
+     print STDERR __PACKAGE__ ." start\n";
+     return $self;
+}
+
+sub _stop{
+     my $self = $_[OBJECT]||shift;
+     print STDERR __PACKAGE__ ." stop\n";
+     return $self;
+}
+
+sub states{
+     my $self = $_[OBJECT]||shift;
+     return $self->{'states'};
+}
+
+sub alias{
+     my $self = $_[OBJECT]||shift;
+     return $self->{'alias'};
+}
+
 
 1;
