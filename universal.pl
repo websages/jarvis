@@ -70,7 +70,7 @@ $poe->object_session(
 $poe->object_session( 
                       new Jarvis::Jabber(
                                           {
-                                            'alias'           => 'xmpp_client',
+                                            'alias'           => 'loki_xmpp',
                                             'ip'              => 'thor.websages.com',
                                             'port'            => '5222',
                                             'hostname'        => 'websages.com',
@@ -88,7 +88,7 @@ $poe->object_session(
 $poe->object_session( 
                       new Jarvis::Jabber(
                                           {
-                                            'alias'           => 'xmpp_client',
+                                            'alias'           => 'crunchy_xmpp',
                                             'ip'              => 'thor.websages.com',
                                             'port'            => '5222',
                                             'hostname'        => 'websages.com',
