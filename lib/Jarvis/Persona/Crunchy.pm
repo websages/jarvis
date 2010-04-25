@@ -48,7 +48,6 @@ sub new {
 sub _start{
      my $self = $_[OBJECT]||shift;
      print STDERR __PACKAGE__ ." start\n";
-     print Data::Dumper->Dump([$self->alias(),$self->states()]);
      return $self;
 }
 

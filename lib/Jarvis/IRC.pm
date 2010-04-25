@@ -69,7 +69,7 @@ sub new {
 ################################################################################
 # POE::Builder expects '_stop', '_start', and 'states', and 'alias'
 ################################################################################
-sub _start { my $self = $_[OBJECT]; print STDERR ref($self)." start\n"; print Data::Dumper->Dump([$self->alias(),$self->states()]); $self->on_start(); }
+sub _start { my $self = $_[OBJECT]; print STDERR ref($self)." start\n"; $self->on_start(); }
 
 
 sub _stop  { my $self = $_[OBJECT]; print STDERR ref($self)." stop \n"; }

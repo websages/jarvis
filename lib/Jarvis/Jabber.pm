@@ -90,7 +90,6 @@ sub _start{
                                                                           },
                                                      );
     $kernel->post($self->{'alias'}, 'connect');
-    print Data::Dumper->Dump([$self->alias(),$self->states()]);
     return $self;
 }
 
