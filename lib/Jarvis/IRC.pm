@@ -71,10 +71,21 @@ sub new {
 ################################################################################
 # POE::Builder expects '_stop', '_start', and 'states', and 'alias'
 ################################################################################
-sub _start { my $self = $_[OBJECT]; print STDERR ref($self)." start\n"; $self->on_start(); }
+sub _start { 
+    my $self = $_[OBJECT]; 
+    my $kernel = $_[KERNEL];
+    print STDERR ref($self)." start\n"; 
+    $kernel->alias_set($object->alias());
+    $self->on_start(); 
+}
 
 
-sub _stop  { my $self = $_[OBJECT]; print STDERR ref($self)." stop \n"; }
+sub _stop  { 
+    my $self = $_[OBJECT]; 
+    my $kernel = $_[KERNEL];
+    print STDERR ref($self)." stop \n"; 
+    $kernel->alias_remove();
+}
 sub states { my $self = $_[OBJECT]; return $self->{'states'};           }
 sub alias { my $self = $_[OBJECT]; return $self->{'alias'};           }
 
