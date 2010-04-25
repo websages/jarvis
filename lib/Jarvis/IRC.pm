@@ -17,36 +17,55 @@ use Data::Dumper;
 use YAML;
 
 sub new { 
-          my $class = shift; 
-          $class = ref($class)||$class;
-          my $self = {}; 
-          my $construct = shift if @_;
-          foreach my $attr ("channel_list","nickname","alias"){
-               if(defined($construct->{$attr})){
-                   $self->{$attr} = $construct->{$attr};
-               }else{
-                   print STDERR "Required constructor attribute [$attr] not defined. Terminating Jarvis::IRC session\n";
-                   return undef;
-               }
-           }
-          bless($self,$class); 
-          $self->{'states'} = { 
-                                _start               => '_start',
-                                _stop                => '_stop',
-                                irc_default          => '_default',
-                                irc_001              => 'irc_001',
-                                irc_public           => 'irc_public',
-                                irc_ping             => 'irc_ping',
-                                irc_msg              => 'irc_msg',
-                             };
-          $self->{'irc_client'} = POE::Component::IRC->spawn(
-                                                              nick    => $construct->{'nickname'},
-                                                              ircname => $construct->{'ircname'},
-                                                              server  => $construct->{'server'},
-                                                            ) 
-              or $self->error("Cannot connect to IRC $construct->{'server'} $!");
-          return $self 
-        }
+   my $class = shift; 
+   $class = ref($class)||$class;
+   my $self = {}; 
+   my $construct = shift if @_;
+    # list of required constructor elements
+    $self->{'must'} = ["channel_list","nickname","alias"];
+
+    # hash of optional constructor elements (key), and their default (value) if not specified
+    $self->{'may'} = { };
+
+    # set our required values fron the constructor or the defaults
+    foreach my $attr (@{ $self->{'must'} }){
+         if(defined($construct->{$attr})){
+             $self->{$attr} = $construct->{$attr};
+         }else{
+             print STDERR "Required session constructor attribute [$attr] not defined. ";
+             print STDERR "unable to define ". __PACKAGE__ ." object\n";
+             return undef;
+         }
+    }
+
+    # set our optional values fron the constructor or the defaults
+    foreach my $attr (keys(%{ $self->{'may'} })){
+         if(defined($construct->{$attr})){
+             $self->{$attr} = $construct->{$attr};
+         }else{
+             $self->{$attr} = $self->{'may'}->{$attr};
+         }
+    }
+
+    bless($self,$class); 
+    $self->{'states'} = { 
+                          _start               => '_start',
+                          _stop                => '_stop',
+                          irc_default          => '_default',
+                          irc_001              => 'irc_001',
+                          irc_public           => 'irc_public',
+                          irc_ping             => 'irc_ping',
+                          irc_msg              => 'irc_msg',
+                       };
+    $self->{'irc_client'} = POE::Component::IRC->spawn(
+                                                        nick    => $construct->{'nickname'},
+                                                        ircname => $construct->{'ircname'},
+                                                        server  => $construct->{'server'},
+                                                      ) 
+        or $self->error("Cannot connect to IRC $construct->{'server'} $!");
+    return $self 
+}
+
 ################################################################################
 # POE::Builder expects '_stop', '_start', and 'states', and 'alias'
 ################################################################################

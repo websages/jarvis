@@ -12,12 +12,7 @@ use Jarvis::Jabber;
 #use Jarvis::Personality::Watcher;
 use POE::Builder;
 
-my $poe = new POE::Builder( 
-                           # {
-                           #   'debug' => '1',
-                           #   'trace' => '1',
-                           # } 
-                          );
+my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
 exit unless $poe;
 
 # irc bot sessions are 1:1 session:nick, but that nick may be in several chats
