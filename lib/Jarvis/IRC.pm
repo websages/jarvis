@@ -22,7 +22,7 @@ sub new {
    my $self = {}; 
    my $construct = shift if @_;
     # list of required constructor elements
-    $self->{'must'} = ["channel_list","nickname","alias"];
+    $self->{'must'} = ["channel_list","nickname","alias","persona"];
 
     # hash of optional constructor elements (key), and their default (value) if not specified
     $self->{'may'} = { };
@@ -148,7 +148,7 @@ sub irc_public {
     my ($self, $kernel, $sender, $who, $where, $what) = @_[OBJECT, KERNEL, SENDER, ARG0 .. ARG2];
     my $nick = ( split /!/, $who )[0];
     my $channel = $where->[0];
-print STDERR $self->{'persona'}."_input".$who." ".$where." ".$what."\n"; 
+print STDERR $self->{'persona'}."_input ".$who."  ".$where." ".$what."\n"; 
     #log everything before we do anything with it.
     $_[KERNEL]->post('logger', 'log', "$channel <$nick> $what");
     $what=~s/[^a-zA-Z0-9:!\@#\%^&*\[\]_+=\- ]//g;
