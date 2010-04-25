@@ -203,7 +203,7 @@ sub input_event()
         print $node->to_str() . "\n";
         print $node->get_id() . "\n";
         if($node->name() eq 'presence'){
-            print Data::Dumper->Dump([$node->get_attrs()]) . "\n";
+            #print Data::Dumper->Dump([$node->get_attrs()]) . "\n";
             if($node->attr('type') eq 'subscribe'){
                 if($node->attr('from') eq 'whitejs@websages.com'){
                     $kernel->yield('approve_subscription',$node->attr('from'));

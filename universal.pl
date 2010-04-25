@@ -6,10 +6,10 @@ BEGIN { unshift @INC, './lib' if -d './lib'; }
 use Data::Dumper;
 use Jarvis::IRC;
 use Jarvis::Jabber;
-#use Jarvis::Personality::Crunchy;
-#use Jarvis::Personality::Jarvis;
-#use Jarvis::Personality::System;
-#use Jarvis::Personality::Watcher;
+#use Jarvis::Persona::Crunchy;
+#use Jarvis::Persona::Jarvis;
+#use Jarvis::Persona::System;
+#use Jarvis::Persona::Watcher;
 use POE::Builder;
 
 my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
@@ -25,7 +25,8 @@ $poe->object_session(
                                          'server'       => '127.0.0.1',
                                          'channel_list' => [ 
                                                              '#puppies',
-                                                           ]
+                                                           ],
+                                         'persona'      => 'crunchy',
                                        }
                                      ), 
                     );
@@ -40,7 +41,8 @@ $poe->object_session(
                                          'channel_list' => [ 
                                                              '#global',
                                                              '#puppies',
-                                                           ]
+                                                           ],
+                                         'persona'      => 'system',
                                        }
                                      ), 
                     );
@@ -57,10 +59,10 @@ $poe->object_session(
                                             'hostname'        => 'websages.com',
                                             'username'        => 'crunchy',
                                             'password'        => $ENV{'XMPP_PASSWORD'},
-                                            'channel_list' => [ 
-                                                                'crunchy@system',
-                                                                'loki@system',
-                                                              ]
+                                            'channel_list'    => [ 
+                                                                   'loki@system',
+                                                                 ],
+                                            'persona'         => 'system',
                                           }
                                         ), 
                     );
