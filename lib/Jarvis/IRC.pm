@@ -151,7 +151,7 @@ sub irc_public {
     my $nick = ( split /!/, $who )[0];
     my $channel = $where->[0];
 
-    $_[KERNEL]->post("$self->{'persona'}", "$self->{'persona'}_input", $what);
+    $_[KERNEL]->post("$self->{'persona'}", "$self->{'persona'}_input",$who, $where, $what);
     #log everything before we do anything with it.
     $_[KERNEL]->post('logger', 'log', "$channel <$nick> $what");
     $what=~s/[^a-zA-Z0-9:!\@#\%^&*\[\]_+=\- ]//g;
