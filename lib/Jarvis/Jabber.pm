@@ -229,8 +229,9 @@ print STDERR "To: $to, From: $from, Type: $type, ID: $id\n";
         if(defined($child_nodes->{'body'})){ 
              $what = $child_nodes->{'body'}->data();
         }
-        $kernel->post("$self->{'persona'}", "$self->{'persona'}_input", $from, $id, $what, 'xmpp_public');
-        #$kernel->delay_add('test_message', int(rand(10)));
+        if(($type eq 'chat')||($type eq 'groupchat')){
+            $kernel->post("$self->{'persona'}", "$self->{'persona'}_input", $from, $id, $what, 'xmpp_reply');
+        }
                 
 }
 
