@@ -229,7 +229,10 @@ sub input_event()
             print ref($child)."\n";
             foreach my $childnode ( @{ $child } ){ 
                 my $childnodedata = $childnode->get_attrs();
-                foreach my $ckey ( keys(%{ $childnodedata }) ){ print $ckey .": ". $childnodedata->{$ckey} ."\n";} 
+                print $childnodedata->data()."\n";
+                foreach my $ckey ( keys(%{ $childnodedata }) ){ 
+                    print $ckey .": ". $childnodedata->{$ckey} ."\n";
+                }
             }
         }
 
