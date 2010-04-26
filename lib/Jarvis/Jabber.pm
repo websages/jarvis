@@ -91,7 +91,7 @@ sub _start{
                                                                             ErrorEvent  => 'error_event',
                                                                           },
                                                       );
-    $session->yield('connect');
+    $kernel->post($session,'connect');
     return $self;
 }
 
