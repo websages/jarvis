@@ -90,7 +90,7 @@ sub _start{
                                                                             ErrorEvent  => 'error_event',
                                                                           },
                                                       );
-    $kernel->yield($self->alias(), 'connect');
+    $kernel->yield('connect');
     return $self;
 }
 
