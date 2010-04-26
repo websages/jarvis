@@ -91,29 +91,26 @@ sub input{
                                                'specifics' => $where,
                                              },
                               };
-print STDERR Data::Dumper->Dump([$message_bundle]);
          $kernel->post($self->alias(), $self->alias().'_process', $message_bundle );
      }
 }
 
 sub output{
-     my ($self, $kernel, $heap, $sender, $response_bundle) = @_[OBJECT, KERNEL, HEAP, SENDER, ARGV0];
+     my ($self, $kernel, $heap, $sender, $message_bundle) = @_[OBJECT, KERNEL, HEAP, SENDER, ARGV0];
      # un-wrap the response bundle and send it back to the initiator
-     my $who           = $response_bundle->{'user'};
-     my $what          = $response_bundle->{'message'};
-     my $sender        = $response_bundle->{'respond'}->{'session'};
-     my $where         = $response_bundle->{'respond'}->{'specifics'};
-     my $respond_event = $response_bundle->{'respond'}->{'event'};
-
-print STDERR Data::Dumper->Dump([$response_bundle]);
-
+     my $who           = $message_bundle->{'user'};
+     my $what          = $message_bundle->{'message'};
+     my $sender        = $message_bundle->{'respond'}->{'session'};
+     my $where         = $message_bundle->{'respond'}->{'specifics'};
+     my $respond_event = $message_bundle->{'respond'}->{'event'};
+print STDERR Data::Dumper->Dump([$message_bundle]);
      $kernel->post($sender, $respond_event, $who, $where, $what);
 }
 
 sub process{
      my ($self, $kernel, $heap, $sender, $message_bundle) = @_[OBJECT, KERNEL, HEAP, SENDER, ARGV0];
 print STDERR Data::Dumper->Dump([$message_bundle]);
-     my $response = $msgbundle; 
+     my $response = $message_bundle; 
      $response->{'message'} = piratespeak( $self->{'megahal'}->do_reply( $response->{'message'} ) );
      $kernel->post($self->alias(), $self->alias().'_output', $response);
 }
