@@ -64,8 +64,8 @@ sub new{
                           leave_channel        => 'leave_channel',
                           send_presence        => 'send_presence',
                           presence_subscribe   => 'presence_subscribe',
-                          #refuse_subscription  => 'refuse_subscription',
-                          #approve_subscription => 'approve_subscription',
+                          refuse_subscription  => 'refuse_subscription',
+                          approve_subscription => 'approve_subscription',
                         };
 
     return $self;
@@ -316,17 +316,17 @@ sub presence_subscribe() {
     $kernel->yield($self->alias(),'send_presence',$tgt_jid,'subscribe');
 } # presence_subscribe
 
-#sub approve_subscription() {
-#    my ($self, $kernel, $heap, $tgt_jid) = @_[OBJECT, KERNEL, HEAP, ARG0];
-#    #
-#    $kernel->yield($self->alias(),'send_presence',$tgt_jid,'subscribed');
-#} # approve_subscription
-#
-#sub refuse_subscription() {
-#    my ($self, $kernel, $heap, $tgt_jid) = @_[OBJECT, KERNEL, HEAP, ARG0];
-#    #
-#    $kernel->yield($self->alias(),'send_presence',$tgt_jid,'unsubscribed');
-#} # refuse_subscription
+sub approve_subscription() {
+    my ($self, $kernel, $heap, $tgt_jid) = @_[OBJECT, KERNEL, HEAP, ARG0];
+    #
+    $kernel->yield($self->alias(),'send_presence',$tgt_jid,'subscribed');
+} # approve_subscription
+
+sub refuse_subscription() {
+    my ($self, $kernel, $heap, $tgt_jid) = @_[OBJECT, KERNEL, HEAP, ARG0];
+    #
+    $kernel->yield($self->alias(),'send_presence',$tgt_jid,'unsubscribed');
+} # refuse_subscription
 
 sub leave_channel() {
     my ($self, $kernel, $heap) = @_[OBJECT, KERNEL, HEAP];
