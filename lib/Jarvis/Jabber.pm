@@ -217,7 +217,6 @@ sub input_event()
         }
         # allow everyone in websages to subscribe to our presence.
         if($node->name() eq 'presence'){
-            #print Data::Dumper->Dump([$node->get_attrs()]) . "\n";
             if($node->attr('type') ){
                 if($node->attr('type') eq 'subscribe'){
                     if($node->attr('from') =~m /\@websages.com/){
@@ -226,6 +225,10 @@ sub input_event()
                 }
             }
         }
+        print Data::Dumper->Dump([$node->data()]) . "\n";
+
+        #$kernel->post("$self->{'persona'}", "$self->{'persona'}_input", $who, $where, $what, 'xmpp_public');
+
         print "=====================\n" if $self->{'DEBUG'} > 2;
         #$kernel->delay_add('test_message', int(rand(10)));
                 
