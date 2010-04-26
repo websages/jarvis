@@ -8,7 +8,7 @@ use Jarvis::IRC;
 use Jarvis::Jabber;
 use Jarvis::Persona::Crunchy;
 #use Jarvis::Persona::Jarvis;
-#use Jarvis::Persona::System;
+use Jarvis::Persona::System;
 #use Jarvis::Persona::Watcher;
 use POE::Builder;
 $|++;
