@@ -81,38 +81,17 @@ sub alias{
 sub input{
      my ($self, $kernel, $heap, $sender, $who, $where, $what, $respond_event) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
      if(defined($what)){
-         # wrap the message into a bundle the process handler expects
-         my $message_bundle = {
-                                'user'    => $who,
-                                'message' => $what,
-                                'respond' => { 
-                                               'session'   => $sender,
-                                               'event'     => $respond_event, 
-                                               'specifics' => $where,
-                                             },
-                              };
-         $kernel->post($self->alias(), $self->alias().'_process', $message_bundle );
+         $kernel->post($sender, $respond_event, $who, $where, piratespeak( $self->{'megahal'}->do_reply( $response->{'message'} ) ) );
      }
 }
 
-sub output{
-     my ($self, $kernel, $heap, $sender, $message_bundle) = @_[OBJECT, KERNEL, HEAP, SENDER, ARGV0];
-     # un-wrap the response bundle and send it back to the initiator
-     my $who           = $message_bundle->{'user'};
-     my $what          = $message_bundle->{'message'};
-     my $sender        = $message_bundle->{'respond'}->{'session'};
-     my $where         = $message_bundle->{'respond'}->{'specifics'};
-     my $respond_event = $message_bundle->{'respond'}->{'event'};
-print STDERR Data::Dumper->Dump([$message_bundle]);
-     $kernel->post($sender, $respond_event, $who, $where, $what);
+sub process{
+     my ($self, $kernel, $message_bundle) = @_[OBJECT, KERNEL, ARGV0];
 }
 
-sub process{
-     my ($self, $kernel, $heap, $sender, $message_bundle) = @_[OBJECT, KERNEL, HEAP, SENDER, ARGV0];
-print STDERR Data::Dumper->Dump([$message_bundle]);
-     my $response = $message_bundle; 
-     $response->{'message'} = piratespeak( $self->{'megahal'}->do_reply( $response->{'message'} ) );
-     $kernel->post($self->alias(), $self->alias().'_output', $response);
+
+sub output{
+     my ($self, $kernel, $message_bundle) = @_[OBJECT, KERNEL, ARGV0];
 }
 
 1;
