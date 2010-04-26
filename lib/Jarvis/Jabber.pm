@@ -229,9 +229,9 @@ sub input_event()
         # allow everyone in websages to subscribe to our presence.
         my $child_nodes=$node->get_children_hash(); 
         if(defined($child_nodes->{'body'})){ 
-             print "-=[ ".ref($child_nodes->{'body'}). " ]=-\n";
+             print "-=[ ". ref($child_nodes->{'body'}) ." ]=-\n";
         }
-print "\n\n\n\n". Data::Dumper->Dump([ $node->get_children_hash() ]) . "\n\n\n\n\n";
+#print "\n\n\n\n". Data::Dumper->Dump([ $node->get_children_hash() ]) . "\n\n\n\n\n";
         #$kernel->post("$self->{'persona'}", "$self->{'persona'}_input", $who, $where, $what, 'xmpp_public');
 
         print "=====================\n" if $self->{'DEBUG'} > 2;
