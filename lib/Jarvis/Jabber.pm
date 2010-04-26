@@ -207,7 +207,7 @@ sub input_event()
 {
         my ($self, $kernel, $heap, $node) = @_[OBJECT, KERNEL, HEAP, ARG0];
 
-        print "INCOMING:\n".$node->to_str()."\n";
+        print "\n\nINCOMING:\n".$node->to_str()."\n\n\n";
         # allow everyone in websages to subscribe to our presence. /*FIXME move regex to constructor */
         if($node->name() eq 'presence'){
             if($node->attr('type') ){
@@ -231,7 +231,7 @@ sub input_event()
         if(defined($child_nodes->{'body'})){ 
              $what = $child_nodes->{'body'}->data();
             if(($type eq 'chat')||($type eq 'groupchat')){
-                print STDERR "*************************************** To: $to, From: $from, Type: $type, ID: $id\n";
+                print STDERR "\n\n\nTo: $to, From: $from, Type: $type, ID: $id\n\n\n";
                 $kernel->post("$self->{'persona'}", "$self->{'persona'}_input", $from, $id, $what, 'xmpp_reply');
             }
         }
