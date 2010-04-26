@@ -85,11 +85,11 @@ sub input{
          if($what=~m/^\s*fortune\s*$/){
              $r = qx( /usr/local/bin/fortune -s );
          }elsif($what=~m/^\s*crunchy\s*:*\s*/){
-             $r = $self->{'megahal'}->do_reply( $what ) ) );
+             $r = $self->{'megahal'}->do_reply( $what );
          }
-         if($r ne ""){
-             $kernel->post($sender, $respond_event, $who, $where, piratespeak( $r ) );
-         }
+         
+         # respond in pirate if we have something to say...
+         if($r ne ""){ $kernel->post($sender, $respond_event, $who, $where, piratespeak( $r ) ); }
      }
 }
 
