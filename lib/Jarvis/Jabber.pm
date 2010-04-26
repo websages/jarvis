@@ -19,6 +19,7 @@ sub new{
     my $class = shift;
     my $self = {};
     my $construct = shift if @_;
+    $self->{'DEBUG'} = 0 unless defined $construct->{'debug'}; 
     # list of required constructor elements
     $self->{'must'} = [ "alias", "ip", "hostname", "username", "password" ];
 
