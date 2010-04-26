@@ -191,10 +191,10 @@ sub status_event()
                     }
                 }
 
-                for(1..10)
-                {
-                        $kernel->delay_add('test_message', int(rand(10)));
-                }
+                #for(1..10)
+                #{
+                #        $kernel->delay_add('test_message', int(rand(10)));
+                #}
         }
         print "Status received: $jabstat->[$state] \n";
 }
@@ -214,14 +214,14 @@ sub input_event()
             #print Data::Dumper->Dump([$node->get_attrs()]) . "\n";
             if($node->attr('type') ){
                 if($node->attr('type') eq 'subscribe'){
-                    if($node->attr('from') eq 'whitejs@websages.com'){
+                    if($node->attr('from') =~m /\@websages.com/){
                         $kernel->post($self->alias(),'approve_subscription',$node->attr('from'));
                     }
                 }
             }
         }
         print "=====================\n" if $self->{'DEBUG'} > 2;
-        $kernel->delay_add('test_message', int(rand(10)));
+        #$kernel->delay_add('test_message', int(rand(10)));
                 
 }
 
