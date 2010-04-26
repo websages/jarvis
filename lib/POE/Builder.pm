@@ -78,8 +78,12 @@ sub object_session(){
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];
                                                                 $kernel->post($_[SESSION],$object->alias()."_start");
                                                                 print STDERR "******************************************\n";
-                                                                my @aliases = $self->{'peek'}->session_alias_list();
-                                                                print Data::Dumper->Dump([@aliases]);
+my @sessions = $self->{'peek'}->session_list();
+foreach my $sess (@sessions){
+    my @aliases = $self->{'peek'}->session_alias_list($sess);
+    print ref@aliases]."\n";
+}
+
                                                                 print STDERR "******************************************\n";
                                                                 
                                                               },
