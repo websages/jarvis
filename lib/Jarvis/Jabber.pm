@@ -205,17 +205,8 @@ sub status_event()
 sub input_event()
 {
         my ($self, $kernel, $heap, $node) = @_[OBJECT, KERNEL, HEAP, ARG0];
-        
-        
-        print "\n===PACKET RECEIVED===\n" if $self->{'DEBUG'} > 2;
-        print "1. " . $node->to_str() . "\n" if $self->{'DEBUG'} > 2;
-        print "2. " . $node->get_id() . "\n" if $self->{'DEBUG'} > 2;
-        print "3. " . ref($node) . "\n" if $self->{'DEBUG'} > 2;
-        if($self->{'DEBUG'} > 2){
-            my $nodedata = $node->get_attrs();
-            foreach my $key ( keys(%{ $nodedata }) ){ print $key .": ". $nodedata->{$key} ."\n";} 
-        }
-        # allow everyone in websages to subscribe to our presence.
+
+        # allow everyone in websages to subscribe to our presence. /*FIXME move regex to constructor */
         if($node->name() eq 'presence'){
             if($node->attr('type') ){
                 if($node->attr('type') eq 'subscribe'){
@@ -225,18 +216,28 @@ sub input_event()
                 }
             }
         }
+        my $from = $node->get_attr('from');
+        my $to = $node->get_attr('to');
+        my $id = $node->get_attr('id');
+        my $type = $node->get_attr('type');
 
-        # allow everyone in websages to subscribe to our presence.
+        # Retrieve the message data from the xml
+        my $what=''; 
         my $child_nodes=$node->get_children_hash(); 
         if(defined($child_nodes->{'body'})){ 
-             print "-=[ ". $child_nodes->{'body'}->data() ." ]=-\n";
+             $what = $child_nodes->{'body'}->data();
         }
-#print "\n\n\n\n". Data::Dumper->Dump([ $node->get_children_hash() ]) . "\n\n\n\n\n";
-        #$kernel->post("$self->{'persona'}", "$self->{'persona'}_input", $who, $where, $what, 'xmpp_public');
-
-        print "=====================\n" if $self->{'DEBUG'} > 2;
+        $kernel->post("$self->{'persona'}", "$self->{'persona'}_input", $from, $id, $what, 'xmpp_public');
         #$kernel->delay_add('test_message', int(rand(10)));
                 
+}
+
+sub xmpp_reply{
+    my ($self, $kernel, $heap, $sender, $who, $where, $reply) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    my $node = XNode->new('message');
+    $node->attr('to', $who);
+    $node->insert_tag('body')->data($reply);
+    $kernel->post($self->alias(),'output_event', $node, $heap->{'sid'});
 }
 
 sub test_message()
