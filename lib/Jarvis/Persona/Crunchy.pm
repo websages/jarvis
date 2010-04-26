@@ -82,19 +82,17 @@ sub input{
      my ($self, $kernel, $heap, $sender, $who, $where, $what, $respond_event) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
      if(defined($what)){
          # wrap the message into a bundle the process handler expects
-         $kernel->post(
-                        $self->alias(),
-                        $self->alias().'_process',
-                        {
-                          'user'    => $who,
-                          'message' => $what,
-                          'respond' => { 
-                                         'session'   => $sender,
-                                         'event'     => $respond_event, 
-                                         'specifics' => $where,
-                                       },
-                        }
-                      );
+         my $message_bundle = {
+                                'user'    => $who,
+                                'message' => $what,
+                                'respond' => { 
+                                               'session'   => $sender,
+                                               'event'     => $respond_event, 
+                                               'specifics' => $where,
+                                             },
+                              };
+print STDERR Data::Dumper->Dump([$message_bundle]);
+         $kernel->post($self->alias(), $self->alias().'_process', $message_bundle );
      }
 }
 
