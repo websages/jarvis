@@ -75,11 +75,13 @@ sub object_session(){
                           inline_states =>  {
                                               _start   => sub { 
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];
+                                                                $kernel->alias_set( $object->alias() ):
                                                                 $kernel->post($_[SESSION],$object->alias()."_start");
                                                               },
                                               _stop    => sub {
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];
                                                                 $kernel->post($_[SESSION],$object->alias()."_stop");
+                                                                $kernel->alias_remove();
                                                               }
     
                                             },
