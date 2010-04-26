@@ -62,7 +62,7 @@ if($IRC){
                                              'server'       => '127.0.0.1',
                                              'channel_list' => [ 
                                                                  '#asgard',
-                                                                 '#migard',
+                                                                 '#midgard',
                                                                  '#puppies',
                                                                ],
                                              'persona'      => 'system',

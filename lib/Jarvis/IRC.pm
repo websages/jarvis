@@ -167,13 +167,11 @@ sub irc_public {
     #log everything before we do anything with it.
     $_[KERNEL]->post('logger', 'log', "$channel <$nick> $what");
 
-
     $what=~s/[^a-zA-Z0-9:!\@#\%^&*\[\]_+=\- ]//g;
     $what=~s/[\$\`\(]//g;
     $what=~s/[)]//g;
 
     $kernel->post("$self->{'persona'}", "$self->{'persona'}_input",$who, $where, $what, 'irc_public_reply');
-
 
 }
 
