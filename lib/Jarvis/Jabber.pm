@@ -225,10 +225,12 @@ sub input_event()
                 }
             }
         }
-
         foreach my $child ($node->get_children()){ 
             print ref($child)."\n";
-            foreach ( @{ $child } ){ print Data::Dumper->Dump([$_]); }
+            foreach my $childnode ( @{ $child } ){ 
+                my $childnodedata = $childnode->get_attrs();
+                foreach my $ckey ( keys(%{ $childnodedata }) ){ print $ckey .": ". $childnodedata->{$ckey} ."\n";} 
+            }
         }
 
         #$kernel->post("$self->{'persona'}", "$self->{'persona'}_input", $who, $where, $what, 'xmpp_public');
