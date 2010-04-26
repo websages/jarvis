@@ -227,8 +227,9 @@ sub input_event()
         }
 
         foreach my $child ($node->get_children()){ 
-            my $n = $child->get_attrs();
-            foreach my $k ( keys(%{ $n }) ){ print $k .": ". $n->{$k} ."\n";} 
+            print ref($child)."\n";
+            #my $n = $child->get_attrs();
+            #foreach my $k ( keys(%{ $n }) ){ print $k .": ". $n->{$k} ."\n";} 
         }
 
         #$kernel->post("$self->{'persona'}", "$self->{'persona'}_input", $who, $where, $what, 'xmpp_public');
