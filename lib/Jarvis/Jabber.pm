@@ -225,7 +225,7 @@ sub input_event()
         my $replyto = $from;
         my $nickname = $from;
         $nickname =~s/.*\///;
-print STDERR "-=[ $self->{'nickname'} :: $nickname ]=-\n";
+print STDERR "-=[ "join("|",$self->{'channel_list'})." :: $nickname ]=-\n";
   
         if($type eq 'groupchat'){ $replyto=~s/\/.*//; }
 
