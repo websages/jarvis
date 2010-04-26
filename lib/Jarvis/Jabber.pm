@@ -197,7 +197,7 @@ sub status_event()
                 #        $kernel->delay_add('test_message', int(rand(10)));
                 #}
         }
-        print "Status received: $jabstat->[$state] \n";
+        # print "Status received: $jabstat->[$state] \n";
 }
 
 # This is the input event. We receive all data from the server through this
@@ -231,15 +231,16 @@ sub input_event()
         foreach my $active_channel ( @{ $self->{'channel_list'} }) {
             if($from eq $active_channel){ $thatsme = 1; }
         } 
-        if($type eq 'groupchat'){ $replyto=~s/\/.*//; }
-
+        if($type){
+            if($type eq 'groupchat'){ $replyto=~s/\/.*//; }
+        }
         # Retrieve the message data from the xml if it has a body and post the message to the personality...
         my $what=''; 
         my $child_nodes=$node->get_children_hash(); 
         if(defined($child_nodes->{'body'})){ 
              $what = $child_nodes->{'body'}->data();
             if((($type eq 'chat')||($type eq 'groupchat'))&&($thatsme == 0)){
-                $kernel->post("$self->{'persona'}", "$self->{'persona'}_input", $replyto, $type, $what, 'xmpp_reply');
+                $kernel->post("$self->{'persona'}", "$self->{'persona'}_input" $replyto, $type, $what, 'xmpp_reply');
             }
         }
 }

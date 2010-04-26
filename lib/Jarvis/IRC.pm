@@ -169,9 +169,6 @@ sub irc_public {
     $what=~s/[^a-zA-Z0-9:!\@#\%^&*\[\]_+=\- ]//g;
     $what=~s/[\$\`\(]//g;
     $what=~s/[)]//g;
-
-print STDERR "I am: ".$self->{'persona'}."\n";
-
     $kernel->post("$self->{'persona'}", "$self->{'persona'}_input",$who, $where, $what, 'irc_public_reply');
 
 }
