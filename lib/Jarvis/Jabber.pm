@@ -64,8 +64,8 @@ sub new{
                           leave_channel        => 'leave_channel',
                           send_presence        => 'send_presence',
                           presence_subscribe   => 'presence_subscribe',
-                          approve_subscription => 'approve_subscription',
                           refuse_subscription  => 'refuse_subscription',
+                          approve_subscription => 'approve_subscription',
                         };
 
     return $self;
