@@ -28,6 +28,7 @@ my $XMPP=1;
 my $poe = new POE::Builder({ 'debug' => '1','trace' => '1' });
 exit unless $poe;
 
+# We set up some personas to redirect various traffic to...
 $poe->object_session(
                       new Jarvis::Persona::Crunchy(
                                                     { 
@@ -56,6 +57,7 @@ if($IRC){
                                              'server'       => '127.0.0.1',
                                              'channel_list' => [ 
                                                                  '#soggies',
+                                                                 '#puppies',
                                                                ],
                                              'persona'      => 'crunchy',
                                            }
@@ -72,7 +74,6 @@ if($IRC){
                                              'channel_list' => [ 
                                                                  '#asgard',
                                                                  '#midgard',
-                                                                 '#puppies',
                                                                ],
                                              'persona'      => 'system',
                                            }
@@ -99,7 +100,6 @@ if($XMPP){
                                                 'password'        => $ENV{'XMPP_PASSWORD'},
                                                 'channel_list'    => [ 
                                                                        'system@conference.websages.com/loki',
-                                                                       'global@conference.websages.com/loki',
                                                                      ],
                                                 'persona'         => 'system',
                                                 'account-persona' => 'crunchy',
@@ -118,7 +118,6 @@ if($XMPP){
                                                 'password'        => $ENV{'XMPP_PASSWORD'},
                                                 'channel_list'    => [ 
                                                                        'soggies@conference.websages.com/crunchy',
-                                                                       'global@conference.websages.com/crunchy',
                                                                      ],
                                                 'persona'         => 'crunchy',
                                                 'account-persona' => 'crunchy',
