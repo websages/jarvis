@@ -116,7 +116,7 @@ sub process{
 
      $response->{'message'} = piratespeak( $self->{'megahal'}->do_reply( $response->{'message'} ) );
 
-     $kernel->post($self->alias(), 'output', $responsebundle);
+     $kernel->post($self->alias(), 'output', $response);
 }
 
 1;
