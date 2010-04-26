@@ -306,7 +306,7 @@ sub join_channel() {
     my $node=XNode->new('presence', [ 'to', $room, 'from', $heap->{$self->alias()}->jid(), ]);
     my $child_node=XNode->new('x',[xmlns=>"http://jabber.org/protocol/muc"]);
     $node->insert_tag($child_node);
-    $kernel->yield('output_event',$node,$heap->{'sid'});
+    $kernel->yield($self->alias(),'output_event',$node,$heap->{'sid'});
 } # join channel
 
 sub presence_subscribe() {
