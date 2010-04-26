@@ -228,8 +228,7 @@ sub input_event()
 
         foreach my $child ($node->get_children()){ 
             print ref($child)."\n";
-            #my $n = $child->get_attrs();
-            #foreach my $k ( keys(%{ $n }) ){ print $k .": ". $n->{$k} ."\n";} 
+            foreach ( @{ $n } ){ print Data::Dumper->Dump([$_]);
         }
 
         #$kernel->post("$self->{'persona'}", "$self->{'persona'}_input", $who, $where, $what, 'xmpp_public');
