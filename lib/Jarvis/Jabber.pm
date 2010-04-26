@@ -91,8 +91,7 @@ sub _start{
                                                                             ErrorEvent  => 'error_event',
                                                                           },
                                                       );
-    print Data::Dumper->Dump([$session]);
-    $kernel->post('connect');
+    $kernel->post($self->alias(),'connect');
     return $self;
 }
 
