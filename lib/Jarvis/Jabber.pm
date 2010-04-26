@@ -226,6 +226,8 @@ sub input_event()
             }
         }
         print Data::Dumper->Dump([$node->data()]) . "\n";
+        print Data::Dumper->Dump([$node->rawdata()]) . "\n";
+        print Data::Dumper->Dump([$node->get_children()]) . "\n";
 
         #$kernel->post("$self->{'persona'}", "$self->{'persona'}_input", $who, $where, $what, 'xmpp_public');
 
