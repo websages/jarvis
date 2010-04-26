@@ -81,7 +81,9 @@ sub object_session(){
 my @sessions = $self->{'peek'}->session_list();
 foreach my $sess (@sessions){
     my @aliases = $self->{'peek'}->session_alias_list($sess);
-    print ref@aliases]."\n";
+    foreach my $alias (@aliases){
+        print ref($alias)."\n";
+    }
 }
 
                                                                 print STDERR "******************************************\n";
