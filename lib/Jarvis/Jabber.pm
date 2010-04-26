@@ -75,6 +75,7 @@ sub _start{
     my $self = $_[OBJECT]||shift;
     my $heap = $_[HEAP];
     my $kernel = $_[KERNEL];
+    my $session = $_[SESSION];
     print STDERR __PACKAGE__ ." start\n";
     $heap->{$self->alias()} = POE::Component::Jabber->new(
                                                         IP             => $self->{'ip'},
@@ -90,7 +91,7 @@ sub _start{
                                                                             ErrorEvent  => 'error_event',
                                                                           },
                                                       );
-    $kernel->yield('connect');
+    $session->yield('connect');
     return $self;
 }
 
