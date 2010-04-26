@@ -245,7 +245,7 @@ sub xmpp_reply{
     my $node = XNode->new('message');
     $node->attr('to', $who);
     $node->insert_tag('body')->data($reply);
-    $kernel->post($self->alias(),'output_event', $node, $heap->{'sid'});
+    $kernel->post($sid,'output_event', $node, $heap->{'sid'});
 }
 
 sub test_message()
