@@ -81,7 +81,11 @@ sub alias{
 sub input{
      my ($self, $kernel, $heap, $sender, $who, $where, $what, $respond_event) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
      if(defined($what)){
-         $kernel->post($sender, $respond_event, $who, $where, piratespeak( $self->{'megahal'}->do_reply( $response->{'message'} ) ) );
+         my $response="";
+         if($what=~m/^fortune$/){
+             $response = qx( /usr/local/bin/fortune -s );
+         }
+         $kernel->post($sender, $respond_event, $who, $where, piratespeak( $self->{'megahal'}->do_reply( $response ) ) );
      }
 }
 
