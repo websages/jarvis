@@ -225,9 +225,10 @@ sub input_event()
                 }
             }
         }
-        print Data::Dumper->Dump([$node->data()]) . "\n";
-        print Data::Dumper->Dump([$node->rawdata()]) . "\n";
-        #print Data::Dumper->Dump([$node->get_children()]) . "\n";
+        foreach my $child ($node->get_children()]){ 
+            my $n = $child->get_attrs();
+            foreach my $k ( keys(%{ $n }) ){ print $k .": ". $n->{$k} ."\n";} 
+        }
 
         #$kernel->post("$self->{'persona'}", "$self->{'persona'}_input", $who, $where, $what, 'xmpp_public');
 
