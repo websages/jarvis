@@ -187,7 +187,7 @@ sub status_event()
                     foreach my $muc (@{ $self->{'channel_list'} }){
                         #$heap->{'roomnick'} = 'system@conference.websages.com/crunchy';
                         #$kernel->yield(presence_subscribe','whitejs@websages.com');
-                        $kernel->yield('join_channel', $muc);
+                        $kernel->post($self->alias(),'join_channel', $muc);
                     }
                 }
 

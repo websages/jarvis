@@ -48,7 +48,7 @@ POE::Session->create(
 				
 				$heap->{'component'} = 
 					POE::Component::Jabber->new(
-						IP => 'loki.websages.com',
+						IP => 'thor.websages.com',
 						Port => '5222',
 						Hostname => 'websages.com',
 						Username => 'crunchy',
@@ -191,12 +191,12 @@ sub status_event()
 
                 $heap->{'roomnick'} = 'system@conference.websages.com/crunchy';
                 #$kernel->yield('presence_subscribe','whitejs@websages.com');
-                $kernel->yield('join_channel','system');
+                $kernel->post('Tester','join_channel','system');
 
-		#for(1..10)
-		#{
-		#	$kernel->delay_add('test_message', int(rand(10)));
-		#}
+		for(1..10)
+		{
+			$kernel->delay_add('test_message', int(rand(10)));
+		}
 	}
 	print "Status received: $jabstat->[$state] \n";
 }
