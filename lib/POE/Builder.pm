@@ -59,6 +59,7 @@ sub heap_objects{
 sub object_session(){
     my $self=shift;
     my $object = shift if @_;
+    my $set_alias = shift if @_;
     my $object_states = $object->states();
     my $aliased_object_states;
     foreach my $event (keys(%{ $object_states })){
@@ -77,10 +78,12 @@ sub object_session(){
                                               _start   => sub { 
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];
                                                                 $kernel->post($_[SESSION],$object->alias()."_start");
+                                                                if($set_alias == 1){ $kernel->set_alias( $object->alias() ); }
                                                               },
                                               _stop    => sub {
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];
                                                                 $kernel->post($_[SESSION],$object->alias()."_stop");
+                                                                if($set_alias == 1){ $kernel->remove_alias(); }
                                                               }
     
                                             },
