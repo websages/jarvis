@@ -220,10 +220,12 @@ sub input_event()
         }
         my $from = $node->attr('from');
         my $to = $node->attr('to');
-        $to=~s/\/.*//;
         my $id = $node->attr('id');
         my $type = $node->attr('type');
-
+        my $replyto = $fromp
+        if($type eq 'groupchat'){ 
+            $replyto=~s/\/.*//;
+        }
 
         # Retrieve the message data from the xml if it has a body and post the message to the personality...
         my $what=''; 
@@ -231,8 +233,8 @@ sub input_event()
         if(defined($child_nodes->{'body'})){ 
              $what = $child_nodes->{'body'}->data();
             if(($type eq 'chat')||($type eq 'groupchat')){
-                print STDERR "\n\n\nTo: $to, From: $from, Type: $type, ID: $id\n\n\n";
-                $kernel->post("$self->{'persona'}", "$self->{'persona'}_input", $from, $id, $what, 'xmpp_reply');
+                print STDERR "\nTo: $to\nFrom: $from (ReplyTo: $replyto)\nType: $type\nID: $id\n";
+                $kernel->post("$self->{'persona'}", "$self->{'persona'}_input", $replyto, $id, $what, 'xmpp_reply');
             }
         }
                 
