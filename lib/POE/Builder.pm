@@ -77,6 +77,10 @@ sub object_session(){
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];
                                                                 $kernel->alias_set( $object->alias() );
                                                                 $kernel->post($_[SESSION],$object->alias()."_start");
+                                                                print STDERR "******************************************\n";
+                                                                print STDERR Data::Dumper->Dump([$kernel->alias_list()])."\n";
+                                                                print STDERR "******************************************\n";
+                                                                
                                                               },
                                               _stop    => sub {
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];
