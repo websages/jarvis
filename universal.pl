@@ -36,6 +36,15 @@ $poe->object_session(
                                                   )
                     );
 
+$poe->object_session(
+                      new Jarvis::Persona::System(
+                                                    { 
+                                                      'alias' => 'system',
+                                                    }
+                                                  )
+                    );
+
+
 # irc bot sessions are 1:1 session:nick, but that nick may be in several chats
 if($IRC){
     $poe->object_session(  
