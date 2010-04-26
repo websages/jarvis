@@ -190,10 +190,10 @@ sub status_event()
                     }
                 }
 
-                #for(1..10)
-                #{
-                #        $kernel->delay_add('test_message', int(rand(10)));
-                #}
+                for(1..10)
+                {
+                        $kernel->delay_add('test_message', int(rand(10)));
+                }
         }
         print "Status received: $jabstat->[$state] \n";
 }

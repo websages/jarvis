@@ -83,7 +83,7 @@ my @sessions = $self->{'peek'}->session_list();
 foreach my $sess (@sessions){
     my @aliases = $self->{'peek'}->session_alias_list($sess);
     foreach my $alias (@aliases){
-        print "-=[".ref($alias)."]=-\n";
+        print "-=[".$alias."]=-\n";
     }
 }
 
