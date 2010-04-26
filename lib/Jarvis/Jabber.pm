@@ -192,10 +192,10 @@ print STDERR "-=[".$self->alias()."]=-\n";
                     }
                 }
 
-                #for(1..10)
-                #{
-                #        $kernel->delay_add('test_message', int(rand(10)));
-                #}
+                for(1..10)
+                {
+                        $kernel->delay_add('test_message', int(rand(10)));
+                }
         }
         print "Status received: $jabstat->[$state] \n";
 }
@@ -216,13 +216,13 @@ sub input_event()
             if($node->attr('type') ){
                 if($node->attr('type') eq 'subscribe'){
                     if($node->attr('from') eq 'whitejs@websages.com'){
-                        $kernel->yield('approve_subscription',$node->attr('from'));
+                        $kernel->post($self->alias(),'approve_subscription',$node->attr('from'));
                     }
                 }
             }
         }
         print "=====================\n" if $self->{'DEBUG'} > 2;
-        #$kernel->delay_add('test_message', int(rand(10)));
+        $kernel->delay_add('test_message', int(rand(10)));
                 
 }
 
@@ -240,7 +240,7 @@ sub test_message()
 
         $node->insert_tag('body')->data('This is a test sent at: ' . time());
         
-        $kernel->yield('output_event', $node, $heap->{'sid'});
+        $kernel->post($self->alias(),'output_event', $node, $heap->{'sid'});
 
 }
 
