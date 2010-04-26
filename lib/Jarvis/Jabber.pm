@@ -222,7 +222,7 @@ sub input_event()
         my $to = $node->attr('to');
         my $id = $node->attr('id');
         my $type = $node->attr('type');
-        my $replyto = $fromp
+        my $replyto = $from;
         if($type eq 'groupchat'){ 
             $replyto=~s/\/.*//;
         }
