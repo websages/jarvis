@@ -70,7 +70,6 @@ sub object_session(){
             $aliased_object_states->{$event} = $object_states->{$event};
         }
     }
-    print Data::Dumper->Dump([$object->alias(),$aliased_object_states]);
     push( @{ $self->{'sessions'} }, POE::Session->create(
                           options => { debug => $self->{'debug'}, trace => $self->{'trace'} },
                           object_states =>  [ $object => $aliased_object_states ],
@@ -79,12 +78,8 @@ sub object_session(){
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];
                                                                 $kernel->post($_[SESSION],$object->alias()."_start");
                                                                 print STDERR "******************************************\n";
-                                                                print STDERR "Session Count: ".$self->{'peek'}->session_count()."\n";
-my @sessions = $self->{'peek'}->session_list();
-foreach my $sess (@sessions){
-    print Data::Dumper->Dump([ $self->{'peek'}->session_alias_list($sess) ]);
-}
-
+                                                                my @aliases = $self->{'peek'}->session_alias_list();
+                                                                print Data::Dumper->Dump([@aliases]);
                                                                 print STDERR "******************************************\n";
                                                                 
                                                               },

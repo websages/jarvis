@@ -117,9 +117,4 @@ if($XMPP){
                                             ), 
                         );
 }
-use POE::API::Peek;
-my $api = POE::API::Peek->new();
-foreach my $sess (@{ $api->session_list() }){
-    print Data::Dumper->Dump([$sess]);
-}
 POE::Kernel->run();
