@@ -84,7 +84,7 @@ sub input{
          # wrap the message into a bundle the process handler expects
          $kernel->post(
                         $self->alias(),
-                        'process',
+                        $self->alias().'_process',
                         {
                           'user'    => $who,
                           'message' => $what,
@@ -116,7 +116,7 @@ sub process{
 
      $response->{'message'} = piratespeak( $self->{'megahal'}->do_reply( $response->{'message'} ) );
 
-     $kernel->post($self->alias(), 'output', $response);
+     $kernel->post($self->alias(), $self->alias().'_output', $response);
 }
 
 1;
