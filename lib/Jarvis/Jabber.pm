@@ -218,6 +218,7 @@ sub input_event()
             }
         }
         my $from = $node->attr('from');
+        $from=~s/\/.*//;
         my $to = $node->attr('to');
         my $id = $node->attr('id');
         my $type = $node->attr('type');
