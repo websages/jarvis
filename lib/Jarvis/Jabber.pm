@@ -90,7 +90,7 @@ sub _start{
                                                                             ErrorEvent  => 'error_event',
                                                                           },
                                                       );
-    $kernel->post($self->alias(), 'connect');
+    $kernel->post('connect');
     return $self;
 }
 
