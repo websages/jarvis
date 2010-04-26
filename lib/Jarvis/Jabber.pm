@@ -223,10 +223,12 @@ sub input_event()
         my $id = $node->attr('id');
         my $type = $node->attr('type');
         my $replyto = $from;
-        my $nickname = $from;
-        $nickname =~s/.*\///;
-print STDERR "-=[ ". join("|",@{ $self->{'channel_list'} })." :: $nickname ]=-\n";
-  
+        
+        # don't parse things from this personality.
+        my $thatsme=0;
+        foreach my $active_channel ( @{ $self->{'channel_list'} }) {
+            if($from eq $active_channel){ $thatsme = 1; }
+        } 
         if($type eq 'groupchat'){ $replyto=~s/\/.*//; }
 
         # Retrieve the message data from the xml if it has a body and post the message to the personality...
@@ -234,7 +236,7 @@ print STDERR "-=[ ". join("|",@{ $self->{'channel_list'} })." :: $nickname ]=-\n
         my $child_nodes=$node->get_children_hash(); 
         if(defined($child_nodes->{'body'})){ 
              $what = $child_nodes->{'body'}->data();
-            if(($type eq 'chat')||($type eq 'groupchat')){
+            if((($type eq 'chat')||($type eq 'groupchat'))&&($thatsme == 0)){
                 print STDERR "\nTo: $to\nFrom: $from (ReplyTo: $replyto)\nType: $type\nID: $id\n";
                 $kernel->post("$self->{'persona'}", "$self->{'persona'}_input", $replyto, $type, $what, 'xmpp_reply');
             }
