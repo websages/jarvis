@@ -67,6 +67,7 @@ sub new{
                           presence_subscribe   => 'presence_subscribe',
                           refuse_subscription  => 'refuse_subscription',
                           approve_subscription => 'approve_subscription',
+                          xmpp_reply           => 'xmpp_reply',
                         };
 
     return $self;
@@ -221,7 +222,6 @@ sub input_event()
         my $id = $node->attr('id');
         my $type = $node->attr('type');
 
-print STDERR "To: $to, From: $from, Type: $type, ID: $id\n";
 
         # Retrieve the message data from the xml
         my $what=''; 
@@ -230,6 +230,7 @@ print STDERR "To: $to, From: $from, Type: $type, ID: $id\n";
              $what = $child_nodes->{'body'}->data();
         }
         if(($type eq 'chat')||($type eq 'groupchat')){
+            print STDERR "*************************************** To: $to, From: $from, Type: $type, ID: $id\n";
             $kernel->post("$self->{'persona'}", "$self->{'persona'}_input", $from, $id, $what, 'xmpp_reply');
         }
                 
