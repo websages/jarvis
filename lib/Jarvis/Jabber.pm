@@ -311,29 +311,29 @@ sub join_channel() {
     my $node=XNode->new('presence', [ 'to', $room, 'from', $heap->{$self->alias()}->jid(), ]);
     my $child_node=XNode->new('x',[xmlns=>"http://jabber.org/protocol/muc"]);
     $node->insert_tag($child_node);
-    $kernel->yield($self->alias(),'output_event',$node,$heap->{'sid'});
+    $kernel->post($self->alias(),'output_event',$node,$heap->{'sid'});
 } # join channel
 
 sub presence_subscribe() {
     my ($self, $kernel, $heap, $tgt_jid) = @_[OBJECT, KERNEL, HEAP, ARG0];
-    $kernel->yield('send_presence',$tgt_jid,'subscribe');
+    $kernel->post($self->alias(),'send_presence',$tgt_jid,'subscribe');
 } # presence_subscribe
 
 sub approve_subscription() {
     my ($self, $kernel, $heap, $tgt_jid) = @_[OBJECT, KERNEL, HEAP, ARG0];
     #
-    $kernel->yield('send_presence',$tgt_jid,'subscribed');
+    $kernel->post($self->alias(),'send_presence',$tgt_jid,'subscribed');
 } # approve_subscription
 
 sub refuse_subscription() {
     my ($self, $kernel, $heap, $tgt_jid) = @_[OBJECT, KERNEL, HEAP, ARG0];
     #
-    $kernel->yield('send_presence',$tgt_jid,'unsubscribed');
+    $kernel->post($self->alias(),'send_presence',$tgt_jid,'unsubscribed');
 } # refuse_subscription
 
 sub leave_channel() {
     my ($self, $kernel, $heap) = @_[OBJECT, KERNEL, HEAP];
-    $kernel->yield('send_presence', $heap->{'roomnick'},'unavailable');
+    $kernel->post($self->alias(),'send_presence', $heap->{'roomnick'},'unavailable');
 } # leave_channel
 
 
@@ -343,6 +343,6 @@ sub send_presence() {
     $node->attr('to',$tgt_jid );
     $node->attr('from', $heap->{$self->alias()}->jid() );
     $node->attr('type',$type) if $type;
-    $kernel->yield('output_event',$node,$heap->{'sid'});
+    $kernel->post($self->alias(),'output_event',$node,$heap->{'sid'});
 } # send_presence
 1;
