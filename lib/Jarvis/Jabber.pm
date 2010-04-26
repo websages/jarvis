@@ -225,7 +225,8 @@ sub input_event()
                 }
             }
         }
-        foreach my $child ($node->get_children()]){ 
+
+        foreach my $child ($node->get_children()){ 
             my $n = $child->get_attrs();
             foreach my $k ( keys(%{ $n }) ){ print $k .": ". $n->{$k} ."\n";} 
         }
