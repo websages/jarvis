@@ -81,11 +81,15 @@ sub alias{
 sub input{
      my ($self, $kernel, $heap, $sender, $who, $where, $what, $respond_event) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
      if(defined($what)){
-         my $response="";
-         if($what=~m/^fortune$/){
-             $response = qx( /usr/local/bin/fortune -s );
+         my $r=""; # response
+         if($what=~m/^\s*fortune\s*$/){
+             $r = qx( /usr/local/bin/fortune -s );
+         }elsif($what=~m/^\s*crunchy\s*:*\s*/){
+             $r = $self->{'megahal'}->do_reply( $what ) ) );
          }
-         $kernel->post($sender, $respond_event, $who, $where, piratespeak( $self->{'megahal'}->do_reply( $response ) ) );
+         if($r ne ""){
+             $kernel->post($sender, $respond_event, $who, $where, piratespeak( $r ) );
+         }
      }
 }
 
