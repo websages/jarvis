@@ -82,7 +82,7 @@ sub object_session(){
                                                                 print STDERR "Session Count: ".$self->{'peek'}->session_count()."\n";
 my @sessions = $self->{'peek'}->session_list();
 foreach my $sess (@sessions){
-    my @aliases = $self->{'peek'}->session_alias_list($sess)
+    my @aliases = $self->{'peek'}->session_alias_list($sess);
     print Data::Dumper->Dump([@aliases]);
 }
 
