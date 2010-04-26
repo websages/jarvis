@@ -100,13 +100,13 @@ sub input{
 
 sub output{
      my ($self, $kernel, $heap, $sender, $response_bundle) = @_[OBJECT, KERNEL, HEAP, SENDER, ARGV0];
-
-     # un-wrap the response bundle
+     # un-wrap the response bundle and send it back to the initiator
      my $who = $response_bundle->{'user'};
      my $what = $response_bundle->{'message'};
      my $sender = $response_bundle->{'respond'}->{'session'};
      my $where = $response_bundle->{'respond'}->{'specifics'};
      my $respond_event = $response_bundle->{'respond'}->{'event'};
+print STDERR "$respond_event: $what\n";
      $kernel->post($sender, $respond_event, $who, $where, $what);
 }
 
