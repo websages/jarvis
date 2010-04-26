@@ -231,6 +231,7 @@ my $index=0;
 print "index ".$index++."\n";
                 my $childnodedata = $childnode->get_attrs();
                 print "-=[ ".$childnode->data()." ]=-\n";
+                print "-=[ ".$childnode->rawdata()." ]=-\n";
                 foreach my $ckey ( keys(%{ $childnodedata }) ){ 
                     print $ckey .": ". $childnodedata->{$ckey} ."\n";
                 }
