@@ -212,7 +212,8 @@ sub input_event()
         print "2. " . $node->get_id() . "\n" if $self->{'DEBUG'} > 2;
         print "3. " . ref($node) . "\n" if $self->{'DEBUG'} > 2;
         if($self->{'DEBUG'} > 2){
-            foreach my $key ( keys(%{ $node->get_attrs() }) ){ print $key .": ". $node->get_attrs($key) ."\n";} 
+            my %node=$node->get_attrs();
+            foreach my $key ( keys(%node) ){ print $key .": ". $node->{$key} ."\n";} 
         }
         # allow everyone in websages to subscribe to our presence.
         if($node->name() eq 'presence'){
