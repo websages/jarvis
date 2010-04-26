@@ -225,11 +225,14 @@ sub input_event()
                 }
             }
         }
+my $index=0;
         foreach my $child ($node->get_children()){ 
+
+print "index ".$index++."\n";
             print ref($child)."\n";
             foreach my $childnode ( @{ $child } ){ 
                 my $childnodedata = $childnode->get_attrs();
-                print $childnode->data()."\n";
+                print "-=[ ".$childnode->data()." ]=-\n";
                 foreach my $ckey ( keys(%{ $childnodedata }) ){ 
                     print $ckey .": ". $childnodedata->{$ckey} ."\n";
                 }
