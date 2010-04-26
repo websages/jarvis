@@ -75,6 +75,7 @@ sub _start {
     my $self = $_[OBJECT]; 
     my $kernel = $_[KERNEL];
     my $session = $_[SESSION];
+    $kernel->alias_set( $self->alias() );
     $self->on_start(); 
     print STDERR ref($self)." started.\n"; 
 }
@@ -83,6 +84,7 @@ sub _start {
 sub _stop  { 
     my $self = $_[OBJECT]; 
     my $kernel = $_[KERNEL];
+    $kernel->alias_remove();
     print STDERR ref($self)." stopped.\n"; 
 }
 sub states { my $self = $_[OBJECT]; return $self->{'states'};           }

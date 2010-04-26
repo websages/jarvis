@@ -77,18 +77,6 @@ sub object_session(){
                                               _start   => sub { 
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];
                                                                 $kernel->post($_[SESSION],$object->alias()."_start");
-                                                                print STDERR "******************************************\n";
-print "Session Count: ".$self->{'peek'}->session_count()."\n";
-my @sessions = $self->{'peek'}->session_list();
-foreach my $sess (@sessions){
-    my @aliases = $self->{'peek'}->session_alias_list($sess);
-    foreach my $alias (@aliases){
-        print "-=[".$alias."]=-\n";
-    }
-}
-
-                                                                print STDERR "******************************************\n";
-                                                                
                                                               },
                                               _stop    => sub {
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];
