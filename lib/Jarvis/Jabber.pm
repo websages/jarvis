@@ -223,9 +223,11 @@ sub input_event()
         my $id = $node->attr('id');
         my $type = $node->attr('type');
         my $replyto = $from;
-        if($type eq 'groupchat'){ 
-            $replyto=~s/\/.*//;
-        }
+        my $nickname = $from;
+        $nickname =~s/.*\///;
+print STDERR "-=[ $self->{'nickname'} $nickname ]=-\n";
+  
+        if($type eq 'groupchat'){ $replyto=~s/\/.*//; }
 
         # Retrieve the message data from the xml if it has a body and post the message to the personality...
         my $what=''; 
@@ -244,7 +246,7 @@ sub xmpp_reply{
     my ($self, $kernel, $heap, $sender, $who, $type, $reply) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     my $node = XNode->new('message');
     $node->attr('to', $who);
-    $node->attr('type', $type);
+    if($type eq 'groupchat'){ $node->attr('type', $type); }
     $node->insert_tag('body')->data($reply);
     $kernel->post($self->alias(),'output_event', $node, $heap->{'sid'});
 }
