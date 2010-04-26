@@ -154,7 +154,7 @@ sub status_event()
                 $kernel->post($self->alias(), 'purge_queue');
 
 #                my $online_node=XNode->new('presence',[ 'show', 'Online']);
-#                $kernel->yield('output_event',$online_node);
+#                $kernel->yield($self->alias(),'output_event',$online_node);
 #
 #                my $reserved_nick_req = XNode->new('iq', [ 
 #                                                           'from', $jid,
@@ -168,7 +168,7 @@ sub status_event()
 #                                              'node', 'x-roomuser-item'
 #                                            ]
 #                                  );
-#                $kernel->yield('output_event', $reserved_nick_req);
+#                $kernel->yield($self->alias(),'output_event', $reserved_nick_req);
 #
 #                my $node=XNode->new('presence', [ 
 #                                                  'to', 'system@conference.websages.com/crunchy',
@@ -179,13 +179,13 @@ sub status_event()
 #                my $child_node=XNode->new('x',[xmlns=>"http://jabber.org/protocol/muc"]);
 #                $node->insert_tag($child_node);
 #
-#                $kernel->yield('output_event',$node);
+#                $kernel->yield($self->alias(),'output_event',$node);
                
                 if(defined($self->{'channel_list'})){
                     foreach my $muc (@{ $self->{'channel_list'} }){
                         #$heap->{'roomnick'} = 'system@conference.websages.com/crunchy';
-                        #$kernel->yield('presence_subscribe','whitejs@websages.com');
-                        $kernel->yield('join_channel', $muc);
+                        #$kernel->yield($self->alias(),'presence_subscribe','whitejs@websages.com');
+                        $kernel->yield($self->alias(),'join_channel', $muc);
                     }
                 }
 
@@ -212,7 +212,7 @@ sub input_event()
             #print Data::Dumper->Dump([$node->get_attrs()]) . "\n";
             if($node->attr('type') eq 'subscribe'){
                 if($node->attr('from') eq 'whitejs@websages.com'){
-                    $kernel->yield('approve_subscription',$node->attr('from'));
+                    $kernel->yield($self->alias(),'approve_subscription',$node->attr('from'));
                 }
             }
         }
@@ -235,7 +235,7 @@ sub test_message()
 
         $node->insert_tag('body')->data('This is a test sent at: ' . time());
         
-        $kernel->yield('output_event', $node, $heap->{'sid'});
+        $kernel->yield($self->alias(),'output_event', $node, $heap->{'sid'});
 
 }
 
@@ -311,24 +311,24 @@ sub join_channel() {
 
 sub presence_subscribe() {
     my ($self, $kernel, $heap, $tgt_jid) = @_[OBJECT, KERNEL, HEAP, ARG0];
-    $kernel->yield('send_presence',$tgt_jid,'subscribe');
+    $kernel->yield($self->alias(),'send_presence',$tgt_jid,'subscribe');
 } # presence_subscribe
 
 sub approve_subscription() {
     my ($self, $kernel, $heap, $tgt_jid) = @_[OBJECT, KERNEL, HEAP, ARG0];
     #
-    $kernel->yield('send_presence',$tgt_jid,'subscribed');
+    $kernel->yield($self->alias(),'send_presence',$tgt_jid,'subscribed');
 } # approve_subscription
 
 sub refuse_subscription() {
     my ($self, $kernel, $heap, $tgt_jid) = @_[OBJECT, KERNEL, HEAP, ARG0];
     #
-    $kernel->yield('send_presence',$tgt_jid,'unsubscribed');
+    $kernel->yield($self->alias(),'send_presence',$tgt_jid,'unsubscribed');
 } # refuse_subscription
 
 sub leave_channel() {
     my ($self, $kernel, $heap) = @_[OBJECT, KERNEL, HEAP];
-    $kernel->yield('send_presence', $heap->{'roomnick'},'unavailable');
+    $kernel->yield($self->alias(),'send_presence', $heap->{'roomnick'},'unavailable');
 } # leave_channel
 
 
@@ -338,6 +338,6 @@ sub send_presence() {
     $node->attr('to',$tgt_jid );
     $node->attr('from', $heap->{$self->alias()}->jid() );
     $node->attr('type',$type) if $type;
-    $kernel->yield('output_event',$node,$heap->{'sid'});
+    $kernel->yield($self->alias(),'output_event',$node,$heap->{'sid'});
 } # send_presence
 1;
