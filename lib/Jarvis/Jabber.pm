@@ -228,16 +228,14 @@ sub input_event()
 
         # allow everyone in websages to subscribe to our presence.
         foreach my $child ($node->get_children()){ 
-my $index=0;
             foreach my $childnode ( @{ $child } ){ 
-print Data::Dumper->Dump([$childnode])."\n============================\n";
-#print "index ".$index++."\n";
+print Data::Dumper->Dump([$childnode]) . "\n============================\n";
 #                my $childnodedata = $childnode->get_attrs();
 #                print "-=[ ".$childnode->data()." ]=-\n";
 #                foreach my $ckey ( keys(%{ $childnodedata }) ){ 
 #                    print $ckey .": ". $childnodedata->{$ckey} ."\n";
 #                }
-#            }
+            }
         }
 
         #$kernel->post("$self->{'persona'}", "$self->{'persona'}_input", $who, $where, $what, 'xmpp_public');
