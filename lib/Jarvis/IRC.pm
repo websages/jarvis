@@ -74,7 +74,9 @@ sub new {
 sub _start { 
     my $self = $_[OBJECT]; 
     my $kernel = $_[KERNEL];
+    my $session = $_[SESSION];
     print STDERR ref($self)." start\n"; 
+print STDERR "setting alias on session ".$self->alias()."\n";
     $kernel->alias_set($self->alias());
     $self->on_start(); 
 }
