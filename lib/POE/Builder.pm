@@ -1,4 +1,5 @@
 package POE::Builder;
+use POE::API::Peek;
 use strict;
 use warnings;
 use POE;
@@ -6,6 +7,7 @@ sub new {
     my $class = shift; 
     my $self = {}; 
     my $construct = shift if @_;
+    my $self->{'peek'} = POE::API::Peek->new();
     $self->{'session_struct'}={};
 
     # list of required constructor elements
@@ -77,7 +79,7 @@ sub object_session(){
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];
                                                                 $kernel->post($_[SESSION],$object->alias()."_start");
                                                                 print STDERR "******************************************\n";
-                                                                print STDERR Data::Dumper->Dump([$kernel->alias_list()])."\n";
+                                                                print STDERR "Session Count: ".$self->{'peek'}->session_count()."\n";
                                                                 print STDERR "******************************************\n";
                                                                 
                                                               },
