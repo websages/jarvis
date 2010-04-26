@@ -80,7 +80,8 @@ sub object_session(){
                                                                 $kernel->post($_[SESSION],$object->alias()."_start");
                                                                 print STDERR "******************************************\n";
                                                                 print STDERR "Session Count: ".$self->{'peek'}->session_count()."\n";
-foreach my $sess (@{ $self->{'peek'}->session_list() }){
+my @sessions = $self->{'peek'}->session_list();
+foreach my $sess (@sessions){
     print Data::Dumper->Dump([$sess]);
 }
 
