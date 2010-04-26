@@ -81,20 +81,42 @@ sub alias{
 sub input{
      my ($self, $kernel, $heap, $sender, $who, $where, $what, $respond_event) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
      if(defined($what)){
-         $kernel->post($sender, $respond_event, $who, $where, piratespeak( $self->{'megahal'}->do_reply( $what ) ) );
+         # wrap the message into a bundle the process handler expects
+         $kernel->post(
+                        $self->alias(),
+                        'process',
+                        {
+                          'user'    => $who,
+                          'message' => $what,
+                          'respond' => { 
+                                         'session'   => $sender,
+                                         'event'     => $respond_event, 
+                                         'specifics' => $where,
+                                       },
+                        }
+                      );
      }
-     return $self->{'alias'};
 }
 
 sub output{
-     my ($self, $kernel, $heap, $sender, $what) = @_[OBJECT, KERNEL, HEAP, SENDER, ARGV0];
-     return $self->{'alias'};
+     my ($self, $kernel, $heap, $sender, $response_bundle) = @_[OBJECT, KERNEL, HEAP, SENDER, ARGV0];
+
+     # un-wrap the response bundle
+     my $who = $response_bundle->{'user'};
+     my $what = $response_bundle->{'message'};
+     my $sender = $response_bundle->{'respond'}->{'session'};
+     my $where = $response_bundle->{'respond'}->{'specifics'};
+     my $respond_event = $response_bundle->{'respond'}->{'event'};
+     $kernel->post($sender, $respond_event, $who, $where, $what);
 }
 
 sub process{
-     my ($self, $kernel, $heap, $sender, $what) = @_[OBJECT, KERNEL, HEAP, SENDER, ARGV0];
-     return $self->{'alias'};
-}
+     my ($self, $kernel, $heap, $sender, $msgbundle) = @_[OBJECT, KERNEL, HEAP, SENDER, ARGV0];
+     my $responce = $msgbundle; 
 
+     $response->{'message'} = piratespeak( $self->{'megahal'}->do_reply( $response->{'message'} ) );
+
+     $kernel->post($self->alias(), 'output', $responsebundle);
+}
 
 1;
