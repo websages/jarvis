@@ -76,8 +76,9 @@ sub _start {
     my $kernel = $_[KERNEL];
     my $session = $_[SESSION];
     print STDERR ref($self)." start\n"; 
-print STDERR "setting alias on session ".$self->alias()."\n";
-    $kernel->alias_set($self->alias());
+#print STDERR "setting alias on session ".$self->alias()."\n";
+    #$kernel->alias_set($self->alias());
+    print Data::Dumper->Dump([$kernel->alias_list()]);
     $self->on_start(); 
 }
 
