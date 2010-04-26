@@ -143,8 +143,8 @@ sub status_event()
 
                 my $jid = $heap->{$self->alias()}->jid();
                 print "INIT FINISHED! \n";
-                print "JID: $jid \n";
-                print "SID: ". $sender->ID() ." \n\n";
+                #print "JID: $jid \n";
+                #print "SID: ". $sender->ID() ." \n\n";
                 
                 $heap->{'jid'} = $jid;
                 $heap->{'sid'} = $sender->ID();
@@ -206,8 +206,8 @@ sub status_event()
 sub input_event()
 {
         my ($self, $kernel, $heap, $node) = @_[OBJECT, KERNEL, HEAP, ARG0];
+        #print "\n\nINCOMING:\n".$node->to_str()."\n\n\n";
 
-        print "\n\nINCOMING:\n".$node->to_str()."\n\n\n";
         # allow everyone in websages to subscribe to our presence. /*FIXME move regex to constructor */
         if($node->name() eq 'presence'){
             if($node->attr('type') ){
@@ -218,6 +218,8 @@ sub input_event()
                 }
             }
         }
+
+        # figure out to where to reply...
         my $from = $node->attr('from');
         my $to = $node->attr('to');
         my $id = $node->attr('id');
@@ -237,14 +239,13 @@ sub input_event()
         if(defined($child_nodes->{'body'})){ 
              $what = $child_nodes->{'body'}->data();
             if((($type eq 'chat')||($type eq 'groupchat'))&&($thatsme == 0)){
-                print STDERR "\nTo: $to\nFrom: $from (ReplyTo: $replyto)\nType: $type\nID: $id\n";
                 $kernel->post("$self->{'persona'}", "$self->{'persona'}_input", $replyto, $type, $what, 'xmpp_reply');
             }
         }
-                
 }
 
 sub xmpp_reply{
+    # Get the reply from the personality and post it back from whence it came.
     my ($self, $kernel, $heap, $sender, $who, $type, $reply) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     my $node = XNode->new('message');
     $node->attr('to', $who);
