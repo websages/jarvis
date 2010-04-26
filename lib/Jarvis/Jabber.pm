@@ -206,9 +206,9 @@ sub input_event()
         my ($self, $kernel, $heap, $node) = @_[OBJECT, KERNEL, HEAP, ARG0];
         
         
-        print "\n===PACKET RECEIVED===\n";
-        print $node->to_str() . "\n";
-        print $node->get_id() . "\n";
+        print "\n===PACKET RECEIVED===\n" if $self->{'DEBUG'} > 2;
+        print $node->to_str() . "\n" if $self->{'DEBUG'} > 2;
+        print $node->get_id() . "\n" if $self->{'DEBUG'} > 2;
         if($node->name() eq 'presence'){
             #print Data::Dumper->Dump([$node->get_attrs()]) . "\n";
             if($node->attr('type') eq 'subscribe'){
@@ -217,7 +217,7 @@ sub input_event()
                 }
             }
         }
-        print "=====================\n";
+        print "=====================\n" if $self->{'DEBUG'} > 2;
         #$kernel->delay_add('test_message', int(rand(10)));
                 
 }
@@ -248,9 +248,9 @@ sub output_event()
 {
         my ($self, $kernel, $heap, $node, $sid) = @_[OBJECT, KERNEL, HEAP, ARG0, ARG1];
         
-        print "\n===PACKET SENT===\n";
-        print $node->to_str() . "\n";
-        print "=================\n";
+        print "\n===PACKET SENT===\n" if $self->{'DEBUG'} > 2;
+        print $node->to_str() . "\n" if $self->{'DEBUG'} > 2;
+        print "=================\n" if $self->{'DEBUG'} > 2;
         
         $kernel->post($sid, 'output_handler', $node);
 }
