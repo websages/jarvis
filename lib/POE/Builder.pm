@@ -1,5 +1,5 @@
 package POE::Builder;
-use POE::API::Peek;
+#use POE::API::Peek;
 use strict;
 use warnings;
 use POE;
@@ -7,7 +7,7 @@ sub new {
     my $class = shift; 
     my $self = {}; 
     my $construct = shift if @_;
-    my $self->{'peek'} = POE::API::Peek->new();
+    #my $self->{'peek'} = POE::API::Peek->new();
     $self->{'session_struct'}={};
 
     # list of required constructor elements

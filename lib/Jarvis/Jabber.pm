@@ -19,7 +19,7 @@ sub new{
     my $class = shift;
     my $self = {};
     my $construct = shift if @_;
-    $self->{'DEBUG'} = 0 unless defined $construct->{'debug'}; 
+    $self->{'DEBUG'} = 3 unless defined $construct->{'debug'}; 
     # list of required constructor elements
     $self->{'must'} = [ "alias", "ip", "hostname", "username", "password" ];
 
@@ -187,7 +187,6 @@ sub status_event()
                     foreach my $muc (@{ $self->{'channel_list'} }){
                         #$heap->{'roomnick'} = 'system@conference.websages.com/crunchy';
                         #$kernel->yield(presence_subscribe','whitejs@websages.com');
-print STDERR "-=[".$self->alias()."]=-\n";
                         $kernel->post($self->alias(),'join_channel', $muc);
                     }
                 }
