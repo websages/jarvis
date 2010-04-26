@@ -14,7 +14,7 @@ use POE::Builder;
 $|++;
 
 my $IRC=1;
-my $XMPP=0;
+my $XMPP=1;
 
 ################################################################################
 # We create a persona session, and give it an alias. We then create IRC/XMPP
@@ -32,8 +32,7 @@ $poe->object_session(
                       new Jarvis::Persona::Crunchy(
                                                     { 
                                                       'alias' => 'crunchy',
-                                                    },
-                                                    1
+                                                    }
                                                   )
                     );
 
@@ -50,8 +49,7 @@ if($IRC){
                                                                  '#soggies',
                                                                ],
                                              'persona'      => 'crunchy',
-                                           },
-                                           1
+                                           }
                                          ), 
                         );
     
@@ -68,8 +66,7 @@ if($IRC){
                                                                  '#puppies',
                                                                ],
                                              'persona'      => 'system',
-                                           },
-                                           1
+                                           }
                                          ), 
                         );
 }
@@ -97,8 +94,7 @@ if($XMPP){
                                                                      ],
                                                 'persona'         => 'system',
                                                 'account-persona' => 'crunchy',
-                                              },
-                                              0
+                                              }
                                             ), 
                         );
     
@@ -117,9 +113,9 @@ if($XMPP){
                                                                      ],
                                                 'persona'         => 'crunchy',
                                                 'account-persona' => 'crunchy',
-                                              },
-                                              0
+                                              }
                                             ), 
                         );
 }
+
 POE::Kernel->run();

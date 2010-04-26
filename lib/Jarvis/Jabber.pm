@@ -83,7 +83,7 @@ sub _start{
                                                         Hostname       => $self->{'hostname'},
                                                         Username       => $self->{'username'},
                                                         Password       => $self->{'password'},
-                                                        Alias          => $self->{'alias'},
+                                                        Alias          => $self->alias().'component',
                                                         ConnectionType => +XMPP,
                                                         States         => {
                                                                             StatusEvent => 'status_event',
@@ -91,7 +91,7 @@ sub _start{
                                                                             ErrorEvent  => 'error_event',
                                                                           },
                                                       );
-    $kernel->post($self->alias(),'connect');
+    $kernel->post($self->alias().'component','connect');
     return $self;
 }
 
@@ -147,12 +147,12 @@ sub status_event()
                 $heap->{'jid'} = $jid;
                 $heap->{'sid'} = $sender->ID();
         
-                $kernel->post($self->alias(),'output_handler', XNode->new('presence'));
+                $kernel->post($self->alias().'component','output_handler', XNode->new('presence'));
                 
                 # And here is the purge_queue. This is to make sure we haven't sent
                 # nodes while something catastrophic has happened (like reconnecting).
                 
-                $kernel->post($self->alias(),'purge_queue');
+                $kernel->post($self->alias().'component','purge_queue');
 
 #                my $online_node=XNode->new('presence',[ 'show', 'Online']);
 #                $kernel->yield(output_event',$online_node);
@@ -307,7 +307,7 @@ sub join_channel() {
     my $node=XNode->new('presence', [ 'to', $room, 'from', $heap->{$self->alias()}->jid(), ]);
     my $child_node=XNode->new('x',[xmlns=>"http://jabber.org/protocol/muc"]);
     $node->insert_tag($child_node);
-    $kernel->yield($self->alias(),'output_event',$node,$heap->{'sid'});
+    $kernel->yield($self->alias().'component','output_event',$node,$heap->{'sid'});
 } # join channel
 
 sub presence_subscribe() {
