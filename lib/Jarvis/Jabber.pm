@@ -221,6 +221,8 @@ sub input_event()
         my $id = $node->attr('id');
         my $type = $node->attr('type');
 
+print STDERR "To: $to, From: $from, Type: $type, ID: $id\n";
+
         # Retrieve the message data from the xml
         my $what=''; 
         my $child_nodes=$node->get_children_hash(); 
