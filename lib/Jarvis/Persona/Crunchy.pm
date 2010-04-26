@@ -113,7 +113,8 @@ print STDERR Data::Dumper->Dump([$response_bundle]);
 }
 
 sub process{
-     my ($self, $kernel, $heap, $sender, $msgbundle) = @_[OBJECT, KERNEL, HEAP, SENDER, ARGV0];
+     my ($self, $kernel, $heap, $sender, $message_bundle) = @_[OBJECT, KERNEL, HEAP, SENDER, ARGV0];
+print STDERR Data::Dumper->Dump([$message_bundle]);
      my $response = $msgbundle; 
      $response->{'message'} = piratespeak( $self->{'megahal'}->do_reply( $response->{'message'} ) );
      $kernel->post($self->alias(), $self->alias().'_output', $response);
