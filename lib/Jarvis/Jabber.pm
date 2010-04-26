@@ -234,16 +234,17 @@ sub input_event()
              $what = $child_nodes->{'body'}->data();
             if(($type eq 'chat')||($type eq 'groupchat')){
                 print STDERR "\nTo: $to\nFrom: $from (ReplyTo: $replyto)\nType: $type\nID: $id\n";
-                $kernel->post("$self->{'persona'}", "$self->{'persona'}_input", $replyto, $id, $what, 'xmpp_reply');
+                $kernel->post("$self->{'persona'}", "$self->{'persona'}_input", $replyto, $type, $what, 'xmpp_reply');
             }
         }
                 
 }
 
 sub xmpp_reply{
-    my ($self, $kernel, $heap, $sender, $who, $where, $reply) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    my ($self, $kernel, $heap, $sender, $who, $type, $reply) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     my $node = XNode->new('message');
     $node->attr('to', $who);
+    $node->attr('type', $type);
     $node->insert_tag('body')->data($reply);
     $kernel->post($self->alias(),'output_event', $node, $heap->{'sid'});
 }
