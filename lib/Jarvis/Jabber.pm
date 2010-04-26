@@ -207,6 +207,7 @@ sub input_event()
 {
         my ($self, $kernel, $heap, $node) = @_[OBJECT, KERNEL, HEAP, ARG0];
 
+        print $node->to_str()."\n";
         # allow everyone in websages to subscribe to our presence. /*FIXME move regex to constructor */
         if($node->name() eq 'presence'){
             if($node->attr('type') ){
