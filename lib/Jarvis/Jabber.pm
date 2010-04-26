@@ -207,7 +207,7 @@ sub input_event()
 {
         my ($self, $kernel, $heap, $node) = @_[OBJECT, KERNEL, HEAP, ARG0];
 
-        print $node->to_str()."\n";
+        print "INCOMING:\n".$node->to_str()."\n";
         # allow everyone in websages to subscribe to our presence. /*FIXME move regex to constructor */
         if($node->name() eq 'presence'){
             if($node->attr('type') ){
@@ -219,21 +219,20 @@ sub input_event()
             }
         }
         my $from = $node->attr('from');
-        $from=~s/\/.*//;
         my $to = $node->attr('to');
         my $id = $node->attr('id');
         my $type = $node->attr('type');
 
 
-        # Retrieve the message data from the xml
+        # Retrieve the message data from the xml if it has a body and post the message to the personality...
         my $what=''; 
         my $child_nodes=$node->get_children_hash(); 
         if(defined($child_nodes->{'body'})){ 
              $what = $child_nodes->{'body'}->data();
-        }
-        if(($type eq 'chat')||($type eq 'groupchat')){
-            print STDERR "*************************************** To: $to, From: $from, Type: $type, ID: $id\n";
-            $kernel->post("$self->{'persona'}", "$self->{'persona'}_input", $from, $id, $what, 'xmpp_reply');
+            if(($type eq 'chat')||($type eq 'groupchat')){
+                print STDERR "*************************************** To: $to, From: $from, Type: $type, ID: $id\n";
+                $kernel->post("$self->{'persona'}", "$self->{'persona'}_input", $from, $id, $what, 'xmpp_reply');
+            }
         }
                 
 }
