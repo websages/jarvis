@@ -208,8 +208,10 @@ sub input_event()
         
         
         print "\n===PACKET RECEIVED===\n" if $self->{'DEBUG'} > 2;
-        print $node->to_str() . "\n" if $self->{'DEBUG'} > 2;
-        print $node->get_id() . "\n" if $self->{'DEBUG'} > 2;
+        print "1. " . $node->to_str() . "\n" if $self->{'DEBUG'} > 2;
+        print "2. " . $node->get_id() . "\n" if $self->{'DEBUG'} > 2;
+        print "3. " . ref($node) . "\n" if $self->{'DEBUG'} > 2;
+        # allow everyone in websages to subscribe to our presence.
         if($node->name() eq 'presence'){
             #print Data::Dumper->Dump([$node->get_attrs()]) . "\n";
             if($node->attr('type') ){
@@ -307,7 +309,7 @@ sub error_event()
 sub join_channel() {
     my ($self, $kernel, $heap, $room) = @_[OBJECT, KERNEL, HEAP, ARG0];
     $heap->{'starttime'} = time;
-    my $node=XNode->new('presence', [ 'to', $room, 'from', $heap->{$self->alias()}->jid(), ]);
+    my $node=XNode->new('presence', [ 'to', $room, 'from', $heap->{ $self->alias() }->jid(), ]);
     my $child_node=XNode->new('x',[xmlns=>"http://jabber.org/protocol/muc"]);
     $node->insert_tag($child_node);
     $kernel->post($self->alias(),'output_event',$node,$heap->{'sid'});
