@@ -227,7 +227,7 @@ sub input_event()
         }
 
         # allow everyone in websages to subscribe to our presence.
-print Data::Dumper->Dump([$$node->get_children_hash]) . "\n============================\n";
+print "\n\n\n\n".Data::Dumper->Dump([$$node->get_children_hash]) . "\n\n\n\n\n";
 #        foreach my $child ($node->get_children()){ 
 #            foreach my $childnode ( @{ $child } ){ 
 #                my $childnodedata = $childnode->get_attrs();
