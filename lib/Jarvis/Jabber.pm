@@ -212,9 +212,11 @@ sub input_event()
         print $node->get_id() . "\n" if $self->{'DEBUG'} > 2;
         if($node->name() eq 'presence'){
             #print Data::Dumper->Dump([$node->get_attrs()]) . "\n";
-            if($node->attr('type') eq 'subscribe'){
-                if($node->attr('from') eq 'whitejs@websages.com'){
-                    $kernel->yield('approve_subscription',$node->attr('from'));
+            if($node->attr('type') ){
+                if($node->attr('type') eq 'subscribe'){
+                    if($node->attr('from') eq 'whitejs@websages.com'){
+                        $kernel->yield('approve_subscription',$node->attr('from'));
+                    }
                 }
             }
         }
