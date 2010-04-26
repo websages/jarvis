@@ -216,10 +216,10 @@ sub input_event()
                 }
             }
         }
-        my $from = $node->get_attr('from');
-        my $to = $node->get_attr('to');
-        my $id = $node->get_attr('id');
-        my $type = $node->get_attr('type');
+        my $from = $node->attr('from');
+        my $to = $node->attr('to');
+        my $id = $node->attr('id');
+        my $type = $node->attr('type');
 
         # Retrieve the message data from the xml
         my $what=''; 
