@@ -75,8 +75,8 @@ sub object_session(){
                           inline_states =>  {
                                               _start   => sub { 
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];
-                                                                $kernel->post($_[SESSION],$object->alias()."_start");
                                                                 $kernel->alias_set( $object->alias() );
+                                                                $kernel->post($_[SESSION],$object->alias()."_start");
                                                                 print STDERR "******************************************\n";
                                                                 print STDERR Data::Dumper->Dump([$kernel->alias_list()])."\n";
                                                                 print STDERR "******************************************\n";
