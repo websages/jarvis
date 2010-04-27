@@ -83,9 +83,9 @@ sub input{
      if(defined($what)){
          my $r=""; # response
          if($what=~m/^\s*fortune\s*$/){
-             $r = qx( /usr/games/fortune -s );
+             $r = $self->fortune();
          }elsif($what=~m/^\s*crunchy\s*:*\s*/){
-             $r = $self->{'megahal'}->do_reply( $what );
+             $r = $self->megahal();
          }
          
          # respond in pirate if we have something to say...
@@ -93,13 +93,15 @@ sub input{
      }
 }
 
-sub process{
-     my ($self, $kernel, $message_bundle) = @_[OBJECT, KERNEL, ARGV0];
+sub megahal{
+    my $self=shift;
+    my $what=shift if @_;
+    return  $self->{'megahal'}->do_reply( $what );
 }
 
-
-sub output{
-     my ($self, $kernel, $message_bundle) = @_[OBJECT, KERNEL, ARGV0];
+sub fortune{
+    my $self=shift;
+    return  qx( /usr/games/fortune -s );
 }
 
 1;
