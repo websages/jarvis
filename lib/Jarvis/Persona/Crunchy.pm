@@ -14,8 +14,11 @@ sub new {
     $self->{'must'} = [ 'alias' ];
 
     # hash of optional constructor elements (key), and their default (value) if not specified
-    $self->{'may'} = {};
-
+    $self->{'may'} = {
+                       'ldap_domain' => undef,
+                       'ldap_binddn' => undef,
+                       'ldap_bindpw' => undef,
+                     };
     # set our required values fron the constructor or the defaults
     foreach my $attr (@{ $self->{'must'} }){
          if(defined($construct->{$attr})){
@@ -41,7 +44,10 @@ sub new {
                           $self->{'alias'}.'_input'   => 'input',
                           # special_events go here...
                         };
-
+    if( !defined($self->{'ldap_domain'}) || !defined($self->{'ldap_binddn'}) || !defined($self->{'ldap_bindpw'})){
+           print STDERRR "WARNING: Not enough LDAP paramaters supplied. LDAP operations will be disabled.\n";
+    }else{
+    }
 
     bless($self,$class);
     return $self;
