@@ -40,8 +40,8 @@ sub new {
                           $self->{'alias'}.'_stop'    => '_stop',
                           $self->{'alias'}.'_input'   => 'input',
                           # special_events go here...
-                          $self->{'alias'}.'_update_success'          => 'update_success',
-                          $self->{'alias'}.'_friend_timeline_success' => 'timeline_success',
+                          $self->{'alias'}.'_update_success'          => 'twitter_update_success',
+                          $self->{'alias'}.'_friend_timeline_success' => 'twitter_timeline_success',
                           $self->{'alias'}.'_response_error'          => 'twitter_error',
                           $self->{'alias'}.'_delay_friend_timeline'   => 'delay_friend_timeline',
                         };
@@ -85,43 +85,25 @@ sub input{
 
 sub delay_friend_timeline {
     my($kernel, $heap) = @_[KERNEL, HEAP];
-    $heap->{twitter}->yield('friend_timeline');
+    $heap->{$self->alias()}->yield('friend_timeline');
 }
 
 sub twitter_update_success {
     my($kernel, $heap, $ret) = @_[KERNEL, HEAP, ARG0];
-    $heap->{ircd}->yield(daemon_cmd_notice => $conf->{botname}, $conf->{channel}, $ret->{text});
+    print STDERR "twitter_update_success $ret->{text}\n";
+    #$heap->{ircd}->yield(daemon_cmd_notice => $conf->{botname}, $conf->{channel}, $ret->{text});
 }
 
 sub twitter_friend_timeline_success {
     my($kernel, $heap, $ret) = @_[KERNEL, HEAP, ARG0];
-    my $conf = $heap->{config}->{irc};
-
-    $ret = [] unless $ret;
-    for my $line (reverse @{ $ret }) {
-        my $name = $line->{user}->{screen_name};
-        my $text = $line->{text};
-
-        unless ($heap->{nicknames}->{$name}) {
-            $heap->{ircd}->yield(add_spoofed_nick => { nick => $name });
-            $heap->{ircd}->yield(daemon_cmd_join => $name, $conf->{channel});
-            $heap->{nicknames}->{$name} = 1;
-        }
-
-        next if $heap->{config}->{twitter}->{screenname} eq $name;
-        if ($heap->{joined}) {
-            $heap->{ircd}->yield(daemon_cmd_privmsg => $name, $conf->{channel}, $text);
-        } else {
-            push @{ $heap->{stack} }, { name => $name, text => $text }
-        }
-    }
-    $kernel->delay('delay_friend_timeline', $heap->{config}->{twitter}->{retry});
+    print STDERR "twitter_update_success $ret\n";
+    $kernel->delay('delay_friend_timeline', 5);
 }
 
 sub twitter_error {
     my($kernel, $heap, $res) = @_[KERNEL, HEAP, ARG0];
-    my $conf = $heap->{config}->{irc};
-    $heap->{ircd}->yield(daemon_cmd_notice => $conf->{botname}, $conf->{channel}, 'Twitter error');
+    print STDERR "twitter_update_success $res\n";
+    #$heap->{ircd}->yield(daemon_cmd_notice => $conf->{botname}, $conf->{channel}, 'Twitter error');
 }
 
 1;
