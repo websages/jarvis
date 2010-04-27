@@ -32,6 +32,15 @@ exit unless $poe;
 
 # We set up some personas to redirect various traffic to...
 $poe->object_session(
+                      new Jarvis::Persona::Watcher(
+                                                    { 
+                                                      'alias'          => 'mediacas',
+                                                      'twitterer'      => 'mediacas',
+                                                      'twitter_passwd' => $ENV{'TWITTER_PASSWORD'},
+                                                    }
+                                                  )
+                    );
+$poe->object_session(
                       new Jarvis::Persona::Crunchy(
                                                     { 
                                                       'alias'       => 'crunchy',
@@ -81,6 +90,20 @@ if($IRC){
                                                                  '#midgard',
                                                                ],
                                              'persona'      => 'system',
+                                           }
+                                         ), 
+                        );
+    $poe->object_session(  
+                          new Jarvis::IRC(
+                                           {
+                                             'alias'        => 'mediacas_session',
+                                             'nickname'     => 'mediacas',
+                                             'ircname'      => 'Media CAS',
+                                             'server'       => '127.0.0.1',
+                                             'channel_list' => [ 
+                                                                 '#soggies',
+                                                               ],
+                                             'persona'      => 'mediacas',
                                            }
                                          ), 
                         );

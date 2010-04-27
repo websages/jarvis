@@ -124,5 +124,4 @@ sub twitter_error {
     $heap->{ircd}->yield(daemon_cmd_notice => $conf->{botname}, $conf->{channel}, 'Twitter error');
 }
 
-
 1;
