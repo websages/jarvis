@@ -3,6 +3,7 @@ use AI::MegaHAL;
 use IRCBot::Chatbot::Pirate;
 use POE;
 use POSIX qw( setsid );
+use Net::LDAP;
 
 sub new {
     my $class = shift;
@@ -45,8 +46,9 @@ sub new {
                           # special_events go here...
                         };
     if( !defined($self->{'ldap_domain'}) || !defined($self->{'ldap_binddn'}) || !defined($self->{'ldap_bindpw'})){
-           print STDERRR "WARNING: Not enough LDAP paramaters supplied. LDAP operations will be disabled.\n";
+        print STDERRR "WARNING: Not enough LDAP paramaters supplied. LDAP operations will be disabled.\n";
     }else{
+        
     }
 
     bless($self,$class);
