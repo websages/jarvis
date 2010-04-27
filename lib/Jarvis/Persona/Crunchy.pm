@@ -83,7 +83,7 @@ sub input{
      if(defined($what)){
          my $r=""; # response
          if($what=~m/^\s*fortune\s*$/){
-             $r = qx( /usr/local/bin/fortune -s );
+             $r = qx( /usr/games/fortune -s );
          }elsif($what=~m/^\s*crunchy\s*:*\s*/){
              $r = $self->{'megahal'}->do_reply( $what );
          }
