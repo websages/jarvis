@@ -40,6 +40,10 @@ sub new {
                           $self->{'alias'}.'_stop'    => '_stop',
                           $self->{'alias'}.'_input'   => 'input',
                           # special_events go here...
+                          $self->{'alias'}.'_update_success'          => 'update_success',
+                          $self->{'alias'}.'_friend_timeline_success' => 'timeline_success',
+                          $self->{'alias'}.'_response_error'          => 'twitter_error',
+                          $self->{'alias'}.'_delay_friend_timeline'   => 'delay_friend_timeline',
                         };
 
 
@@ -52,13 +56,6 @@ sub new {
 sub _start{
      my $self = $_[OBJECT]||shift;
      print STDERR __PACKAGE__ ." start\n";
-     $self->{'megahal'} = new AI::MegaHAL(
-                                           'Path'     => '/usr/lib/share/crunchy',
-                                           'Banner'   => 0,
-                                           'Prompt'   => 0,
-                                           'Wrap'     => 0,
-                                           'AutoSave' => 1
-                                         );
      return $self;
 }
 
@@ -84,6 +81,11 @@ sub input{
          $kernel->post($sender, $respond_event, $who, $where, $self->{'megahal'}->do_reply( $what ));
      }
      return $self->{'alias'};
+}
+
+sub delay_friend_timeline {
+    my($kernel, $heap) = @_[KERNEL, HEAP];
+    $heap->{twitter}->yield('friend_timeline');
 }
 
 sub twitter_update_success {
@@ -121,5 +123,6 @@ sub twitter_error {
     my $conf = $heap->{config}->{irc};
     $heap->{ircd}->yield(daemon_cmd_notice => $conf->{botname}, $conf->{channel}, 'Twitter error');
 }
+
 
 1;
