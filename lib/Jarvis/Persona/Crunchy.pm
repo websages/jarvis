@@ -39,8 +39,6 @@ sub new {
                           $self->{'alias'}.'_start'   => '_start',
                           $self->{'alias'}.'_stop'    => '_stop',
                           $self->{'alias'}.'_input'   => 'input',
-                          $self->{'alias'}.'_output'  => 'output',
-                          $self->{'alias'}.'_process' => 'process',
                           # special_events go here...
                         };
 
