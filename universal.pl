@@ -1,11 +1,11 @@
 #!/usr/bin/perl
 $ENV{'PATH'}='/usr/local/bin:/usr/bin:/bin';
 $ENV{'IFS'}=' \t\n';
-BEGIN { unshift @INC, './lib' if -d './lib'; }
-if (!defined($ENV{'XMPP_PASSWORD'})){
+if(!defined($ENV{'XMPP_PASSWORD'})){
     print "Please set XMPP_PASSWORD\n";
     exit 1;
 }
+BEGIN { unshift @INC, './lib' if -d './lib'; }
 use Data::Dumper;
 use Jarvis::IRC;
 use Jarvis::Jabber;
