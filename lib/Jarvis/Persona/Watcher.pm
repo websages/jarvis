@@ -94,7 +94,7 @@ sub twitter_update_success {
     #$heap->{ircd}->yield(daemon_cmd_notice => $conf->{botname}, $conf->{channel}, $ret->{text});
 }
 
-sub twitter_friend_timeline_success {
+sub twitter_timeline_success {
     my($kernel, $heap, $ret) = @_[KERNEL, HEAP, ARG0];
     print STDERR "twitter_update_success $ret\n";
     $kernel->delay('delay_friend_timeline', 5);
