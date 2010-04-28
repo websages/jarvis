@@ -237,7 +237,7 @@ sub shoutout_users{
         foreach my $user (@users){
             $user=~s/,.*//;
             print STDERR "$user:\n";
-            foreach my $user_entry ( $self->get_ldap_entry("($user)") );
+            foreach my $user_entry ( $self->get_ldap_entry("($user)") ){
                 foreach my $mail ($user_entry->get_value('mail') ){
                     print "$user $mail\n";
                 }
