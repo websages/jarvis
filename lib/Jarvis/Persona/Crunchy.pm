@@ -237,9 +237,11 @@ sub shoutout_users{
         foreach my $user (@users){
             $user=~s/,.*//;
             print STDERR "$user:\n";
-            my @user_entry = $self->get_ldap_entry("($user)");
-            print STDERR Data::Dumper->Dump([@user_entry]);
-            #print STDERR join("\n",@users)."\n";
+            foreach my $user_entry ( $self->get_ldap_entry("($user)") );
+                foreach my $mail ($user_entry->get_value('mail') ){
+                    print "$user $mail\n";
+                }
+            }
         }
     }
 }
