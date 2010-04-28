@@ -96,7 +96,6 @@ sub _start{
                                            'AutoSave' => 1
                                          );
      if($self->{'ldap_enabled'} == 1){
-         $self->shoutout_users();
          print STDERR "[ ".$self->error()." ]" if $self->{'ERROR'};
      }
      return $self;
@@ -126,6 +125,9 @@ sub input{
              $r = $self->fortune();
          }elsif($what=~m/^\s*crunchy\s*:*\s*/){
              $r = $self->megahal();
+         }elsif($what=~m/^!shoutout\s*(.*)/){
+             my $shoutout=$1;
+             $r = $self->shoutout($1);
          }
          
          # respond in pirate if we have something to say...
@@ -229,8 +231,11 @@ sub update{
     return $self;
 }
 
-sub shoutout_users{
+sub shoutout{
     my $self=shift;
+    my $shoutout=shift if @_;
+    my @list;
+    return "shoutout what?" unless $shoutout;
     foreach my $entry ( $self->get_ldap_entry("(cn=shoutouts)") ){
         my @users=$entry->get_value('uniqueMember');
         foreach my $user (@users){
@@ -238,11 +243,12 @@ sub shoutout_users{
             $user=~s/uid=//;
             foreach my $user_entry ( $self->get_ldap_entry("(uid=$user)") ){
                 foreach my $mail ($user_entry->get_value('pageremail') ){
-                    print "$user: $mail\n" if $mail;
+                    push(@list,$mail);
                 }
             }
         }
     }
+    return join(" ",@list);
 }
 ################################################################################
 # End LDAP events
