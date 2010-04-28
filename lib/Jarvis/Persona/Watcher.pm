@@ -111,6 +111,7 @@ sub twitter_update_success {
 
 sub twitter_timeline_success {
     my($self, $kernel, $heap, $ret) = @_[OBJECT, KERNEL, HEAP, ARG0];
+    my $count=0;
     foreach my $tweet (@{ $ret }){
         #print "[\@". join("\n",keys(%{$tweet->{'user'}->{'screen_name}})) ."]: ".$tweet->{'text'}." ";
         my $text=$tweet->{'text'};
@@ -118,7 +119,7 @@ sub twitter_timeline_success {
             $text=~s/^I used #*Shazam to discover\s+(.*)\s+by\s+(.*)\s+http:\/\/.*/$1 $2/;
             $text=~s/^I used #*Shazam to discover\s+(.*)\s+by\s+(.*)\s+#shazam.*/$1 $2/;
         }
-        print "[\@".$tweet->{'user'}->{'screen_name'}."($tweet->{'id'})]: ".$text." ";
+        print $count++. "[\@".$tweet->{'user'}->{'screen_name'}."($tweet->{'id'})]: ".$text." ";
         print "\n";
         # print join("|", keys(%{ $tweet->{'user'} }))."\n";
         # friends_count
