@@ -235,6 +235,8 @@ sub shoutout_users{
     foreach my $entry ( $self->get_ldap_entry("(cn=shoutouts)") ){
         my @users=$entry->get_value('uniqueMember');
         foreach my $user (@users){
+            $user=~s/$self->{'ldap_basedn'}//;
+            print STDERR "$user:\n";
             my $user_entry = $self->get_ldap_entry("($user)");
             print STDERR Data::Dumper->Dump([$user_entry]);
             #print STDERR join("\n",@users)."\n";
