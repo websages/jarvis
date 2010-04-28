@@ -69,7 +69,7 @@ sub _start{
      my $self = $_[OBJECT]||shift;
      my $kernel = $_[KERNEL];
      print STDERR __PACKAGE__ ." start\n";
-print Data::Dumper->Dump([ $self->{'twitter'} }]);
+print Data::Dumper->Dump([ $self->{'twitter'} ]);
      #$heap->{ $self->alias() }->{'twitter'}->yield('register');
      $kernel->delay($self->alias().'_delay_friend_timeline', 5);
      return $self;
