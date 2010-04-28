@@ -53,14 +53,14 @@ sub new {
 
 
 
-    my $self->{'cfg'} = {
-                          'screenname' => $self->{'screenname'},
-                          'username'   => $self->{'username'},
-                          'password'   => $self->{'password'},
-                          'retry'      => $self->{'retry'},
-                         };
+    $self->{'cfg'} = {
+                       'screenname' => $self->{'screenname'},
+                       'username'   => $self->{'username'},
+                       'password'   => $self->{'password'},
+                       'retry'      => $self->{'retry'},
+                      };
 
-#    $self->{'twitter'} = POE::Component::Client::Twitter->spawn(%{ $self->{'cfg'} });
+    $self->{'twitter'} = POE::Component::Client::Twitter->spawn(%{ $self->{'cfg'} });
     bless($self,$class);
     return $self;
 }
