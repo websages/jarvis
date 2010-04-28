@@ -179,7 +179,7 @@ sub twitter_timeline_success {
 
 sub twitter_error {
     my($self, $kernel, $heap, $res) = @_[OBJECT, KERNEL, HEAP, ARG0];
-    print STDERR "twitter_error\n". Data::Dumper->Dump([$res]) ."\n";
+    print STDERR "twitter_error\n". Data::Dumper->Dump([$res->{'_rc'}, $res->{'_content'}]) ."\n";
     #$heap->{ircd}->yield(daemon_cmd_notice => $conf->{botname}, $conf->{channel}, 'Twitter error');
 }
 
