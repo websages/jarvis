@@ -105,19 +105,19 @@ sub delay_friend_timeline {
 
 sub twitter_update_success {
     my($self, $kernel, $heap, $ret) = @_[OBJECT, KERNEL, HEAP, ARG0];
-    print STDERR "twitter_update_success\n". Data::Dumper->Dump([ $ret ]) ."\n";
+    print STDERR "twitter_update_success\n". ref($ret) ."\n";
     #$heap->{ircd}->yield(daemon_cmd_notice => $conf->{botname}, $conf->{channel}, $ret->{text});
 }
 
 sub twitter_timeline_success {
     my($self, $kernel, $heap, $ret) = @_[OBJECT, KERNEL, HEAP, ARG0];
-    print STDERR "twitter_timeline_success\n". Data::Dumper->Dump([ $ret ]) ."\n";
+    print STDERR "twitter_timeline_success\n". ref(ret) ."\n";
     $kernel->delay($self->alias().'_delay_friend_timeline', 20);
 }
 
 sub twitter_error {
     my($self, $kernel, $heap, $res) = @_[OBJECT, KERNEL, HEAP, ARG0];
-    print STDERR "twitter_error\n". Data::Dumper->Dump([ $res ]) ."\n";
+    print STDERR "twitter_error\n". ref($res) ."\n";
     #$heap->{ircd}->yield(daemon_cmd_notice => $conf->{botname}, $conf->{channel}, 'Twitter error');
 }
 
