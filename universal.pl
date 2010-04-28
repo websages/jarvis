@@ -34,9 +34,9 @@ exit unless $poe;
 $poe->object_session(
                       new Jarvis::Persona::Watcher(
                                                     { 
-                                                      'alias'            => 'mediacas',
-                                                      'screenname'       => 'james_s_white',
-                                                      'username'         => 'james_s_white',
+                                                      'alias'            => 'crunchy',
+                                                      'screenname'       => 'capncrunchbot',
+                                                      'username'         => 'capncrunchbot',
                                                       'password'         => $ENV{'TWITTER_PASSWORD'},
                                                       'retry'            => 300
                                                     }

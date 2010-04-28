@@ -167,7 +167,7 @@ sub twitter_timeline_success {
         # in_reply_to_status_id
         # in_reply_to_screen_name
     }
-    $kernel->delay($self->alias().'_delay_friend_timeline', 60);
+    $kernel->delay($self->alias().'_delay_friend_timeline', $self->{'retry'});
 }
 
 sub twitter_error {
