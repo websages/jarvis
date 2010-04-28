@@ -112,7 +112,7 @@ sub twitter_update_success {
 sub twitter_timeline_success {
     my($self, $kernel, $heap, $ret) = @_[OBJECT, KERNEL, HEAP, ARG0];
     print STDERR "twitter_timeline_success". Data::Dumper->Dump([ $ret ]) ."\n";
-    $kernel->delay($self->alias().'_delay_friend_timeline', 5);
+    $kernel->delay($self->alias().'_delay_friend_timeline', 20);
 }
 
 sub twitter_error {
