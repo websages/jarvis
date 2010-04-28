@@ -256,7 +256,7 @@ sub shoutout{
             }
         }
     }
-    return join(" ",@list);
+    return "shoutout sent to: ".join(" ",@list);
 }
 ################################################################################
 # End LDAP events
