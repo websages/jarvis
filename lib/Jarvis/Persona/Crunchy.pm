@@ -48,6 +48,7 @@ sub new {
                           # special_events go here...
                         };
     if( (!defined($self->{'ldap_domain'})) || (!defined($self->{'ldap_binddn'})) || (!defined($self->{'ldap_bindpw'})) ){
+        print STDERR "[ $self->{'ldap_domain'} :: $self->{'ldap_binddn'} :: $self->{'ldap_bindpw'} ]\n";
         print STDERR "WARNING: Not enough LDAP paramaters supplied. LDAP operations will be disabled.\n";
     }else{
         $self->{'ldap_basedn'} = $self->{'ldap_domain'};
