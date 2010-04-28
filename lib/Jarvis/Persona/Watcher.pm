@@ -106,7 +106,7 @@ sub delay_friend_timeline {
 }
 
 sub new_tweet {
-    my($self, $kernel, $heap, $status) = @_[OBJECT, KERNEL, HEAP, ARGV0];
+    my($self, $kernel, $heap, $status) = @_[OBJECT, KERNEL, HEAP, ARG0];
     $heap->{ $self->alias() }->{'twitter'}->yield('update', $status);
 }
 
