@@ -67,9 +67,13 @@ sub new {
                 }else{
                     $uri = "ldaps://".$rr->target.":".$rr->port;
                 }
-                print "$order $uri\n";
+                $self->{'ldap_uri'}=$self->{'ldap_uri'}." ,$uri";
             }
+        }else{
+            print STDERR "Cannot resolve srv records for _ldap._tcp.".$self->{'ldap_domain'}.". LDAP operations will be disabled.\n";
+            $self->{'ldap_enabled'}=0;
         }
+        print STDERR "$self->{'ldap_uri'}\n";
     }
 
     bless($self,$class);
