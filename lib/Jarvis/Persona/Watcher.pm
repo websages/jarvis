@@ -115,8 +115,8 @@ sub twitter_timeline_success {
     foreach my $tweet (@{ $ret }){
         #print "[\@". join("\n",keys(%{$tweet->{'user'}->{'screen_name}})) ."]: ".$tweet->{'text'}." ";
         my $text=$tweet->{'text'};
-        $text=~s/^I used #*Shazam to discover\s+(.*)\s+http:\/\/.*/$1/;
-        $text=~s/^I used #*Shazam to discover\s+(.*)\s+#shazam.*/$1/;
+        $text=~s/^I used #*Shazam to discover\s+(.*)\s+by\s+(.*)\s+http:\/\/.*/$1 by $2/;
+        $text=~s/^I used #*Shazam to discover\s+(.*)\s+by\s+(.*)\s+#shazam.*/$1 by $2/;
         print "[\@".$tweet->{'user'}->{'screen_name'}."]: ".$text." ";
         print "\n";
         # print join("|", keys(%{ $tweet->{'user'} }))."\n";
