@@ -96,7 +96,6 @@ sub _start{
                                            'AutoSave' => 1
                                          );
      if($self->{'ldap_enabled'} == 1){
-         #print STDERR Data::Dumper->Dump([ $self->get_ldap_entry("(cn=shoutouts)") ]);
          $self->shoutout_users();
          print STDERR "[ ".$self->error()." ]" if $self->{'ERROR'};
      }
@@ -238,7 +237,7 @@ sub shoutout_users{
             $user=~s/,.*//;
             $user=~s/uid=//;
             foreach my $user_entry ( $self->get_ldap_entry("(uid=$user)") ){
-                foreach my $mail ($user_entry->get_value('maildrop') ){
+                foreach my $mail ($user_entry->get_value('pageremail') ){
                     print "$user: $mail\n" if $mail;
                 }
             }
