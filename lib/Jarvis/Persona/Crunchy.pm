@@ -58,6 +58,11 @@ sub new {
         $self->{'ldap_basedn'} = "dc=".$self->{'ldap_basedn'};
         $self->{'resolver'} = Net::DNS::Resolver->new;
         my $srv = $self->{'resolver'}->query( "_ldap._tcp.".$self->{'ldap_domain'}, "SRV" );
+        if($srv){
+            foreach $rr (grep { $_->type eq 'SRV' } $srv->answer) {
+                print ref($rr), "\n";
+            }
+        }
         print STDERR Data::Dumper->Dump([$srv]);
     }
 
