@@ -203,7 +203,7 @@ sub update{
         @{ $servers } = split(/,/,$self->{'ldap_uri'}) if $self->{'ldap_uri'};
     }
     my @what_to_change;
-    while($server=shift(@{$servers})){
+    while(my $server=shift(@{$servers})){
         $self->error("Updating: ".$entry->dn." at ".$server);
         if($server=~m/(.*)/){ $server=$1 if ($server=~m/(^[A-Za-z0-9\-\.\/:]+$)/); }
         my $ldap = Net::LDAP->new($server) || warn "could not connect to $server $@";
