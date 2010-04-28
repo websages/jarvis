@@ -192,6 +192,43 @@ sub get_ldap_entry {
     return undef;
 }
 
+sub update{
+    my $self = shift;
+    my $construct = shift if @_;
+    my $entry = $construct->{'entry'} if $construct->{'entry'};
+    return undef unless $entry;
+    my ($servers,$mesg);
+    $servers = [ $construct->{'server'} ] if $construct->{'server'};
+    unless($servers){
+        @{ $servers } = split(/,/,$self->{'ldap_uri'}) if $self->{'ldap_uri'};
+    }
+    my @what_to_change;
+    while($server=shift(@{$servers})){
+        $self->error("Updating: ".$entry->dn." at ".$server);
+        if($server=~m/(.*)/){ $server=$1 if ($server=~m/(^[A-Za-z0-9\-\.\/:]+$)/); }
+        my $ldap = Net::LDAP->new($server) || warn "could not connect to $server $@";
+        $mesg = $ldap->bind( $self->{'ldap_binddn'}, password => $self->{'ldap_bindpw'});
+        undef $servers unless $mesg->{'resultCode'};
+        $mesg->code && $self->error($mesg->code." ".$mesg->error);
+        foreach my $change (@{ $entry->{'changes'} }){
+            push(@what_to_change, $change);
+
+        }
+        $mesg =  $ldap->modify ( $entry->dn, changes => [ @what_to_change ] );
+        if(($mesg->code == 10) && ($mesg->error eq "Referral received")){
+            $self->error("Received referral");
+            foreach my $ref (@{ $mesg->{'referral'} }){
+                 if($ref=~m/(ldap.*:.*)\/.*/){
+                     $self->update({ 'server'=> $ref, 'entry'=> $entry });
+                 }
+             }
+         }else{
+             $mesg->code && $self->error($mesg->code." ".$mesg->error);
+         }
+    }
+    return $self;
+}
+
 ################################################################################
 # End LDAP events
 ################################################################################
