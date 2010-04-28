@@ -174,7 +174,7 @@ sub get_ldap_entry {
         }
         my $ldap = Net::LDAP->new($server) || warn "could not connect to $server $@";
         $mesg = $ldap->bind( $self->{'ldap_binddn'}, password => $self->{'ldap_bindpw'});
-        $mesg->code && $self->error($mesg->error);
+        if($mesg->code != 0){ $self->error($mesg->error); }
         next if $mesg->code;
         my $records = $ldap->search(
                                      'base'   => "$self->{'ldap_basedn'}",
