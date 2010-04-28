@@ -54,14 +54,14 @@ sub new {
 
     bless($self,$class);
 
-    my $twitter = POE::Component::Client::Twitter->spawn(
-                                                          %{ 
-                                                             'screenname' => $self->{'screenname'},
-                                                             'username'   => $self->{'username'},
-                                                             'password'   => $self->{'password'},
-                                                             'retry'      => $self->{'retry'},
-                                                           }
-                                                         );
+#    my $twitter = POE::Component::Client::Twitter->spawn(
+#                                                          %{ 
+#                                                             'screenname' => $self->{'screenname'},
+#                                                             'username'   => $self->{'username'},
+#                                                             'password'   => $self->{'password'},
+#                                                             'retry'      => $self->{'retry'},
+#                                                           }
+#                                                         );
     return $self;
 }
 
