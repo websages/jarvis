@@ -59,7 +59,7 @@ sub new {
         $self->{'resolver'} = Net::DNS::Resolver->new;
         my $srv = $self->{'resolver'}->query( "_ldap._tcp.".$self->{'ldap_domain'}, "SRV" );
         if($srv){
-            foreach $rr (grep { $_->type eq 'SRV' } $srv->answer) {
+            foreach my $rr (grep { $_->type eq 'SRV' } $srv->answer) {
                 print ref($rr), "\n";
             }
         }
