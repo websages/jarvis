@@ -236,10 +236,10 @@ sub shoutout_users{
         my @users=$entry->get_value('uniqueMember');
         foreach my $user (@users){
             $user=~s/,.*//;
-            print STDERR "$user:\n";
-            foreach my $user_entry ( $self->get_ldap_entry("($user)") ){
-                foreach my $mail ($user_entry->get_value('mail') ){
-                    print "$user $mail\n";
+            $user=~s/uid=//;
+            foreach my $user_entry ( $self->get_ldap_entry("(uid=$user)") ){
+                foreach my $mail ($user_entry->get_value('maildrop') ){
+                    print "$user $mail\n" if $mail;
                 }
             }
         }
