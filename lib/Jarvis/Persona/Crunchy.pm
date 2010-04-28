@@ -229,6 +229,12 @@ sub update{
     return $self;
 }
 
+sub shoutout_users{
+    my $self=shift;
+    foreach my $entry($self->get_ldap_entry("(cn=shoutouts)") ){
+        print STDERR Data::Dumper->Dump([ $entry->uniqueMember ]);
+    }
+}
 ################################################################################
 # End LDAP events
 ################################################################################
