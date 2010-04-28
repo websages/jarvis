@@ -118,7 +118,7 @@ sub twitter_timeline_success {
             $text=~s/^I used #*Shazam to discover\s+(.*)\s+by\s+(.*)\s+http:\/\/.*/$1 $2/;
             $text=~s/^I used #*Shazam to discover\s+(.*)\s+by\s+(.*)\s+#shazam.*/$1 $2/;
         }
-        print "[\@".$tweet->{'user'}->{'screen_name'}."]: ".$text." ";
+        print "[\@".$tweet->{'user'}->{'screen_name'}."($tweet->{'id'})]: ".$text." ";
         print "\n";
         # print join("|", keys(%{ $tweet->{'user'} }))."\n";
         # friends_count
