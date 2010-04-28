@@ -234,7 +234,11 @@ sub shoutout_users{
     my $self=shift;
     foreach my $entry ( $self->get_ldap_entry("(cn=shoutouts)") ){
         my @users=$entry->get_value('uniqueMember');
-        print STDERR join("\n",@users)."\n";
+        foreach my $user (@users){
+            my $user_entry = $self->get_ldap_entry("($user)");
+            print ref($user_entry);
+            #print STDERR join("\n",@users)."\n";
+        }
     }
 }
 ################################################################################
