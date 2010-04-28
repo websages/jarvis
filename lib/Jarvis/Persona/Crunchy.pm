@@ -97,6 +97,7 @@ sub _start{
                                          );
      if($self->{'ldap_enabled'} == 1){
          print STDERR Data::Dumper->Dump([ $self->get_ldap_entry("(uid=crunchy)") ]);
+         print STDERR $self->error() if $self->error();
      }
      return $self;
 }
@@ -145,6 +146,17 @@ sub fortune{
 ################################################################################
 # Begin LDAP events
 ################################################################################
+
+sub error{
+    my $self=shift;
+    if(@_){
+        push(@{ $self->{'ERROR'} }, @_);
+    }
+    if($#{ $self->{'ERROR'} } >= 0 ){
+        return join("\n",@{ $self->{'ERROR'} });
+    }
+    return undef;
+}
 
 sub get_ldap_entry {
     my $self = shift;
