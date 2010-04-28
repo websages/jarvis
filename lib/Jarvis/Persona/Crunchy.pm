@@ -68,7 +68,7 @@ sub new {
                     $uri = "ldaps://".$rr->target.":".$rr->port;
                 }
                 if( defined($self->{'ldap_uri'}) ){ 
-                    $self->{'ldap_uri'}=$self->{'ldap_uri'}." ,$uri";
+                    $self->{'ldap_uri'}=$self->{'ldap_uri'}.", $uri";
                 }else{
                     $self->{'ldap_uri'}=$uri;
                 }
@@ -95,6 +95,9 @@ sub _start{
                                            'Wrap'     => 0,
                                            'AutoSave' => 1
                                          );
+     if($self->{'ldap_enabled'} == 1){
+         print STDERR Data::Dumper->Dump([ $self->get_ldap_entry("(uid=crunchy)") ]);
+     }
      return $self;
 }
 
@@ -142,6 +145,40 @@ sub fortune{
 ################################################################################
 # Begin LDAP events
 ################################################################################
+
+sub get_ldap_entry {
+    my $self = shift;
+    my $filter = shift if @_;
+    $filter = "(objectclass=*)" unless $filter;
+    my $servers;
+    if($self->{'ldap_uri'}){
+        @{ $servers }= split(/\,\s+/,$self->{'ldap_uri'})
+    }
+    my $mesg;
+    while( $server = shift(@{ $servers })){
+        if($server=~m/(.*)/){
+            $server=$1 if ($server=~m/(^[A-Za-z0-9\-\.\/:]+$)/);
+        }
+        my $ldap = Net::LDAP->new($server) || warn "could not connect to $server $@";
+        $mesg = $ldap->bind( $self->{'ldap_binddn'}, password => $self->{'ldap_bindpw'});
+        $mesg->code && $self->error($mesg->error);
+        next if $mesg->code;
+        my $records = $ldap->search(
+                                     'base'   => "$self->{'ldap_basedn'}",
+                                     'scope'  => 'sub',
+                                     'filter' => $filter
+                                   );
+        unless($records->{'resultCode'}){
+            undef $servers;
+            $self->error($records->{'resultCode'});
+        }
+        my $recs;
+        my @entries = $records->entries;
+        $ldap->unbind();
+        return @entries;
+    }
+    return undef;
+}
 
 ################################################################################
 # End LDAP events
