@@ -71,7 +71,7 @@ sub _start{
      my $kernel = $_[KERNEL];
      print STDERR __PACKAGE__ ." start\n";
      $self->{'twitter'}->yield('register');
-     $kernel->yield($self->alias().'_tweet', "yarr. restarted me mateys...");
+     #$kernel->yield($self->alias().'_tweet', "yarr. restarted me mateys...");
      $kernel->delay($self->alias().'_delay_friend_timeline', 5);
      return $self;
 }
@@ -107,12 +107,12 @@ sub delay_friend_timeline {
 
 sub new_tweet {
     my($self, $kernel, $heap, $status) = @_[OBJECT, KERNEL, HEAP, ARG0];
-    $heap->{ $self->alias() }->{'twitter'}->yield('update', $status);
+    $heap->{ $self->alias() }->{'twitter'}->yield( 'update', $status );
 }
 
 sub twitter_update_success {
     my($self, $kernel, $heap, $ret) = @_[OBJECT, KERNEL, HEAP, ARG0];
-    print STDERR "twitter_update_success\n". ref($ret) ."\n";
+    print STDERR "twitter_update_success\n";
     #$heap->{ircd}->yield(daemon_cmd_notice => $conf->{botname}, $conf->{channel}, $ret->{text});
 }
 

@@ -27,21 +27,10 @@ my $XMPP=1;
 # Repeat for multiple chat sesions and personas...
 ################################################################################
 
-my $poe = new POE::Builder({ 'debug' => '0','trace' => '1' });
+my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
 exit unless $poe;
 
 # We set up some personas to redirect various traffic to...
-$poe->object_session(
-                      new Jarvis::Persona::Watcher(
-                                                    { 
-                                                      'alias'            => 'crunchy',
-                                                      'screenname'       => 'capncrunchbot',
-                                                      'username'         => 'capncrunchbot',
-                                                      'password'         => $ENV{'TWITTER_PASSWORD'},
-                                                      'retry'            => 300
-                                                    }
-                                                  )
-                    );
 $poe->object_session(
                       new Jarvis::Persona::Crunchy(
                                                     { 
@@ -49,6 +38,9 @@ $poe->object_session(
                                                       'ldap_domain' => 'websages.com',
                                                       'ldap_binddn' => 'uid=crunchy,ou=People,dc=websages,dc=com',
                                                       'ldap_bindpw' => $ENV{'LDAP_PASSWORD'},
+                                                      #'screenname'       => 'capncrunchbot',
+                                                      #'username'         => 'capncrunchbot',
+                                                      #'password'         => $ENV{'TWITTER_PASSWORD'},
                                                     }
                                                   )
                     );
@@ -92,20 +84,6 @@ if($IRC){
                                                                  '#midgard',
                                                                ],
                                              'persona'      => 'system',
-                                           }
-                                         ), 
-                        );
-    $poe->object_session(  
-                          new Jarvis::IRC(
-                                           {
-                                             'alias'        => 'mediacas_session',
-                                             'nickname'     => 'mediacas',
-                                             'ircname'      => 'Media CAS',
-                                             'server'       => '127.0.0.1',
-                                             'channel_list' => [ 
-                                                                 '#soggies',
-                                                               ],
-                                             'persona'      => 'mediacas',
                                            }
                                          ), 
                         );
