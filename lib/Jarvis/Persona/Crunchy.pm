@@ -4,6 +4,7 @@ use IRCBot::Chatbot::Pirate;
 use POE;
 use POSIX qw( setsid );
 use Net::LDAP;
+use Net::DNS;
 use strict;
 use warnings;
 
@@ -54,7 +55,7 @@ sub new {
         $self->{'ldap_basedn'} = $self->{'ldap_domain'};
         $self->{'ldap_basedn'} =~s/\./,dc=/g;
         $self->{'ldap_basedn'} = "dc=".$self->{'ldap_basedn'};
-        print STDERR "-=[ $self->{'ldap_basedn'}]=-\n";
+        print STDERR "-=[ $self->{'ldap_basedn'} ]=-\n";
     }
 
     bless($self,$class);
