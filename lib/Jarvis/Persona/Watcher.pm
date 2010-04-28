@@ -111,13 +111,13 @@ sub twitter_update_success {
 
 sub twitter_timeline_success {
     my($self, $kernel, $heap, $ret) = @_[OBJECT, KERNEL, HEAP, ARG0];
-    print STDERR "twitter_update_success $ret\n";
+    print STDERR "twitter_timeline_success". Data::Dumper->Dump([ $ret ]) ."\n";
     $kernel->delay($self->alias().'_delay_friend_timeline', 5);
 }
 
 sub twitter_error {
     my($self, $kernel, $heap, $res) = @_[OBJECT, KERNEL, HEAP, ARG0];
-    print STDERR "twitter_update_success $res\n";
+    print STDERR "twitter_error". Data::Dumper->Dump([ $res ]) ."\n";
     #$heap->{ircd}->yield(daemon_cmd_notice => $conf->{botname}, $conf->{channel}, 'Twitter error');
 }
 
