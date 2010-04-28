@@ -183,7 +183,7 @@ sub get_ldap_entry {
                                    );
         unless($records->{'resultCode'}){
             undef $servers;
-            $self->error($records->{'resultCode'});
+            $self->error($records->{'resultCode'}) if $records->{'resultCode'};
         }
         my $recs;
         my @entries = $records->entries;
