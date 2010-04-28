@@ -46,9 +46,9 @@ sub new {
                           $self->{'alias'}.'_input'   => 'input',
                           # special_events go here...
                           $self->{'alias'}.'_update_success'          => 'twitter_update_success',
-                          $self->{'alias'}.'_friend_timeline_success' => 'twitter_timeline_success',
-                          $self->{'alias'}.'_response_error'          => 'twitter_error',
                           $self->{'alias'}.'_delay_friend_timeline'   => 'delay_friend_timeline',
+                          'twitter.friend_timeline_success' => 'twitter_timeline_success',
+                          'twitter.response_error'          => 'twitter_error',
                         };
 
 
