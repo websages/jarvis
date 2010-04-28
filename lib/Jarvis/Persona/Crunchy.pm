@@ -96,7 +96,7 @@ sub _start{
                                            'AutoSave' => 1
                                          );
      if($self->{'ldap_enabled'} == 1){
-         print STDERR Data::Dumper->Dump([ $self->get_ldap_entry("(cn=shoutouts)") ]);
+         #print STDERR Data::Dumper->Dump([ $self->get_ldap_entry("(cn=shoutouts)") ]);
          print STDERR $self->error();
      }
      return $self;
@@ -232,7 +232,7 @@ sub update{
 sub shoutout_users{
     my $self=shift;
     foreach my $entry($self->get_ldap_entry("(cn=shoutouts)") ){
-        print STDERR Data::Dumper->Dump([ $entry->uniqueMember ]);
+        print STDERR Data::Dumper->Dump([ $entry->get_value('uniqueMember') ]);
     }
 }
 ################################################################################
