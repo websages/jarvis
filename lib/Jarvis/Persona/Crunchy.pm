@@ -97,6 +97,7 @@ sub _start{
                                          );
      if($self->{'ldap_enabled'} == 1){
          #print STDERR Data::Dumper->Dump([ $self->get_ldap_entry("(cn=shoutouts)") ]);
+         $self->shoutout_users();
          print STDERR $self->error();
      }
      return $self;
