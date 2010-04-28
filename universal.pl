@@ -35,8 +35,8 @@ $poe->object_session(
                       new Jarvis::Persona::Watcher(
                                                     { 
                                                       'alias'            => 'mediacas',
-                                                      'screenname'       => 'mediacas',
-                                                      'username'         => 'mediacas',
+                                                      'screenname'       => 'james_s_white',
+                                                      'username'         => 'james_s_white',
                                                       'password'         => $ENV{'TWITTER_PASSWORD'},
                                                       'retry'            => 300
                                                     }
