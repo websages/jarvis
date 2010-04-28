@@ -99,7 +99,7 @@ sub input{
 
 sub delay_friend_timeline {
     my($self, $kernel, $heap) = @_[OBJECT, KERNEL, HEAP];
-print STDERR Data::Dumper->Dump([$self->{'twitter'}]);
+print STDERR Data::Dumper->Dump([$self->{'twitter'}->session_id()]);
     $self->{'twitter'}->yield('friend_timeline');
 }
 
