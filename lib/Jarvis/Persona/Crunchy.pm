@@ -119,6 +119,7 @@ sub alias{
 
 sub input{
      my ($self, $kernel, $heap, $sender, $who, $where, $what, $respond_event) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+     my $pirate=1;
      if(defined($what)){
          my $r=""; # response
          if($what=~m/^\s*fortune\s*$/){
@@ -128,10 +129,16 @@ sub input{
          }elsif($what=~m/^!shoutout\s*(.*)/){
              my $shoutout=$1;
              $r = $self->shoutout($1);
+             $pirate=0;
          }
          
          # respond in pirate if we have something to say...
-         if($r ne ""){ $kernel->post($sender, $respond_event, $who, $where, piratespeak( $r ) ); }
+         if($r ne ""){ 
+             if($pirate){
+                 $kernel->post($sender, $respond_event, $who, $where, piratespeak( $r ) ); 
+             }else{
+                 $kernel->post($sender, $respond_event, $who, $where, $r); 
+             }
      }
 }
 
@@ -241,9 +248,10 @@ sub shoutout{
         foreach my $user (@users){
             $user=~s/,.*//;
             $user=~s/uid=//;
+            push(@list,$user);
             foreach my $user_entry ( $self->get_ldap_entry("(uid=$user)") ){
                 foreach my $mail ($user_entry->get_value('pageremail') ){
-                    push(@list,$mail);
+                    print STDERR "/*FIXME*/ send mail to $mail\n";
                 }
             }
         }
