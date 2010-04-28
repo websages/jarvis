@@ -67,7 +67,7 @@ sub new {
                 }else{
                     $uri = "ldaps://".$rr->target.":".$rr->port;
                 }
-                if(defined($self->{'ldap_uri'}){ 
+                if(defined($self->{'ldap_uri'})){ 
                     $self->{'ldap_uri'}=$self->{'ldap_uri'}." ,$uri";
                 }else{
                     $self->{'ldap_uri'}=$self->{'ldap_uri'};
