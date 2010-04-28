@@ -45,10 +45,10 @@ sub new {
                           $self->{'alias'}.'_stop'    => '_stop',
                           $self->{'alias'}.'_input'   => 'input',
                           # special_events go here...
-                          $self->{'alias'}.'_update_success'          => 'twitter_update_success',
-                          $self->{'alias'}.'_delay_friend_timeline'   => 'delay_friend_timeline',
-                          'twitter.friend_timeline_success' => 'twitter_timeline_success',
-                          'twitter.response_error'          => 'twitter_error',
+                          $self->{'alias'}.'_update_success'         => 'twitter_update_success',
+                          $self->{'alias'}.'_delay_friend_timeline'  => 'delay_friend_timeline',
+                          'twitter.friend_timeline_success'          => 'twitter_timeline_success',
+                          'twitter.response_error'                   => 'twitter_error',
                         };
 
 
@@ -104,19 +104,19 @@ sub delay_friend_timeline {
 }
 
 sub twitter_update_success {
-    my($kernel, $heap, $ret) = @_[KERNEL, HEAP, ARG0];
+    my($self, $kernel, $heap, $ret) = @_[OBJECT, KERNEL, HEAP, ARG0];
     print STDERR "twitter_update_success". Data::Dumper->Dump([ $ret ]) ."\n";
     #$heap->{ircd}->yield(daemon_cmd_notice => $conf->{botname}, $conf->{channel}, $ret->{text});
 }
 
 sub twitter_timeline_success {
-    my($kernel, $heap, $ret) = @_[KERNEL, HEAP, ARG0];
+    my($self, $kernel, $heap, $ret) = @_[OBJECT, KERNEL, HEAP, ARG0];
     print STDERR "twitter_update_success $ret\n";
     $kernel->delay('delay_friend_timeline', 5);
 }
 
 sub twitter_error {
-    my($kernel, $heap, $res) = @_[KERNEL, HEAP, ARG0];
+    my($self, $kernel, $heap, $res) = @_[OBJECT, KERNEL, HEAP, ARG0];
     print STDERR "twitter_update_success $res\n";
     #$heap->{ircd}->yield(daemon_cmd_notice => $conf->{botname}, $conf->{channel}, 'Twitter error');
 }
