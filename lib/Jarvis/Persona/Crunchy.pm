@@ -67,7 +67,12 @@ sub new {
                 }else{
                     $uri = "ldaps://".$rr->target.":".$rr->port;
                 }
-                $self->{'ldap_uri'}=$self->{'ldap_uri'}." ,$uri";
+                if(defined($self->{'ldap_uri'}){ 
+                    $self->{'ldap_uri'}=$self->{'ldap_uri'}." ,$uri";
+                }else{
+                    $self->{'ldap_uri'}=$self->{'ldap_uri'};
+                }
+                $self->{'ldap_enabled'}=1;
             }
         }else{
             print STDERR "Cannot resolve srv records for _ldap._tcp.".$self->{'ldap_domain'}.". LDAP operations will be disabled.\n";
