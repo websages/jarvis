@@ -113,7 +113,22 @@ sub twitter_timeline_success {
     my($self, $kernel, $heap, $ret) = @_[OBJECT, KERNEL, HEAP, ARG0];
     print STDERR "twitter_timeline_success\n". ref($ret) ."\n";
     foreach my $tweet (@{ $ret }){
-        print join("|", keys(%{ $tweet }))."\n";
+        print "[\@$tweet->{'user'}]: $tweet->{'text'}\n"
+        #print join("|", keys(%{ $tweet }))."\n";
+        #source
+        #favorited
+        #geo
+        #coordinates
+        #place
+        #truncated
+        #created_at
+        #contributors
+        #text
+        #in_reply_to_user_id
+        #user
+        #id
+        #in_reply_to_status_id
+        #in_reply_to_screen_name
     }
     $kernel->delay($self->alias().'_delay_friend_timeline', 60);
 }
