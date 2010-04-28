@@ -116,22 +116,51 @@ sub twitter_timeline_success {
         #print "[\@". join("\n",keys(%{$tweet->{'user'}->{'screen_name}})) ."]: ".$tweet->{'text'}." ";
         print "[\@".$tweet->{'user'}->{'screen_name'}."]: ".$tweet->{'text'}." ";
         print "\n";
-        print join("|", keys(%{ $tweet->{'user'} }))."\n";
-        #print join("|", keys(%{ $tweet }))."\n";
-        #source
-        #favorited
-        #geo
-        #coordinates
-        #place
-        #truncated
-        #created_at
-        #contributors
-        #text
-        #in_reply_to_user_id
-        #user
-        #id
-        #in_reply_to_status_id
-        #in_reply_to_screen_name
+        # print join("|", keys(%{ $tweet->{'user'} }))."\n";
+        # friends_count
+        # profile_background_tile
+        # profile_image_url
+        # contributors_enabled
+        # profile_sidebar_fill_color
+        # profile_link_color
+        # profile_sidebar_border_color
+        # created_at
+        # utc_offset
+        # profile_background_color
+        # notifications
+        # url
+        # id
+        # verified
+        # following
+        # profile_background_image_url
+        # screen_name
+        # location
+        # lang
+        # followers_count
+        # name
+        # protected
+        # statuses_count
+        # description
+        # profile_text_color
+        # time_zone
+        # geo_enabled
+        # favourites_count
+
+        # print join("|", keys(%{ $tweet }))."\n";
+        # source
+        # favorited
+        # geo
+        # coordinates
+        # place
+        # truncated
+        # created_at
+        # contributors
+        # text
+        # in_reply_to_user_id
+        # user
+        # id
+        # in_reply_to_status_id
+        # in_reply_to_screen_name
     }
     $kernel->delay($self->alias().'_delay_friend_timeline', 60);
 }
