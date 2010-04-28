@@ -97,7 +97,7 @@ sub _start{
                                          );
      if($self->{'ldap_enabled'} == 1){
          print STDERR Data::Dumper->Dump([ $self->get_ldap_entry("(uid=crunchy)") ]);
-         print STDERR $self->error() if $self->error();
+         print STDERR $self->error();
      }
      return $self;
 }
@@ -155,7 +155,7 @@ sub error{
     if($#{ $self->{'ERROR'} } >= 0 ){
         return join("\n",@{ $self->{'ERROR'} });
     }
-    return undef;
+    return '';
 }
 
 sub get_ldap_entry {
