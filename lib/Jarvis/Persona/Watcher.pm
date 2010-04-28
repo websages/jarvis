@@ -70,7 +70,7 @@ sub _start{
      my $kernel = $_[KERNEL];
      print STDERR __PACKAGE__ ." start\n";
 print Data::Dumper->Dump([$heap->{ $self->alias() }]);
-     $heap->{ $self->alias() }->{'twitter'}->yield('register');
+     #$heap->{ $self->alias() }->{'twitter'}->yield('register');
      $kernel->delay($self->alias().'_delay_friend_timeline', 5);
      return $self;
 }
