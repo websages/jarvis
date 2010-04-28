@@ -4,6 +4,8 @@ use IRCBot::Chatbot::Pirate;
 use POE;
 use POSIX qw( setsid );
 use Net::LDAP;
+use strict;
+use warnings;
 
 sub new {
     my $class = shift;
@@ -45,7 +47,7 @@ sub new {
                           $self->{'alias'}.'_input'   => 'input',
                           # special_events go here...
                         };
-    if( !defined($self->{'ldap_domain'}) || !defined($self->{'ldap_binddn'}) || !defined($self->{'ldap_bindpw'})){
+    if( (!defined($self->{'ldap_domain'})) || (!defined($self->{'ldap_binddn'})) || (!defined($self->{'ldap_bindpw'})) ){
         print STDERR "WARNING: Not enough LDAP paramaters supplied. LDAP operations will be disabled.\n";
     }else{
         $self->{'ldap_basedn'} = $self->{'ldap_domain'};
