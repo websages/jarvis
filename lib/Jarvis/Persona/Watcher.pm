@@ -44,6 +44,7 @@ sub new {
                           $self->{'alias'}.'_start'   => '_start',
                           $self->{'alias'}.'_stop'    => '_stop',
                           $self->{'alias'}.'_input'   => 'input',
+                          $self->{'alias'}.'_tweet'   => 'new_tweet',
                           # special_events go here...
                           $self->{'alias'}.'_update_success'         => 'twitter_update_success',
                           $self->{'alias'}.'_delay_friend_timeline'  => 'delay_friend_timeline',
@@ -70,6 +71,7 @@ sub _start{
      my $kernel = $_[KERNEL];
      print STDERR __PACKAGE__ ." start\n";
      $self->{'twitter'}->yield('register');
+     $kernel->yield($self->alias().'_tweet', "yarr. restarted me mateys...");
      $kernel->delay($self->alias().'_delay_friend_timeline', 5);
      return $self;
 }
@@ -101,6 +103,11 @@ sub input{
 sub delay_friend_timeline {
     my($self, $kernel, $heap) = @_[OBJECT, KERNEL, HEAP];
     $heap->{ $self->alias() }->{'twitter'}->yield('friend_timeline');
+}
+
+sub new_tweet {
+    my($self, $kernel, $heap, $status) = @_[OBJECT, KERNEL, HEAP, ARGV0];
+    $heap->{ $self->alias() }->{'twitter'}->yield('update', $status);
 }
 
 sub twitter_update_success {
