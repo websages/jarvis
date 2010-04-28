@@ -14,7 +14,12 @@ sub new {
     $self->{'must'} = [ 'alias' ];
 
     # hash of optional constructor elements (key), and their default (value) if not specified
-    $self->{'may'} = {};
+    $self->{'may'} = {
+                       'screenname' => undef,
+                       'username'   => undef,
+                       'password'   => undef,
+                       'retry'      => undef,
+                     };
 
     # set our required values fron the constructor or the defaults
     foreach my $attr (@{ $self->{'must'} }){
@@ -49,13 +54,21 @@ sub new {
 
     bless($self,$class);
 
-    my $twitter = POE::Component::Client::Twitter->spawn(%{ $config->{twitter} });
+    my $twitter = POE::Component::Client::Twitter->spawn(
+                                                          %{ 
+                                                             'screenname' => $self->{'screenname'},
+                                                             'username'   => $self->{'username'},
+                                                             'password'   => $self->{'password'},
+                                                             'retry'      => $self->{'retry'},
+                                                           }
+                                                         );
     return $self;
 }
 
 sub _start{
      my $self = $_[OBJECT]||shift;
      print STDERR __PACKAGE__ ." start\n";
+     $kernel->delay('delay_friend_timeline', 5);
      return $self;
 }
 
@@ -85,7 +98,7 @@ sub input{
 
 sub delay_friend_timeline {
     my($kernel, $heap) = @_[KERNEL, HEAP];
-    $heap->{$self->alias()}->yield('friend_timeline');
+    $heap->{ $self->alias() }->yield('friend_timeline');
 }
 
 sub twitter_update_success {
