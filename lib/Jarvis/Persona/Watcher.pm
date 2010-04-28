@@ -99,7 +99,7 @@ sub input{
 
 sub delay_friend_timeline {
     my($self, $kernel, $heap) = @_[OBJECT, KERNEL, HEAP];
-    $heap->{ $self->alias() }->yield('friend_timeline');
+    $self->{'twitter'}->yield('friend_timeline');
 }
 
 sub twitter_update_success {
