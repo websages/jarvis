@@ -56,7 +56,7 @@ sub new {
         $self->{'ldap_basedn'} =~s/\./,dc=/g;
         $self->{'ldap_basedn'} = "dc=".$self->{'ldap_basedn'};
         $self->{'resolver'} = Net::DNS::Resolver->new;
-        my  @mx = srv($self->{'resolver'}, "_tcp._ldap.".$self->{'ldap_domain'});
+        my $srv = $self->{'resolver'}->query( "_tcp._ldap.".$self->{'ldap_domain'}, "SRV" );
         print STDERR Data::Dumper->Dump([@mx]);
     }
 
