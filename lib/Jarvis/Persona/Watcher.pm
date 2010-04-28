@@ -113,7 +113,7 @@ sub twitter_timeline_success {
     my($self, $kernel, $heap, $ret) = @_[OBJECT, KERNEL, HEAP, ARG0];
     print STDERR "twitter_timeline_success\n". ref($ret) ."\n";
     foreach my $tweet (@{ $ret }){
-        print "[\@$tweet->{'user'}]: $tweet->{'text'}\n"
+        print "[\@$tweet->{'user'}]: $tweet->{'text'}\n";
         #print join("|", keys(%{ $tweet }))."\n";
         #source
         #favorited
