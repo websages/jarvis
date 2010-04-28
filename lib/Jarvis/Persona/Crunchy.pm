@@ -134,11 +134,12 @@ sub input{
          
          # respond in pirate if we have something to say...
          if($r ne ""){ 
-             if($pirate){
+             if( $pirate ){
                  $kernel->post($sender, $respond_event, $who, $where, piratespeak( $r ) ); 
              }else{
                  $kernel->post($sender, $respond_event, $who, $where, $r); 
              }
+         }
      }
 }
 
