@@ -78,7 +78,7 @@ sub new {
             print STDERR "Cannot resolve srv records for _ldap._tcp.".$self->{'ldap_domain'}.". LDAP operations will be disabled.\n";
             $self->{'ldap_enabled'}=0;
         }
-        print STDERR $self->{'ldap_uri'}."\n";
+        #print STDERR $self->{'ldap_uri'}."\n";
     }
 
     bless($self,$class);
@@ -236,7 +236,7 @@ sub shoutout_users{
         my @users=$entry->get_value('uniqueMember');
         foreach my $user (@users){
             my $user_entry = $self->get_ldap_entry("($user)");
-            print ref($user_entry);
+            print STDERR Data::Dumper->Dump([$user_entry]);
             #print STDERR join("\n",@users)."\n";
         }
     }
