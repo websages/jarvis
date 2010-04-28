@@ -69,6 +69,7 @@ sub _start{
      my $self = $_[OBJECT]||shift;
      my $kernel = $_[KERNEL];
      print STDERR __PACKAGE__ ." start\n";
+     $heap->{'twitter'}->yield('register');
      $kernel->delay($self->alias().'_delay_friend_timeline', 5);
      return $self;
 }
@@ -99,7 +100,7 @@ sub input{
 
 sub delay_friend_timeline {
     my($self, $kernel, $heap) = @_[OBJECT, KERNEL, HEAP];
-    $kernel->post('friend_timeline');
+    $heap->{'twitter'}->yield('friend_timeline');
 }
 
 sub twitter_update_success {
