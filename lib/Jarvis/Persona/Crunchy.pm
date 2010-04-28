@@ -63,7 +63,6 @@ sub new {
                 print ref($rr), "\n";
             }
         }
-        print STDERR Data::Dumper->Dump([$srv]);
     }
 
     bless($self,$class);
