@@ -52,7 +52,6 @@ sub new {
                         };
 
 
-    bless($self,$class);
 
     my $self->{'cfg'} = {
                           'screenname' => $self->{'screenname'},
@@ -61,7 +60,8 @@ sub new {
                           'retry'      => $self->{'retry'},
                          };
 
-    $self->{'twitter'} = POE::Component::Client::Twitter->spawn(%{ $self->{'cfg'} });
+#    $self->{'twitter'} = POE::Component::Client::Twitter->spawn(%{ $self->{'cfg'} });
+    bless($self,$class);
     return $self;
 }
 
