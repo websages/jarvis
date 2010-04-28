@@ -114,7 +114,9 @@ sub twitter_timeline_success {
     print STDERR "twitter_timeline_success\n". ref($ret) ."\n";
     foreach my $tweet (@{ $ret }){
         #print "[\@". join("\n",keys(%{$tweet->{'user'}->{'screen_name}})) ."]: ".$tweet->{'text'}." ";
-        print "[\@".$tweet->{'user'}->{'screen_name'}."]: ".$tweet->{'text'}." ";
+        my $text=$tweet->{'text'};
+        $text=~s/^I used #*Shazam to discover //;
+        print "[\@".$tweet->{'user'}->{'screen_name'}."]: ".$text." ";
         print "\n";
         # print join("|", keys(%{ $tweet->{'user'} }))."\n";
         # friends_count
