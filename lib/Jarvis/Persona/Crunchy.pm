@@ -48,7 +48,10 @@ sub new {
     if( !defined($self->{'ldap_domain'}) || !defined($self->{'ldap_binddn'}) || !defined($self->{'ldap_bindpw'})){
         print STDERRR "WARNING: Not enough LDAP paramaters supplied. LDAP operations will be disabled.\n";
     }else{
-        
+        $self->{'ldap_basedn'} = $self->{'ldap_domain'};
+        $self->{'ldap_basedn'} =~s/\./,dc=/g;
+        $self->{'ldap_basedn'} = "dc=".$self->{'ldap_basedn'};
+        print STDERR "-=[ $self->{'ldap_basedn'}]=-\n";
     }
 
     bless($self,$class);
@@ -109,5 +112,12 @@ sub fortune{
     my $self=shift;
     return  qx( /usr/games/fortune -s );
 }
+################################################################################
+# Begin LDAP events
+################################################################################
+
+################################################################################
+# End LDAP events
+################################################################################
 
 1;

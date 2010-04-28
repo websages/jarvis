@@ -44,8 +44,8 @@ sub new {
                           $self->{'alias'}.'_start'   => '_start',
                           $self->{'alias'}.'_stop'    => '_stop',
                           $self->{'alias'}.'_input'   => 'input',
-                          $self->{'alias'}.'_tweet'   => 'new_tweet',
                           # special_events go here...
+                          $self->{'alias'}.'_tweet'   => 'new_tweet',
                           $self->{'alias'}.'_update_success'         => 'twitter_update_success',
                           $self->{'alias'}.'_delay_friend_timeline'  => 'delay_friend_timeline',
                           'twitter.friend_timeline_success'          => 'twitter_timeline_success',
@@ -100,6 +100,9 @@ sub input{
      return $self->{'alias'};
 }
 
+################################################################################
+# Begin Twitter events
+################################################################################
 sub delay_friend_timeline {
     my($self, $kernel, $heap) = @_[OBJECT, KERNEL, HEAP];
     $heap->{ $self->alias() }->{'twitter'}->yield('friend_timeline');
@@ -182,5 +185,8 @@ sub twitter_error {
     print STDERR "twitter_error\n". Data::Dumper->Dump([$res->{'_rc'}, $res->{'_content'}]) ."\n";
     #$heap->{ircd}->yield(daemon_cmd_notice => $conf->{botname}, $conf->{channel}, 'Twitter error');
 }
+################################################################################
+# End Twitter events
+################################################################################
 
 1;
