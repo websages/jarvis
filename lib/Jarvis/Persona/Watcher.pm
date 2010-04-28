@@ -116,6 +116,7 @@ sub twitter_timeline_success {
         #print "[\@". join("\n",keys(%{$tweet->{'user'}->{'screen_name}})) ."]: ".$tweet->{'text'}." ";
         print "[\@".$tweet->{'user'}->{'screen_name'}."]: ".$tweet->{'text'}." ";
         print "\n";
+        print join("|", keys(%{ $tweet->{'user'} }))."\n";
         #print join("|", keys(%{ $tweet }))."\n";
         #source
         #favorited
