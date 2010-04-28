@@ -60,7 +60,14 @@ sub new {
         my $srv = $self->{'resolver'}->query( "_ldap._tcp.".$self->{'ldap_domain'}, "SRV" );
         if($srv){
             foreach my $rr (grep { $_->type eq 'SRV' } $srv->answer) {
-                print $rr->priority." ".$rr->weight." ".$rr->port." ".$rr->target."\n";
+                my $uri;
+                my $order=$rr->priority.".".$rr->weight;
+                if($rr->port eq 389){
+                    $uri = "ldap://".$rr->target.":".$rr->port;
+                }else{
+                    $uri = "ldaps://".$rr->target.":".$rr->port;
+                }
+                print "$order $uri\n";
             }
         }
     }
