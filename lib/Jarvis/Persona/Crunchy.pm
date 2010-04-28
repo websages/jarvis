@@ -96,7 +96,7 @@ sub _start{
                                            'AutoSave' => 1
                                          );
      if($self->{'ldap_enabled'} == 1){
-         print STDERR Data::Dumper->Dump([ $self->get_ldap_entry("(uid=crunchy)") ]);
+         print STDERR Data::Dumper->Dump([ $self->get_ldap_entry("(cn=shoutouts)") ]);
          print STDERR $self->error();
      }
      return $self;
