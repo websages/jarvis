@@ -319,7 +319,7 @@ use HTML::Parser;
     #$arg{'kernel'}->post( localhost => privmsg => $d, $h);
     push(@{  $self->{'standings'} },$h);
     $p->parse( $content );
-    return join("",@{  $self->{'standings'} });
+    print STDERR join("",@{  $self->{'standings'} });
 }
 ################################################################################
 # End Standings
