@@ -186,8 +186,7 @@ sub input{
          if($what=~m/^\s*fortune\s*$/){
              $r = $self->fortune();
          }elsif($directly_addressed==1){
-             #$r = $self->megahal($what);
-             $r = "$who: $what";
+             $r = "$who: ".$self->megahal($what);
          }elsif($what=~m/^!shoutout\s*(.*)/){
              my $shoutout=$1;
              $r = $self->shoutout($1);
