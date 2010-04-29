@@ -159,7 +159,6 @@ sub input{
      my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
 
      # un-wrap the $msg
-     print Data::Dumper
      my ( $sender_alias, $respond_event, $who, $where, $what, $id ) =
         (
           $msg->{'sender_alias'},
@@ -184,7 +183,7 @@ sub input{
          }elsif($what=~m/^!standings\s*(.*)/){
              my @r = $self->standings();
              foreach $r (@r){
-                 $kernel->post($sender, $respond_event, $who, $where, $r); 
+                 $kernel->post($sender, $respond_event, $msg, $r); 
              }
              $pirate=0;
          }
@@ -192,9 +191,9 @@ sub input{
          # respond in pirate if we have something to say...
          if($r ne ""){ 
              if( $pirate ){
-                 $kernel->post($sender, $respond_event, $who, $where, piratespeak( $r ) ); 
+                 $kernel->post($sender, $respond_event, $msg, piratespeak( $r ) ); 
              }else{
-                 $kernel->post($sender, $respond_event, $who, $where, $r); 
+                 $kernel->post($sender, $respond_event, $msg, $r); 
              }
          }
      }

@@ -197,14 +197,16 @@ sub irc_public {
 }
 
 sub irc_public_reply{
-    my ($self, $kernel, $heap, $sender, $who, $where, $what) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    my ($self, $kernel, $heap, $sender, $msg, $what) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    my ( $who, $where ) = $msg->{'conversation'}->{'nick'}, $msg->{'conversation'}->{'room'} );
     foreach my $channel (@{ $where }){
         $self->{'irc_client'}->yield( privmsg => $channel => $what );
     }
 }
 
 sub irc_msg {
-    my ($self, $kernel, $sender, $who, $where, $what) = @_[OBJECT, KERNEL, SENDER, ARG0 .. ARG2];
+    my ($self, $kernel, $sender, $msg, $what) = @_[OBJECT, KERNEL, SENDER, ARG0 .. ARG2];
+    my ( $who, $where ) = $msg->{'conversation'}->{'nick'}, $msg->{'conversation'}->{'room'} );
     my $nick = ( split /!/, $who )[0];
     my $channel = $where->[0];
     if ( $what =~m/(.+)/ ) {
