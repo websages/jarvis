@@ -182,21 +182,17 @@ sub irc_public {
     $what=~s/[^a-zA-Z0-9:!\@#\%^&*\[\]_+=\- ]//g;
     $what=~s/[\$\`\(]//g;
     $what=~s/[)]//g;
-    print Data::Dumper->Dump(
-                              [
-                                { 
-                                  'sender_alias' => $self->alias(),
-                                  'reply_event'  => 'irc_public_reply',
-                                  'conversation' => {
-                                                      'id'   => 1,
-                                                      'nick' => $who,
-                                                      'room' => $where,
-                                                      'body' => $what,
-                                                    }
-                                },
-                              ]
-                            );
-    $kernel->post("$self->{'persona'}", "input", $who, $where, $what, 'irc_public_reply');
+    my $msg = { 
+                'sender_alias' => $self->alias(),
+                'reply_event'  => 'irc_public_reply',
+                'conversation' => {
+                                    'id'   => 1,
+                                    'nick' => $who,
+                                    'room' => $where,
+                                    'body' => $what,
+                                  }
+              };
+    $kernel->post("$self->{'persona'}", "input", $msg);
 
 }
 

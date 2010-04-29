@@ -156,7 +156,19 @@ sub channel_del{
 
 
 sub input{
-     my ($self, $kernel, $heap, $sender, $who, $where, $what, $respond_event) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+     my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
+
+     # un-wrap the $msg
+     my ( $sender_alias, $reply_event, $who, $where, $what, $id,) =
+        (
+          $msg->{'sender_alias'},
+          $msg->{'reply_event'},
+          $msg->{'conversation'}->{'nick'},
+          $msg->{'conversation'}->{'room'},
+          $msg->{'conversation'}->{'body'},
+          $msg->{'conversation'}->{'id'},
+        );
+     #
      my $pirate=1;
      if(defined($what)){
          my $r=""; # response
