@@ -307,6 +307,7 @@ use HTML::Parser;
                                                                my $q = sprintf "%-20s %-5s %-5s %-7s %-6s %-7s\n",
                                                                     $team, $wins, $losses, $pct, $gb, $l10;
                                                                #$arg{'kernel'}->post( localhost => privmsg => $d, $q);
+                                                               $q=~s/\s+$//;
                                                                push(@{ $self->{'standings'} }, $q);
                                                                return $self;
                                                              }
@@ -322,6 +323,7 @@ use HTML::Parser;
     my $h = sprintf "%-20s %-5s %-5s %-7s %-6s %-7s\n",
         '', 'W', 'L', ' Pct', 'GB', 'L10';
     #$arg{'kernel'}->post( localhost => privmsg => $d, $h);
+    $q=~s/\s+$//;
     push(@{  $p->{'standings'} },$h);
     $p->parse( $content );
     return @{ $p->{'standings'} };
