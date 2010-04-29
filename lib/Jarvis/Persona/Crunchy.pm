@@ -131,8 +131,11 @@ sub input{
              $r = $self->shoutout($1);
              $pirate=0;
          }elsif($what=~m/^!standings\s*(.*)/){
-             my $r = $self->standings();
-             print STDERR Data::Dumper->Dump([$r]);
+             my @r = $self->standings();
+             foreach $r (@r){
+                 $kernel->post($sender, $respond_event, $who, $where, $r); 
+                 print STDERR Data::Dumper->Dump([$r]);
+             }
              $pirate=0;
          }
          
