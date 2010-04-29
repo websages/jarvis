@@ -173,19 +173,22 @@ sub input{
      # Response handlers
      ###########################################################################     
      my $pirate=1;
-     if(defined($heap->{'locations'})){
-            print Data::Dumper->Dump([$heap->{'locations'}]);
-     }
-     print STDERR "$where\n";
-     if(defined($heap->{'locations'}->{$sender_alias}->{$where})){ 
-         print Data::Dumper->Dump([$heap->{'locations'}->{$sender_alias}->{$where}]); 
-     }
+     my $directly_addressed=0;
      if(defined($what)){
+         if(defined($heap->{'locations'}->{$sender_alias}->{$where})){ 
+             foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){ 
+                 if($what=~m/^\s*$chan_nick\s*:*\s*/){ 
+                     $what=~s/^\s*$chan_nick\s*:*\s*//;
+                     $directly_addressed=0;
+                 }
+             }
+         }
          my $r=""; # response
          if($what=~m/^\s*fortune\s*$/){
              $r = $self->fortune();
-         }elsif($what=~m/^\s*crunchy\s*:*\s*/){
-             $r = $self->megahal();
+         }elsif($directly_addressed==1){
+             #$r = $self->megahal($what);
+             $r = $what;
          }elsif($what=~m/^!shoutout\s*(.*)/){
              my $shoutout=$1;
              $r = $self->shoutout($1);
