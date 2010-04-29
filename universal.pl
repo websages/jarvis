@@ -16,7 +16,7 @@ use Jarvis::Persona::System;
 use POE::Builder;
 $|++;
 my $IRC=0;
-my $XMPP=0;
+my $XMPP=1;
 
 ################################################################################
 # We create a persona session, and give it an alias. We then create IRC/XMPP
