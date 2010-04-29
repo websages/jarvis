@@ -120,7 +120,7 @@ sub alias{
 
 sub channel_add{
      # expects a constructor hash of { alias => <sender_alias>, channel => <some_tag>, nick => <nick in channel> }
-     my ($self, $construct) = @_[OBJECT ARG0];
+    my ($self, $kernel, $heap, $construct) = @_[OBJECT, ARG0];
          push (
                 @{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} },
                 $construct->{'nick'}
@@ -129,7 +129,7 @@ sub channel_add{
 
 sub channel_del{
     # expects a constructor hash of { alias => <sender_alias>, channel => <some_tag>, nick => <nick in channel> }
-    my ($self, $construct) = @_[OBJECT ARG0];
+    my ($self, $kernel, $heap, $construct) = @_[OBJECT, ARG0];
     # unshift each of the items in the room, push them back if they're not the one we're removing
     my $count=0;
     my $max=$#{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} };
