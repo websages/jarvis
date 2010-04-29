@@ -85,7 +85,7 @@ sub start{
                                                         Hostname       => $self->{'hostname'},
                                                         Username       => $self->{'username'},
                                                         Password       => $self->{'password'},
-                                                        Alias          => $self->alias().'component',
+                                                        Alias          => 'component',
                                                         ConnectionType => +XMPP,
                                                         States         => {
                                                                             StatusEvent => 'status_event',
