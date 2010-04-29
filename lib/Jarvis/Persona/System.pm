@@ -80,6 +80,7 @@ sub alias{
 sub input{
      my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
 
+     if(defined($heap->{'locations'})){ print Data::Dumper->Dump([$heap->{'locations'}]); }
      # un-wrap the $msg
      my ( $sender_alias, $respond_event, $who, $where, $what, $id ) =
         ( 
