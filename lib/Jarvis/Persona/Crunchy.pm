@@ -173,6 +173,9 @@ sub input{
      # Response handlers
      ###########################################################################     
      my $pirate=1;
+     if(defined($heap->{'locations'})){
+            print Data::Dumper->Dump([$heap->{'locations'}]);
+     }
      if(defined($heap->{'locations'}->{$sender_alias}->{$where})){ 
          print Data::Dumper->Dump([$heap->{'locations'}->{$sender_alias}->{$where}]); 
      }
