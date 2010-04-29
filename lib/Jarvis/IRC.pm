@@ -229,7 +229,7 @@ sub irc_private_reply{
     my ( $who, $where ) = ( $msg->{'conversation'}->{'nick'}, $msg->{'conversation'}->{'room'} );
     my $nick = ( split /!/, $who )[0];
     foreach my $channel (@{ $where }){
-        $self->{'irc_client'}->yield( privmsg => $nick => $what );
+        $self->{'irc_client'}->yield( privmsg => [ $nick ] => $what );
     }
 }
 
