@@ -15,7 +15,7 @@ use Jarvis::Persona::System;
 use Jarvis::Persona::Watcher;
 use POE::Builder;
 $|++;
-my $IRC=0;
+my $IRC=1;
 my $XMPP=1;
 
 ################################################################################
