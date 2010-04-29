@@ -198,10 +198,8 @@ sub irc_public {
 
 sub irc_public_reply{
     my ($self, $kernel, $heap, $sender, $msg, $what) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-    my ( $who, $where ) = ( $msg->{'conversation'}->{'nick'}, $msg->{'conversation'}->{'room'} );
-    foreach my $channel (@{ $where }){
-        $self->{'irc_client'}->yield( privmsg => [ $channel ] => $what );
-    }
+    my ( $who, $channel ) = ( $msg->{'conversation'}->{'nick'}, $msg->{'conversation'}->{'room'} );
+    $self->{'irc_client'}->yield( privmsg => [ $channel ] => $what );
 }
 
 sub irc_msg {
@@ -226,11 +224,9 @@ sub irc_msg {
 
 sub irc_private_reply{
     my ($self, $kernel, $heap, $sender, $msg, $what) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-    my ( $who, $where ) = ( $msg->{'conversation'}->{'nick'}, $msg->{'conversation'}->{'room'} );
+    my ( $who, $channel ) = ( $msg->{'conversation'}->{'nick'}, $msg->{'conversation'}->{'room'} );
     my $nick = ( split /!/, $who )[0];
-    foreach my $channel (@{ $where }){
-        $self->{'irc_client'}->yield( privmsg => [ $nick ] => $what );
-    }
+    $self->{'irc_client'}->yield( privmsg => [ $nick ] => $what );
 }
 
 sub irc_ping {
