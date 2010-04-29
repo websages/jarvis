@@ -185,12 +185,6 @@ sub input{
          my $r=""; # response
          if($what=~m/^\s*fortune\s*$/){
              $r = $self->fortune();
-         }elsif($directly_addressed==1){
-             if($msg->{'conversation'}->{'direct'} == 0){
-                 $r = "$who: ".$self->megahal($what);
-             }else{
-                 $r = $self->megahal($what);
-             }
          }elsif($what=~m/^!shoutout\s*(.*)/){
              my $shoutout=$1;
              $r = $self->shoutout($1);
@@ -201,6 +195,12 @@ sub input{
                  $kernel->post($sender, $respond_event, $msg, $r); 
              }
              $pirate=0;
+         }elsif($directly_addressed==1){
+             if($msg->{'conversation'}->{'direct'} == 0){
+                 $r = "$who: ".$self->megahal($what);
+             }else{
+                 $r = $self->megahal($what);
+             }
          }
          
          # respond in pirate if we have something to say...
