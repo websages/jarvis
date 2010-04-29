@@ -224,6 +224,7 @@ sub input_event() {
         my $id = $node->attr('id');
         my $type = $node->attr('type');
         my $replyto = $from;
+        my ($r,$n);
         
         # don't parse things from this personality.
         my $thatsme=0;
@@ -231,7 +232,9 @@ sub input_event() {
             if($from eq $active_channel){ $thatsme = 1; }
         } 
         if(defined($type)){
-            if($type eq 'groupchat'){ $replyto=~s/\/.*//; }
+            if($type eq 'groupchat'){ 
+                ($replyto,$ick)=split('/',$replyto);
+            }
         }
         # Retrieve the message data from the xml if it has a body and post the message to the personality...
         my $what=''; 
@@ -244,7 +247,7 @@ sub input_event() {
                             'reply_event'  => 'xmpp_reply',
                             'conversation' => { 
                                                 'id'   => 1,
-                                                'nick' => $replyto,
+                                                'nick' => $nick,
                                                 'room' => $replyto,
                                                 'body' => $what,
                                                 'type' => $type,
