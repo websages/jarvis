@@ -308,7 +308,7 @@ use HTML::Parser;
                                                                  }
                                                            }, 
                                                'self,tagname' );
-                             },
+                             }($self),
                              'self,tagname,attr' 
                        ],
         report_tags => [ qw( tr ) ],
