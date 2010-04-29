@@ -43,9 +43,9 @@ sub new {
          }
     }
     $self->{'states'} = { 
-                          $self->{'alias'}.'start'   => '_start',
-                          $self->{'alias'}.'stop'    => '_stop',
-                          $self->{'alias'}.'_input'   => 'input',
+                          $self->{'alias'}.'start'   => 'start',
+                          $self->{'alias'}.'stop'    => 'stop',
+                          $self->{'alias'}.'_input'  => 'input',
                           # special_events go here...
                         };
     if( (!defined($self->{'ldap_domain'})) || (!defined($self->{'ldap_binddn'})) || (!defined($self->{'ldap_bindpw'})) ){
@@ -85,7 +85,7 @@ sub new {
     return $self;
 }
 
-sub _start{
+sub start{
      my $self = $_[OBJECT]||shift;
      print STDERR __PACKAGE__ ." start\n";
      $self->{'megahal'} = new AI::MegaHAL(
@@ -101,7 +101,7 @@ sub _start{
      return $self;
 }
 
-sub _stop{
+sub stop{
      my $self = $_[OBJECT]||shift;
      print STDERR __PACKAGE__ ." stop\n";
      return $self;
