@@ -35,11 +35,11 @@ sub new {
          }
     }
     $self->{'states'} = { 
-                          'start'   => '_start',
-                          'stop'    => '_stop',
-                          '_input'   => 'input',
-                          '_output'  => 'output',
-                          '_process' => 'process',
+                          'start'   => 'start',
+                          'stop'    => 'stop',
+                          'input'   => 'input',
+                          'output'  => 'output',
+                          'process' => 'process',
                           # special_events go here...
                         };
 
@@ -48,7 +48,7 @@ sub new {
     return $self;
 }
 
-sub _start{
+sub start{
      my $self = $_[OBJECT]||shift;
      print STDERR __PACKAGE__ ." start\n";
      $self->{'megahal'} = new AI::MegaHAL(
@@ -61,7 +61,7 @@ sub _start{
      return $self;
 }
 
-sub _stop{
+sub stop{
      my $self = $_[OBJECT]||shift;
      print STDERR __PACKAGE__ ." stop\n";
      return $self;
