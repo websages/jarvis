@@ -317,7 +317,7 @@ use HTML::Parser;
     my $h = sprintf "%-20s %-5s %-5s %-7s %-6s %-7s\n",
         '', 'W', 'L', ' Pct', 'GB', 'L10';
     #$arg{'kernel'}->post( localhost => privmsg => $d, $h);
-    print STDERR "$q";
+    print STDERR "$h";
     $p->parse( $content );
 }
 ################################################################################
