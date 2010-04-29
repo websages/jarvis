@@ -132,6 +132,7 @@ sub input{
              $pirate=0;
          }elsif($what=~m/^!standings\s*(.*)/){
              my $r = $self->standings();
+             print STDERR Data::Dumper->Dump([$r]);
              $pirate=0;
          }
          
