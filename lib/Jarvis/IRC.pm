@@ -48,17 +48,18 @@ sub new {
     }
 
     bless($self,$class); 
-    $self->{'states'} = { 
-                          start                => 'start',
-                          stop                 => 'stop',
-                          irc_default          => 'irc_default',
-                          irc_001              => 'irc_001',
-                          irc_public           => 'irc_public',
-                          irc_ping             => 'irc_ping',
-                          irc_msg              => 'irc_msg',
-                          irc_public_reply     => 'irc_public_reply',
-                          irc_private_reply    => 'irc_private_reply',
-                       };
+    $self->{'states'} = ['start', 'stop', 'irc_default', 'irc_001', 'irc_public', 'irc_ping', 'irc_msg', 'irc_public_reply', 'irc_private_reply' ];
+    #$self->{'states'} = { 
+    #                      start                => 'start',
+    #                      stop                 => 'stop',
+    #                      irc_default          => 'irc_default',
+    #                      irc_001              => 'irc_001',
+    #                      irc_public           => 'irc_public',
+    #                      irc_ping             => 'irc_ping',
+    #                      irc_msg              => 'irc_msg',
+    #                      irc_public_reply     => 'irc_public_reply',
+    #                      irc_private_reply    => 'irc_private_reply',
+    #                   };
     $self->{'irc_client'} = POE::Component::IRC->spawn(
                                                         nick    => $construct->{'nickname'},
                                                         ircname => $construct->{'ircname'},
