@@ -159,7 +159,7 @@ sub input{
      my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
 
      # un-wrap the $msg
-     my ( $sender_alias, $respond_event, $who, $where, $what, $id,) =
+     my ( $sender_alias, $respond_event, $who, $where, $what, $id ) =
         (
           $msg->{'sender_alias'},
           $msg->{'reply_event'},
