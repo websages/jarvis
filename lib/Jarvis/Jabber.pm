@@ -224,6 +224,7 @@ sub input_event() {
         my $id = $node->attr('id');
         my $type = $node->attr('type');
         my $replyto = $from;
+print STDERR "$from : $type : $id : $to\n";
         
         # don't parse things from this personality.
         my $thatsme=0;
