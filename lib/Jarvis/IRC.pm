@@ -156,7 +156,7 @@ sub irc_001 {
     for(@{ $self->{'channel_list'} }){
         # notify the persona that we're adding the channel and nick 
         # or there is no way for the persona to be aware of it...
-        $kernel->post($self->{'persona'}, 'channel_add', $nick, $_);
+        $kernel->post($self->{'persona'}, 'channel_add', $self->{'nickname'}, $_);
         # we join our channels
         $self->{'irc_client'}->yield( join => $_ );
     }
