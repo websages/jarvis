@@ -244,7 +244,7 @@ sub input_event() {
                             'reply_event'  => 'xmpp_reply',
                             'conversation' => { 
                                                 'id'   => 1,
-                                                'nick' => $replyto,
+                                                'nick' => $to,
                                                 'room' => $replyto,
                                                 'body' => $what,
                                                 'type' => $type,
