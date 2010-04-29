@@ -273,7 +273,7 @@ sub standings{
 use LWP::Simple;
 use HTML::Parser;
     my $self=shift;
-    $self->{'standings'}='';
+    $self->{'standings'}=[];
     my $content = get( 'http://sports.yahoo.com/mlb/standings' );
     my $p = HTML::Parser->new(
         api_version => 3,
