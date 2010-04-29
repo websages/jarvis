@@ -242,7 +242,7 @@ sub input_event()
             if((($type eq 'chat')||($type eq 'groupchat'))&&($thatsme == 0)){
                 my $msg = { 
                             'sender_alias' => $self->alias(),
-                            'reply_event'  => 'xmpp_public_reply',
+                            'reply_event'  => 'xmpp_reply',
                             'conversation' => { 
                                                 'id'   => 1,
                                                 'nick' => $replyto,
@@ -251,7 +251,7 @@ sub input_event()
                                                 'type' => $type,
                                               }
                           };
-                $kernel->post("$self->{'persona'}", "input", $msg );
+                $kernel->post("$self->{'persona'}", "input", $msg);
             }
        }
 }
