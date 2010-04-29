@@ -80,19 +80,19 @@ sub start{
     my $session = $_[SESSION];
     print STDERR __PACKAGE__ ." start\n";
     $heap->{$self->alias()} = POE::Component::Jabber->new(
-                                                        IP             => $self->{'ip'},
-                                                        Port           => $self->{'port'},
-                                                        Hostname       => $self->{'hostname'},
-                                                        Username       => $self->{'username'},
-                                                        Password       => $self->{'password'},
-                                                        Alias          => 'component',
-                                                        ConnectionType => +XMPP,
-                                                        States         => {
-                                                                            StatusEvent => 'status_event',
-                                                                            InputEvent  => 'input_event',
-                                                                            ErrorEvent  => 'error_event',
-                                                                          },
-                                                      );
+                                                           IP             => $self->{'ip'},
+                                                           Port           => $self->{'port'},
+                                                           Hostname       => $self->{'hostname'},
+                                                           Username       => $self->{'username'},
+                                                           Password       => $self->{'password'},
+                                                           Alias          => 'component',
+                                                           ConnectionType => +XMPP,
+                                                           States         => {
+                                                                               StatusEvent => 'status_event',
+                                                                               InputEvent  => 'input_event',
+                                                                               ErrorEvent  => 'error_event',
+                                                                             },
+                                                         );
     $kernel->post('component','connect');
     return $self;
 }
