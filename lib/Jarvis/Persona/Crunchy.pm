@@ -135,11 +135,11 @@ sub channel_del{
     my $max = $#{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} } };
     while( $count < $max ){
         my $nick = shift(@{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} } },
-        push(
-              @{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} } },
-              $nick
-            ) unless $nick eq $construct->{'nick'};
-        $count++;
+#        push(
+#              @{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} } },
+#              $nick
+#            ) unless $nick eq $construct->{'nick'};
+#        $count++;
     }
 #    # delete the channel if there are no nicks in it
 #    if($heap->{'locations'}->{ $construct->{'alias'}->{ $construct->{'channel'} }){
