@@ -91,13 +91,20 @@ sub input{
           $msg->{'conversation'}->{'body'},
           $msg->{'conversation'}->{'id'},
         );
-
-#     if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
-#         print Data::Dumper->Dump([$heap->{'locations'}->{$sender_alias}->{$where}]);
-#     }
-
+     my $directly_addressed=0;
      if(defined($what)){
-         $kernel->post($sender, $respond_event, $msg, $self->{'megahal'}->do_reply( $what ));
+         if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
+             foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
+                 if($what=~m/^\s*$chan_nick\s*:*\s*/){
+                     $what=~s/^\s*$chan_nick\s*:*\s*//;
+                     $directly_addressed=1;
+                 }
+             }
+         }
+         my $r=""; # response
+         if($directly_addressed==1){ 
+             $kernel->post($sender, $respond_event, $msg, $self->{'megahal'}->do_reply( $what ));
+         }
      }
      return $self->{'alias'};
 }

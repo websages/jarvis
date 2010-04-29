@@ -178,7 +178,6 @@ sub input{
              foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){ 
                  if($what=~m/^\s*$chan_nick\s*:*\s*/){ 
                      $what=~s/^\s*$chan_nick\s*:*\s*//;
-print STDERR "1. $what\n";
                      $directly_addressed=1;
                  }
              }
