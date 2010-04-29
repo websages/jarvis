@@ -225,7 +225,6 @@ sub input_event() {
         my $type = $node->attr('type');
         my $replyto = $from;
         my $nick = $from;
-print STDERR Data::Dumper->Dump([$node]);
         
         # don't parse things from this personality.
         my $thatsme=0;
