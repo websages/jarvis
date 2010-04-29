@@ -176,6 +176,7 @@ sub input{
      if(defined($heap->{'locations'})){
             print Data::Dumper->Dump([$heap->{'locations'}]);
      }
+     print STDERR "$where\n";
      if(defined($heap->{'locations'}->{$sender_alias}->{$where})){ 
          print Data::Dumper->Dump([$heap->{'locations'}->{$sender_alias}->{$where}]); 
      }
