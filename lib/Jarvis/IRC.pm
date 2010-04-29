@@ -188,7 +188,7 @@ sub irc_public {
                 'conversation' => {
                                     'id'   => 1,
                                     'nick' => $who,
-                                    'room' => $where,
+                                    'room' => $channel,
                                     'body' => $what,
                                   }
               };
