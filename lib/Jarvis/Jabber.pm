@@ -284,6 +284,7 @@ sub output_event()
         print "\n===PACKET SENT===\n" if $self->{'DEBUG'} > 2;
         print $node->to_str() . "\n" if $self->{'DEBUG'} > 2;
         print "=================\n" if $self->{'DEBUG'} > 2;
+print STDERR "OUTPUT_HANDLER $room > ". $sid ."\n";
         $kernel->post($sid, 'output_handler', $node);
 }
 
@@ -339,7 +340,6 @@ sub join_channel() {
     my $node=XNode->new('presence', [ 'to', $room, 'from', $heap->{ $self->alias() }->jid(), ]);
     my $child_node=XNode->new('x',[xmlns=>"http://jabber.org/protocol/muc"]);
     $node->insert_tag($child_node);
-print STDERR "JOIN $room > ". $self->alias() ."\n";
     $kernel->post($self->alias(),'output_event',$node,$heap->{'sid'});
 } # join channel
 
