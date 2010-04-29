@@ -89,7 +89,7 @@ sub input{
           $msg->{'conversation'}->{'body'},
           $msg->{'conversation'}->{'id'},
         );
-     my $directly_addressed=0;
+     my $directly_addressed=$msg->{'conversation'}->{'direct'}||0;
      if(defined($what)){
          if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
              foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
@@ -101,7 +101,11 @@ sub input{
          }
          my $r=""; # response
          if($directly_addressed==1){ 
-             $kernel->post($sender, $respond_event, $msg, $who.": ".$self->{'megahal'}->do_reply( $what ));
+             if($msg->{'conversation'}->{'direct'} == 0){
+                 $kernel->post($sender, $respond_event, $msg, $who.": ".$self->{'megahal'}->do_reply( $what ));
+             }else{
+                 $kernel->post($sender, $respond_event, $msg, $self->{'megahal'}->do_reply( $what ));
+             }
          }
      }
      return $self->{'alias'};

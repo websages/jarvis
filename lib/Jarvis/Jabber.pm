@@ -225,6 +225,7 @@ sub input_event() {
         my $type = $node->attr('type');
         my $replyto = $from;
         my $nick = $from;
+        my $direct = 0;
         
         # don't parse things from this personality.
         my $thatsme=0;
@@ -235,6 +236,8 @@ sub input_event() {
             if($type eq 'groupchat'){ 
                 $replyto=~s/\/.*//; 
                 $nick=~s/.*\///; 
+            }else{
+                $direct = 1;
             }
         }
         # Retrieve the message data from the xml if it has a body and post the message to the personality...
@@ -252,6 +255,7 @@ sub input_event() {
                                                 'room' => $replyto,
                                                 'body' => $what,
                                                 'type' => $type,
+                                                'direct' => $direct,
                                               }
                           };
                 $kernel->post("$self->{'persona'}", "input", $msg);
