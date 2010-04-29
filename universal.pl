@@ -109,6 +109,7 @@ if($XMPP){
                                                 'password'        => $ENV{'XMPP_PASSWORD'},
                                                 'channel_list'    => [ 
                                                                        'soggies@conference.websages.com/crunchy',
+                                                                       'system@conference.websages.com/loki',
                                                                      ],
                                                 'persona'         => 'crunchy',
                                                 'account-persona' => 'crunchy',
@@ -126,6 +127,7 @@ if($XMPP){
                                                 'password'        => $ENV{'XMPP_PASSWORD'},
                                                 'channel_list'    => [ 
                                                                        'system@conference.websages.com/loki',
+                                                                       'soggies@conference.websages.com/crunchy',
                                                                      ],
                                                 'persona'         => 'system',
                                                 'account-persona' => 'crunchy',
