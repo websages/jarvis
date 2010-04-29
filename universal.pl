@@ -32,7 +32,7 @@ exit unless $poe;
 
 # We set up some personas to redirect various traffic to...
 $poe->object_session(
-                      new Jarvis::Persona::Crunchy(
+                      new Jarvis::Persona::System(
                                                     { 
                                                       'alias'       => 'crunchy',
                                                       'ldap_domain' => 'websages.com',
