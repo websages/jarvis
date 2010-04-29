@@ -133,14 +133,14 @@ sub channel_del{
     # unshift each of the items in the room, push them back if they're not the one we're removing
     my $count=0;
     my $max = $#{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} } };
-    while($count<$max){
-        my $nick = shift(@{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} },
-        push(
-              @{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} } },
-              $nick
-            ) unless $nick eq $construct->{'nick'};
-        $count++;
-    }
+#    while($count<$max){
+#        my $nick = shift(@{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} },
+#        push(
+#              @{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} } },
+#              $nick
+#            ) unless $nick eq $construct->{'nick'};
+#        $count++;
+#    }
 #    # delete the channel if there are no nicks in it
 #    if($heap->{'locations'}->{ $construct->{'alias'}->{ $construct->{'channel'} }){
 #        if($#{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} } } < 0){
