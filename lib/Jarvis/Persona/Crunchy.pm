@@ -43,9 +43,9 @@ sub new {
          }
     }
     $self->{'states'} = { 
-                          $self->{'alias'}.'start'   => 'start',
-                          $self->{'alias'}.'stop'    => 'stop',
-                          $self->{'alias'}.'_input'  => 'input',
+                          'start'   => 'start',
+                          'stop'    => 'stop',
+                          'input'   => 'input',
                           # special_events go here...
                         };
     if( (!defined($self->{'ldap_domain'})) || (!defined($self->{'ldap_binddn'})) || (!defined($self->{'ldap_bindpw'})) ){
