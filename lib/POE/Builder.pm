@@ -61,16 +61,16 @@ sub object_session(){
     my $object = shift if @_;
     my $set_alias = shift if @_;
     my $object_states = $object->states();
-    my $aliased_object_states;
-    foreach my $event (keys(%{ $object_states })){
-        if($event =~m /^_/){
-            # if it starts with and _underscore, prepend the alias to it, so we don't collide
-            $aliased_object_states->{$object->alias().$event} = $object_states->{$event};
-        }else{
-            # otherwise, just pass the event straight through.
-            $aliased_object_states->{$event} = $object_states->{$event};
-        }
-    }
+    my $aliased_object_states = $object_states;;
+    #foreach my $event (keys(%{ $object_states })){
+    #    if($event =~m /^_/){
+    #        # if it starts with and _underscore, prepend the alias to it, so we don't collide
+    #        $aliased_object_states->{$object->alias().$event} = $object_states->{$event};
+    #    }else{
+    #        # otherwise, just pass the event straight through.
+    #        $aliased_object_states->{$event} = $object_states->{$event};
+    #    }
+    #}
     push( @{ $self->{'sessions'} }, POE::Session->create(
                           options => { debug => $self->{'debug'}, trace => $self->{'trace'} },
                           object_states =>  [ $object => $aliased_object_states ],
