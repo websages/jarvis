@@ -211,7 +211,7 @@ sub irc_msg {
     if ( $what =~m/(.+)/ ) {
         my $msg = { 
                     'sender_alias' => $self->alias(),
-                    'reply_event'  => 'irc_public_reply',
+                    'reply_event'  => 'irc_private_reply',
                     'conversation' => {
                                         'id'   => 1,
                                         'nick' => $who,
@@ -225,7 +225,8 @@ sub irc_msg {
 }
 
 sub irc_private_reply{
-    my ($self, $kernel, $heap, $sender, $who, $where, $what) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    my ($self, $kernel, $heap, $sender, $msg, $what) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    my ( $who, $where ) = ( $msg->{'conversation'}->{'nick'}, $msg->{'conversation'}->{'room'} );
     my $nick = ( split /!/, $who )[0];
     foreach my $channel (@{ $where }){
         $self->{'irc_client'}->yield( privmsg => $nick => $what );
