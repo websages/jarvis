@@ -259,9 +259,10 @@ sub input_event() {
                                               }
                           };
                 if($direct){
-                    print STDERR "[ ".$self->{'account-persona'}." ".$self->alias()." ]\n";
+                    if( !$self->{'ignore_direct'}){
+                        $kernel->post("$self->{'persona'}", "input", $msg);
+                    }
                 }
-                $kernel->post("$self->{'persona'}", "input", $msg);
             }
        }
 }

@@ -112,7 +112,7 @@ if($XMPP){
                                                                        'soggies@conference.websages.com/crunchy',
                                                                      ],
                                                 'persona'         => 'crunchy',
-                                                'account-persona' => 'crunchy',
+                                                'ignore_direct'   => 0,
                                               }
                                             ), 
                         );
@@ -129,7 +129,7 @@ if($XMPP){
                                                                        'system@conference.websages.com/loki',
                                                                      ],
                                                 'persona'         => 'system',
-                                                'account-persona' => 'crunchy',
+                                                'ignore_direct'   => 1,
                                               }
                                             ), 
                         );
