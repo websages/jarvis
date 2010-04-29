@@ -131,8 +131,8 @@ sub input{
              $r = $self->shoutout($1);
              $pirate=0;
          }elsif($what=~m/^!standings\s*(.*)/){
-             $pirate=0;
              my $r = $self->standings();
+             $pirate=0;
          }
          
          # respond in pirate if we have something to say...
@@ -273,6 +273,7 @@ sub standings{
 use LWP::Simple;
 use HTML::Parser;
     my $self=shift;
+    $self->{'standings'}='';
     my $content = get( 'http://sports.yahoo.com/mlb/standings' );
     my $p = HTML::Parser->new(
         api_version => 3,
@@ -303,7 +304,7 @@ use HTML::Parser;
                                                                my $q = sprintf "%-20s %-5s %-5s %-7s %-6s %-7s\n",
                                                                     $team, $wins, $losses, $pct, $gb, $l10;
                                                                #$arg{'kernel'}->post( localhost => privmsg => $d, $q);
-                                                               print STDERR "$q";
+                                                               push(@{  $self->{'standings'} },$q);
                                                              }
                                                                  }
                                                            }, 
@@ -313,18 +314,14 @@ use HTML::Parser;
                        ],
         report_tags => [ qw( tr ) ],
     );
-
     my $h = sprintf "%-20s %-5s %-5s %-7s %-6s %-7s\n",
         '', 'W', 'L', ' Pct', 'GB', 'L10';
     #$arg{'kernel'}->post( localhost => privmsg => $d, $h);
-    print STDERR "$h";
+    push(@{  $self->{'standings'} },$h);
     $p->parse( $content );
+    return join("",@{  $self->{'standings'});
 }
 ################################################################################
 # End Standings
 ################################################################################
-
 1;
-
-
-
