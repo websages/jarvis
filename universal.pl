@@ -15,7 +15,7 @@ use Jarvis::Persona::System;
 #use Jarvis::Persona::Watcher;
 use POE::Builder;
 $|++;
-my $IRC=1;
+my $IRC=0;
 my $XMPP=1;
 
 ################################################################################
@@ -72,21 +72,21 @@ if($IRC){
                                          ), 
                         );
     
-    $poe->object_session(  
-                          new Jarvis::IRC(
-                                           {
-                                             'alias'        => 'system_session',
-                                             'nickname'     => 'loki',
-                                             'ircname'      => 'loki.websages.com',
-                                             'server'       => '127.0.0.1',
-                                             'channel_list' => [ 
-                                                                 '#asgard',
-                                                                 '#midgard',
-                                                               ],
-                                             'persona'      => 'system',
-                                           }
-                                         ), 
-                        );
+#    $poe->object_session(  
+#                          new Jarvis::IRC(
+#                                           {
+#                                             'alias'        => 'system_session',
+#                                             'nickname'     => 'loki',
+#                                             'ircname'      => 'loki.websages.com',
+#                                             'server'       => '127.0.0.1',
+#                                             'channel_list' => [ 
+#                                                                 '#asgard',
+#                                                                 '#midgard',
+#                                                               ],
+#                                             'persona'      => 'system',
+#                                           }
+#                                         ), 
+#                        );
 }
 
 # xmpp bot sessions are 1:n for session:room_nick, #
