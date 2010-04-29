@@ -187,7 +187,7 @@ sub input{
              $r = $self->fortune();
          }elsif($directly_addressed==1){
              #$r = $self->megahal($what);
-             $r = $what;
+             $r = "$who: $what";
          }elsif($what=~m/^!shoutout\s*(.*)/){
              my $shoutout=$1;
              $r = $self->shoutout($1);

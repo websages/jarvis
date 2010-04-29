@@ -103,7 +103,7 @@ sub input{
          }
          my $r=""; # response
          if($directly_addressed==1){ 
-             $kernel->post($sender, $respond_event, $msg, $self->{'megahal'}->do_reply( $what ));
+             $kernel->post($sender, $respond_event, $msg, $who.": ".$self->{'megahal'}->do_reply( $what ));
          }
      }
      return $self->{'alias'};
