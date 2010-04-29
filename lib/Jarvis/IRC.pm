@@ -200,7 +200,7 @@ sub irc_public_reply{
     my ($self, $kernel, $heap, $sender, $msg, $what) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     my ( $who, $where ) = ( $msg->{'conversation'}->{'nick'}, $msg->{'conversation'}->{'room'} );
     foreach my $channel (@{ $where }){
-        $self->{'irc_client'}->yield( privmsg => $channel => $what );
+        $self->{'irc_client'}->yield( privmsg => [ $channel ] => $what );
     }
 }
 
