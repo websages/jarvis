@@ -262,6 +262,8 @@ sub input_event() {
                     if( !$self->{'ignore_direct'}){
                         $kernel->post("$self->{'persona'}", "input", $msg);
                     }
+                }else{
+                    $kernel->post("$self->{'persona'}", "input", $msg);
                 }
             }
        }

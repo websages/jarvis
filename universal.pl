@@ -95,7 +95,7 @@ if($IRC){
 
 # Adding additional multi-user-chats works, but direct-messages will not go to the chat-persona, 
 # but to the last chat persona instanciated, so it's best to define a accout-persona for
-# xmpp bots with the 'account-persona' attribute and to keep it the same persona for all xmpp sessions.
+# xmpp bots with the 'ignore_direct' attribute and to keep it the same persona for all direct xmpp sessions.
 # (Right now this is not implemented and it appears the first persona defined is used...)
 
 if($XMPP){
