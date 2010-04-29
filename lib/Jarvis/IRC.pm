@@ -170,7 +170,7 @@ sub irc_public {
     $what=~s/[^a-zA-Z0-9:!\@#\%^&*\[\]_+=\- ]//g;
     $what=~s/[\$\`\(]//g;
     $what=~s/[)]//g;
-    $kernel->post("$self->{'persona'}", "$self->{'persona'}_input",$who, $where, $what, 'irc_public_reply');
+    $kernel->post("$self->{'persona'}", "input",$who, $where, $what, 'irc_public_reply');
 
 }
 
