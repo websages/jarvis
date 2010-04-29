@@ -260,6 +260,7 @@ sub input_event() {
                           };
                 if($direct){
                     if( !$self->{'ignore_direct'}){
+                        print STDERR "$self->{'persona'}\n";
                         $kernel->post("$self->{'persona'}", "input", $msg);
                     }
                 }else{
