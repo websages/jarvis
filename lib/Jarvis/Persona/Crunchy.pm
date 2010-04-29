@@ -147,12 +147,13 @@ sub channel_del{
             delete $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} };
         }
         # delete the alias from locations if there are no channels in it
-        if($heap->{'locations'}->{ $construct->{'alias'}){
-            my @channels = keys(%{ $heap->{'locations'}->{ $construct->{'alias'} } });
-            if($#channels < 0){ delete $heap->{'locations'}->{ $construct->{'alias'} }; }
-        }
+#        if($heap->{'locations'}->{ $construct->{'alias'}){
+#            my @channels = keys(%{ $heap->{'locations'}->{ $construct->{'alias'} } });
+#            if($#channels < 0){ delete $heap->{'locations'}->{ $construct->{'alias'} }; }
+#        }
     }
 }
+
 
 sub input{
      my ($self, $kernel, $heap, $sender, $who, $where, $what, $respond_event) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
