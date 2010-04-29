@@ -172,6 +172,9 @@ sub input{
      # Response handlers
      ###########################################################################     
      my $pirate=1;
+     if(defined($heap->{'locations'}){
+         print Data::Dumper->Dump([$heap->{'locations'}]);
+     }
      if(defined($what)){
          my $r=""; # response
          if($what=~m/^\s*fortune\s*$/){
