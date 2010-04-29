@@ -173,7 +173,7 @@ sub irc_public {
     print Data::Dumper->Dump(
                               [
                                 { 
-                                  'sender_alias' => $object->alias(),
+                                  'sender_alias' => $self->alias(),
                                   'reply_event'  => 'irc_public_reply',
                                   'conversation' => {
                                                       'id'   => 1,
