@@ -303,12 +303,14 @@ use HTML::Parser;
                                                                my $q = sprintf "%-20s %-5s %-5s %-7s %-6s %-7s\n",
                                                                     $team, $wins, $losses, $pct, $gb, $l10;
                                                                #$arg{'kernel'}->post( localhost => privmsg => $d, $q);
-                                                               return $q;
+                                                               push(@{ $self->{'standings'} }, $q);
+                                                               return $self;
                                                              }
                                                                  }
                                                            }, 
                                                'self,tagname' );
-                             }($self),
+                              return $self; 
+                             },
                              'self,tagname,attr' 
                        ],
         report_tags => [ qw( tr ) ],
