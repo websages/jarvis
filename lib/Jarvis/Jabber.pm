@@ -85,7 +85,7 @@ sub start{
                                                            Hostname       => $self->{'hostname'},
                                                            Username       => $self->{'username'},
                                                            Password       => $self->{'password'},
-                                                           Alias          => 'component',
+                                                           Alias          => $self->alias().'component',
                                                            ConnectionType => +XMPP,
                                                            States         => {
                                                                                StatusEvent => 'status_event',
@@ -93,7 +93,7 @@ sub start{
                                                                                ErrorEvent  => 'error_event',
                                                                              },
                                                          );
-    $kernel->post('component','connect');
+    $kernel->post($self->alias().'component','connect');
     return $self;
 }
 
@@ -149,12 +149,12 @@ sub status_event()
                 $heap->{'jid'} = $jid;
                 $heap->{'sid'} = $sender->ID();
         
-                $kernel->post('component','output_handler', XNode->new('presence'));
+                $kernel->post($self->alias().'component','output_handler', XNode->new('presence'));
                 
                 # And here is the purge_queue. This is to make sure we haven't sent
                 # nodes while something catastrophic has happened (like reconnecting).
                 
-                $kernel->post('component','purge_queue');
+                $kernel->post($self->alias().'component','purge_queue');
 
 #                my $online_node=XNode->new('presence',[ 'show', 'Online']);
 #                $kernel->yield(output_event',$online_node);
@@ -269,7 +269,7 @@ sub test_message()
 
         $node->insert_tag('body')->data('This is a test sent at: ' . time());
         
-        $kernel->post($self->alias(),'output_event', $node, $heap->{'sid'});
+        $kernel->post($self->alias().'component','output_event', $node, $heap->{'sid'});
 
 }
 
