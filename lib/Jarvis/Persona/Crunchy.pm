@@ -131,9 +131,9 @@ sub channel_del{
     # expects a constructor hash of { alias => <sender_alias>, channel => <some_tag>, nick => <nick in channel> }
     my ($self, $kernel, $heap, $construct) = @_[OBJECT, KERNEL, HEAP, ARG0];
     # unshift each of the items in the room, push them back if they're not the one we're removing
-    my $count=0;
-    my $max = $#{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} } };
-#    while($count<$max){
+#    my $count=0;
+#    my $max = $#{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} } };
+#    while( $count < $max ){
 #        my $nick = shift(@{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} } },
 #        push(
 #              @{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} } },
