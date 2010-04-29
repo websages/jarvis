@@ -78,9 +78,21 @@ sub alias{
 }
 
 sub input{
-     my ($self, $kernel, $heap, $sender, $who, $where, $what, $respond_event) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+     my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
+
+     # un-wrap the $msg
+     my ( $sender_alias, $respond_event, $who, $where, $what, $id ) =
+        ( 
+          $msg->{'sender_alias'},
+          $msg->{'reply_event'},
+          $msg->{'conversation'}->{'nick'},
+          $msg->{'conversation'}->{'room'},
+          $msg->{'conversation'}->{'body'},
+          $msg->{'conversation'}->{'id'},
+        );
+
      if(defined($what)){
-         $kernel->post($sender, $respond_event, $who, $where, $self->{'megahal'}->do_reply( $what ));
+         $kernel->post($sender, $respond_event, $msg, $self->{'megahal'}->do_reply( $what ));
      }
      return $self->{'alias'};
 }
