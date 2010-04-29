@@ -258,7 +258,7 @@ sub input_event() {
 sub xmpp_reply{
     # Get the reply from the personality and post it back from whence it came.
     my ($self, $kernel, $heap, $sender, $msg, $reply) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-    my ( $who, $type ) = ( $msg->{'conversation'}->{'nick'}, $msg->{'conversation'}->{'type'} );
+    my ( $who, $type ) = ( $msg->{'conversation'}->{'room'}, $msg->{'conversation'}->{'type'} );
     my $node = XNode->new('message');
     $node->attr('to', $who);
     if($type eq 'groupchat'){ $node->attr('type', $type); }
