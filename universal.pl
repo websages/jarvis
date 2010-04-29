@@ -9,7 +9,7 @@ BEGIN { unshift @INC, './lib' if -d './lib'; }
 use Data::Dumper;
 use Jarvis::IRC;
 use Jarvis::Jabber;
-#use Jarvis::Persona::Crunchy;
+use Jarvis::Persona::Crunchy;
 #use Jarvis::Persona::Jarvis;
 use Jarvis::Persona::System;
 #use Jarvis::Persona::Watcher;
@@ -32,7 +32,7 @@ exit unless $poe;
 
 # We set up some personas to redirect various traffic to...
 $poe->object_session(
-                      new Jarvis::Persona::System(
+                      new Jarvis::Persona::Crunchy(
                                                     { 
                                                       'alias'       => 'crunchy',
                                                       'ldap_domain' => 'websages.com',
@@ -109,31 +109,29 @@ if($XMPP){
                                                 'password'        => $ENV{'XMPP_PASSWORD'},
                                                 'channel_list'    => [ 
                                                                        'soggies@conference.websages.com/crunchy',
-                                                                       'system@conference.websages.com/crunchy',
                                                                      ],
                                                 'persona'         => 'crunchy',
                                                 'account-persona' => 'crunchy',
                                               }
                                             ), 
                         );
-#    $poe->object_session( 
-#                          new Jarvis::Jabber(
-#                                              {
-#                                                'alias'           => 'loki_xmpp',
-#                                                'ip'              => 'thor.websages.com',
-#                                                'port'            => '5222',
-#                                                'hostname'        => 'websages.com',
-#                                                'username'        => 'crunchy',
-#                                                'password'        => $ENV{'XMPP_PASSWORD'},
-#                                                'channel_list'    => [ 
-#                                                                       'system@conference.websages.com/loki',
-#                                                                       'soggies@conference.websages.com/loki',
-#                                                                     ],
-#                                                'persona'         => 'system',
-#                                                'account-persona' => 'crunchy',
-#                                              }
-#                                            ), 
-#                        );
+    $poe->object_session( 
+                          new Jarvis::Jabber(
+                                              {
+                                                'alias'           => 'loki_xmpp',
+                                                'ip'              => 'thor.websages.com',
+                                                'port'            => '5222',
+                                                'hostname'        => 'websages.com',
+                                                'username'        => 'crunchy',
+                                                'password'        => $ENV{'XMPP_PASSWORD'},
+                                                'channel_list'    => [ 
+                                                                       'system@conference.websages.com/loki',
+                                                                     ],
+                                                'persona'         => 'system',
+                                                'account-persona' => 'crunchy',
+                                              }
+                                            ), 
+                        );
 }
 
 POE::Kernel->run();
