@@ -49,9 +49,9 @@ sub new {
 
     bless($self,$class); 
     $self->{'states'} = { 
-                          _start               => '_start',
-                          _stop                => '_stop',
-                          irc_default          => '_default',
+                          start                => 'start',
+                          stop                 => 'stop',
+                          irc_default          => 'irc_default',
                           irc_001              => 'irc_001',
                           irc_public           => 'irc_public',
                           irc_ping             => 'irc_ping',
@@ -69,9 +69,9 @@ sub new {
 }
 
 ################################################################################
-# POE::Builder expects '_stop', '_start', and 'states', and 'alias'
+# POE::Builder expects 'stop', 'start', and 'states', and 'alias'
 ################################################################################
-sub _start { 
+sub start { 
     my $self = $_[OBJECT]; 
     my $kernel = $_[KERNEL];
     my $session = $_[SESSION];
@@ -79,7 +79,7 @@ sub _start {
     print STDERR ref($self)." started.\n"; 
 }
 
-sub _stop  { 
+sub stop  { 
     my $self = $_[OBJECT]; 
     my $kernel = $_[KERNEL];
     print STDERR ref($self)." stopped.\n"; 
@@ -126,7 +126,7 @@ sub on_start {
     $self->{'irc_client'}->yield( connect => { } );
 }
 
-sub _default {
+sub irc_default {
     my $self = $_[OBJECT];
     my ($event, $args) = @_[ARG0 .. $#_];
     my @output = ( "$event: " );

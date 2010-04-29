@@ -35,11 +35,11 @@ sub new {
          }
     }
     $self->{'states'} = { 
-                          $self->{'alias'}.'_start'   => '_start',
-                          $self->{'alias'}.'_stop'    => '_stop',
-                          $self->{'alias'}.'_input'   => 'input',
-                          $self->{'alias'}.'_output'  => 'output',
-                          $self->{'alias'}.'_process' => 'process',
+                          'start'   => '_start',
+                          'stop'    => '_stop',
+                          '_input'   => 'input',
+                          '_output'  => 'output',
+                          '_process' => 'process',
                           # special_events go here...
                         };
 

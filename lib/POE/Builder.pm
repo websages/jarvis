@@ -77,13 +77,13 @@ sub object_session(){
                           inline_states =>  {
                                               _start   => sub { 
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];
-                                                                $kernel->post($_[SESSION],$object->alias()."_start");
+                                                                $kernel->post($_[SESSION], "start");
                                                                 # set the session_alias
                                                                 $kernel->alias_set( $object->alias() );
                                                               },
                                               _stop    => sub {
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];
-                                                                $kernel->post($_[SESSION],$object->alias()."_stop");
+                                                                $kernel->post($_[SESSION],"stop");
                                                                 # remove the session_alias
                                                                 $kernel->alias_remove();
                                                               }

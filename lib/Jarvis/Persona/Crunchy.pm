@@ -43,8 +43,8 @@ sub new {
          }
     }
     $self->{'states'} = { 
-                          $self->{'alias'}.'_start'   => '_start',
-                          $self->{'alias'}.'_stop'    => '_stop',
+                          $self->{'alias'}.'start'   => '_start',
+                          $self->{'alias'}.'stop'    => '_stop',
                           $self->{'alias'}.'_input'   => 'input',
                           # special_events go here...
                         };
@@ -134,7 +134,6 @@ sub input{
              my @r = $self->standings();
              foreach $r (@r){
                  $kernel->post($sender, $respond_event, $who, $where, $r); 
-                 print STDERR Data::Dumper->Dump([$r]);
              }
              $pirate=0;
          }
