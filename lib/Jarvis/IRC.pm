@@ -147,15 +147,19 @@ sub irc_default {
 }
 
 sub irc_001 {
-    my $self = $_[OBJECT];
-    my $sender = $_[SENDER];
+    my ($self, $kernel, $sender) = @_[OBJECT, KERNEL, SENDER];
     # Since this is an irc_* event, we can get the component's object by
     # accessing the heap of the sender. Then we register and connect to the
     # specified server.
     my $sender_heap = $sender->get_heap();
     print "Connected to ", $sender_heap->server_name(), "\n";
-    # we join our channels
-    $self->{'irc_client'}->yield( join => $_ ) for (@{ $self->{'channel_list'} });
+    for(@{ $self->{'channel_list'} }){
+        # notify the persona that we're adding the channel and nick 
+        # or there is no way for the persona to be aware of it...
+        $kernel->post($self->{'persona'}, 'channel_add', $nick, $_);
+        # we join our channels
+        $self->{'irc_client'}->yield( join => $_ );
+    }
     return;
 }
 
