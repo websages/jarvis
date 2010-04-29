@@ -38,8 +38,6 @@ sub new {
                           'start'       => 'start',
                           'stop'        => 'stop',
                           'input'       => 'input',
-                          'output'      => 'output',
-                          'process'     => 'process',
                           'channel_add' => 'channel_add',
                           'channel_del' => 'channel_del',
                           # special_events go here...
@@ -106,16 +104,6 @@ sub input{
              $kernel->post($sender, $respond_event, $msg, $who.": ".$self->{'megahal'}->do_reply( $what ));
          }
      }
-     return $self->{'alias'};
-}
-
-sub output{
-     my ($self, $kernel, $heap, $sender, $what) = @_[OBJECT, KERNEL, HEAP, SENDER, ARGV0];
-     return $self->{'alias'};
-}
-
-sub process{
-     my ($self, $kernel, $heap, $sender, $what) = @_[OBJECT, KERNEL, HEAP, SENDER, ARGV0];
      return $self->{'alias'};
 }
 
