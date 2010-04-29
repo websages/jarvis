@@ -273,7 +273,6 @@ sub standings{
 use LWP::Simple;
 use HTML::Parser;
     my $self=shift;
-    $self->{'standings'}=[];
     my $content = get( 'http://sports.yahoo.com/mlb/standings' );
     my $p = HTML::Parser->new(
         api_version => 3,
@@ -304,7 +303,7 @@ use HTML::Parser;
                                                                my $q = sprintf "%-20s %-5s %-5s %-7s %-6s %-7s\n",
                                                                     $team, $wins, $losses, $pct, $gb, $l10;
                                                                #$arg{'kernel'}->post( localhost => privmsg => $d, $q);
-                                                               push(@{  $self->{'standings'} },$q);
+                                                               return $q;
                                                              }
                                                                  }
                                                            }, 
