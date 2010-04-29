@@ -81,9 +81,6 @@ sub alias{
 
 sub input{
      my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
-     if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
-         print Data::Dumper->Dump([$heap->{'locations'}->{$sender_alias}->{$where}]);
-     }
      # un-wrap the $msg
      my ( $sender_alias, $respond_event, $who, $where, $what, $id ) =
         ( 
@@ -94,6 +91,10 @@ sub input{
           $msg->{'conversation'}->{'body'},
           $msg->{'conversation'}->{'id'},
         );
+
+     if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
+         print Data::Dumper->Dump([$heap->{'locations'}->{$sender_alias}->{$where}]);
+     }
 
      if(defined($what)){
          $kernel->post($sender, $respond_event, $msg, $self->{'megahal'}->do_reply( $what ));
