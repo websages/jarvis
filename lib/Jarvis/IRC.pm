@@ -187,7 +187,7 @@ sub irc_public {
                 'reply_event'  => 'irc_public_reply',
                 'conversation' => {
                                     'id'   => 1,
-                                    'nick' => $who,
+                                    'nick' => $nick,
                                     'room' => $channel,
                                     'body' => $what,
                                   }
@@ -212,7 +212,7 @@ sub irc_msg {
                     'reply_event'  => 'irc_private_reply',
                     'conversation' => {
                                         'id'   => 1,
-                                        'nick' => $who,
+                                        'nick' => $nick,
                                         'room' => $where,
                                         'body' => $what,
                                       }
