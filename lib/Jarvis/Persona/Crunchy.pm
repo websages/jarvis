@@ -279,7 +279,6 @@ use HTML::Parser;
         start_h     => [ 
                          sub {
                                my ( $self, $tag, $attr ) = @_;
-                               print STDERR "$tag ::  $self->{'blah'}\n";
                                return unless $tag eq 'tr';
                                $self->handler( text => [], '@{dtext}' );
                                $self->handler( end  => sub {
@@ -304,7 +303,6 @@ use HTML::Parser;
                                                                my $q = sprintf "%-20s %-5s %-5s %-7s %-6s %-7s\n",
                                                                     $team, $wins, $losses, $pct, $gb, $l10;
                                                                #$arg{'kernel'}->post( localhost => privmsg => $d, $q);
-                                                               print STDERR "$q ::  $self->{'blah'}\n";
                                                                push(@{ $self->{'standings'} }, $q);
                                                                return $self;
                                                              }
@@ -322,6 +320,7 @@ use HTML::Parser;
     #$arg{'kernel'}->post( localhost => privmsg => $d, $h);
     push(@{  $p->{'standings'} },$h);
     $p->parse( $content );
+    print join(" ",$p->{'standings'});
 }
 ################################################################################
 # End Standings
