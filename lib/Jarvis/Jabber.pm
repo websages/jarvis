@@ -203,8 +203,7 @@ sub status_event()
 # This is the input event. We receive all data from the server through this
 # event. ARG0 will a POE::Filter::XML::Node object.
 
-sub input_event()
-{
+sub input_event() {
         my ($self, $kernel, $heap, $node) = @_[OBJECT, KERNEL, HEAP, ARG0];
         #print "\n\nINCOMING:\n".$node->to_str()."\n\n\n";
 

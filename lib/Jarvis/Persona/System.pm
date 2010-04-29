@@ -92,9 +92,9 @@ sub input{
           $msg->{'conversation'}->{'id'},
         );
 
-     if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
-         print Data::Dumper->Dump([$heap->{'locations'}->{$sender_alias}->{$where}]);
-     }
+#     if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
+#         print Data::Dumper->Dump([$heap->{'locations'}->{$sender_alias}->{$where}]);
+#     }
 
      if(defined($what)){
          $kernel->post($sender, $respond_event, $msg, $self->{'megahal'}->do_reply( $what ));

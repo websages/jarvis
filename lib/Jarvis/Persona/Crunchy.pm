@@ -155,7 +155,6 @@ sub channel_del{
     }
 }
 
-
 sub input{
      my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
 
@@ -175,6 +174,7 @@ sub input{
      my $pirate=1;
      my $directly_addressed=0;
      if(defined($what)){
+print STDERR "1. $what\n";
          if(defined($heap->{'locations'}->{$sender_alias}->{$where})){ 
              foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){ 
                  if($what=~m/^\s*$chan_nick\s*:*\s*/){ 
