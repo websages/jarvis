@@ -130,6 +130,9 @@ sub input{
              my $shoutout=$1;
              $r = $self->shoutout($1);
              $pirate=0;
+         }elsif($what=~m/^!shoutout\s*(.*)/){
+             $pirate=0;
+             my $r = $self->standings();
          }
          
          # respond in pirate if we have something to say...
@@ -263,4 +266,65 @@ sub shoutout{
 # End LDAP events
 ################################################################################
 
+################################################################################
+# Begin Standings
+################################################################################
+sub standings{
+use LWP::Simple;
+use HTML::Parser;
+    my $self=shift;
+    my $content = get( 'http://sports.yahoo.com/mlb/standings' );
+    my $p = HTML::Parser->new(
+        api_version => 3,
+        start_h     => [ 
+                         sub {
+                               my ( $self, $tag, $attr ) = @_;
+                               return unless $tag eq 'tr';
+                               $self->handler( text => [], '@{dtext}' );
+                               $self->handler( end  => sub {
+                                                             my ( $self, $tag ) = @_;
+                                                             my $text = join( '', @{$self->handler( 'text' )} );
+                                                             $text =~ s/^\s+//;
+                                                             $text =~ s/\s+$//;
+                                                             $text =~ s/\s+/ /g;
+                                                             return unless (
+                                                                             $text =~ /Atlanta Braves/   ||
+                                                                             $text =~ /New York Mets/ ||
+                                                                             $text =~ /Washington Nationals/ ||
+                                                                             $text =~ /Chicago Cubs/
+                                                                           );
+                                                             if ( $text =~m/(Chicago Cubs|Atlanta Braves|New York Mets|Washington Nationals)\s+(\d+.*)/ ) {
+                                                             my $team = $1;
+                                                             my $other = $2;
+                                                             if ( $other =~ /(\d+)\s(\d+)\s(\d{0,1}\.\d+)\s+(.+?)\s+(\d+\-\d+)\s+(\d+\-\d+)\s+(\d+\-\d+)\s+(\d+\-\d+)\s+(\d+\-\d+)\s+(.+?)\s+(\d+\-\d+)/ ) 
+                                                             {
+                                                               my ($wins, $losses, $pct, $gb, $home, $road, $east, $west, $central, $streak, $l10) = 
+                                                                  ( $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11 );
+                                                               my $q = sprintf "%-20s %-5s %-5s %-7s %-6s %-7s\n",
+                                                                    $team, $wins, $losses, $pct, $gb, $l10;
+                                                               #$arg{'kernel'}->post( localhost => privmsg => $d, $q);
+                                                               print STDERR "$q";
+                                                             }
+                                                                 }
+                                                           }, 
+                                               'self,tagname' );
+                             },
+                             'self,tagname,attr' 
+                       ],
+        report_tags => [ qw( tr ) ],
+    );
+
+    my $h = sprintf "%-20s %-5s %-5s %-7s %-6s %-7s\n",
+        '', 'W', 'L', ' Pct', 'GB', 'L10';
+    #$arg{'kernel'}->post( localhost => privmsg => $d, $h);
+    print STDERR "$q";
+    $p->parse( $content );
+}
+################################################################################
+# End Standings
+################################################################################
+
 1;
+
+
+
