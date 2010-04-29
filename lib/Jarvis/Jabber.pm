@@ -93,7 +93,7 @@ sub start{
                                                                             ErrorEvent  => 'error_event',
                                                                           },
                                                       );
-    $kernel->post($self->alias().'component','connect');
+    $kernel->post('component','connect');
     return $self;
 }
 
@@ -149,12 +149,12 @@ sub status_event()
                 $heap->{'jid'} = $jid;
                 $heap->{'sid'} = $sender->ID();
         
-                $kernel->post($self->alias().'component','output_handler', XNode->new('presence'));
+                $kernel->post('component','output_handler', XNode->new('presence'));
                 
                 # And here is the purge_queue. This is to make sure we haven't sent
                 # nodes while something catastrophic has happened (like reconnecting).
                 
-                $kernel->post($self->alias().'component','purge_queue');
+                $kernel->post('component','purge_queue');
 
 #                my $online_node=XNode->new('presence',[ 'show', 'Online']);
 #                $kernel->yield(output_event',$online_node);
