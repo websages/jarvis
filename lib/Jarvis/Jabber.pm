@@ -259,7 +259,7 @@ sub input_event() {
                                               }
                           };
                 if($direct){
-                    print STDERR "[ "$self->{'account-persona'} $self->alias()." ]\n";
+                    print STDERR "[ ".$self->{'account-persona'} $self->alias()." ]\n";
                 }
                     $kernel->post("$self->{'persona'}", "input", $msg);
             }
