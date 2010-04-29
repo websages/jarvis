@@ -205,12 +205,21 @@ sub irc_public_reply{
 }
 
 sub irc_msg {
-    my ($self, $kernel, $sender, $msg, $what) = @_[OBJECT, KERNEL, SENDER, ARG0 .. ARG2];
-    my ( $who, $where ) = ( $msg->{'conversation'}->{'nick'}, $msg->{'conversation'}->{'room'} );
+    my ($self, $kernel, $sender, $who, $where, $what) = @_[OBJECT, KERNEL, SENDER, ARG0 .. ARG2];
     my $nick = ( split /!/, $who )[0];
     my $channel = $where->[0];
     if ( $what =~m/(.+)/ ) {
-        $kernel->post("$self->{'persona'}", "$self->{'persona'}_input",$who, $where, $what, 'irc_private_reply');
+        my $msg = { 
+                    'sender_alias' => $self->alias(),
+                    'reply_event'  => 'irc_public_reply',
+                    'conversation' => {
+                                        'id'   => 1,
+                                        'nick' => $who,
+                                        'room' => $where,
+                                        'body' => $what,
+                                      }
+                  };
+        $kernel->post("$self->{'persona'}", "input", $msg);
     }
     return;
 }
