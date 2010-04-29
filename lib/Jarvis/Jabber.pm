@@ -54,8 +54,8 @@ sub new{
         $self->{$key} = $construct->{$key};
     }
     $self->{'states'} = {
-                          start               => '_start',
-                          stop                => '_stop',
+                          start                => 'start',
+                          stop                 => 'stop',
                           input_event          => 'input_event',
                           error_event          => 'error_event',
                           status_event         => 'status_event',
