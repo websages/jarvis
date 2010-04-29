@@ -284,7 +284,7 @@ sub output_event()
         print "\n===PACKET SENT===\n" if $self->{'DEBUG'} > 2;
         print $node->to_str() . "\n" if $self->{'DEBUG'} > 2;
         print "=================\n" if $self->{'DEBUG'} > 2;
-print STDERR "OUTPUT_HANDLER $room > ". $sid ."\n";
+print STDERR "post $sid output_handler, $node\n";
         $kernel->post($sid, 'output_handler', $node);
 }
 
