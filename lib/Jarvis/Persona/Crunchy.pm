@@ -48,6 +48,7 @@ sub new {
                           'input'   => 'input',
                           # special_events go here...
                           'channel_add'   => 'channel_add',
+                          'channel_del'   => 'channel_del',
                         };
     if( (!defined($self->{'ldap_domain'})) || (!defined($self->{'ldap_binddn'})) || (!defined($self->{'ldap_bindpw'})) ){
         print STDERR "[ $self->{'ldap_domain'} :: $self->{'ldap_binddn'} :: $self->{'ldap_bindpw'} ]\n";
@@ -172,8 +173,8 @@ sub input{
      # Response handlers
      ###########################################################################     
      my $pirate=1;
-     if(defined($heap->{'locations'})){
-         print Data::Dumper->Dump([$heap->{'locations'}]);
+     if(defined($heap->{'locations'}->{$sender_alias}->{$where})){ 
+         print Data::Dumper->Dump([$heap->{'locations'}->{$sender_alias}->{$where}]); 
      }
      if(defined($what)){
          my $r=""; # response
