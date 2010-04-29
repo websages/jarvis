@@ -143,13 +143,13 @@ sub channel_del{
     }
     # delete the channel if there are no nicks in it
     if($heap->{'locations'}->{ $construct->{'alias'}->{ $construct->{'channel'} }){
-        if($#{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} } < 0){
+        if($#{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} } } < 0){
             delete $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} };
         }
         # delete the alias from locations if there are no channels in it
         if($heap->{'locations'}->{ $construct->{'alias'}){
             my @channels = keys(%{ $heap->{'locations'}->{ $construct->{'alias'} } });
-            if($#channels < 0){ delete $heap->{'locations'}->{ $construct->{'alias'} } }
+            if($#channels < 0){ delete $heap->{'locations'}->{ $construct->{'alias'} }; }
         }
     }
 }
