@@ -35,11 +35,13 @@ sub new {
          }
     }
     $self->{'states'} = { 
-                          'start'   => 'start',
-                          'stop'    => 'stop',
-                          'input'   => 'input',
-                          'output'  => 'output',
-                          'process' => 'process',
+                          'start'       => 'start',
+                          'stop'        => 'stop',
+                          'input'       => 'input',
+                          'output'      => 'output',
+                          'process'     => 'process',
+                          'channel_add' => 'channel_add',
+                          'channel_del' => 'channel_del',
                           # special_events go here...
                         };
 
@@ -79,7 +81,6 @@ sub alias{
 
 sub input{
      my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
-
      if(defined($heap->{'locations'})){ print Data::Dumper->Dump([$heap->{'locations'}]); }
      # un-wrap the $msg
      my ( $sender_alias, $respond_event, $who, $where, $what, $id ) =
@@ -106,6 +107,42 @@ sub output{
 sub process{
      my ($self, $kernel, $heap, $sender, $what) = @_[OBJECT, KERNEL, HEAP, SENDER, ARGV0];
      return $self->{'alias'};
+}
+
+sub channel_add{
+     # expects a constructor hash of { alias => <sender_alias>, channel => <some_tag>, nick => <nick in channel> }
+    my ($self, $kernel, $heap, $construct) = @_[OBJECT, KERNEL, HEAP, ARG0];
+         push ( 
+                @{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} } },
+                $construct->{'nick'}
+              );
+}
+
+sub channel_del{
+    # expects a constructor hash of { alias => <sender_alias>, channel => <some_tag>, nick => <nick in channel> }
+    my ($self, $kernel, $heap, $construct) = @_[OBJECT, KERNEL, HEAP, ARG0];
+    # unshift each of the items in the room, push them back if they're not the one we're removing
+    my $count=0;
+    my $max = $#{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} } };
+    while( $count < $max ){
+       my $nick = shift(@{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} } });
+        push( 
+              @{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} } },
+              $nick
+            ) unless $nick eq $construct->{'nick'};
+        $count++;
+   }
+    # delete the channel if there are no nicks in it
+    if($heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} }){
+        if($#{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} } } < 0){
+            delete $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} };   
+        }
+        # delete the alias from locations if there are no channels in it
+        if($heap->{'locations'}->{ $construct->{'alias'} }){
+            my @channels = keys(%{ $heap->{'locations'}->{ $construct->{'alias'} } });
+            if($#channels < 0){ delete $heap->{'locations'}->{ $construct->{'alias'} }; }
+        }
+    }
 }
 
 
