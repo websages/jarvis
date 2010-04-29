@@ -9,10 +9,10 @@ BEGIN { unshift @INC, './lib' if -d './lib'; }
 use Data::Dumper;
 use Jarvis::IRC;
 use Jarvis::Jabber;
-use Jarvis::Persona::Crunchy;
+#use Jarvis::Persona::Crunchy;
 #use Jarvis::Persona::Jarvis;
 use Jarvis::Persona::System;
-use Jarvis::Persona::Watcher;
+#use Jarvis::Persona::Watcher;
 use POE::Builder;
 $|++;
 my $IRC=1;
