@@ -179,7 +179,7 @@ print STDERR "1. $what\n";
              foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){ 
                  if($what=~m/^\s*$chan_nick\s*:*\s*/){ 
                      $what=~s/^\s*$chan_nick\s*:*\s*//;
-                     $directly_addressed=0;
+                     $directly_addressed=1;
                  }
              }
          }
