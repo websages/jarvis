@@ -172,7 +172,7 @@ sub input{
      # Response handlers
      ###########################################################################     
      my $pirate=1;
-     my $directly_addressed=0;
+     my $directly_addressed=$msg->{'conversation'}->{'direct'}||0;
      if(defined($what)){
          if(defined($heap->{'locations'}->{$sender_alias}->{$where})){ 
              foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){ 

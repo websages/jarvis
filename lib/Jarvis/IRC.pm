@@ -211,10 +211,11 @@ sub irc_msg {
                     'sender_alias' => $self->alias(),
                     'reply_event'  => 'irc_private_reply',
                     'conversation' => {
-                                        'id'   => 1,
-                                        'nick' => $nick,
-                                        'room' => $where,
-                                        'body' => $what,
+                                        'id'     => 1,
+                                        'nick'   => $nick,
+                                        'room'   => $where,
+                                        'body'   => $what,
+                                        'direct' => 1,
                                       }
                   };
         $kernel->post("$self->{'persona'}", "input", $msg);
