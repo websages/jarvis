@@ -240,7 +240,18 @@ sub input_event()
         if(defined($child_nodes->{'body'})){ 
              $what = $child_nodes->{'body'}->data();
             if((($type eq 'chat')||($type eq 'groupchat'))&&($thatsme == 0)){
-                #$kernel->post("$self->{'persona'}", "input", $replyto, $type, $what, 'xmpp_reply');
+                my $msg = { 
+                            'sender_alias' => $self->alias(),
+                            'reply_event'  => 'xmpp_public_reply',
+                            'conversation' => { 
+                                                'id'   => 1,
+                                                'nick' => $replyto,
+                                                'room' => $replyto,
+                                                'body' => $what,
+                                                'type' => $type,
+                                              }
+                          };
+                $kernel->post("$self->{'persona'}", "input", $msg );
             }
        }
 }
