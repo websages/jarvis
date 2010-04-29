@@ -73,7 +73,7 @@ sub new{
     return $self;
 }
 
-sub _start{
+sub start{
     my $self = $_[OBJECT]||shift;
     my $heap = $_[HEAP];
     my $kernel = $_[KERNEL];
@@ -97,7 +97,7 @@ sub _start{
     return $self;
 }
 
-sub _stop{
+sub stop{
      my $self = $_[OBJECT]||shift;
     print STDERR __PACKAGE__ ." stop\n";
      return $self;
