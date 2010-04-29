@@ -130,7 +130,7 @@ sub input{
              my $shoutout=$1;
              $r = $self->shoutout($1);
              $pirate=0;
-         }elsif($what=~m/^!shoutout\s*(.*)/){
+         }elsif($what=~m/^!standings\s*(.*)/){
              $pirate=0;
              my $r = $self->standings();
          }
