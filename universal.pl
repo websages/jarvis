@@ -72,21 +72,21 @@ if($IRC){
                                          ), 
                         );
     
-#    $poe->object_session(  
-#                          new Jarvis::IRC(
-#                                           {
-#                                             'alias'        => 'system_session',
-#                                             'nickname'     => 'loki',
-#                                             'ircname'      => 'loki.websages.com',
-#                                             'server'       => '127.0.0.1',
-#                                             'channel_list' => [ 
-#                                                                 '#asgard',
-#                                                                 '#midgard',
-#                                                               ],
-#                                             'persona'      => 'system',
-#                                           }
-#                                         ), 
-#                        );
+    $poe->object_session(  
+                          new Jarvis::IRC(
+                                           {
+                                             'alias'        => 'system_session',
+                                             'nickname'     => 'loki',
+                                             'ircname'      => 'loki.websages.com',
+                                             'server'       => '127.0.0.1',
+                                             'channel_list' => [ 
+                                                                 '#asgard',
+                                                                 '#midgard',
+                                                               ],
+                                             'persona'      => 'system',
+                                           }
+                                         ), 
+                        );
 }
 
 # xmpp bot sessions are 1:n for session:room_nick, #
@@ -116,24 +116,24 @@ if($XMPP){
                                               }
                                             ), 
                         );
-    $poe->object_session( 
-                          new Jarvis::Jabber(
-                                              {
-                                                'alias'           => 'loki_xmpp',
-                                                'ip'              => 'thor.websages.com',
-                                                'port'            => '5222',
-                                                'hostname'        => 'websages.com',
-                                                'username'        => 'crunchy',
-                                                'password'        => $ENV{'XMPP_PASSWORD'},
-                                                'channel_list'    => [ 
-                                                                       'system@conference.websages.com/loki',
-                                                                       'soggies@conference.websages.com/crunchy',
-                                                                     ],
-                                                'persona'         => 'system',
-                                                'account-persona' => 'crunchy',
-                                              }
-                                            ), 
-                        );
+#    $poe->object_session( 
+#                          new Jarvis::Jabber(
+#                                              {
+#                                                'alias'           => 'loki_xmpp',
+#                                                'ip'              => 'thor.websages.com',
+#                                                'port'            => '5222',
+#                                                'hostname'        => 'websages.com',
+#                                                'username'        => 'crunchy',
+#                                                'password'        => $ENV{'XMPP_PASSWORD'},
+#                                                'channel_list'    => [ 
+#                                                                       'system@conference.websages.com/loki',
+#                                                                       'soggies@conference.websages.com/crunchy',
+#                                                                     ],
+#                                                'persona'         => 'system',
+#                                                'account-persona' => 'crunchy',
+#                                              }
+#                                            ), 
+#                        );
 }
 
 POE::Kernel->run();
