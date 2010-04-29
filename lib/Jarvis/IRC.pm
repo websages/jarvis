@@ -155,7 +155,7 @@ sub irc_001 {
     print "Connected to ", $sender_heap->server_name(), "\n";
     for(@{ $self->{'channel_list'} }){
         # notify the persona that we're adding the channel and nick 
-        # or there is no way for the persona to be aware of it...
+        # or there is no way for the persona to know what he's called in what channels
         $kernel->post($self->{'persona'}, 'channel_add', $self->{'nickname'}, $_);
         # we join our channels
         $self->{'irc_client'}->yield( join => $_ );

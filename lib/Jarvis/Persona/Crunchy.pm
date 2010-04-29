@@ -47,6 +47,7 @@ sub new {
                           'stop'    => 'stop',
                           'input'   => 'input',
                           # special_events go here...
+                          'channel_add'   => 'channel_add',
                         };
     if( (!defined($self->{'ldap_domain'})) || (!defined($self->{'ldap_binddn'})) || (!defined($self->{'ldap_bindpw'})) ){
         print STDERR "[ $self->{'ldap_domain'} :: $self->{'ldap_binddn'} :: $self->{'ldap_bindpw'} ]\n";
@@ -116,6 +117,43 @@ sub alias{
      my $self = $_[OBJECT]||shift;
      return $self->{'alias'};
 }
+
+sub channel_add{
+     # expects a constructor hash of { alias => <sender_alias>, channel => <some_tag>, nick => <nick in channel> }
+     my ($self, $construct) = @_[OBJECT ARG0];
+         push (
+                @{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} },
+                $construct->{'nick'}
+              );
+}
+
+sub channel_del{
+    # expects a constructor hash of { alias => <sender_alias>, channel => <some_tag>, nick => <nick in channel> }
+    my ($self, $construct) = @_[OBJECT ARG0];
+    # unshift each of the items in the room, push them back if they're not the one we're removing
+    my $count=0;
+    my $max=$#{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} };
+    while($count<$max){
+        my $nick = shift(@{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} },
+        push(
+              @{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} },
+              $nick
+            ) unless $nick eq $construct->{'nick'};
+        $count++;
+    }
+    # delete the channel if there are no nicks in it
+    if($heap->{'locations'}->{ $construct->{'alias'}->{ $construct->{'channel'} }){
+        if($#{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} } < 0){
+            delete $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} };
+        }
+        # delete the alias from locations if there are no channels in it
+        if($heap->{'locations'}->{ $construct->{'alias'}){
+            my @channels = keys(%{ $heap->{'locations'}->{ $construct->{'alias'} } });
+            if($#channels < 0){ delete $heap->{'locations'}->{ $construct->{'alias'} } }
+        }
+    }
+}
+
 
 sub input{
      my ($self, $kernel, $heap, $sender, $who, $where, $what, $respond_event) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
