@@ -224,7 +224,7 @@ sub input_event() {
         my $id = $node->attr('id');
         my $type = $node->attr('type');
         my $replyto = $from;
-        my ($r,$n);
+        my $nick = "";
         
         # don't parse things from this personality.
         my $thatsme=0;
@@ -233,7 +233,7 @@ sub input_event() {
         } 
         if(defined($type)){
             if($type eq 'groupchat'){ 
-                ($replyto,$ick)=split('/',$replyto);
+                ($replyto,$nick)=split('/',$replyto);
             }
         }
         # Retrieve the message data from the xml if it has a body and post the message to the personality...
