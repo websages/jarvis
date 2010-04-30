@@ -251,7 +251,7 @@ sub irc_ping {
 sub authen {
     my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
     print STDERR Data::Dumper->Dump([$msg]);
-    $kernel->yield('irc_whois', $msg->{'conversation'}->{'nick'});
+    $self->{'irc_client'}->yield( 'irc_whois', $msg->{'conversation'}->{'nick'} );
     # do nothing.
     return;
 }
