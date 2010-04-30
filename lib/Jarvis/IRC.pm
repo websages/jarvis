@@ -59,6 +59,7 @@ sub new {
                           'irc_public_reply', 
                           'irc_private_reply',
                           'authen'
+                          'irc_whois'
                         ];
     #$self->{'states'} = { 
     #                      start                => 'start',
@@ -249,8 +250,14 @@ sub irc_ping {
 
 sub authen {
     my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
-    print STDERR Data::Dumper->Dump([$msg]);
     $self->{'irc_client'}->yield('whois', $msg->{'conversation'}->{'nick'} );
+    # do nothing.
+    return;
+}
+
+sub irc_whois {
+    my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
+    print STDERR Data::Dumper->Dump([$msg]);
     # do nothing.
     return;
 }
