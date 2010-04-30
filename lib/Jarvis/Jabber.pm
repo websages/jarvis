@@ -275,7 +275,7 @@ sub input_event() {
                $heap->{'presence'}->{ $node->attr('from') } = 
                 my $child_nodes=$node->get_children_hash();
                 if(defined->$child_nodes->{'x'}){
-                    print STDERR Data::Dumper->Dump([ $child_nodes->{'x'}->to_str() ]);
+                    print STDERR Data::Dumper->Dump([ $child_nodes->{'x'} ]);
                 }
         }
         print STDERR $self->pretty_xml( $node->to_str() );
