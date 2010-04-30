@@ -250,7 +250,10 @@ sub input_event() {
             if( length($line) > 80){
                 my $in_quote=0;
                 my @char=split('',$line);
-                for(my $i; $i<$#char; $i++){
+                for( my $i=0; $i < $#char; $i++ ){
+                    #if($char[$i] eq '"'){ 
+                    #    if($in_quote == 1){ $in_quote=0; }else{ $in_quote=1; } 
+                    #}
                     if($char[$i] eq '"'){ if($in_quote == 1){ $in_quote=0; }else{ $in_quote=1; } }
                     if($char[$i] eq ' '){ if(!$in_quote == 1){ print STDERR "\n  ";} } 
                     print STDERR $char[$i];
