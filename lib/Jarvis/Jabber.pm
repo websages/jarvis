@@ -269,11 +269,14 @@ sub input_event() {
         if( $node->attr('type')){
             if( $node->attr('type') eq 'unavailable'){ 
                 # remove from $heap->{'presence'}
-                print STDERR $node->attr('from')."\n";
+                print STDERR "Departing: ". $node->attr('from')."\n";
                 if(defined($heap->{'presence'}->{ $node->attr('from') })){
                     delete $heap->{'presence'}->{ $node->attr('from') };
                 }
-            }else{                                  # add to $heap->{'prescense'}
+                my $child_nodes = $node->get_children_hash();
+                print STDERR Data::Dumper->Dump([ $child_nodes->{'x'} ]);
+            }else{                                  
+                   # add to $heap->{'prescense'}
                    #$heap->{'presence'}->{ $node->attr('from') } = 
                     my $child_nodes = $node->get_children_hash();
                     #if(defined($child_nodes->{'x'})){
