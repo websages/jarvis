@@ -122,6 +122,7 @@ sub authen {
     # we need to remember 
     push(@{ $heap->{'pending'} }, { 'authen' => $msg, 'sender' => $sender->ID } );
     #$self->{'irc_client'}->yield('whois', $msg->{'conversation'}->{'nick'} );
+    print STDERR $msg->{'conversation'}->{'room'}.'\\'.$msg->{'conversation'}->{'nick'}."\n";
     if(defined( $heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'\\'.$msg->{'conversation'}->{'nick'} })){
         #print Data::Dumper->Dump([$msg]);
         print STDERR $heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'\\'.$msg->{'conversation'}->{'nick'} }->to_str()."\n";
