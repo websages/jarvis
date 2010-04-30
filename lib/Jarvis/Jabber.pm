@@ -246,7 +246,7 @@ sub input_event() {
         $twig->parse( $node->to_str() );
         $twig->set_pretty_print( 'indented' );
         my @prettier=split("\n",$twig->sprint);
-    #    foreach my $line (@prettier){
+        foreach my $line (@prettier){
     #        if(length($line)) > 40){
     #            my $in_quote=0;
                 #foreach my $char ( split('',$line) ){
@@ -255,8 +255,8 @@ sub input_event() {
                 #    print $char;
                 #}
     #        }
-    #        print "\n";
-    #    }
+            print "\n";
+        }
         print STDERR $twig->sprint."\n";
 
         # don't parse things from this personality.
