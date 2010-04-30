@@ -56,7 +56,6 @@ sub new {
                           'irc_public', 
                           'irc_ping', 
                           'irc_msg', 
-                          'irc_whois', 
                           'irc_public_reply', 
                           'irc_private_reply',
                           'authen'
