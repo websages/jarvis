@@ -258,6 +258,7 @@ sub input_event() {
                                 $in_body=0; 
                             }else{ 
                                 $in_body=1; 
+                                print STDERR "\n  ";
                             }
                         }
                     }
