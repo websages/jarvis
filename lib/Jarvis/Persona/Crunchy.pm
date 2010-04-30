@@ -123,10 +123,9 @@ sub alias{
 sub authen_reply{
     my ($self, $kernel, $heap, $msg, $user) = @_[OBJECT, KERNEL, HEAP, ARG0, ARG1];
     my $r = "I see you as: $user";
-    $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r); 
-
-
-    print Data::Dumper->Dump([$msg,$user]);
+    if(defined($msg->{'reason'} eq 'whoami')){
+        $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $r); 
+    }
 }
 
 sub channel_add{
@@ -207,6 +206,7 @@ sub input{
              $pirate=0;
          }elsif($what=~m/^\s*who\s*am\s*i[?\s]*/){
              $pirate=0;
+             $msg->{'reason'}='whoami';
              $kernel->post($sender, 'authen', $msg); 
          }elsif($directly_addressed==1){
              if($msg->{'conversation'}->{'direct'} == 0){
