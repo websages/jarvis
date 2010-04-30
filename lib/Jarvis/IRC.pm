@@ -266,9 +266,12 @@ sub irc_whois {
         my $request = shift (@{ $heap->{'pending'} });
         if(defined($request->{'authen'})){
             if($reply->{'nick'} eq $request->{'authen'}->{'conversation'}->{'nick'}){
-print STDERR Data::Dumper->Dump([$request]);
-print STDERR $reply->{'nick'}." => ". $reply->{'user'} .'@'. $reply->{'host'} ."\n";
-                $kernel->post($request->{'sender'}, 'authen_reply', $reply->{'user'} .'@'. $reply->{'host'});
+                $kernel->post(
+                               $request->{'sender'}, 
+                               'authen_reply', 
+                               $request->{'authen'}, 
+                               $reply->{'user'} .'@'. $reply->{'host'}
+                             );
             }else{
                 push(@{ $heap->{'pending'} }, $reply );
             }
@@ -278,5 +281,4 @@ print STDERR $reply->{'nick'}." => ". $reply->{'user'} .'@'. $reply->{'host'} ."
     }
     return;
 }
-
 1;
