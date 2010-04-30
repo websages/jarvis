@@ -249,9 +249,10 @@ sub input_event() {
         foreach my $line (@prettier){
             if( length($line) > 80){
                 my $in_quote=0;
-                foreach my $char ( split('',$line) ){
-                    if($char eq '"'){ if($in_quote == 1){ $in_quote=0; }else{ $in_quote=1; } }
-                    if($char eq ' '){ if(!$in_quote == 1){ print STDERR "\n  ";} } 
+                my @char=split('',$line);
+                for(my $i; $i<$#char; $i++){
+                    if($char[$i] eq '"'){ if($in_quote == 1){ $in_quote=0; }else{ $in_quote=1; } }
+                    if($char[$i] eq ' '){ if(!$in_quote == 1){ print STDERR "\n  ";} } 
                     print STDERR $char;
                 }
             }
