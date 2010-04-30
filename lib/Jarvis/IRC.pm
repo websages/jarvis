@@ -58,8 +58,8 @@ sub new {
                           'irc_msg', 
                           'irc_public_reply', 
                           'irc_private_reply',
-                          'authen'
-                          'irc_whois'
+                          'authen',
+                          'irc_whois',
                         ];
     #$self->{'states'} = { 
     #                      start                => 'start',
