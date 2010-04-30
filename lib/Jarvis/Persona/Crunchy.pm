@@ -122,6 +122,8 @@ sub alias{
 
 sub authen_reply{
     my ($self, $kernel, $heap, $msg, $user) = @_[OBJECT, KERNEL, HEAP, ARG0, ARG1];
+    my $r = "I see you as: $user";
+    $kernel->post($msg->{'sender'}, $msg->{'respond_event'}, $r); 
     print Data::Dumper->Dump([$msg,$user]);
 }
 
@@ -203,7 +205,6 @@ sub input{
              $pirate=0;
          }elsif($what=~m/^\s*who\s*am\s*i[?\s]*/){
              $pirate=0;
-             $r = "I see you as: bleh.";
              $kernel->post($sender, 'authen', $msg); 
          }elsif($directly_addressed==1){
              if($msg->{'conversation'}->{'direct'} == 0){
