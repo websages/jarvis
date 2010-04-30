@@ -245,18 +245,18 @@ sub input_event() {
         $twig->set_indent(" "x4);
         $twig->parse( $node->to_str() );
         $twig->set_pretty_print( 'indented' );
-        my @prettier=split("\n",$twig->sprint);
-        foreach my $line (@prettier){
-            if(length($line)) > 40){
-                my $in_quote=0;
+    #    my @prettier=split("\n",$twig->sprint);
+    #    foreach my $line (@prettier){
+    #        if(length($line)) > 40){
+    #            my $in_quote=0;
                 #foreach my $char ( split('',$line) ){
                 #    if($char eq '"'){ if($in_quote == 1){ $in_quote=0; } }
                 #    if($char eq ' '){ if(!$in_quote == 1){ print "\n  ";} } 
                 #    print $char;
                 #}
-            }
-            print "\n";
-        }
+    #        }
+    #        print "\n";
+    #    }
         print STDERR $twig->sprint."\n";
 
         # don't parse things from this personality.
