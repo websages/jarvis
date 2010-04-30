@@ -14,6 +14,7 @@ use POE::Filter::XML::Node;
 use POE::Filter::XML::NS qw/ :JABBER :IQ /;
 use POE::Filter::XML::Utils;
 use Carp;
+use XML::Twig;
 
 sub new{
     my $class = shift;
@@ -239,10 +240,13 @@ sub input_event() {
         my $replyto = $from;
         my $nick = $from;
         my $direct = 0;
-my $text=$node->to_str();
-$text=~s/</\n</g;
-print STDERR $text;
-        
+
+        my  $twig= new XML::Twig;
+        $twig->set_indent(" "x4);
+        $twig->parse( $node->to_str() );
+        $twig->set_pretty_print( $sPrettyFormat );
+        print STDERR $twig->sprint;
+
         # don't parse things from this personality.
         my $thatsme=0;
         foreach my $active_channel ( @{ $self->{'channel_list'} }) {
