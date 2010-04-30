@@ -249,15 +249,15 @@ sub input_event() {
         foreach my $line (@prettier){
             if( length($line) > 40){
                 my $in_quote=0;
-                #foreach my $char ( split('',$line) ){
-                #    if($char eq '"'){ if($in_quote == 1){ $in_quote=0; } }
-                #    if($char eq ' '){ if(!$in_quote == 1){ print "\n  ";} } 
-                #    print $char;
-                #}
+                foreach my $char ( split('',$line) ){
+                    if($char eq '"'){ if($in_quote == 1){ $in_quote=0; } }
+                    if($char eq ' '){ if(!$in_quote == 1){ print STDERR "\n  ";} } 
+                    print STDERR $char;
+                }
             }
-            print "\n";
+            print STDERR "\n";
         }
-        print STDERR $twig->sprint."\n";
+        #print STDERR $twig->sprint."\n";
 
         # don't parse things from this personality.
         my $thatsme=0;
