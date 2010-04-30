@@ -43,12 +43,13 @@ sub new {
          }
     }
     $self->{'states'} = { 
-                          'start'   => 'start',
-                          'stop'    => 'stop',
-                          'input'   => 'input',
+                          'start'        => 'start',
+                          'stop'         => 'stop',
+                          'input'        => 'input',
+                          'authen_reply' => 'authen_reply',
                           # special_events go here...
-                          'channel_add'   => 'channel_add',
-                          'channel_del'   => 'channel_del',
+                          'channel_add'  => 'channel_add',
+                          'channel_del'  => 'channel_del',
                         };
     if( (!defined($self->{'ldap_domain'})) || (!defined($self->{'ldap_binddn'})) || (!defined($self->{'ldap_bindpw'})) ){
         print STDERR "[ $self->{'ldap_domain'} :: $self->{'ldap_binddn'} :: $self->{'ldap_bindpw'} ]\n";
