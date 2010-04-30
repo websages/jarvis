@@ -281,12 +281,12 @@ sub input_event() {
                 }
 
             }else{                                  
+        print STDERR $self->pretty_xml( $node->to_str() );
                # add to $heap->{'prescense'}
                print STDERR "Arriving: ". $node->attr('from')."\n";
                $heap->{'presence'}->{ $node->attr('from') } = $node;
             }
         }
-        print STDERR $self->pretty_xml( $node->to_str() );
     }
 
     # figure out to where to reply...
