@@ -258,16 +258,16 @@ sub input_event() {
         #print "\n\nINCOMING:\n".$node->to_str()."\n\n\n";
 
         # allow everyone in websages to subscribe to our presence. /*FIXME move regex to constructor */
-        if($node->name() eq 'presence'){
-            if($node->attr('type') ){
-                if($node->attr('type') eq 'subscribe'){
-                    if($node->attr('from') =~m /\@websages.com/){
-                        $kernel->post($self->alias(),'approve_subscription',$node->attr('from'));
-                    }
-                }
-            }
-            print STDERR $self->pretty_xml( $node->to_str() );
-        }
+#        if($node->name() eq 'presence'){
+#            if($node->attr('type') ){
+#                if($node->attr('type') eq 'subscribe'){
+#                    if($node->attr('from') =~m /\@websages.com/){
+#                        $kernel->post($self->alias(),'approve_subscription',$node->attr('from'));
+#                    }
+#                }
+#            }
+#            print STDERR $self->pretty_xml( $node->to_str() );
+#        }
 
         # figure out to where to reply...
         my $from = $node->attr('from');
