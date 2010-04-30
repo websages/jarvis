@@ -245,7 +245,7 @@ sub input_event() {
         $twig->set_indent(" "x4);
         $twig->parse( $node->to_str() );
         $twig->set_pretty_print( 'indented' );
-    #    my @prettier=split("\n",$twig->sprint);
+        my @prettier=split("\n",$twig->sprint);
     #    foreach my $line (@prettier){
     #        if(length($line)) > 40){
     #            my $in_quote=0;
