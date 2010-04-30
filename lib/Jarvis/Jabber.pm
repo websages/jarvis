@@ -220,7 +220,7 @@ sub status_event()
 sub pretty_xml{
     my $self=shift;
     my $xml=shift;
-    my  $twig= new XML::Twig;
+    my  $twig = new XML::Twig;
     $twig->set_indent(" "x4);
     $twig->parse( $xml );
     $twig->set_pretty_print( 'indented' );
@@ -249,76 +249,76 @@ sub pretty_xml{
     #            print STDERR $char[$i];
     #        }
     #    }
-    }
+    #}
     return $twig->sprint;
 }
 
 sub input_event() {
-        my ($self, $kernel, $heap, $node) = @_[OBJECT, KERNEL, HEAP, ARG0];
-        #print "\n\nINCOMING:\n".$node->to_str()."\n\n\n";
+    my ($self, $kernel, $heap, $node) = @_[OBJECT, KERNEL, HEAP, ARG0];
+    #print "\n\nINCOMING:\n".$node->to_str()."\n\n\n";
 
-        # allow everyone in websages to subscribe to our presence. /*FIXME move regex to constructor */
-#        if($node->name() eq 'presence'){
-#            if($node->attr('type') ){
-#                if($node->attr('type') eq 'subscribe'){
-#                    if($node->attr('from') =~m /\@websages.com/){
-#                        $kernel->post($self->alias(),'approve_subscription',$node->attr('from'));
-#                    }
-#                }
-#            }
-#            print STDERR $self->pretty_xml( $node->to_str() );
-#        }
-
-        # figure out to where to reply...
-        my $from = $node->attr('from');
-        my $to = $node->attr('to');
-        my $id = $node->attr('id');
-        my $type = $node->attr('type');
-        my $replyto = $from;
-        my $nick = $from;
-        my $direct = 0;
-
-        # don't parse things from this personality.
-        my $thatsme=0;
-        foreach my $active_channel ( @{ $self->{'channel_list'} }) {
-            if($from eq $active_channel){ $thatsme = 1; }
-        } 
-        if(defined($type)){
-            if($type eq 'groupchat'){ 
-                $replyto=~s/\/.*//; 
-                $nick=~s/.*\///; 
-            }else{
-                $direct = 1;
+    # allow everyone in websages to subscribe to our presence. /*FIXME move regex to constructor */
+    if($node->name() eq 'presence'){
+        if($node->attr('type') ){
+            if($node->attr('type') eq 'subscribe'){
+                if($node->attr('from') =~m /\@websages.com/){
+                    $kernel->post($self->alias(),'approve_subscription',$node->attr('from'));
+                    }
             }
         }
-        # Retrieve the message data from the xml if it has a body and post the message to the personality...
-        my $what=''; 
-        my $child_nodes=$node->get_children_hash(); 
-        if(defined($child_nodes->{'body'})){ 
-             $what = $child_nodes->{'body'}->data();
-            if((($type eq 'chat')||($type eq 'groupchat'))&&($thatsme == 0)){
-                my $msg = { 
-                            'sender_alias' => $self->alias(),
-                            'reply_event'  => 'xmpp_reply',
-                            'conversation' => { 
-                                                'id'   => 1,
-                                                'nick' => $nick,
-                                                'room' => $replyto,
-                                                'body' => $what,
-                                                'type' => $type,
-                                                'direct' => $direct,
-                                              }
-                          };
-                if($direct){
-                    if( !$self->{'ignore_direct'}){
-                        print STDERR "$self->{'persona'}\n";
-                        $kernel->post("$self->{'persona'}", "input", $msg);
-                    }
-                }else{
+        print STDERR $self->pretty_xml( $node->to_str() );
+    }
+
+    # figure out to where to reply...
+    my $from = $node->attr('from');
+    my $to = $node->attr('to');
+    my $id = $node->attr('id');
+    my $type = $node->attr('type');
+    my $replyto = $from;
+    my $nick = $from;
+    my $direct = 0;
+
+    # don't parse things from this personality.
+    my $thatsme=0;
+    foreach my $active_channel ( @{ $self->{'channel_list'} }) {
+        if($from eq $active_channel){ $thatsme = 1; }
+    } 
+    if(defined($type)){
+        if($type eq 'groupchat'){ 
+            $replyto=~s/\/.*//; 
+            $nick=~s/.*\///; 
+        }else{
+            $direct = 1;
+        }
+    }
+    # Retrieve the message data from the xml if it has a body and post the message to the personality...
+    my $what=''; 
+    my $child_nodes=$node->get_children_hash(); 
+    if(defined($child_nodes->{'body'})){ 
+         $what = $child_nodes->{'body'}->data();
+        if((($type eq 'chat')||($type eq 'groupchat'))&&($thatsme == 0)){
+            my $msg = { 
+                        'sender_alias' => $self->alias(),
+                        'reply_event'  => 'xmpp_reply',
+                        'conversation' => { 
+                                            'id'   => 1,
+                                            'nick' => $nick,
+                                            'room' => $replyto,
+                                            'body' => $what,
+                                            'type' => $type,
+                                            'direct' => $direct,
+                                          }
+                      };
+            if($direct){
+                if( !$self->{'ignore_direct'}){
+                    print STDERR "$self->{'persona'}\n";
                     $kernel->post("$self->{'persona'}", "input", $msg);
                 }
+            }else{
+                $kernel->post("$self->{'persona'}", "input", $msg);
             }
-       }
+        }
+   }
 }
 
 sub xmpp_reply{
