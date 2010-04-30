@@ -122,7 +122,14 @@ sub authen {
     # we need to remember 
     push(@{ $heap->{'pending'} }, { 'authen' => $msg, 'sender' => $sender->ID } );
     #$self->{'irc_client'}->yield('whois', $msg->{'conversation'}->{'nick'} );
-    # do nothing.
+    print Data::Dumper->Dump([$msg]);
+    
+    #my $node = XNode->new('message');
+    #$node->attr('to', $who);
+    #if($type eq 'groupchat'){ $node->attr('type', $type); }
+    #$node->insert_tag('body')->data($reply);
+    #$kernel->post($self->alias(),'output_event', $node, $heap->{'sid'});
+
     return;
 }
 
@@ -241,11 +248,11 @@ sub input_event() {
         my $nick = $from;
         my $direct = 0;
 
-        my  $twig= new XML::Twig;
-        $twig->set_indent(" "x4);
-        $twig->parse( $node->to_str() );
-        $twig->set_pretty_print( 'nice' );
-print STDERR $twig->sprint."\n";
+#        my  $twig= new XML::Twig;
+#        $twig->set_indent(" "x4);
+#        $twig->parse( $node->to_str() );
+#        $twig->set_pretty_print( 'nice' );
+#print STDERR $twig->sprint."\n";
         #my @prettier=split("\n",$twig->sprint);
         #foreach my $line (@prettier){
         #    if( length($line) > 80){
@@ -270,7 +277,7 @@ print STDERR $twig->sprint."\n";
         #        }
         #    }
         #}
-        print STDERR "\n\n";
+#        print STDERR "\n\n";
         #print STDERR $twig->sprint."\n";
 
         # don't parse things from this personality.
