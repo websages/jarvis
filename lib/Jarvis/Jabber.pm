@@ -244,7 +244,7 @@ sub input_event() {
         my  $twig= new XML::Twig;
         $twig->set_indent(" "x4);
         $twig->parse( $node->to_str() );
-        $twig->set_pretty_print( 'indented' );
+        $twig->set_pretty_print( 'nice' );
         my @prettier=split("\n",$twig->sprint);
         foreach my $line (@prettier){
             if( length($line) > 80){
@@ -254,10 +254,11 @@ sub input_event() {
                 for( my $i=0; $i <= $#char; $i++ ){
                     if($i < $#char-5){
                         if(join('',($char[$i],$char[$i+1],$char[$i+2],$char[$i+3])) eq "body"){
-                        if($char[$i-1] eq '\\'){
-                            $in_body=0; 
-                        }else{ 
-                            $in_body=1; }
+                            if($char[$i-1] eq '\\'){
+                                $in_body=0; 
+                            }else{ 
+                                $in_body=1; 
+                            }
                         }
                     }
                     if($char[$i] eq '"'){ if($in_quote == 1){ $in_quote=0; }else{ $in_quote=1; } }
