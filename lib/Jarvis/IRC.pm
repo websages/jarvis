@@ -250,14 +250,15 @@ sub irc_ping {
 
 sub authen {
     my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
+    my $heap->{'request_id'}
     $self->{'irc_client'}->yield('whois', $msg->{'conversation'}->{'nick'} );
     # do nothing.
     return;
 }
 
 sub irc_whois {
-    my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
-    print STDERR Data::Dumper->Dump([$msg]);
+    my ($self, $kernel, $heap, $sender, @reply) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    print STDERR Data::Dumper->Dump([@reply]);
     # do nothing.
     return;
 }
