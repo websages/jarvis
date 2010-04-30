@@ -261,7 +261,7 @@ sub input_event() {
                         }
                     }
                     if($char[$i] eq '"'){ if($in_quote == 1){ $in_quote=0; }else{ $in_quote=1; } }
-                    if($char[$i] eq ' ' && $char[$i-1] ne ' ' && $char[$i+1] ne ' '){ 
+                    if($char[$i] eq ' ' && $char[$i-1] ne ' '){ 
                         if($in_quote == 0 && $in_body == 0){ print STDERR "\n  ";} 
                     } 
                     print STDERR $char[$i];
