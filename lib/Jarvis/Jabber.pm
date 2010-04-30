@@ -244,7 +244,7 @@ sub input_event() {
         my  $twig= new XML::Twig;
         $twig->set_indent(" "x4);
         $twig->parse( $node->to_str() );
-        $twig->set_pretty_print( 'nice' );
+        $twig->set_pretty_print( 'nsgmls' );
         #$twig->set_pretty_print( 'indented' );
         print STDERR $twig->sprint."\n";
 
