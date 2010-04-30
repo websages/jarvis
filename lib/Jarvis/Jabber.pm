@@ -120,12 +120,11 @@ sub states{
 sub authen {
     my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
     # we need to remember 
-    print Data::Dumper->Dump([$msg]);
     push(@{ $heap->{'pending'} }, { 'authen' => $msg, 'sender' => $sender->ID } );
     #$self->{'irc_client'}->yield('whois', $msg->{'conversation'}->{'nick'} );
-    print STDERR $msg->{'conversation'}->{'room'}.'\\'.$msg->{'conversation'}->{'nick'}."\n";
-    if(defined( $heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'\\'.$msg->{'conversation'}->{'nick'} })){
-        print STDERR $heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'\\'.$msg->{'conversation'}->{'nick'} }->to_str()."\n";
+    print STDERR $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'}."\n";
+    if(defined( $heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} })){
+        print STDERR $heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} }->to_str()."\n";
     }
     
     return;
