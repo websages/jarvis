@@ -262,7 +262,7 @@ sub irc_whois {
     # look through our pending requests for authen
     my $max=$#{ $heap->{'pending'} };
     my $count=0;
-    while ($count++ < $max){
+    while ($count++ <= $max){
 print STDERR $count."\n";
         my $request = shift (@{ $heap->{'pending'} });
         if(defined($request->{'authen'})){
