@@ -268,7 +268,7 @@ sub input_event() {
         }
         if($node->attr('type') eq unavailable){ 
             # remove from $heap->{'presence'}
-            if(defined($heap->{'presence'}->{ $node->attr('from') }){
+            if(defined($heap->{'presence'}->{ $node->attr('from') })){
                 delete $heap->{'presence'}->{ $node->attr('from') };
             }
         }else{                                  # add to $heap->{'prescense'}
