@@ -14,6 +14,7 @@ use POE::Filter::XML::Node;
 use POE::Filter::XML::NS qw/ :JABBER :IQ /;
 use POE::Filter::XML::Utils;
 use Carp;
+use YAML;
 
 sub new{
     my $class = shift;
@@ -57,11 +58,13 @@ sub new{
                           start                => 'start',
                           stop                 => 'stop',
                           authen               => 'authen',
+
                           input_event          => 'input_event',
                           error_event          => 'error_event',
                           status_event         => 'status_event',
                           test_message         => 'test_message',
                           output_event         => 'output_event',
+
                           join_channel         => 'join_channel',
                           leave_channel        => 'leave_channel',
                           send_presence        => 'send_presence',
@@ -237,6 +240,7 @@ sub input_event() {
         my $replyto = $from;
         my $nick = $from;
         my $direct = 0;
+print STDERR YAML::Dump($node);
         
         # don't parse things from this personality.
         my $thatsme=0;
