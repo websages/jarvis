@@ -239,7 +239,9 @@ sub input_event() {
         my $replyto = $from;
         my $nick = $from;
         my $direct = 0;
-print STDERR $node->to_str();
+my $text=$node->to_str();
+$text=~s/</\n</g;
+print STDERR $text;
         
         # don't parse things from this personality.
         my $thatsme=0;
