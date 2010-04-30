@@ -274,7 +274,9 @@ sub input_event() {
                     delete $heap->{'presence'}->{ $node->attr('from') };
                 }
                 my $child_nodes = $node->get_children_hash();
-                print STDERR Data::Dumper->Dump([ $child_nodes->{'x'} ]);
+                if(defined($child_nodes->{'x'})){
+                    print STDERR Data::Dumper->Dump([ $child_nodes->{'x'}->get_children_hash() ]);
+                }
             }else{                                  
                    # add to $heap->{'prescense'}
                    #$heap->{'presence'}->{ $node->attr('from') } = 
