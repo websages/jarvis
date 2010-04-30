@@ -251,7 +251,7 @@ sub irc_ping {
 sub authen {
     my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
     # we need to remember 
-    push(@{ $heap->{'pending'} }, { 'authen' => $msg, 'sender' => $sender->{'SESSION_ID'} } );
+    push(@{ $heap->{'pending'} }, { 'authen' => $msg, 'sender' => $sender->[0]->{'SESSION_ID'} } );
     $self->{'irc_client'}->yield('whois', $msg->{'conversation'}->{'nick'} );
     # do nothing.
     return;
