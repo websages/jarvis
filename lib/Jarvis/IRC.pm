@@ -267,6 +267,7 @@ print STDERR $count."\n";
         my $request = shift (@{ $heap->{'pending'} });
         if(defined($request->{'authen'})){
             if($reply->{'nick'} eq $request->{'authen'}->{'conversation'}->{'nick'}){
+print STDERR $reply->{'nick'}."\n";
 print STDERR Data::Dumper->Dump([$reply->{'sender'}]);
                 $kernel->post($reply->{'sender'}, 'authen_reply', $reply->{'user'} .'\@'. $reply->{'server'});
             }else{
