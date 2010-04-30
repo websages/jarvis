@@ -266,6 +266,16 @@ sub input_event() {
                     }
             }
         }
+        if($node->attr('type') eq unavailable){ 
+            # remove from $heap->{'presence'}
+            if(defined($heap->{'presence'}->{ $node->attr('from') }){
+                delete $heap->{'presence'}->{ $node->attr('from') };
+            }
+        }else{                                  # add to $heap->{'prescense'}
+               $heap->{'presence'}->{ $node->attr('from') } = 
+                my $child_nodes=$node->get_children_hash();
+                print STDERR Data::Dumper->([$child_nodes]);
+        }
         print STDERR $self->pretty_xml( $node->to_str() );
     }
 
