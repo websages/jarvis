@@ -273,17 +273,15 @@ sub input_event() {
                 if(defined($heap->{'presence'}->{ $node->attr('from') })){
                     delete $heap->{'presence'}->{ $node->attr('from') };
                 }
-                my $child_nodes = $node->get_children_hash();
-                if(defined($child_nodes->{'item'})){
-                    print STDERR Data::Dumper->Dump([ $child_nodes->{'item'}->get_children_hash() ]);
-                }
+
+                #my $child_nodes = $node->get_children_hash();
+                #if(defined($child_nodes->{'item'})){
+                #    print STDERR Data::Dumper->Dump([ $child_nodes->{'item'}->get_children_hash() ]);
+                #}
             }else{                                  
-                   # add to $heap->{'prescense'}
-                   #$heap->{'presence'}->{ $node->attr('from') } = 
-                    my $child_nodes = $node->get_children_hash();
-                    #if(defined($child_nodes->{'x'})){
-                        print STDERR Data::Dumper->Dump([ $child_nodes ]);
-                    #}
+               # add to $heap->{'prescense'}
+               print STDERR "Arriving: ". $node->attr('from')."\n";
+               $heap->{'presence'}->{ $node->attr('from') } = $node;
             }
             print STDERR $self->pretty_xml( $node->to_str() );
         }
