@@ -231,6 +231,11 @@ sub input_event() {
                     }
                 }
             }
+            my  $twig= new XML::Twig;
+            $twig->set_indent(" "x4);
+            $twig->parse( $node->to_str() );
+            $twig->set_pretty_print( 'nice' );
+            print STDERR $twig->sprint."\n\n";
         }
 
         # figure out to where to reply...
@@ -242,11 +247,11 @@ sub input_event() {
         my $nick = $from;
         my $direct = 0;
 
-        my  $twig= new XML::Twig;
-        $twig->set_indent(" "x4);
-        $twig->parse( $node->to_str() );
-        $twig->set_pretty_print( 'nice' );
-print STDERR $twig->sprint."\n\n";
+#        my  $twig= new XML::Twig;
+#        $twig->set_indent(" "x4);
+#        $twig->parse( $node->to_str() );
+#        $twig->set_pretty_print( 'nice' );
+#        print STDERR $twig->sprint."\n\n";
         #my @prettier=split("\n",$twig->sprint);
         #foreach my $line (@prettier){
         #    if( length($line) > 80){
