@@ -14,7 +14,6 @@ use POE::Filter::XML::Node;
 use POE::Filter::XML::NS qw/ :JABBER :IQ /;
 use POE::Filter::XML::Utils;
 use Carp;
-use YAML;
 
 sub new{
     my $class = shift;
@@ -240,7 +239,7 @@ sub input_event() {
         my $replyto = $from;
         my $nick = $from;
         my $direct = 0;
-print STDERR YAML::Dump($node);
+print STDERR $node->to_str();
         
         # don't parse things from this personality.
         my $thatsme=0;
