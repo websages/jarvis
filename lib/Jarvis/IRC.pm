@@ -263,6 +263,7 @@ sub irc_whois {
     my $max=$#{ $heap->{'pending'} };
     my $count=0;
     while ($count++ < $max){
+print STDERR $count."\n";
         my $request = shift (@{ $heap->{'pending'} });
         if(defined($request->{'authen'})){
             if($reply->{'nick'} eq $request->{'authen'}->{'conversation'}->{'nick'}){
