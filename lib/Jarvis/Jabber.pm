@@ -256,7 +256,7 @@ sub input_event() {
                 }
             }
         }
-        print STDERR "\n";
+        print STDERR "\n\n";
         #print STDERR $twig->sprint."\n";
 
         # don't parse things from this personality.
