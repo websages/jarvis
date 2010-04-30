@@ -123,7 +123,7 @@ sub alias{
 sub authen_reply{
     my ($self, $kernel, $heap, $msg, $user) = @_[OBJECT, KERNEL, HEAP, ARG0, ARG1];
     my $r = "I see you as: $user";
-    $kernel->post($msg->{'sender'}, $msg->{'respond_event'}, $r); 
+    $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $r); 
     print Data::Dumper->Dump([$msg,$user]);
 }
 
