@@ -250,15 +250,30 @@ sub irc_ping {
 
 sub authen {
     my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
-    my $heap->{'request_id'}='';
+    # we need to remember 
+    push(@{ $heap->{'pending'} }, { 'authen' => $msg, 'sender' => $sender } );
     $self->{'irc_client'}->yield('whois', $msg->{'conversation'}->{'nick'} );
     # do nothing.
     return;
 }
 
 sub irc_whois {
-    my ($self, $kernel, $heap, $sender, @reply) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-    print STDERR Data::Dumper->Dump([@reply]);
+    my ($self, $kernel, $heap, $sender, $reply) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
+    # look through our pending requests for authen
+    my $max=$#{ $heap->{'pending'} };
+    my $count=0;
+    while ($count++ < $max){
+        my $request = shift (@{ $heap->{'pending'}, { 'authen' => $msg } });
+        if(defined($request->{'authen'})){
+            if($reply->{'nick'} eq $request->{'authen'}->{'conversation'}->{'nick'}){
+                $kernel->post($reply->{'sender'}, 'authen_reply', $reply->{'user'} .'\@'. $reply->{'server'});
+            }else{
+                push(@{ $heap->{'pending'} }, $reply );
+            }
+        }else{
+            push(@{ $heap->{'pending'} }, $reply );
+        }
+    }
     # do nothing.
     return;
 }
