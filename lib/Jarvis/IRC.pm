@@ -48,7 +48,19 @@ sub new {
     }
 
     bless($self,$class); 
-    $self->{'states'} = ['start', 'stop', 'irc_default', 'irc_001', 'irc_public', 'irc_ping', 'irc_msg', 'irc_public_reply', 'irc_private_reply' ];
+    $self->{'states'} = [
+                          'start', 
+                          'stop', 
+                          'irc_default', 
+                          'irc_001', 
+                          'irc_public', 
+                          'irc_ping', 
+                          'irc_msg', 
+                          'irc_whois', 
+                          'irc_public_reply', 
+                          'irc_private_reply',
+                          'authen'
+                        ];
     #$self->{'states'} = { 
     #                      start                => 'start',
     #                      stop                 => 'stop',
@@ -232,6 +244,14 @@ sub irc_private_reply{
 
 sub irc_ping {
     my $self = $_[OBJECT];
+    # do nothing.
+    return;
+}
+
+sub authen {
+    my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
+    print STDERR Data::Dumper->Dump([$msg]);
+    $kernel->yield('irc_whois', $msg->{'conversation'->{'nick'});
     # do nothing.
     return;
 }

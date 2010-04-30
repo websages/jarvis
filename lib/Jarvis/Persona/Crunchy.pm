@@ -196,7 +196,9 @@ sub input{
              }
              $pirate=0;
          }elsif($what=~m/^\s*who\s*am\s*i[?\s]*/){
-                 $r = "I see you as: bleh.";
+             $pirate=0;
+             $r = "I see you as: bleh.";
+             $kernel->post($sender, 'authen', $msg); 
          }elsif($directly_addressed==1){
              if($msg->{'conversation'}->{'direct'} == 0){
                  $r = "$who: ".$self->megahal($what);
