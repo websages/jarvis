@@ -260,6 +260,7 @@ sub authen {
 sub irc_whois {
     my ($self, $kernel, $heap, $sender, $reply) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
     # look through our pending requests for authen
+print STDERR Data::Dumper->Dump([$sender]);
     my $max=$#{ $heap->{'pending'} };
     my $count=0;
     while ($count++ <= $max){
@@ -267,9 +268,8 @@ print STDERR $count."\n";
         my $request = shift (@{ $heap->{'pending'} });
         if(defined($request->{'authen'})){
             if($reply->{'nick'} eq $request->{'authen'}->{'conversation'}->{'nick'}){
-print STDERR $reply->{'nick'}." => ". $reply->{'user'} .'\@'. $reply->{'server'} ."\n";
-print STDERR Data::Dumper->Dump([$reply->{'sender'}]);
-                $kernel->post($reply->{'sender'}, 'authen_reply', $reply->{'user'} .'\@'. $reply->{'server'});
+print STDERR $reply->{'nick'}." => ". $reply->{'user'} .'@'. $reply->{'host'} ."\n";
+                $kernel->post($reply->{'sender'}, 'authen_reply', $reply->{'user'} .'@'. $reply->{'host'});
             }else{
                 push(@{ $heap->{'pending'} }, $reply );
             }
