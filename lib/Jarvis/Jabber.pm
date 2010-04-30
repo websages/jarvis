@@ -269,6 +269,7 @@ sub input_event() {
         if( $node->attr('type')){
             if( $node->attr('type') eq 'unavailable'){ 
                 # remove from $heap->{'presence'}
+                print STDERR $node->attr('from')."\n";
                 if(defined($heap->{'presence'}->{ $node->attr('from') })){
                     delete $heap->{'presence'}->{ $node->attr('from') };
                 }
