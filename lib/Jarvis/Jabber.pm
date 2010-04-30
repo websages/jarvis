@@ -217,6 +217,41 @@ sub status_event()
 
 # This is the input event. We receive all data from the server through this
 # event. ARG0 will a POE::Filter::XML::Node object.
+sub pretty_xml{
+    my $self=shift;
+    my $xml=shift;
+    my  $twig= new XML::Twig;
+    $twig->set_indent(" "x4);
+    $twig->parse( $xml );
+    $twig->set_pretty_print( 'indented' );
+    #$twig->set_pretty_print( 'nice' );
+    #my @prettier=split("\n",$twig->sprint);
+    #foreach my $line (@prettier){
+    #    if( length($line) > 80){
+    #        my ($in_quote, $in_body, $in_tag, $tagdepth) = ( 0, 0, 0, 0 );
+    #        my @char=split('',$line);
+    #        for( my $i=0; $i <= $#char; $i++ ){
+    #            #if($i < $#char-5){
+    #                #if(join('',($char[$i],$char[$i+1],$char[$i+2],$char[$i+3])) eq "body"){
+    #                #    if($char[$i-1] eq '\\'){
+    #                #        $in_body=0; 
+    #                #    }else{ 
+    #                #        $in_body=1; 
+    #                #    }
+    #                #}
+    #            #}
+    #            if($char[$i] eq '<'){ $in_tag = 1; }
+    #            if($char[$i] eq '>'){ $in_tag = 0; }
+    #            if($char[$i] eq '"'){ if($in_quote == 1){ $in_quote=0; }else{ $in_quote=1; } }
+    #            if($char[$i] eq ' ' && $char[$i-1] ne ' '){ 
+    #                if($in_quote == 0 && $in_body == 0){ print STDERR "\n  ";} 
+    #            } 
+    #            print STDERR $char[$i];
+    #        }
+    #    }
+    }
+    return $twig->sprint;
+}
 
 sub input_event() {
         my ($self, $kernel, $heap, $node) = @_[OBJECT, KERNEL, HEAP, ARG0];
@@ -231,11 +266,7 @@ sub input_event() {
                     }
                 }
             }
-            my  $twig= new XML::Twig;
-            $twig->set_indent(" "x4);
-            $twig->parse( $node->to_str() );
-            $twig->set_pretty_print( 'nice' );
-            print STDERR $twig->sprint."\n\n";
+            print STDERR $self->pretty_xml( $node->to_str() );
         }
 
         # figure out to where to reply...
@@ -246,37 +277,6 @@ sub input_event() {
         my $replyto = $from;
         my $nick = $from;
         my $direct = 0;
-
-#        my  $twig= new XML::Twig;
-#        $twig->set_indent(" "x4);
-#        $twig->parse( $node->to_str() );
-#        $twig->set_pretty_print( 'nice' );
-#        print STDERR $twig->sprint."\n\n";
-        #my @prettier=split("\n",$twig->sprint);
-        #foreach my $line (@prettier){
-        #    if( length($line) > 80){
-        #        my $in_quote=0;
-        #        my $in_body=0;
-        #        my @char=split('',$line);
-        #        for( my $i=0; $i <= $#char; $i++ ){
-        #            if($i < $#char-5){
-        #                if(join('',($char[$i],$char[$i+1],$char[$i+2],$char[$i+3])) eq "body"){
-        #                    if($char[$i-1] eq '\\'){
-        #                        $in_body=0; 
-        #                    }else{ 
-        #                        $in_body=1; 
-        #                    }
-        #                }
-        #            }
-        #            if($char[$i] eq '"'){ if($in_quote == 1){ $in_quote=0; }else{ $in_quote=1; } }
-        #            if($char[$i] eq ' ' && $char[$i-1] ne ' '){ 
-        #                if($in_quote == 0 && $in_body == 0){ print STDERR "\n  ";} 
-        #            } 
-        #            print STDERR $char[$i];
-        #        }
-        #    }
-        #}
-        #print STDERR $twig->sprint."\n";
 
         # don't parse things from this personality.
         my $thatsme=0;
