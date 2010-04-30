@@ -279,8 +279,8 @@ sub input_event() {
                         print STDERR Data::Dumper->Dump([ $child_nodes->{'x'} ]);
                     }
             }
+            print STDERR $self->pretty_xml( $node->to_str() );
         }
-        print STDERR $self->pretty_xml( $node->to_str() );
     }
 
     # figure out to where to reply...
