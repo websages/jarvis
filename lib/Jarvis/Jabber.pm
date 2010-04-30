@@ -229,7 +229,6 @@ sub input_event() {
             }
         }
 
-print STDERR Data::Dumper->Dump([$node]);
         # figure out to where to reply...
         my $from = $node->attr('from');
         my $to = $node->attr('to');
