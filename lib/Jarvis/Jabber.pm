@@ -253,8 +253,10 @@ sub input_event() {
                 for( my $i=0; $i <= $#char; $i++ ){
                     if($i < $#char-5){
                         if(join('',($char[$i],$char[$i+1],$char[$i+2],$char[$i+3])) eq "body"){
-                            print STDERR "-=[". join('',($char[$i],$char[$i+1],$char[$i+2],$char[$i+3])) ."]=-\n";
-                        #    if($in_quote == 1){ $in_quote=0; }else{ $in_quote=1; } 
+                        if($char[$i-1] eq '\\'){
+                            $in_quote=0; 
+                        }else{ 
+                            $in_quote=1; }
                         }
                     }
                     if($char[$i] eq '"'){ if($in_quote == 1){ $in_quote=0; }else{ $in_quote=1; } }
