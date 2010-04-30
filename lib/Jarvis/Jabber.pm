@@ -251,9 +251,12 @@ sub input_event() {
                 my $in_quote=0;
                 my @char=split('',$line);
                 for( my $i=0; $i <= $#char; $i++ ){
-                    print STDERR "-=[". join('',($char[$i],$char[$i+1],$char[$i+2],$char[$i+3])) ."]=-\n";
-                    #    if($in_quote == 1){ $in_quote=0; }else{ $in_quote=1; } 
-                    #}
+                    if($i < $#char-5){
+                        if(join('',($char[$i],$char[$i+1],$char[$i+2],$char[$i+3])) eq "body"){
+                            print STDERR "-=[". join('',($char[$i],$char[$i+1],$char[$i+2],$char[$i+3])) ."]=-\n";
+                        #    if($in_quote == 1){ $in_quote=0; }else{ $in_quote=1; } 
+                        }
+                    }
                     if($char[$i] eq '"'){ if($in_quote == 1){ $in_quote=0; }else{ $in_quote=1; } }
                     if($char[$i] eq ' '){ if(!$in_quote == 1){ print STDERR "\n  ";} } 
                     print STDERR $char[$i];
