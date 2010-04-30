@@ -246,7 +246,7 @@ sub input_event() {
         $twig->parse( $node->to_str() );
         $twig->set_pretty_print( 'nice' );
         #$twig->set_pretty_print( 'indented' );
-        print STDERR $twig->sprint;
+        print STDERR $twig->sprint."\n";
 
         # don't parse things from this personality.
         my $thatsme=0;
