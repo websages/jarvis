@@ -229,6 +229,7 @@ sub input_event() {
             }
         }
 
+print STDERR Data::Dumper->Dump([$node]);
         # figure out to where to reply...
         my $from = $node->attr('from');
         my $to = $node->attr('to');
@@ -269,7 +270,6 @@ sub input_event() {
                                                 'direct' => $direct,
                                               }
                           };
-print STDERR Data::Dumper->Dump([$msg]);
                 if($direct){
                     if( !$self->{'ignore_direct'}){
                         print STDERR "$self->{'persona'}\n";
