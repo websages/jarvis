@@ -56,6 +56,7 @@ sub new{
     $self->{'states'} = {
                           start                => 'start',
                           stop                 => 'stop',
+                          authen               => 'authen',
                           input_event          => 'input_event',
                           error_event          => 'error_event',
                           status_event         => 'status_event',
@@ -112,6 +113,16 @@ sub states{
      my $self = $_[OBJECT]||shift;
      return $self->{'states'};
 }
+
+sub authen {
+    my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
+    # we need to remember 
+    push(@{ $heap->{'pending'} }, { 'authen' => $msg, 'sender' => $sender->ID } );
+    #$self->{'irc_client'}->yield('whois', $msg->{'conversation'}->{'nick'} );
+    # do nothing.
+    return;
+}
+
 # The status event receives all of the various bits of status from PCJ. PCJ
 # sends out numerous statuses to inform the consumer of events of what it is 
 # currently doing (ie. connecting, negotiating TLS or SASL, etc). A list of 
@@ -258,6 +269,7 @@ sub input_event() {
                                                 'direct' => $direct,
                                               }
                           };
+print STDERR Data::Dumper->Dump([$msg]);
                 if($direct){
                     if( !$self->{'ignore_direct'}){
                         print STDERR "$self->{'persona'}\n";
