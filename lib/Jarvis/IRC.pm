@@ -260,7 +260,7 @@ sub authen {
 sub irc_whois {
     my ($self, $kernel, $heap, $sender, $reply) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
     # look through our pending requests for authen
-print STDERR Data::Dumper->Dump([$sender]);
+print STDERR Data::Dumper->Dump([ $sender->alias() ]);
     my $max=$#{ $heap->{'pending'} };
     my $count=0;
     while ($count++ <= $max){
