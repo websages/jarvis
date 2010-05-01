@@ -289,6 +289,7 @@ sub input_event() {
 
             my $child_nodes = $node->get_children_hash();
             if(defined($child_nodes->{'x'})){
+print STDERR "[ ".ref($child_nodes->{'x'}) ." ]\n";
                 my $child_child_nodes = $child_nodes->{'x'}->get_children_hash();
                 if(defined($child_child_nodes->{'item'})){
                     if( $child_child_nodes->{'item'}->attr('jid') ){
