@@ -272,17 +272,7 @@ sub input{
          }elsif($what=~m/^!tell\s+(.+?):*\s+(.+?)$/){
              my ($recipient,$message)=($1,$2);
              # first we try to dereference the nickname
-             my $msg = {
-                         'sender_alias' => $sender->ID,
-                         'reply_event'  => $respond_event,
-                         'reason'       => 'tell_request',
-                         'conversation' => {
-                                             'id'   => 1,
-                                             'nick' => $recipient,
-                                             'room' => $where,
-                                             'body' => $message,
-                                           }
-                       };
+             $msg->{'reason'}  = 'tell_request';
              $kernel->post($sender,'authen',$msg);
              my $r = $self->tell($1,$2);
          }elsif($what=~m/^!standings\s*(.*)/){
