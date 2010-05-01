@@ -230,6 +230,7 @@ sub input{
          my $r=""; # response
          if($what=~m/^\s*!*help/){
              $r = $self->help($what);
+             $pirate=0;
          }elsif($what=~m/^\s*fortune\s*$/){
              $r = $self->fortune();
          }elsif($what=~m/^!shoutout\s*(.*)/){
@@ -480,26 +481,46 @@ sub help {
     my $self = shift;
     my $line = shift;
     my $help = {
-                 'fortune'    => 'description: Display a random fortune\n'.
-                                 'syntax/use : fortune',
-#                  'image'     => "description: Add an image to tumble\n".
-#                                 "syntax/use : e-mail to tumble\@wcyd.org",
-#                  'quote'     => "description: Add a quote to tumble\n".
-#                                  "syntax/use : \"Quote quote quote...\" -- Author",
-#                  'link'      => "description: Add a link to tumble\n".
-#                                  "syntax/use : Cut and paste a link into irc, stupid.",
-                  'shoutout'  => "description: Send a textpage to everyone\n".
-                                  "syntax/use : !shoutout beer @ bbh now, bitches.",
-                  'standings' => "description: Baseball standings\n".
-                                  "syntax/use : To piss off Heath.",
-#                  'weather'   => "description: Weather report\n".
-#                                  "syntax/use : !weather <zip/city/whatevah>.",
-#                  'insult'    => "description: Insult someone\n".
-#                                  "syntax/use : !insult <target (optional)>",
-#                  'tell'      => "description: Send a textpage to an individual\n".
-#                                  "syntax/use : !tell james: you are a fag.",
-                  'tumble'    => "description: Our tumblelog\n".
-                                  "syntax/use : http://tumble.wcyd.org/",
+                 'fortune'    => [ 
+                                   'description: Display a random fortune',
+                                   'syntax/use : fortune',
+                                 ],
+#                  'image'     => [
+#                                   "description: Add an image to tumble",
+#                                   "syntax/use : e-mail to tumble\@wcyd.org",
+#                                 ],
+#                  'quote'     => [
+#                                   "description: Add a quote to tumble",
+#                                   "syntax/use : \"Quote quote quote...\" -- Author",
+#                                 ],
+#                  'link'      => [
+#                                   "description: Add a link to tumble",
+#                                   "syntax/use : Cut and paste a link into irc, stupid.",
+#                                 ],
+                  'shoutout'  => [
+                                   "description: Send a textpage to everyone",
+                                   "syntax/use : !shoutout beer @ bbh now, bitches.",
+                                 ],
+                  'standings' => [
+                                   "description: Baseball standings",
+                                   "syntax/use : To piss off Heath.",
+                                 ],
+#                  'weather'   => [
+#                                   "description: Weather report",
+#                                   "syntax/use : !weather <zip/city/whatevah>.",
+#                                 ],
+#                  'insult'    => [
+#                                   "description: Insult someone",
+#                                   "syntax/use : !insult <target (optional)>",
+#                                 ],
+#                  'tell'      => [
+#                                   "description: Send a textpage to an individual",
+#                                   "syntax/use : !tell james: you are a fag.",
+#                                 ],
+                  'tumble'    => [
+                                   "description: Our tumblelog",
+                                   "syntax/use : http://tumble.wcyd.org/",
+                                 ],
                };
     if($line=~m/^!*help$/){
         return 'Available help topics: '. join(' ',(keys(%{ $help })));
