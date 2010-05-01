@@ -125,11 +125,11 @@ sub authen_reply{
     my $r;
     if(defined($msg->{'reason'})){
         if($msg->{'reason'} eq 'whoami'){
-#            if(defined($user)){
-#               $r = "I see you as: $user";
-#            }else{
-#               $r = "I cannot authenticate you at this time. Is the room anonymous?";
-#            }
+            if(defined($user)){
+               $r = "I see you as: $user";
+            }else{
+               $r = "I cannot authenticate you at this time. Is the room anonymous?\n";
+            }
             $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r); 
         }else{ 
             # authorize request_id in the $heap->{'requests'} queue
