@@ -154,15 +154,16 @@ print STDERR Data::Dumper->Dump([$msg]);
                     my @pager_count = $user_entry->get_value('pageremail');
                     if($#pager_count >=0){
                         foreach my $mail ($user_entry->get_value('pageremail') ){
-                            print STDERR "/*FIXME*/ send mail to $mail\n";
+                            $r = "/*FIXME*/ send mail to $mail\n";
                         }
                     }else{
-                        print STDERR "$user has no pageremails in their ldap entry\n";
+                        $r = "$user has no pageremails in their ldap entry\n";
                     }
                 }
             }else{
-                print STDERR "$user has no ldap entry\n";
+               $r = "$user has no ldap entry\n";
             }
+            $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r); 
         }else{ 
             # authorize request_id in the $heap->{'requests'} queue
             print STDERR "implement authorization request queue\n";
