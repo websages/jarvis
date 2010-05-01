@@ -480,13 +480,30 @@ sub help {
     my $self = shift;
     my $line = shift;
     my $help = {
-                 'fortune' => 'description: Display a random fortune\n'.
-                              'syntax/use : fortune',
-
+                 'fortune'    => 'description: Display a random fortune\n'.
+                                 'syntax/use : fortune',
+#                  'image'     => "description: Add an image to tumble\n".
+#                                 "syntax/use : e-mail to tumble\@wcyd.org",
+#                  'quote'     => "description: Add a quote to tumble\n".
+#                                  "syntax/use : \"Quote quote quote...\" -- Author",
+#                  'link'      => "description: Add a link to tumble\n".
+#                                  "syntax/use : Cut and paste a link into irc, stupid.",
+                  'shoutout'  => "description: Send a textpage to everyone\n".
+                                  "syntax/use : !shoutout beer @ bbh now, bitches.",
+                  'standings' => "description: Baseball standings\n".
+                                  "syntax/use : To piss off Heath.",
+#                  'weather'   => "description: Weather report\n".
+#                                  "syntax/use : !weather <zip/city/whatevah>.",
+#                  'insult'    => "description: Insult someone\n".
+#                                  "syntax/use : !insult <target (optional)>",
+#                  'tell'      => "description: Send a textpage to an individual\n".
+#                                  "syntax/use : !tell james: you are a fag.",
+                  'tumble'    => "description: Our tumblelog\n".
+                                  "syntax/use : http://tumble.wcyd.org/",
                };
     if($line=~m/^!*help$/){
         return 'Available help topics: '. join(' ',(keys(%{ $help })));
-    }elsif($line=~m/^!*help(.*)/){
+    }elsif($line=~m/^!*help\s+(.*)/){
         my $subtopic = $1;
 print STDERR "[ $subtopic ]\n";
         if(defined($help->{$subtopic})){
