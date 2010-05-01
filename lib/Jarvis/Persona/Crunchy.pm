@@ -228,7 +228,7 @@ sub input{
              }
          }
          my $r=""; # response
-         if($what=~m/^\s*!*help\s*$/){
+         if($what=~m/^\s*!*help/){
              $r = $self->help($what);
          }elsif($what=~m/^\s*fortune\s*$/){
              $r = $self->fortune();
