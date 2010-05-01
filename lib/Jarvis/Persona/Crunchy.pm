@@ -147,6 +147,7 @@ sub authen_reply{
             if(!defined($user)){
                 $user = $msg->{'conversation'}->{'nick'};
             }
+print STDERR "[$user]\n";
             my @user_count = $self->get_ldap_entry("(uid=$user)");
             if($#user_count >=0){
                 foreach my $user_entry ( $self->get_ldap_entry("(uid=$user)") ){
