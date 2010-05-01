@@ -178,7 +178,7 @@ sub channel_del{
 }
 
 sub channel_join{
-    my ($self, $kernel, $sender, $heap, $user, $channel) = @_[OBJECT, KERNEL, SENDER, HEAP, ARG0, ARG1];
+    my ($self, $kernel, $sender, $heap, $nick, $channel) = @_[OBJECT, KERNEL, SENDER, HEAP, ARG0, ARG1];
     # determine who the actual user is
     my $msg = {
                 'sender_alias' => $self->alias(),
