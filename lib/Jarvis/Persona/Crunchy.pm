@@ -133,7 +133,7 @@ sub authen_reply{
             }
             $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r); 
         }elsif($msg->{'reason'} eq 'channel_join'){ 
-            print STDERR "Should I /op $msg->{'conversation'}->{'nick'} ($user) in $msg->{'conversation'}->{'room'} ?\n"
+            print STDERR "Should I /op $msg->{'conversation'}->{'nick'} ($user) in $msg->{'conversation'}->{'room'} ?\n";
             if($self->is_channel_operator($user){
                 print STDERR "yes.";
             }else{
