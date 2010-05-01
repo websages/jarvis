@@ -130,7 +130,7 @@ sub authen_reply{
             if(defined($user)){
                $r = "I see you as: $user";
             }else{
-               $r = "I cannot authenticate you at this time. Is the room anonymous?\n";
+               $r = "I cannot authenticate you at this time. Is the room anonymous or am I not a moderator?\n";
             }
             $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r); 
         }elsif($msg->{'reason'} eq 'channel_join'){ 
@@ -245,6 +245,31 @@ sub input{
              my $shoutout=$1;
              $r = $self->shoutout($1);
              $pirate=0;
+         }elsif($what=~m/^!tell\s+(.*):\s*(.*)$/){
+             my ($recipient,$message)=($1,$2);
+             # first we try to dereference the nickname
+             my $msg = {
+                         'sender_alias' => $sender->ID,
+                         'reply_event'  => 'authen_reply',
+                         'reason'       => 'tell_request',
+                         'conversation' => {
+                                             'id'   => 1,
+                                             'nick' => $nick,
+                                             'room' => $channel,
+                                             'body' => undef,
+                                           }
+                       };
+            $kernel->post($sender,'authen',$msg);
+
+
+
+
+
+
+
+
+             $kernel->post($sender,'authen',$msg);
+             my $r = $self->tell($1,$2);
          }elsif($what=~m/^!standings\s*(.*)/){
              my @r = $self->standings();
              $pirate=0;
@@ -330,6 +355,14 @@ sub quote{
     $agent->agent( 'Mozilla/5.0' );
     my $response = $agent->get('http://tumble.wcyd.org/quote/?quote=' . "$quote" . "&author=$author");
     return "quote added" if($response->is_success);
+}
+
+sub tell{
+    my $self=shift;
+    my $nick=shift if @_;
+    my $message=shift if @_;
+    return undef unless $nick;
+    return undef unless $message;
 }
 
 ################################################################################
@@ -563,10 +596,10 @@ sub help {
 #                                   "description: Insult someone",
 #                                   "syntax/use : !insult <target (optional)>",
 #                                 ],
-#                  'tell'      => [
-#                                   "description: Send a textpage to an individual",
-#                                   "syntax/use : !tell james: you are a fag.",
-#                                 ],
+                  'tell'      => [
+                                   "description: Send a textpage to an individual",
+                                   "syntax/use : !tell james: you are a fag.",
+                                 ],
                   'tumble'    => [
                                    "description: Our tumblelog",
                                    "syntax/use : http://tumble.wcyd.org/",
