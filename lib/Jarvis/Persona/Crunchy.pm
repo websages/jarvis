@@ -122,19 +122,20 @@ sub alias{
 
 sub authen_reply{
     my ($self, $kernel, $heap, $msg, $user) = @_[OBJECT, KERNEL, HEAP, ARG0, ARG1];
-#    if(defined($msg->{'reason'})){
-#        if($msg->{'reason'} eq 'whoami'){
+    my $r;
+    if(defined($msg->{'reason'})){
+        if($msg->{'reason'} eq 'whoami'){
 #            if(defined($user)){
-#                my $r = "I see you as: $user";
+#               $r = "I see you as: $user";
 #            }else{
-#                my $r = "I cannot authenticate you at this time. Is the room anonymous?";
+#               $r = "I cannot authenticate you at this time. Is the room anonymous?";
 #            }
-#            $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r); 
-#        }else{ 
-#            # authorize request_id in the $heap->{'requests'} queue
-#            print STDERR "implement authorization request queue\n";
-#        }
-#    }
+            $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r); 
+        }else{ 
+            # authorize request_id in the $heap->{'requests'} queue
+            print STDERR "implement authorization request queue\n";
+        }
+    }
 }
 
 sub channel_add{
