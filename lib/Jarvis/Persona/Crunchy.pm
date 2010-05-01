@@ -534,7 +534,7 @@ print STDERR "[ $subtopic ]\n";
         if(defined($help->{$subtopic})){
             return $help->{$subtopic};
         }else{
-            return "I don't believe I can help you with that.";
+            return [ "I don't believe I can help you with that." ];
         }
     }
     return $line;
