@@ -331,6 +331,7 @@ sub quote{
     my $response = $agent->get('http://tumble.wcyd.org/quote/?quote=' . "$quote" . "&author=$author");
     return "quote added" if($response->is_success);
 }
+
 ################################################################################
 # End Micellaneous events
 ################################################################################
