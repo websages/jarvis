@@ -343,7 +343,7 @@ sub input_event() {
                                             'direct' => $direct,
                                           }
                       };
-            if($heap->{'input_enabled'} == 1){
+            if($heap->{'input_enabled'}){
                 if($direct){
                     if( !$self->{'ignore_direct'}){
                         # print STDERR "$self->{'persona'}\n";
