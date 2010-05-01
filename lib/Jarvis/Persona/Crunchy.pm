@@ -272,7 +272,7 @@ sub input{
              # first we try to dereference the nickname
              my $msg = {
                          'sender_alias' => $sender->ID,
-                         'reply_event'  => 'authen_reply',
+                         'reply_event'  => $respond_event,
                          'reason'       => 'tell_request',
                          'conversation' => {
                                              'id'   => 1,
