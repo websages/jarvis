@@ -145,9 +145,12 @@ sub authen_reply{
             # if the nick didn't translate to a userid, they may not be logged in, 
             # but the request may have been for a userid, so let's try to look that up...
             if(!defined($user)){
-                print STDERR Data::Dumper->Dump([$user,$msg->{'conversation'}->{'nick'}]);
-            }else{
-                print STDERR Data::Dumper->Dump([$user,$msg->{'conversation'}->{'nick'}]);
+                $user = $msg->{'conversation'}->{'nick'};
+            }
+            foreach my $user_entry ( $self->get_ldap_entry("(uid=$user)") ){
+                foreach my $mail ($user_entry->get_value('pageremail') ){
+                    print STDERR "/*FIXME*/ send mail to $mail\n";
+                }
             }
         }else{ 
             # authorize request_id in the $heap->{'requests'} queue
