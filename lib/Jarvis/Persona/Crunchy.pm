@@ -147,10 +147,14 @@ sub authen_reply{
             if(!defined($user)){
                 $user = $msg->{'conversation'}->{'nick'};
             }
-            foreach my $user_entry ( $self->get_ldap_entry("(uid=$user)") ){
-                foreach my $mail ($user_entry->get_value('pageremail') ){
-                    print STDERR "/*FIXME*/ send mail to $mail\n";
+            if($self->get_ldap_entry("(uid=$user)") >= 0){
+                foreach my $user_entry ( $self->get_ldap_entry("(uid=$user)") ){
+                    foreach my $mail ($user_entry->get_value('pageremail') ){
+                        print STDERR "/*FIXME*/ send mail to $mail\n";
+                    }
                 }
+            }else{
+                print STDERR "SOME KIND OF ERROR\n";
             }
         }else{ 
             # authorize request_id in the $heap->{'requests'} queue
