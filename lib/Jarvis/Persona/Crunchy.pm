@@ -229,9 +229,9 @@ sub input{
          }
          my $r=""; # response
          if($what=~m/^\s*!*help/){
-             $r = $self->help($what);
-             foreach my $reply (@{ $r }){
-                 $kernel->post($sender, $respond_event, $msg, $reply); 
+             my $reply = $self->help($what);
+             foreach my $r (@{ $reply }){
+                 $kernel->post($sender, $respond_event, $msg, $r); 
              }
              return;
          }elsif($what=~m/^\s*fortune\s*$/){
@@ -527,7 +527,7 @@ sub help {
                                  ],
                };
     if($line=~m/^!*help$/){
-        return 'Available help topics: '. join(' ',(keys(%{ $help })));
+        return [ 'Available help topics: '. join(' ',(keys(%{ $help }))) ];
     }elsif($line=~m/^!*help\s+(.*)/){
         my $subtopic = $1;
 print STDERR "[ $subtopic ]\n";
