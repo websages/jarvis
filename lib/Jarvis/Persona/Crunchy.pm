@@ -214,7 +214,6 @@ sub input{
           $msg->{'conversation'}->{'body'},
           $msg->{'conversation'}->{'id'},
         );
-print STDERR "[ $what ]\n";
      ###########################################################################     
      # Response handlers
      ###########################################################################     
@@ -303,9 +302,13 @@ sub quote{
     }
     return undef unless $quote;
     return undef unless $author;
-    $quote  =~ s/\&/\&amp;/g; $author =~ s/\&/\&amp;/g;
-    $quote  =~ s/</\&lt;/g;   $author =~ s/</\&lt;/g;
-    $quote  =~ s/>/\&gt;/g;   $author =~ s/>/\&gt;/g;
+
+    # tumble will need to support these: /* FIXME */
+    #
+    # $quote  =~ s/\&/\&amp;/g; $author =~ s/\&/\&amp;/g;
+    # $quote  =~ s/</\&lt;/g;   $author =~ s/</\&lt;/g;
+    # $quote  =~ s/>/\&gt;/g;   $author =~ s/>/\&gt;/g;
+
     $quote  =~ s/\&/\%26/g;  $author =~ s/\&/\%26/g;
     $quote  =~ s/;/\%3b/g;  $author =~ s/\;/\%3b/g;
 

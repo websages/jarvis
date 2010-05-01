@@ -196,11 +196,8 @@ sub irc_public {
 
 print STDERR "( $what )\n";
     $what=~s/[^a-zA-Z0-9:!\@#\%^&*\[\]_+=\-"' ]//g;
-print STDERR "1: < $what >\n";
     $what=~s/[\$\`\(]//g;
-print STDERR "2: < $what >\n";
     $what=~s/[)]//g;
-print STDERR "3: < $what >\n";
     my $msg = { 
                 'sender_alias' => $self->alias(),
                 'reply_event'  => 'irc_public_reply',
