@@ -295,7 +295,7 @@ sub input_event() {
                             print STDERR "Got: ".$child_child_nodes->attr('jid')."\n";
                         }
                     }
-                #}
+                }
             $heap->{'presence'}->{ $node->attr('from') } = $node;
         }
     }
