@@ -154,8 +154,9 @@ print STDERR Data::Dumper->Dump([$msg]);
                     my @pager_count = $user_entry->get_value('pageremail');
                     if($#pager_count >=0){
                         foreach my $mail ($user_entry->get_value('pageremail') ){
-                            $r = "/*FIXME*/ send mail to $mail\n";
+                            print STDERR "/*FIXME*/ send mail to $mail\n";
                         }
+                        $r = "page sent to $user\n";
                     }else{
                         $r = "$user has no pageremails in their ldap entry\n";
                     }
