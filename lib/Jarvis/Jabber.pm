@@ -124,13 +124,10 @@ sub authen {
     if(defined( $heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} })){
         my $jid=$heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} };
         $jid=~s/\/.*//g;
-        print STDERR "[ $jid ]\n";
+        $kernel->post($sender,'authen_reply', $msg, $jid);
     }else{
-        
-        print STDERR "[ unknown ]\n";
+        $kernel->post($sender,'authen_reply', $msg, undef);
     }
-    
-    return;
 }
 
 # The status event receives all of the various bits of status from PCJ. PCJ
