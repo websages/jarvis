@@ -127,7 +127,7 @@ sub authen {
     print STDERR join("\n",keys (%{ $heap->{'presence'} }));
     print STDERR "\n";
     if(defined( $heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} })){
-    print STDERR "FOUND".ref($heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} })."\n";
+    print STDERR "FOUND".ref($heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} })."\n\n";
         print STDERR $heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} }->to_str()."\n";
     }
     
@@ -276,10 +276,14 @@ sub input_event() {
         if( $node->attr('type')){
             if( $node->attr('type') eq 'unavailable'){ 
 
-                #my $child_nodes = $node->get_children_hash();
-                #if(defined($child_nodes->{'item'})){
-                #    print STDERR Data::Dumper->Dump([ $child_nodes->{'item'}->get_children_hash() ]);
-                #}
+                
+                my $child_nodes = $node->get_children_hash();
+                if(defined($child_nodes->{'item'})){
+                    my $child_child_nodes = $child_nodes->{'item'}->get_children_hash();
+                    if(defined($child_child_nodes->{'x'})){
+                        print STDERR Data::Dumper->Dump([ $child_child_nodes->{'x'} ]);
+                    }
+                }
 
                 # remove from $heap->{'presence'}
                 print STDERR "Departing: ". $node->attr('from')."\n";
