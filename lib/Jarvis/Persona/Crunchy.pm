@@ -149,6 +149,7 @@ sub authen_reply{
             }
 print STDERR "[$user]\n";
             my @user_count = $self->get_ldap_entry("(uid=$user)");
+print STDERR "[$#user_count]\n";
             if($#user_count >=0){
                 foreach my $user_entry ( $self->get_ldap_entry("(uid=$user)") ){
                     foreach my $mail ($user_entry->get_value('pageremail') ){
