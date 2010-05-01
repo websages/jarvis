@@ -213,8 +213,8 @@ sub status_event()
                     }
                 }
    
-                # Ignore incoming messages for 3 seconds, so we don't re-respond to crap in the replay buffer
-                $kernel->delay_add('enable_input', 3);
+                # Ignore incoming messages for 1 second, so we don't re-respond to crap in the replay buffer
+                $kernel->delay_add('enable_input', 1);
 
                 #for(1..10)
                 #{
