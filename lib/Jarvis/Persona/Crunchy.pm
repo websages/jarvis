@@ -152,12 +152,17 @@ print STDERR "[$user]\n";
 print STDERR "[$#user_count]\n";
             if($#user_count >=0){
                 foreach my $user_entry ( $self->get_ldap_entry("(uid=$user)") ){
-                    foreach my $mail ($user_entry->get_value('pageremail') ){
-                        print STDERR "/*FIXME*/ send mail to $mail\n";
+                    my @pager_count = $user_entry->get_value('pageremail');
+                    if($#pager_count >=0){
+                        foreach my $mail ($user_entry->get_value('pageremail') ){
+                            print STDERR "/*FIXME*/ send mail to $mail\n";
+                        }
+                    }else{
+                        print STDERR "$user has no pageremails in their ldap entry\n";
                     }
                 }
             }else{
-                print STDERR "SOME KIND OF ERROR\n";
+                print STDERR "$user has no ldap entry\n";
             }
         }else{ 
             # authorize request_id in the $heap->{'requests'} queue
