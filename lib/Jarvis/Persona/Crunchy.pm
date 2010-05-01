@@ -482,13 +482,15 @@ sub help {
     my $help = {
                  'fortune' => 'description: Display a random fortune\n'.
                               'syntax/use : fortune',
-                 'image'   => 'description: Display a random fortune\n',
+
                };
     if($line=~m/^!*help$/){
         return 'Available help topics: '. join(' ',(keys(%{ $help })));
     }elsif($line=~m/^!*help\s+(.*)/){
-        if(defined($help->{$1})){
-            return $help->{$1};
+        my $subtopic = $1;
+print STDERR "[ $subtopic ]\n";
+        if(defined($help->{$subtopic})){
+            return $help->{$subtopic};
         }else{
             return "I don't believe I can help you with that.";
         }
