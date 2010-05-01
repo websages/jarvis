@@ -156,7 +156,7 @@ print Data::Dumper->Dump([$msg]);
                     my @pager_count = $user_entry->get_value('pageremail');
                     if($#pager_count >=0){
                         foreach my $mail ($user_entry->get_value('pageremail') ){
-                            my $mx = Mail::Send->new(Subject => '[tell]',To => "$mail"); 
+                            my $mx = Mail::Send->new(Subject => '['.$msg->{'conversation'}->{'originator'}.']',To => "$mail"); 
                             my $mail_fh = $mx->open; 
                             print $mail_fh $msg->{'conversation'}->{'body'};
                             $mail_fh->close;
@@ -275,10 +275,10 @@ sub input{
              $r = $self->shoutout($1);
              $pirate=0;
          }elsif($what=~m/^!tell\s+(.+?):*\s+(.+?)$/){
-print STDERR Data::Dumper->Dump([$msg]);
              my ($recipient,$message)=($1,$2);
              # first we try to dereference the nickname
              $msg->{'reason'}  = 'tell_request';
+             $msg->{'conversation'}->{'originator'} = $msg->{'conversation'}->{'nick'};
              $msg->{'conversation'}->{'nick'}  = $recipient;
              $msg->{'conversation'}->{'body'}  = $message;
              $kernel->post($sender,'authen',$msg);
