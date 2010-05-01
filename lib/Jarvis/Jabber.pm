@@ -124,7 +124,7 @@ sub authen {
 #    #$self->{'irc_client'}->yield('whois', $msg->{'conversation'}->{'nick'} );
 #    print STDERR "\n";
 #    print STDERR "::".$msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'}."\n";
-    print STDERR join("\n",keys (%{ $heap->{'presence'} }));
+    print STDERR join("\n",keys (%{ $heap->{'presence'} }))."\n";
 #    print STDERR "\n";
 #    if(defined( $heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} })){
 #    print STDERR "FOUND".ref($heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} })."\n\n";
@@ -343,7 +343,7 @@ sub input_event() {
                       };
             if($direct){
                 if( !$self->{'ignore_direct'}){
-                    #print STDERR "$self->{'persona'}\n";
+                    # print STDERR "$self->{'persona'}\n";
                     $kernel->post("$self->{'persona'}", "input", $msg);
                 }
             }else{
