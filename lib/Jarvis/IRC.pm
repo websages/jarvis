@@ -22,7 +22,7 @@ sub new {
    my $self = {}; 
    my $construct = shift if @_;
     # list of required constructor elements
-    $self->{'must'} = ["channel_list","nickname","alias","persona"];
+    $self->{'must'} = ["channel_list","nickname","alias","persona","domain"];
 
     # hash of optional constructor elements (key), and their default (value) if not specified
     $self->{'may'} = { };
@@ -266,11 +266,14 @@ sub irc_whois {
         my $request = shift (@{ $heap->{'pending'} });
         if(defined($request->{'authen'})){
             if($reply->{'nick'} eq $request->{'authen'}->{'conversation'}->{'nick'}){
+                my $domain=$reply->{'host'};
+                if($domain eq '127.0.0.1'){ $domain = $self->{'domain'}; }
+ 
                 $kernel->post(
                                $request->{'sender'}, 
                                'authen_reply', 
                                $request->{'authen'}, 
-                               $reply->{'user'} .'@'. $reply->{'host'}
+                               $reply->{'user'} .'@'. $domain
                              );
             }else{
                 push(@{ $heap->{'pending'} }, $reply );

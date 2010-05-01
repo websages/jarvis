@@ -64,6 +64,7 @@ if($IRC){
                                              'nickname'     => 'crunchy',
                                              'ircname'      => 'Cap\'n Crunchbot',
                                              'server'       => '127.0.0.1',
+                                             'domain'       => 'websages.com',
                                              'channel_list' => [ 
                                                                  '#soggies',
                                                                  '#puppies',
