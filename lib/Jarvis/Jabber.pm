@@ -277,7 +277,7 @@ sub input_event() {
         if( $node->attr('type')){
             if( $node->attr('type') eq 'unavailable'){ 
                 # remove from $heap->{'presence'}
-#                print STDERR "Departing: ". $node->attr('from')."\n";
+                # print STDERR "Departing: ". $node->attr('from')."\n";
                 if(defined($heap->{'presence'}->{ $node->attr('from') })){
                     delete $heap->{'presence'}->{ $node->attr('from') };
                 }
@@ -343,7 +343,7 @@ sub input_event() {
                       };
             if($direct){
                 if( !$self->{'ignore_direct'}){
-                    print STDERR "$self->{'persona'}\n";
+                    #print STDERR "$self->{'persona'}\n";
                     $kernel->post("$self->{'persona'}", "input", $msg);
                 }
             }else{
