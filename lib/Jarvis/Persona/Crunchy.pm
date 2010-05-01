@@ -50,6 +50,7 @@ sub new {
                           # special_events go here...
                           'channel_add'  => 'channel_add',
                           'channel_del'  => 'channel_del',
+                          'channel_join' => 'channel_join',
                         };
     if( (!defined($self->{'ldap_domain'})) || (!defined($self->{'ldap_binddn'})) || (!defined($self->{'ldap_bindpw'})) ){
         print STDERR "[ $self->{'ldap_domain'} :: $self->{'ldap_binddn'} :: $self->{'ldap_bindpw'} ]\n";
@@ -131,6 +132,8 @@ sub authen_reply{
                $r = "I cannot authenticate you at this time. Is the room anonymous?\n";
             }
             $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r); 
+        }elsif($msg->{'reason'} eq 'channel_join'){ 
+            print STDERR "Should I /op $msg->{'conversation'}->{'nick'} ($user) in $msg->{'conversation'}->{'room'} ?\n"
         }else{ 
             # authorize request_id in the $heap->{'requests'} queue
             print STDERR "implement authorization request queue\n";
@@ -172,6 +175,23 @@ sub channel_del{
             if($#channels < 0){ delete $heap->{'locations'}->{ $construct->{'alias'} }; }
         }
     }
+}
+
+sub channel_join{
+    my ($self, $kernel, $sender, $heap, $user, $channel) = @_[OBJECT, KERNEL, SENDER, HEAP, ARG0, ARG1];
+    # determine who the actual user is
+    my $msg = {
+                'sender_alias' => $self->alias(),
+                'reply_event'  => 'authen_reply',
+                'reason'       => 'channel_join',
+                'conversation' => {
+                                    'id'   => 1,
+                                    'nick' => $nick,
+                                    'room' => $channel,
+                                    'body' => undef,
+                                  }
+              };
+   $kernel->post($sender,'authen',$msg);
 }
 
 sub input{
