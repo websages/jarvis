@@ -290,12 +290,12 @@ sub input_event() {
             # add to $heap->{'presence'}
             print STDERR "Arriving: ". $node->attr('from')."\n";
                 my $child_nodes = $node->get_children_hash();
-                if(defined($child_nodes->{'item'})){
+                #if(defined($child_nodes->{'item'})){
                     #my $child_child_nodes = $child_nodes->{'item'}->get_children_hash();
                     #if(defined($child_child_nodes->{'x'})){
-                        print STDERR Data::Dumper->Dump([ $child_nodes->{'item'} ]);
+                        print STDERR Data::Dumper->Dump([ $child_nodes ]);
                     #}
-                }
+                #}
             $heap->{'presence'}->{ $node->attr('from') } = $node;
         }
     }
