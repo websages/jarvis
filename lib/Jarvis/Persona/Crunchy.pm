@@ -275,6 +275,7 @@ sub input{
              $r = $self->shoutout($1);
              $pirate=0;
          }elsif($what=~m/^!tell\s+(.+?):*\s+(.+?)$/){
+print STDERR Data::Dumper->Dump([$msg]);
              my ($recipient,$message)=($1,$2);
              # first we try to dereference the nickname
              $msg->{'reason'}  = 'tell_request';
