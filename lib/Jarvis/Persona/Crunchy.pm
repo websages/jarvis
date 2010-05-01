@@ -304,7 +304,7 @@ sub quote{
     return undef unless $author;
 
     $quote  =~ s/</\%3e/g;  $author =~ s/</\%3c/g;
-    $quote  =~ s/>/\%3c/g;  $author =~ s/>/\%3e/g;
+    $quote  =~ s/>/\%3e/g;  $author =~ s/>/\%3e/g;
     $quote  =~ s/\&/\%26/g; $author =~ s/\&/\%26/g;
     $quote  =~ s/;/\%3b/g;  $author =~ s/\;/\%3b/g;
 
