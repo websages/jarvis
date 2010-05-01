@@ -124,7 +124,7 @@ sub authen {
 #    #$self->{'irc_client'}->yield('whois', $msg->{'conversation'}->{'nick'} );
 #    print STDERR "\n";
 #    print STDERR "::".$msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'}."\n";
-#    print STDERR join("\n",keys (%{ $heap->{'presence'} }));
+    print STDERR join("\n",keys (%{ $heap->{'presence'} }));
 #    print STDERR "\n";
 #    if(defined( $heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} })){
 #    print STDERR "FOUND".ref($heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} })."\n\n";
@@ -264,6 +264,7 @@ sub input_event() {
     my ($self, $kernel, $heap, $node) = @_[OBJECT, KERNEL, HEAP, ARG0];
     #print "\n\nINCOMING:\n".$node->to_str()."\n\n\n";
     print STDERR ">>  ".$node->to_str()."\n\n";
+
     # allow everyone in websages to subscribe to our presence. /*FIXME move regex to constructor */
     if($node->name() eq 'presence'){
         if($node->attr('type') ){
@@ -275,9 +276,6 @@ sub input_event() {
         }
         if( $node->attr('type')){
             if( $node->attr('type') eq 'unavailable'){ 
-
-                
-
                 # remove from $heap->{'presence'}
 #                print STDERR "Departing: ". $node->attr('from')."\n";
                 if(defined($heap->{'presence'}->{ $node->attr('from') })){
@@ -288,7 +286,7 @@ sub input_event() {
         }else{
             # print STDERR $self->pretty_xml( $node->to_str() );
             # add to $heap->{'presence'}
-#            print STDERR "Arriving: ". $node->attr('from')."\n";
+            print STDERR "Arriving: ". $node->attr('from')."\n";
                 my $child_nodes = $node->get_children_hash();
                 #if(defined($child_nodes->{'item'})){
                     #my $child_child_nodes = $child_nodes->{'item'}->get_children_hash();
