@@ -141,6 +141,8 @@ sub authen_reply{
                     print STDERR "/op $msg->{'conversation'}->{'nick'}\n";
                 }
             }
+        }elsif($msg->{'reason'} eq 'tell_request'){ 
+            print STDERR Data::Dumper->Dump([$user,$msg]);
         }else{ 
             # authorize request_id in the $heap->{'requests'} queue
             print STDERR "implement authorization request queue\n";
@@ -254,20 +256,11 @@ sub input{
                          'reason'       => 'tell_request',
                          'conversation' => {
                                              'id'   => 1,
-                                             'nick' => $nick,
-                                             'room' => $channel,
-                                             'body' => undef,
+                                             'nick' => $recipient,
+                                             'room' => $where,
+                                             'body' => $message,
                                            }
                        };
-            $kernel->post($sender,'authen',$msg);
-
-
-
-
-
-
-
-
              $kernel->post($sender,'authen',$msg);
              my $r = $self->tell($1,$2);
          }elsif($what=~m/^!standings\s*(.*)/){
