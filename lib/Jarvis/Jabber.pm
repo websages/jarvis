@@ -277,13 +277,6 @@ sub input_event() {
             if( $node->attr('type') eq 'unavailable'){ 
 
                 
-                my $child_nodes = $node->get_children_hash();
-                if(defined($child_nodes->{'item'})){
-                    #my $child_child_nodes = $child_nodes->{'item'}->get_children_hash();
-                    #if(defined($child_child_nodes->{'x'})){
-                        print STDERR Data::Dumper->Dump([ $child_nodes->{'item'} ]);
-                    #}
-                }
 
                 # remove from $heap->{'presence'}
                 print STDERR "Departing: ". $node->attr('from')."\n";
@@ -296,6 +289,13 @@ sub input_event() {
             # print STDERR $self->pretty_xml( $node->to_str() );
             # add to $heap->{'presence'}
             print STDERR "Arriving: ". $node->attr('from')."\n";
+                my $child_nodes = $node->get_children_hash();
+                if(defined($child_nodes->{'item'})){
+                    #my $child_child_nodes = $child_nodes->{'item'}->get_children_hash();
+                    #if(defined($child_child_nodes->{'x'})){
+                        print STDERR Data::Dumper->Dump([ $child_nodes->{'item'} ]);
+                    #}
+                }
             $heap->{'presence'}->{ $node->attr('from') } = $node;
         }
     }
