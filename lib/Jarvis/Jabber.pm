@@ -288,10 +288,13 @@ sub input_event() {
             # add to $heap->{'presence'}
             print STDERR "Arriving: ". $node->attr('from')."\n";
                 my $child_nodes = $node->get_children_hash();
-                #if(defined($child_nodes->{'item'})){
-                    #my $child_child_nodes = $child_nodes->{'item'}->get_children_hash();
-                    #if(defined($child_child_nodes->{'x'})){
-                    #}
+                if(defined($child_nodes->{'x'})){
+                    my $child_child_nodes = $child_nodes->{'x'}->get_children_hash();
+                    if(defined($child_child_nodes->{'item'})){
+                        if( $child_child_node->attr('jid') ){
+                            print STDERR "Got: ".$child_child_node->attr('jid')."\n";
+                        }
+                    }
                 #}
             $heap->{'presence'}->{ $node->attr('from') } = $node;
         }
