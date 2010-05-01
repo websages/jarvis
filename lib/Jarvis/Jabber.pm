@@ -264,9 +264,9 @@ sub input_event() {
     my ($self, $kernel, $heap, $node) = @_[OBJECT, KERNEL, HEAP, ARG0];
     #print "\n\nINCOMING:\n".$node->to_str()."\n\n\n";
 
+                        print STDERR $self->pretty_xml( $node->to_str() )."\n";
     # allow everyone in websages to subscribe to our presence. /*FIXME move regex to constructor */
     if($node->name() eq 'presence'){
-                        print STDERR $self->pretty_xml( $node->to_str() )."\n";
         if($node->attr('type') ){
             if($node->attr('type') eq 'subscribe'){
                 if($node->attr('from') =~m /\@websages.com/){
