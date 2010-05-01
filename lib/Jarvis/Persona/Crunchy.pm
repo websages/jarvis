@@ -313,7 +313,7 @@ sub quote{
     my $agent = LWP::UserAgent->new();
     $agent->agent( 'Mozilla/5.0' );
     my $response = $agent->get('http://tumble.wcyd.org/quote/?quote=' . "$quote" . "&author=$author");
-    return "Added quote" $response->is_success;
+    return "Added quote" if($response->is_success);
 }
 ################################################################################
 # End Micellaneous events
