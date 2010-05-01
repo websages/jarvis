@@ -274,8 +274,6 @@ sub irc_401 {
         my $request = shift (@{ $heap->{'pending'} });
         if(defined($request->{'authen'})){
             if($error_array->[0] eq $request->{'authen'}->{'conversation'}->{'nick'}){
-                my $domain=$reply->{'host'};
-                if($domain eq '127.0.0.1'){ $domain = $self->{'domain'}; }
                 $kernel->post(
                                $request->{'sender'}, 
                                'authen_reply', 
@@ -283,10 +281,10 @@ sub irc_401 {
                                undef,
                              );
             }else{
-                push(@{ $heap->{'pending'} }, $reply );
+                push(@{ $heap->{'pending'} }, $request );
             }
         }else{
-            push(@{ $heap->{'pending'} }, $reply );
+            push(@{ $heap->{'pending'} }, $request );
         }
     }
     print Data::Dumper->Dump([@args]);
@@ -312,10 +310,10 @@ sub irc_whois {
                                $reply->{'user'} .'@'. $domain
                              );
             }else{
-                push(@{ $heap->{'pending'} }, $reply );
+                push(@{ $heap->{'pending'} }, $request );
             }
         }else{
-            push(@{ $heap->{'pending'} }, $reply );
+            push(@{ $heap->{'pending'} }, $request );
         }
     }
     return;
