@@ -230,7 +230,7 @@ sub input{
          my $r=""; # response
          if($what=~m/^\s*!*help/){
              $r = $self->help($what);
-             foreach $reply (@{ $reply }){
+             foreach my $reply (@{ $reply }){
                  $kernel->post($sender, $respond_event, $msg, $reply); 
              }
              return;
