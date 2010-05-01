@@ -285,18 +285,19 @@ sub input_event() {
             }
         }else{
             # print STDERR $self->pretty_xml( $node->to_str() );
-            # add to $heap->{'presence'}
-            print STDERR "Arriving: ". $node->attr('from')."\n";
+            # add to $heap->{'presence'} if we can see the jid
+            # print STDERR "Arriving: ". $node->attr('from')."\n";
+
             my $child_nodes = $node->get_children_hash();
             if(defined($child_nodes->{'x'})){
                 my $child_child_nodes = $child_nodes->{'x'}->get_children_hash();
                 if(defined($child_child_nodes->{'item'})){
                     if( $child_child_nodes->{'item'}->attr('jid') ){
-                        print STDERR "Got: ".$child_child_nodes->{'item'}->attr('jid')."\n";
+                        #print STDERR "Got: ".$child_child_nodes->{'item'}->attr('jid')."\n";
+                        $heap->{'presence'}->{ $node->attr('from') } = $child_child_nodes->{'item'}->attr('jid');
                     }
                 }
             }
-            $heap->{'presence'}->{ $node->attr('from') } = $node;
         }
     }
 
