@@ -119,12 +119,8 @@ sub states{
 
 sub authen {
     my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
-
-    print STDERR "::".$msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'}."\n";
-    print STDERR Data::Dumper->Dump([ $heap->{'presence'} ]);
-    print STDERR "\n";
     if(defined( $heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} })){
-        print STDERR "FOUND".ref($heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} })."\n\n";
+        print STDERR "FOUND". $heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} } ."\n\n";
     }
     
     return;
