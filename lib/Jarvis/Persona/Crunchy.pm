@@ -378,7 +378,7 @@ sub is_channel_operator{
         foreach my $op (@opers){
             $op=~s/,.*//;
             $op=~s/uid=//;
-print STDERR "[ $op ]\n";
+print STDERR "[ $user eq $op ]\n";
             if($user eq $op){ return $user; }
         }
     }
