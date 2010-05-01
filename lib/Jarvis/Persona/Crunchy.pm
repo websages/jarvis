@@ -228,7 +228,9 @@ sub input{
              }
          }
          my $r=""; # response
-         if($what=~m/^\s*fortune\s*$/){
+         if($what=~m/^\s*!*help\s*$/){
+             $r = $self->help($what);
+         }elsif($what=~m/^\s*fortune\s*$/){
              $r = $self->fortune();
          }elsif($what=~m/^!shoutout\s*(.*)/){
              my $shoutout=$1;
@@ -469,5 +471,29 @@ use HTML::Parser;
 }
 ################################################################################
 # End Standings
+################################################################################
+
+################################################################################
+# Begin Help
+################################################################################
+sub help {
+    my $self = shift;
+    my $line = shift;
+    my $help = {
+                 'fortune' => 'description: Display a random fortune\nsyntax/use : fortune',
+               }
+    if($line=~m/^!*help$/){
+        return 'Available help topics: '. join(' ',(keys(%{ $help })));
+    }elsif($line=~m/^!*help (.*)/){
+        if(defined($help->{$1})){
+            return $help->{$1};
+        }else{
+            return "I don't believe I can help you with that.";
+        }
+    }
+    return $line;
+}
+################################################################################
+# End Help
 ################################################################################
 1;
