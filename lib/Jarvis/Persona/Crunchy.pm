@@ -301,11 +301,8 @@ sub quote{
     }
     return undef unless $quote;
     return undef unless $author;
-    unless ($agent = $arg{'heap'}->{'useragent'}) {
-                                                    $agent = LWP::UserAgent->new();
-                                                    $agent->agent( 'Mozilla/5.0' );
-                                                    $arg{'heap'}->{'useragent'} = $agent;
-                                                  }
+    my $agent = LWP::UserAgent->new();
+    $agent->agent( 'Mozilla/5.0' );
     $quote  =~ s/\&/\&amp;/g; $author =~ s/\&/\&amp;/g;
     $quote  =~ s/</\&lt;/g;   $author =~ s/</\&lt;/g;
     $quote  =~ s/>/\&gt;/g;   $author =~ s/>/\&gt;/g;
