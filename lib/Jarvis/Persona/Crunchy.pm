@@ -238,7 +238,7 @@ sub input{
          }elsif($what=~m/\"(.+?)\"\s+--\s*(.+?)$/){
              $r = $self->quote($what);
          }elsif($what=~m/(https*:\S+)/){
-             $r = $self->link($what);
+             $r = $self->link($what, $who);
          }elsif($what=~m/^\s*fortune\s*$/){
              $r = $self->fortune();
          }elsif($what=~m/^!shoutout\s*(.*)/){
@@ -294,14 +294,16 @@ sub fortune{
     return  qx( /usr/games/fortune -s );
 }
 
-sub quote{
+sub link{
     my $self=shift;
     my $url=shift if @_;
+    my $nick=shift if @_;
     return undef unless $url;
+    return undef unless $nick;
     my $agent = LWP::UserAgent->new();
     $agent->agent( 'Mozilla/5.0' );
     $url =~ s/\&/\%26/g;
-    my $response = $agent->get("http://tumble.wcyd.org/irclink/?user=". $arg{'nick'} . "&source=irc&url=$url");
+    my $response = $agent->get("http://tumble.wcyd.org/irclink/?user=". $nick . "&source=irc&url=$url");
     if ( $response->content eq '0' ) {
         return 'Invalid link!'
     }else{
