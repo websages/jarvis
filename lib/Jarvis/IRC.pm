@@ -289,6 +289,7 @@ sub irc_whois {
 
 sub irc_join {
     my ($self, $kernel, $heap, $sender, $join) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
-    print STDERR Data::Dumper->Dump([$join]);
+    $join=~s/!.*//g;
+    print STDERR "[ $join ]\n";
 }
 1;
