@@ -135,9 +135,9 @@ sub authen_reply{
         }elsif($msg->{'reason'} eq 'channel_join'){ 
             print STDERR "Should I /op $msg->{'conversation'}->{'nick'} ($user) in $msg->{'conversation'}->{'room'} ?\n";
             if($self->is_channel_operator($user)){
-                print STDERR "yes.";
+                print STDERR "yes.\n";
             }else{
-                print STDERR "no.";
+                print STDERR "no.\n";
             }
         }else{ 
             # authorize request_id in the $heap->{'requests'} queue
@@ -372,15 +372,15 @@ sub is_channel_operator{
     my $self=shift;
     my $user=shift;
     return undef unless $user;
-#    my @list;
-#    foreach my $entry ( $self->get_ldap_entry( "(cn=channel_operators)" ) ){
-#        my @opers=$entry->get_value('uniqueMember');
-#        foreach my $op (@opers){
-#            $op=~s/,.*//;
-#            $op=~s/uid=//;
-#            if($user eq $op){ return $user; }
-#        }
-#    }
+    my @list;
+    foreach my $entry ( $self->get_ldap_entry( "(cn=channel_operators)" ) ){
+        my @opers=$entry->get_value('uniqueMember');
+        foreach my $op (@opers){
+            $op=~s/,.*//;
+            $op=~s/uid=//;
+            if($user eq $op){ return $user; }
+        }
+    }
     return undef;
 }
 
