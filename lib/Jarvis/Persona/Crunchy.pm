@@ -234,6 +234,8 @@ sub input{
                  $kernel->post($sender, $respond_event, $msg, $r); 
              }
              return;
+         }elsif($what=~m/\"(.+?)\"\s+--\s*(.+?)$/){
+             $r = $self->quote($what);
          }elsif($what=~m/^\s*fortune\s*$/){
              $r = $self->fortune();
          }elsif($what=~m/^!shoutout\s*(.*)/){
@@ -260,11 +262,13 @@ sub input{
          }
          
          # respond in pirate if we have something to say...
-         if($r ne ""){ 
-             if( $pirate ){
-                 $kernel->post($sender, $respond_event, $msg, piratespeak( $r ) ); 
-             }else{
-                 $kernel->post($sender, $respond_event, $msg, $r); 
+         if($r){ 
+             if($r ne ""){ 
+                 if( $pirate ){
+                     $kernel->post($sender, $respond_event, $msg, piratespeak( $r ) ); 
+                 }else{
+                     $kernel->post($sender, $respond_event, $msg, $r); 
+                 }
              }
          }
      }
@@ -285,6 +289,20 @@ sub megahal{
 sub fortune{
     my $self=shift;
     return  qx( /usr/games/fortune -s );
+}
+
+sub quote{
+    my $self=shift;
+    my $line=shift if @_;
+    if($line=~m/^\s*\"(.+?)\"\s+--\s*(.+?)$/){
+        my $quote  = $1;
+        my $author = $2;
+    }
+    return undef unless $quote;
+    return undef unless $author;
+    print STDERR "[ $quote ]\n";
+    print STDERR "[ $author ]\n";
+
 }
 ################################################################################
 # End Micellaneous events
@@ -489,14 +507,14 @@ sub help {
                                    'description: Display a random fortune',
                                    'syntax/use : fortune',
                                  ],
-#                  'image'     => [
-#                                   "description: Add an image to tumble",
-#                                   "syntax/use : e-mail to tumble\@wcyd.org",
-#                                 ],
-#                  'quote'     => [
-#                                   "description: Add a quote to tumble",
-#                                   "syntax/use : \"Quote quote quote...\" -- Author",
-#                                 ],
+                  'image'     => [
+                                   "description: Add an image to tumble",
+                                   "syntax/use : e-mail to tumble\@wcyd.org",
+                                 ],
+                  'quote'     => [
+                                   "description: Add a quote to tumble",
+                                   "syntax/use : \"Quote quote quote...\" -- Author",
+                                 ],
 #                  'link'      => [
 #                                   "description: Add a link to tumble",
 #                                   "syntax/use : Cut and paste a link into irc, stupid.",
@@ -530,7 +548,6 @@ sub help {
         return [ 'Available help topics: '. join(' ',(keys(%{ $help }))) ];
     }elsif($line=~m/^!*help\s+(.*)\s*/){
         my $subtopic = $1;
-print STDERR "[ $subtopic ]\n";
         if(defined($help->{$subtopic})){
             return $help->{$subtopic};
         }else{
