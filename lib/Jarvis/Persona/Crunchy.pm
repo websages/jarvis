@@ -481,7 +481,7 @@ sub help {
     my $line = shift;
     my $help = {
                  'fortune' => 'description: Display a random fortune\nsyntax/use : fortune',
-               }
+               };
     if($line=~m/^!*help$/){
         return 'Available help topics: '. join(' ',(keys(%{ $help })));
     }elsif($line=~m/^!*help (.*)/){
