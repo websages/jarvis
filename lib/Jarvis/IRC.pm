@@ -267,8 +267,30 @@ sub authen {
 }
 
 sub irc_401 {
-    my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    my ($self, $kernel, $heap, $sender, $server, $error, $error_array) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    my $max=$#{ $heap->{'pending'} };
+    my $count=0;
+    while ($count++ <= $max){
+        my $request = shift (@{ $heap->{'pending'} });
+        if(defined($request->{'authen'})){
+            if($error_array->[0] eq $request->{'authen'}->{'conversation'}->{'nick'}){
+                my $domain=$reply->{'host'};
+                if($domain eq '127.0.0.1'){ $domain = $self->{'domain'}; }
+                $kernel->post(
+                               $request->{'sender'}, 
+                               'authen_reply', 
+                               $request->{'authen'}, 
+                               undef,
+                             );
+            }else{
+                push(@{ $heap->{'pending'} }, $reply );
+            }
+        }else{
+            push(@{ $heap->{'pending'} }, $reply );
+        }
+    }
     print Data::Dumper->Dump([@args]);
+    return;
 }
 
 sub irc_whois {
