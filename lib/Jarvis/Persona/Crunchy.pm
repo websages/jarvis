@@ -303,8 +303,11 @@ sub quote{
     return undef unless $quote;
     return undef unless $author;
 
-    $quote  =~ s/</\%3c/g;  $author =~ s/</\%3c/g;
-    $quote  =~ s/>/\%3e/g;  $author =~ s/>/\%3e/g;
+    # tumble interprets these literally
+    $quote  =~ s/</\#60;/g;  $author =~ s/</\#60;/g;
+    $quote  =~ s/>/\#62;/g;  $author =~ s/>/\#62;/g;
+    #$quote  =~ s/</\%3c/g;  $author =~ s/</\%3c/g;
+    #$quote  =~ s/>/\%3e/g;  $author =~ s/>/\%3e/g;
     $quote  =~ s/\&/\%26/g; $author =~ s/\&/\%26/g;
     $quote  =~ s/;/\%3b/g;  $author =~ s/\;/\%3b/g;
 
@@ -313,7 +316,7 @@ sub quote{
     my $agent = LWP::UserAgent->new();
     $agent->agent( 'Mozilla/5.0' );
     my $response = $agent->get('http://tumble.wcyd.org/quote/?quote=' . "$quote" . "&author=$author");
-    return "Added quote" if($response->is_success);
+    return "quote added" if($response->is_success);
 }
 ################################################################################
 # End Micellaneous events
