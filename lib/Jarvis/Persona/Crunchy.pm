@@ -142,8 +142,11 @@ sub authen_reply{
                 }
             }
         }elsif($msg->{'reason'} eq 'tell_request'){ 
-            # if the nick didn't translate to a userid, they may not be logged in.
+            # if the nick didn't translate to a userid, they may not be logged in, 
+            # but the request may have been for a userid, so let's try to look that up...
             if(!defined($user)){
+                print STDERR Data::Dumper->Dump([$user,$msg->{'conversation'}->{'nick'}]);
+            }else{
                 print STDERR Data::Dumper->Dump([$user,$msg->{'conversation'}->{'nick'}]);
             }
         }else{ 
