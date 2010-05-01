@@ -123,6 +123,7 @@ sub authen {
     push(@{ $heap->{'pending'} }, { 'authen' => $msg, 'sender' => $sender->ID } );
     #$self->{'irc_client'}->yield('whois', $msg->{'conversation'}->{'nick'} );
     print STDERR $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'}."\n";
+    print STDERR keys (%{ $heap->{'presence'} });
     if(defined( $heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} })){
         print STDERR $heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} }->to_str()."\n";
     }
@@ -286,7 +287,7 @@ sub input_event() {
             }
         }else{
             # print STDERR $self->pretty_xml( $node->to_str() );
-            # add to $heap->{'prescense'}
+            # add to $heap->{'presence'}
             print STDERR "Arriving: ". $node->attr('from')."\n";
             $heap->{'presence'}->{ $node->attr('from') } = $node;
         }
