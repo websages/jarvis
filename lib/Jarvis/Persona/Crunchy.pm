@@ -228,7 +228,7 @@ sub input{
              }
          }
          my $r=""; # response
-         if($what=~m/^\s*!*help/){
+         if($what=~m/^\s*!*help\s*/){
              my $reply = $self->help($what);
              foreach my $r (@{ $reply }){
                  $kernel->post($sender, $respond_event, $msg, $r); 
@@ -526,9 +526,9 @@ sub help {
                                    "syntax/use : http://tumble.wcyd.org/",
                                  ],
                };
-    if($line=~m/^!*help$/){
+    if($line=~m/^!*help\s*$/){
         return [ 'Available help topics: '. join(' ',(keys(%{ $help }))) ];
-    }elsif($line=~m/^!*help\s+(.*)/){
+    }elsif($line=~m/^!*help\s+(.*)\s*/){
         my $subtopic = $1;
 print STDERR "[ $subtopic ]\n";
         if(defined($help->{$subtopic})){
