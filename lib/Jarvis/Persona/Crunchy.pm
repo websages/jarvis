@@ -303,11 +303,10 @@ sub quote{
     return undef unless $quote;
     return undef unless $author;
 
-    # tumble interprets these literally
-    $quote  =~ s/</\&lt;/g;  $author =~ s/</\&lt;/g;
-    $quote  =~ s/>/\&gt;/g;  $author =~ s/>/\&gt;/g;
-    #$quote  =~ s/</\%3c/g;  $author =~ s/</\%3c/g;
-    #$quote  =~ s/>/\%3e/g;  $author =~ s/>/\%3e/g;
+    # tumble interprets these literally /*FIXME*/
+    #$quote  =~ s/</\&lt;/g;  $author =~ s/</\&lt;/g;
+    #$quote  =~ s/>/\&gt;/g;  $author =~ s/>/\&gt;/g;
+
     $quote  =~ s/\&/\%26/g; $author =~ s/\&/\%26/g;
     $quote  =~ s/;/\%3b/g;  $author =~ s/\;/\%3b/g;
 
