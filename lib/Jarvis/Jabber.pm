@@ -124,7 +124,8 @@ sub authen {
 #    #$self->{'irc_client'}->yield('whois', $msg->{'conversation'}->{'nick'} );
 #    print STDERR "\n";
 #    print STDERR "::".$msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'}."\n";
-    print STDERR join("\n",keys (%{ $heap->{'presence'} }))."\n";
+    # print STDERR join("\n",keys (%{ $heap->{'presence'} }))."\n";
+    print STDERR Data::Dumper->Dump([ $heap->{'presence'} ]);
 #    print STDERR "\n";
 #    if(defined( $heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} })){
 #    print STDERR "FOUND".ref($heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} })."\n\n";
