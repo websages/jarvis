@@ -237,6 +237,8 @@ sub input{
              return;
          }elsif($what=~m/\"(.+?)\"\s+--\s*(.+?)$/){
              $r = $self->quote($what);
+         }elsif($what=~m/(https*:\S+)/){
+             $r = $self->link($what);
          }elsif($what=~m/^\s*fortune\s*$/){
              $r = $self->fortune();
          }elsif($what=~m/^!shoutout\s*(.*)/){
@@ -290,6 +292,21 @@ sub megahal{
 sub fortune{
     my $self=shift;
     return  qx( /usr/games/fortune -s );
+}
+
+sub quote{
+    my $self=shift;
+    my $url=shift if @_;
+    return undef unless $url;
+    my $agent = LWP::UserAgent->new();
+    $agent->agent( 'Mozilla/5.0' );
+    $url =~ s/\&/\%26/g;
+    my $response = $agent->get("http://tumble.wcyd.org/irclink/?user=". $arg{'nick'} . "&source=irc&url=$url");
+    if ( $response->content eq '0' ) {
+        return 'Invalid link!'
+    }else{
+        return 'http://tumble.wcyd.org/irclink/?' . $response->content;
+    }
 }
 
 sub quote{
@@ -523,10 +540,10 @@ sub help {
                                    "description: Add a quote to tumble",
                                    "syntax/use : \"Quote quote quote...\" -- Author",
                                  ],
-#                  'link'      => [
-#                                   "description: Add a link to tumble",
-#                                   "syntax/use : Cut and paste a link into irc, stupid.",
-#                                 ],
+                  'link'      => [
+                                   "description: Add a link to tumble",
+                                   "syntax/use : Cut and paste a link into irc, stupid.",
+                                 ],
                   'shoutout'  => [
                                    "description: Send a textpage to everyone",
                                    "syntax/use : !shoutout beer @ bbh now, bitches.",
