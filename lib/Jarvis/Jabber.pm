@@ -257,7 +257,7 @@ sub pretty_xml{
     #        }
     #    }
     #}
-    return $twig->sprint;
+    return $twig->sprint."\n";
 }
 
 sub input_event() {
