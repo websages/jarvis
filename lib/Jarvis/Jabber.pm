@@ -65,6 +65,8 @@ sub new{
                           test_message         => 'test_message',
                           output_event         => 'output_event',
 
+                          enable_input         => 'enable_input',
+
                           join_channel         => 'join_channel',
                           leave_channel        => 'leave_channel',
                           send_presence        => 'send_presence',
@@ -210,6 +212,9 @@ sub status_event()
                         $kernel->post($self->alias(),'join_channel', $muc);
                     }
                 }
+   
+                # Ignore incoming messages for 10 seconds, so we don't re-respond to crap in the replay buffer
+                $kernel->delay_add('enable_input'), 10);
 
                 #for(1..10)
                 #{
@@ -338,14 +343,16 @@ sub input_event() {
                                             'direct' => $direct,
                                           }
                       };
-            if($direct){
-                if( !$self->{'ignore_direct'}){
-                    # print STDERR "$self->{'persona'}\n";
+            if($heap->{'input_enabled'} == 1){
+                if($direct){
+                    if( !$self->{'ignore_direct'}){
+                        # print STDERR "$self->{'persona'}\n";
+                        $kernel->post("$self->{'persona'}", "input", $msg);
+                    }
+                }else{
                     $kernel->post("$self->{'persona'}", "input", $msg);
                 }
-            }else{
-                $kernel->post("$self->{'persona'}", "input", $msg);
-            }
+           }
         }
    }
 }
@@ -379,6 +386,11 @@ sub test_message()
 
 }
 
+sub enable_input(){
+    my ($self, $kernel, $heap) = @_[OBJECT, KERNEL, HEAP];
+    $heap->{'input_enabled'} = 1;
+}
+
 # This is our own output_event that is a simple passthrough on the way to
 # post()ing to PCJ's output_handler so it can then send the Node on to the
 # server
@@ -392,7 +404,7 @@ sub output_event()
     #$twig->parse( $node->to_str() );
     #$twig->set_pretty_print( 'indented' );
     #print STDERR $twig->sprint."\n";
-    $kernel->post($sid, 'output_handler', $node);
+        $kernel->post($sid, 'output_handler', $node);
 }
 
 # This is the error event. Any error conditions that arise from any point 
