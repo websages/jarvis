@@ -482,7 +482,7 @@ sub help {
     my $help = {
                  'fortune' => 'description: Display a random fortune\n'.
                               'syntax/use : fortune',
-                 'image'   => 'description: Display a random fortune\n'.
+                 'image'   => 'description: Display a random fortune\n',
                };
     if($line=~m/^!*help$/){
         return 'Available help topics: '. join(' ',(keys(%{ $help })));
