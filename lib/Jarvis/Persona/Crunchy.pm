@@ -5,6 +5,7 @@ use POE;
 use POSIX qw( setsid );
 use Net::LDAP;
 use Net::DNS;
+use LWP::UserAgent;
 use strict;
 use warnings;
 
