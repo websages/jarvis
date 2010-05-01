@@ -142,7 +142,10 @@ sub authen_reply{
                 }
             }
         }elsif($msg->{'reason'} eq 'tell_request'){ 
-            print STDERR Data::Dumper->Dump([$user,$msg]);
+            # if the nick didn't translate to a userid, they may not be logged in.
+            if(!defined($user)){
+                print STDERR Data::Dumper->Dump([$user,$msg->{'conversation'}->{'nick'}]);
+            }
         }else{ 
             # authorize request_id in the $heap->{'requests'} queue
             print STDERR "implement authorization request queue\n";

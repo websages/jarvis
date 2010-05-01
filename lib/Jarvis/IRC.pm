@@ -287,7 +287,6 @@ sub irc_401 {
             push(@{ $heap->{'pending'} }, $request );
         }
     }
-    print Data::Dumper->Dump([$server, $error, $error_array]);
     return;
 }
 
