@@ -136,6 +136,7 @@ sub authen_reply{
             my ($u,$d) = split('@',$user);
             if($d eq $self->{'ldap_domain'}){
                 if($self->is_channel_operator($u)){
+                    $kernel->post($msg->{'sender_alias'},'elevate_priv',$msg->{'conversation'}->{'nick'},$msg->{'conversation'}->{'room'});
                     print STDERR "/op $msg->{'conversation'}->{'nick'}\n";
                 }
             }
@@ -186,7 +187,7 @@ sub channel_join{
     my ($self, $kernel, $sender, $heap, $nick, $channel) = @_[OBJECT, KERNEL, SENDER, HEAP, ARG0, ARG1];
     # determine who the actual user is
     my $msg = {
-                'sender_alias' => $self->alias(),
+                'sender_alias' => $sender->ID,
                 'reply_event'  => 'authen_reply',
                 'reason'       => 'channel_join',
                 'conversation' => {

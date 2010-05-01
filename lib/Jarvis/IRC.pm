@@ -62,6 +62,7 @@ print Data::Dumper->Dump([$construct]);
                           'authen',
                           'irc_whois',
                           'irc_join',
+                          'elevate_priv',
                         ];
     #$self->{'states'} = { 
     #                      start                => 'start',
@@ -214,6 +215,11 @@ sub irc_public_reply{
     my ($self, $kernel, $heap, $sender, $msg, $what) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     my ( $who, $channel ) = ( $msg->{'conversation'}->{'nick'}, $msg->{'conversation'}->{'room'} );
     $self->{'irc_client'}->yield( privmsg => [ $channel ] => $what );
+}
+
+sub elevate_priv{
+    my ($self, $kernel, $heap, $sender, $nick, $channel) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    $self->{'irc_client'}->yield( 'mode', $channel." +o $nick" );
 }
 
 sub irc_msg {
