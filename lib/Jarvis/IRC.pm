@@ -195,7 +195,7 @@ sub irc_public {
     $_[KERNEL]->post('logger', 'log', "$channel <$nick> $what");
 
 print STDERR "( $what )\n";
-    $what=~s/[^a-zA-Z0-9:!\@#\%^&*\[\]_+=\- ]//g;
+    $what=~s/[^a-zA-Z0-9:!\@#\%^&*\[\]_+=\-"' ]//g;
 print STDERR "1: < $what >\n";
     $what=~s/[\$\`\(]//g;
 print STDERR "2: < $what >\n";
