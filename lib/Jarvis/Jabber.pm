@@ -288,7 +288,7 @@ sub input_event() {
             # print STDERR "Arriving: ". $node->attr('from')."\n";
 
             my $child_nodes = $node->get_children_hash();
-            if(defined($child_nodes->{'x'})){
+            if(defined($child_nodes->{'x'}) && (ref($child_nodes->{'x'}) ne 'ARRAY')){
 print STDERR "[ ".ref($child_nodes->{'x'}) ." ]\n";
                 my $child_child_nodes = $child_nodes->{'x'}->get_children_hash();
                 if(defined($child_child_nodes->{'item'})){
