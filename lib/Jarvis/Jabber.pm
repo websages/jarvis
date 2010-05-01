@@ -266,7 +266,7 @@ sub input_event() {
 
     # allow everyone in websages to subscribe to our presence. /*FIXME move regex to constructor */
     if($node->name() eq 'presence'){
-                        print STDERR $self->pretty_xml( $node->to_str() );
+                        print STDERR $self->pretty_xml( $node->to_str() )."\n";
         if($node->attr('type') ){
             if($node->attr('type') eq 'subscribe'){
                 if($node->attr('from') =~m /\@websages.com/){
@@ -280,7 +280,7 @@ sub input_event() {
                 
 
                 # remove from $heap->{'presence'}
-                print STDERR "Departing: ". $node->attr('from')."\n";
+#                print STDERR "Departing: ". $node->attr('from')."\n";
                 if(defined($heap->{'presence'}->{ $node->attr('from') })){
                     delete $heap->{'presence'}->{ $node->attr('from') };
                 }
@@ -289,7 +289,7 @@ sub input_event() {
         }else{
             # print STDERR $self->pretty_xml( $node->to_str() );
             # add to $heap->{'presence'}
-            print STDERR "Arriving: ". $node->attr('from')."\n";
+#            print STDERR "Arriving: ". $node->attr('from')."\n";
                 my $child_nodes = $node->get_children_hash();
                 #if(defined($child_nodes->{'item'})){
                     #my $child_child_nodes = $child_nodes->{'item'}->get_children_hash();
