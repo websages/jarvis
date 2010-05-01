@@ -54,6 +54,7 @@ print Data::Dumper->Dump([$construct]);
                           'stop', 
                           'irc_default', 
                           'irc_001', 
+                          'irc_401', 
                           'irc_public', 
                           'irc_ping', 
                           'irc_msg', 
@@ -263,6 +264,11 @@ sub authen {
     $self->{'irc_client'}->yield('whois', $msg->{'conversation'}->{'nick'} );
     # do nothing.
     return;
+}
+
+sub irc_401 {
+    my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    print Data::Dumper->Dump([@args]);
 }
 
 sub irc_whois {
