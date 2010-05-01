@@ -120,7 +120,12 @@ sub states{
 sub authen {
     my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
     if(defined( $heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} })){
-        print STDERR "FOUND". $heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} } ."\n\n";
+        my $jid=$heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} };
+        $jid=~s/\/.*//g;
+        print STDERR "[ $jid ]\n";
+    }else{
+        
+        print STDERR "[ unknown ]\n";
     }
     
     return;
