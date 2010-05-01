@@ -134,6 +134,11 @@ sub authen_reply{
             $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r); 
         }elsif($msg->{'reason'} eq 'channel_join'){ 
             print STDERR "Should I /op $msg->{'conversation'}->{'nick'} ($user) in $msg->{'conversation'}->{'room'} ?\n"
+            if($self->is_channel_operator($user){
+                print STDERR "yes.";
+            }else{
+                print STDERR "no.";
+            }
         }else{ 
             # authorize request_id in the $heap->{'requests'} queue
             print STDERR "implement authorization request queue\n";
@@ -361,6 +366,22 @@ sub update{
          }
     }
     return $self;
+}
+
+sub is_channel_operator{
+    my $self=shift;
+    my $user=shift;
+    return undef unless $user;
+    my @list;
+    foreach my $entry ( $self->get_ldap_entry("(cn=channel_operators)") ){
+        my @opers=$entry->get_value('uniqueMember');
+        foreach my $op (@opers){
+            $op=~s/,.*//;
+            $op=~s/uid=//;
+            if($user eq $op){ return $user }
+        }
+    }
+    return undef;
 }
 
 sub shoutout{
