@@ -487,14 +487,11 @@ sub help {
     if($line=~m/^!*help$/){
         return 'Available help topics: '. join(' ',(keys(%{ $help })));
     }elsif($line=~m/^!*help\s+(.*)/){
-print STDERR "$line\n";
         if(defined($help->{$1})){
             return $help->{$1};
         }else{
             return "I don't believe I can help you with that.";
         }
-    }else{
-print STDERR "2\n";
     }
     return $line;
 }
