@@ -28,7 +28,7 @@ my $XMPP=1;
 # Repeat for multiple chat sesions and personas...
 ################################################################################
 
-my $poe = new POE::Builder({ 'debug' => '0','trace' => '1' });
+my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
 exit unless $poe;
 
 # We set up some personas to redirect various traffic to...
