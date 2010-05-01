@@ -142,14 +142,13 @@ sub authen_reply{
                 }
             }
         }elsif($msg->{'reason'} eq 'tell_request'){ 
+print STDERR Data::Dumper->Dump([$msg]);
             # if the nick didn't translate to a userid, they may not be logged in, 
             # but the request may have been for a userid, so let's try to look that up...
             if(!defined($user)){
                 $user = $msg->{'conversation'}->{'nick'};
             }
-print STDERR "[$user]\n";
             my @user_count = $self->get_ldap_entry("(uid=$user)");
-print STDERR "[$#user_count]\n";
             if($#user_count >=0){
                 foreach my $user_entry ( $self->get_ldap_entry("(uid=$user)") ){
                     my @pager_count = $user_entry->get_value('pageremail');
