@@ -247,7 +247,7 @@ sub input{
              my $shoutout=$1;
              $r = $self->shoutout($1);
              $pirate=0;
-         }elsif($what=~m/^!tell\s+(.*)[:\s]+(.*)$/){
+         }elsif($what=~m/^!tell\s+(.*):*\s+(.*)$/){
              my ($recipient,$message)=($1,$2);
              # first we try to dereference the nickname
              my $msg = {
