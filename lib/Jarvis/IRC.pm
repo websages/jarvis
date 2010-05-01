@@ -258,7 +258,6 @@ sub irc_ping {
 
 sub authen {
     my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
-print Data::Dumper->Dump([$msg]);
     # we need to remember this for when the reply comes back
     push(@{ $heap->{'pending'} }, { 'authen' => $msg, 'sender' => $sender->ID } );
     $self->{'irc_client'}->yield('whois', $msg->{'conversation'}->{'nick'} );
