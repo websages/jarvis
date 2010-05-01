@@ -134,10 +134,13 @@ sub authen_reply{
             $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r); 
         }elsif($msg->{'reason'} eq 'channel_join'){ 
             print STDERR "Should I /op $msg->{'conversation'}->{'nick'} ($user) in $msg->{'conversation'}->{'room'} ?\n";
-            if($self->is_channel_operator($user)){
-                print STDERR "yes.\n";
-            }else{
-                print STDERR "no.\n";
+            my ($u,$d) = split('@',$user);
+            if($d eq $self->{'domain'}){
+                if($self->is_channel_operator($u)){
+                    print STDERR "yes.\n";
+                }else{
+                    print STDERR "no.\n";
+                }
             }
         }else{ 
             # authorize request_id in the $heap->{'requests'} queue
