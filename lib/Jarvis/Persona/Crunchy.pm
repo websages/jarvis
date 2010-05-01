@@ -480,16 +480,20 @@ sub help {
     my $self = shift;
     my $line = shift;
     my $help = {
-                 'fortune' => 'description: Display a random fortune\nsyntax/use : fortune',
+                 'fortune' => 'description: Display a random fortune\n'.
+                              'syntax/use : fortune',
                };
     if($line=~m/^!*help$/){
         return 'Available help topics: '. join(' ',(keys(%{ $help })));
-    }elsif($line=~m/^!*help (.*)/){
+    }elsif($line=~m/^!*help\s+(.*)/){
+print STDERR "1\n";
         if(defined($help->{$1})){
             return $help->{$1};
         }else{
             return "I don't believe I can help you with that.";
         }
+    }else{
+print STDERR "2\n";
     }
     return $line;
 }
