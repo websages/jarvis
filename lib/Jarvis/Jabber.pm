@@ -279,10 +279,10 @@ sub input_event() {
                 
                 my $child_nodes = $node->get_children_hash();
                 if(defined($child_nodes->{'item'})){
-                    my $child_child_nodes = $child_nodes->{'item'}->get_children_hash();
-                    if(defined($child_child_nodes->{'x'})){
-                        print STDERR Data::Dumper->Dump([ $child_child_nodes->{'x'} ]);
-                    }
+                    #my $child_child_nodes = $child_nodes->{'item'}->get_children_hash();
+                    #if(defined($child_child_nodes->{'x'})){
+                        print STDERR Data::Dumper->Dump([ $child_nodes->{'item'} ]);
+                    #}
                 }
 
                 # remove from $heap->{'presence'}
