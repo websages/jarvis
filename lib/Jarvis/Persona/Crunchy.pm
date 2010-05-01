@@ -294,9 +294,10 @@ sub fortune{
 sub quote{
     my $self=shift;
     my $line=shift if @_;
+    my ($quote, $author);
     if($line=~m/^\s*\"(.+?)\"\s+--\s*(.+?)$/){
-        my $quote  = $1;
-        my $author = $2;
+        $quote  = $1;
+        $author = $2;
     }
     return undef unless $quote;
     return undef unless $author;

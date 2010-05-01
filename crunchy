@@ -419,7 +419,7 @@ sub ircHandleMsg {
 
             my $response = $agent->get(
                 'http://tumble.wcyd.org/quote/?quote='
-                . $quote 
+                . "$quote"
                . "&author=$author"
             );
 
