@@ -123,7 +123,7 @@ sub authen {
     push(@{ $heap->{'pending'} }, { 'authen' => $msg, 'sender' => $sender->ID } );
     #$self->{'irc_client'}->yield('whois', $msg->{'conversation'}->{'nick'} );
     print STDERR $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'}."\n";
-    print STDERR keys (%{ $heap->{'presence'} });
+    print STDERR join("\n",keys (%{ $heap->{'presence'} }));
     if(defined( $heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} })){
         print STDERR $heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} }->to_str()."\n";
     }
