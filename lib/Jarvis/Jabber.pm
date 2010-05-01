@@ -122,13 +122,13 @@ sub authen {
     # we need to remember 
     push(@{ $heap->{'pending'} }, { 'authen' => $msg, 'sender' => $sender->ID } );
     #$self->{'irc_client'}->yield('whois', $msg->{'conversation'}->{'nick'} );
-#    print STDERR "\n";
-#    print STDERR "::".$msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'}."\n";
-#    print STDERR join("\n",keys (%{ $heap->{'presence'} }));
-#    print STDERR "\n";
-#    if(defined( $heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} })){
-#    print STDERR "FOUND".ref($heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} })."\n\n";
-#        print STDERR $heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} }->to_str()."\n";
+    print STDERR "\n";
+    print STDERR "::".$msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'}."\n";
+    print STDERR join("\n",keys (%{ $heap->{'presence'} }));
+    print STDERR "\n";
+    if(defined( $heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} })){
+    print STDERR "FOUND".ref($heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} })."\n\n";
+        print STDERR $heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} }->to_str()."\n";
     }
     
     return;
