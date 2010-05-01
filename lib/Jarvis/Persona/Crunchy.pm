@@ -158,7 +158,7 @@ sub authen_reply{
                             my $mx = Mail::Send->new(To => "$mail"); 
                             my $mail_fh = $mx->open; 
                             print $mail_fh $msg->{'conversation'}->{'body'};
-                            $fh->close;
+                            $mail_fh->close;
                         }
                         $r = "page sent to $user\n";
                     }else{
@@ -498,7 +498,7 @@ sub shoutout{
                     my $mx = Mail::Send->new(Subject=> "shoutout!", To => "$mail"); 
                     my $mail_fh = $mx->open; 
                     print $mail_fh $shoutout;
-                    $fh->close;
+                    $mail_fh->close;
                 }
             }
         }
