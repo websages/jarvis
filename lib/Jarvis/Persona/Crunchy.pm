@@ -149,6 +149,7 @@ print STDERR Data::Dumper->Dump([$msg]);
                 $user = $msg->{'conversation'}->{'nick'};
             }
             my @user_count = $self->get_ldap_entry("(uid=$user)");
+print STDERR ":: ".$#user_count."\n";
             if($#user_count >=0){
                 foreach my $user_entry ( $self->get_ldap_entry("(uid=$user)") ){
                     my @pager_count = $user_entry->get_value('pageremail');
