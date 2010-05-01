@@ -305,6 +305,7 @@ sub quote{
     $quote  =~ s/\&/\&amp;/g; $author =~ s/\&/\&amp;/g;
     $quote  =~ s/</\&lt;/g;   $author =~ s/</\&lt;/g;
     $quote  =~ s/>/\&gt;/g;   $author =~ s/>/\&gt;/g;
+    $quote  =~ s/\&/\%26;/g;  $author =~ s/\&/\%26;/g;
 
     print STDERR "[ $quote ]\n";
     print STDERR "[ $author ]\n";
