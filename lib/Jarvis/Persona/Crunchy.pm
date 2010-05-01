@@ -486,7 +486,7 @@ sub help {
                };
     if($line=~m/^!*help$/){
         return 'Available help topics: '. join(' ',(keys(%{ $help })));
-    }elsif($line=~m/^!*help\s+(.*)/){
+    }elsif($line=~m/^!*help(.*)/){
         my $subtopic = $1;
 print STDERR "[ $subtopic ]\n";
         if(defined($help->{$subtopic})){
