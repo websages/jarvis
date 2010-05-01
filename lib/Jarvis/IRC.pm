@@ -61,6 +61,7 @@ print Data::Dumper->Dump([$construct]);
                           'irc_private_reply',
                           'authen',
                           'irc_whois',
+                          'irc_join',
                         ];
     #$self->{'states'} = { 
     #                      start                => 'start',
@@ -284,5 +285,10 @@ sub irc_whois {
         }
     }
     return;
+}
+
+sub irc_join {
+    my ($self, $kernel, $heap, $sender, $join) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
+    print STDERR Data::Dumper->Dump([$join]);
 }
 1;
