@@ -301,16 +301,17 @@ sub quote{
     }
     return undef unless $quote;
     return undef unless $author;
-    my $agent = LWP::UserAgent->new();
-    $agent->agent( 'Mozilla/5.0' );
     $quote  =~ s/\&/\&amp;/g; $author =~ s/\&/\&amp;/g;
     $quote  =~ s/</\&lt;/g;   $author =~ s/</\&lt;/g;
     $quote  =~ s/>/\&gt;/g;   $author =~ s/>/\&gt;/g;
     $quote  =~ s/\&/\%26;/g;  $author =~ s/\&/\%26;/g;
+
+    print STDERR "[ $quote ] -- [ $author ]\n";
+
+    my $agent = LWP::UserAgent->new();
+    $agent->agent( 'Mozilla/5.0' );
     my $response = $agent->get('http://tumble.wcyd.org/quote/?quote=' . "$quote" . "&author=$author");
 
-    print STDERR "[ $quote ]\n";
-    print STDERR "[ $author ]\n";
 
 }
 ################################################################################
