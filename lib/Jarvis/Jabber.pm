@@ -291,8 +291,8 @@ sub input_event() {
                 if(defined($child_nodes->{'x'})){
                     my $child_child_nodes = $child_nodes->{'x'}->get_children_hash();
                     if(defined($child_child_nodes->{'item'})){
-                        if( $child_child_node->attr('jid') ){
-                            print STDERR "Got: ".$child_child_node->attr('jid')."\n";
+                        if( $child_child_nodes->attr('jid') ){
+                            print STDERR "Got: ".$child_child_nodes->attr('jid')."\n";
                         }
                     }
                 #}
