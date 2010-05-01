@@ -303,8 +303,8 @@ sub quote{
     return undef unless $author;
 
     $quote  =~ s/\&/\&amp;/g; $author =~ s/\&/\&amp;/g;
-    $quote  =~ s/</\&lt;/g; $author =~ s/</\&lt;/g;
-    $quote  =~ s/>/\&gt;/g; $author =~ s/</\&gt;/g;
+    $quote  =~ s/</\&lt;/g;   $author =~ s/</\&lt;/g;
+    $quote  =~ s/>/\&gt;/g;   $author =~ s/>/\&gt;/g;
 
     print STDERR "[ $quote ]\n";
     print STDERR "[ $author ]\n";
