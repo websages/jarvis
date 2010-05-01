@@ -81,6 +81,7 @@ if($IRC){
                                              'nickname'     => 'loki',
                                              'ircname'      => 'loki.websages.com',
                                              'server'       => '127.0.0.1',
+                                             'domain'       => 'websages.com',
                                              'channel_list' => [ 
                                                                  '#asgard',
                                                                  '#midgard',
