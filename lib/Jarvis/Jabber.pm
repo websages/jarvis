@@ -264,7 +264,7 @@ sub input_event() {
     my ($self, $kernel, $heap, $node) = @_[OBJECT, KERNEL, HEAP, ARG0];
     #print "\n\nINCOMING:\n".$node->to_str()."\n\n\n";
 
-    print STDERR $node->to_str()."\n\n";
+    print STDERR ">>  ".$node->to_str()."\n\n";
 
     # allow everyone in websages to subscribe to our presence. /*FIXME move regex to constructor */
     if($node->name() eq 'presence'){
@@ -388,17 +388,17 @@ sub test_message()
 
 sub output_event()
 {
-        my ($self, $kernel, $heap, $node, $sid) = @_[OBJECT, KERNEL, HEAP, ARG0, ARG1];
-        
-        print "\n===PACKET SENT===\n" if $self->{'DEBUG'} > 2;
-        print $node->to_str() . "\n" if $self->{'DEBUG'} > 2;
-        print "=================\n" if $self->{'DEBUG'} > 2;
-        #my  $twig= new XML::Twig;
-        #$twig->set_indent(" "x4);
-        #$twig->parse( $node->to_str() );
-        #$twig->set_pretty_print( 'indented' );
-        #print STDERR $twig->sprint."\n";
-        $kernel->post($sid, 'output_handler', $node);
+    my ($self, $kernel, $heap, $node, $sid) = @_[OBJECT, KERNEL, HEAP, ARG0, ARG1];
+    print STDERR "<<  ".$node->to_str()."\n\n";
+    print "\n===PACKET SENT===\n" if $self->{'DEBUG'} > 2;
+    print $node->to_str() . "\n" if $self->{'DEBUG'} > 2;
+    print "=================\n" if $self->{'DEBUG'} > 2;
+    #my  $twig= new XML::Twig;
+    #$twig->set_indent(" "x4);
+    #$twig->parse( $node->to_str() );
+    #$twig->set_pretty_print( 'indented' );
+    #print STDERR $twig->sprint."\n";
+    $kernel->post($sid, 'output_handler', $node);
 }
 
 # This is the error event. Any error conditions that arise from any point 
