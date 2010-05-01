@@ -263,9 +263,7 @@ sub pretty_xml{
 sub input_event() {
     my ($self, $kernel, $heap, $node) = @_[OBJECT, KERNEL, HEAP, ARG0];
     #print "\n\nINCOMING:\n".$node->to_str()."\n\n\n";
-
     print STDERR ">>  ".$node->to_str()."\n\n";
-
     # allow everyone in websages to subscribe to our presence. /*FIXME move regex to constructor */
     if($node->name() eq 'presence'){
         if($node->attr('type') ){
