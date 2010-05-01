@@ -135,7 +135,6 @@ sub authen_reply{
         }elsif($msg->{'reason'} eq 'channel_join'){ 
             print STDERR "Should I /op $msg->{'conversation'}->{'nick'} ($user) in $msg->{'conversation'}->{'room'} ?\n";
             my ($u,$d) = split('@',$user);
-print STDERR "/ $u / $d / $self->{'ldap_domain'} /\n";
             if($d eq $self->{'ldap_domain'}){
                 if($self->is_channel_operator($u)){
                     print STDERR "yes.\n";
