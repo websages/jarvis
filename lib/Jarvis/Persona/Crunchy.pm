@@ -6,6 +6,7 @@ use POSIX qw( setsid );
 use Net::LDAP;
 use Net::DNS;
 use LWP::UserAgent;
+use Mail::Send;
 use strict;
 use warnings;
 
@@ -143,20 +144,21 @@ sub authen_reply{
             }
         }elsif($msg->{'reason'} eq 'tell_request'){ 
             $user=~s/\@.*//;
-print STDERR Data::Dumper->Dump([$user,$msg]);
             # if the nick didn't translate to a userid, they may not be logged in, 
             # but the request may have been for a userid, so let's try to look that up...
             if(!defined($user)){
                 $user = $msg->{'conversation'}->{'nick'};
             }
             my @user_count = $self->get_ldap_entry("(uid=$user)");
-print STDERR ":: ".$#user_count."\n";
             if($#user_count >=0){
                 foreach my $user_entry ( $self->get_ldap_entry("(uid=$user)") ){
                     my @pager_count = $user_entry->get_value('pageremail');
                     if($#pager_count >=0){
                         foreach my $mail ($user_entry->get_value('pageremail') ){
-                            print STDERR "/*FIXME*/ send mail to $mail\n";
+                            my $mx = Mail::Send->new(To => "$mail"); 
+                            my $mail_fh = $mx->open; 
+                            print $mail_fh $msg->{'conversation'}->{'body'};
+                            $fh->close;
                         }
                         $r = "page sent to $user\n";
                     }else{
@@ -493,7 +495,10 @@ sub shoutout{
             push(@list,$user);
             foreach my $user_entry ( $self->get_ldap_entry("(uid=$user)") ){
                 foreach my $mail ($user_entry->get_value('pageremail') ){
-                    print STDERR "/*FIXME*/ send mail to $mail\n";
+                    my $mx = Mail::Send->new(Subject=> "shoutout!", To => "$mail"); 
+                    my $mail_fh = $mx->open; 
+                    print $mail_fh $shoutout;
+                    $fh->close;
                 }
             }
         }
