@@ -230,7 +230,10 @@ sub input{
          my $r=""; # response
          if($what=~m/^\s*!*help/){
              $r = $self->help($what);
-             $pirate=0;
+             foreach $reply (@{ $reply }){
+                 $kernel->post($sender, $respond_event, $msg, $reply); 
+             }
+             return;
          }elsif($what=~m/^\s*fortune\s*$/){
              $r = $self->fortune();
          }elsif($what=~m/^!shoutout\s*(.*)/){
@@ -239,10 +242,11 @@ sub input{
              $pirate=0;
          }elsif($what=~m/^!standings\s*(.*)/){
              my @r = $self->standings();
+             $pirate=0;
              foreach $r (@r){
                  $kernel->post($sender, $respond_event, $msg, $r); 
              }
-             $pirate=0;
+             return; 
          }elsif($what=~m/^\s*who\s*am\s*i[?\s]*/){
              $pirate=0;
              $msg->{'reason'}='whoami';
