@@ -136,7 +136,7 @@ sub authen_reply{
             print STDERR "Should I /op $msg->{'conversation'}->{'nick'} ($user) in $msg->{'conversation'}->{'room'} ?\n";
             my ($u,$d) = split('@',$user);
 print STDERR "/ $u / $d / $self->{'domain'} /\n";
-            if($d eq $self->{'domain'}){
+            if($d eq $self->{'ldap_domain'}){
                 if($self->is_channel_operator($u)){
                     print STDERR "yes.\n";
                 }else{
