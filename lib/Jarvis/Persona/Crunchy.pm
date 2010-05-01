@@ -142,7 +142,7 @@ sub authen_reply{
                 }
             }
         }elsif($msg->{'reason'} eq 'tell_request'){ 
-print STDERR Data::Dumper->Dump([$msg]);
+print STDERR Data::Dumper->Dump([$user,$msg]);
             # if the nick didn't translate to a userid, they may not be logged in, 
             # but the request may have been for a userid, so let's try to look that up...
             if(!defined($user)){
