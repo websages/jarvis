@@ -445,6 +445,7 @@ sub update{
     my $self = shift;
     my $construct = shift if @_;
     my $entry = $construct->{'entry'} if $construct->{'entry'};
+print STDERR Data::Dumper->Dump([$entry]);
     return undef unless $entry;
     my ($servers,$mesg);
     $servers = [ $construct->{'server'} ] if $construct->{'server'};
