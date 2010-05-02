@@ -516,7 +516,7 @@ sub toggle_shoutout{
         }
         if($action eq 'enable'){ 
             if($found == 0){
-                push(@users,$action_users);
+                push(@users,$action_user);
                 $modified = 1;
             }else{
                 $r = "$action_user is already in cn=shoutout (you're already good to go)";
