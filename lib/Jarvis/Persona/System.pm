@@ -104,9 +104,10 @@ sub input{
          my $r=""; # response
          if($what=~m/^\s*!*help\s*/){
              $r = "I need a help routine.";
-         }elsif($what=~m/^\s*!*spawn\s+(\S+)/){
+         }elsif($what=~m/^\s*!*spawn\s+crunchy/){
              if($directly_addressed == 1){
-                 $r = "spawning $1";
+                 $r = "spawning crunchy";
+                 $self->spawn_crunchy();
              }
          }elsif($directly_addressed==1){ 
              if($msg->{'conversation'}->{'direct'} == 0){
@@ -167,5 +168,39 @@ sub channel_del{
     }
 }
 
+sub spawn_crunchy{
+    my $self=shift;
+    #my $persona = shift if @_;
+    $poe->object_session(
+                          new Jarvis::Persona::Crunchy(
+                                                        {
+                                                          'alias'        => 'crunchy',
+                                                          'ldap_domain'  => 'websages.com',
+                                                          'ldap_binddn'  => 'uid=crunchy,ou=People,dc=websages,dc=com',
+                                                          'ldap_bindpw'  => $ENV{'LDAP_PASSWORD'},
+                                                          'twitter_name' => 'capncrunchbot',
+                                                          'password'     => $ENV{'TWITTER_PASSWORD'},
+                                                          'retry'        => 300,
+                                                        }
+                                                      )
+                        );
 
+
+    $poe->object_session(
+                          new Jarvis::IRC(
+                                           {
+                                             'alias'        => 'irc_client',
+                                             'nickname'     => 'crunchy',
+                                             'ircname'      => 'Cap\'n Crunchbot',
+                                             'server'       => '127.0.0.1',
+                                             'domain'       => 'websages.com',
+                                             'channel_list' => [
+                                                                 '#soggies',
+                                                                 '#puppies',
+                                                               ],
+                                             'persona'      => 'crunchy',
+                                           }
+                                         ),
+                        );
+}
 1;
