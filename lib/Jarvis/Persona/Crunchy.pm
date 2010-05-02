@@ -1,6 +1,7 @@
 package Jarvis::Persona::Crunchy;
 use AI::MegaHAL;
 use IRCBot::Chatbot::Pirate;
+use POE::Component::Client::Twitter;
 use POE;
 use POSIX qw( setsid );
 use Net::LDAP;
@@ -21,9 +22,13 @@ sub new {
 
     # hash of optional constructor elements (key), and their default (value) if not specified
     $self->{'may'} = {
-                       'ldap_domain' => undef,
-                       'ldap_binddn' => undef,
-                       'ldap_bindpw' => undef,
+                       'ldap_domain'  => undef,
+                       'ldap_binddn'  => undef,
+                       'ldap_bindpw'  => undef,
+                       'twitter_name' => undef,
+                       'username'     => undef,
+                       'password'     => undef,
+                       'retry'        => undef,
                      };
     # set our required values fron the constructor or the defaults
     foreach my $attr (@{ $self->{'must'} }){
@@ -45,14 +50,20 @@ sub new {
          }
     }
     $self->{'states'} = { 
-                          'start'        => 'start',
-                          'stop'         => 'stop',
-                          'input'        => 'input',
-                          'authen_reply' => 'authen_reply',
+                          'start'                           => 'start',
+                          'stop'                            => 'stop',
+                          'input'                           => 'input',
+                          'authen_reply'                    => 'authen_reply',
                           # special_events go here...
-                          'channel_add'  => 'channel_add',
-                          'channel_del'  => 'channel_del',
-                          'channel_join' => 'channel_join',
+                          'channel_add'                     => 'channel_add',
+                          'channel_del'                     => 'channel_del',
+                          'channel_join'                    => 'channel_join',
+                          'new_tweet'                       => 'new_tweet',
+                          'twitter_update_success'          => 'twitter_update_success',
+                          'delay_friend_timeline'           => 'delay_friend_timeline',
+                          'twitter.friend_timeline_success' => 'twitter_timeline_success',
+                          'twitter.response_error'          => 'twitter_error',
+
                         };
     if( (!defined($self->{'ldap_domain'})) || (!defined($self->{'ldap_binddn'})) || (!defined($self->{'ldap_bindpw'})) ){
         print STDERR "[ $self->{'ldap_domain'} :: $self->{'ldap_binddn'} :: $self->{'ldap_bindpw'} ]\n";
@@ -85,7 +96,14 @@ sub new {
             $self->{'ldap_enabled'}=0;
         }
     }
+    $self->{'cfg'} = {
+                       'screenname' => $self->{'twitter_name'},
+                       'username'   => $self->{'username'},
+                       'password'   => $self->{'password'},
+                       'retry'      => $self->{'retry'},
+                      };
 
+    $self->{'twitter'} = POE::Component::Client::Twitter->spawn(%{ $self->{'cfg'} });
     bless($self,$class);
     return $self;
 }
@@ -103,6 +121,7 @@ sub start{
      if($self->{'ldap_enabled'} == 1){
          print STDERR "[ ".$self->error()." ]" if $self->{'ERROR'};
      }
+     $kernel->delay('delay_friend_timeline', 5);
      return $self;
 }
 
@@ -707,4 +726,49 @@ sub help {
 ################################################################################
 # End Help
 ################################################################################
+
+################################################################################
+# Begin Twitter events
+################################################################################
+sub delay_friend_timeline {
+    my($self, $kernel, $heap) = @_[OBJECT, KERNEL, HEAP];
+    $heap->{ $self->alias() }->{'twitter'}->yield('friend_timeline');
+}
+
+sub new_tweet {
+    my($self, $kernel, $heap, $status) = @_[OBJECT, KERNEL, HEAP, ARG0];
+    $heap->{ $self->alias() }->{'twitter'}->yield( 'update', $status );
+}
+
+sub twitter_update_success {
+    my($self, $kernel, $heap, $ret) = @_[OBJECT, KERNEL, HEAP, ARG0];
+    print STDERR "twitter_update_success\n";
+    #$heap->{ircd}->yield(daemon_cmd_notice => $conf->{botname}, $conf->{channel}, $ret->{text});
+}
+
+sub twitter_timeline_success {
+    my($self, $kernel, $heap, $ret) = @_[OBJECT, KERNEL, HEAP, ARG0];
+    my $count=0;
+    foreach my $tweet (@{ $ret }){
+        #print "[\@". join("\n",keys(%{$tweet->{'user'}->{'screen_name}})) ."]: ".$tweet->{'text'}." ";
+        my $text=$tweet->{'text'};
+        if($tweet->{'user'}->{'screen_name'} eq 'mediacas'){
+            $text=~s/^I used #*Shazam to discover\s+(.*)\s+by\s+(.*)\s+http:\/\/.*/$1 $2/;
+            $text=~s/^I used #*Shazam to discover\s+(.*)\s+by\s+(.*)\s+#shazam.*/$1 $2/;
+        }
+        print $count++. "[\@".$tweet->{'user'}->{'screen_name'}."($tweet->{'id'})]: ".$text." ";
+        print "\n";
+    }
+    $kernel->delay($self->alias().'_delay_friend_timeline', $self->{'retry'});
+}
+
+sub twitter_error {
+    my($self, $kernel, $heap, $res) = @_[OBJECT, KERNEL, HEAP, ARG0];
+    print STDERR "twitter_error\n". Data::Dumper->Dump([$res->{'_rc'}, $res->{'_content'}]) ."\n";
+    #$heap->{ircd}->yield(daemon_cmd_notice => $conf->{botname}, $conf->{channel}, 'Twitter error');
+}
+################################################################################
+# End Twitter events
+################################################################################
+
 1;

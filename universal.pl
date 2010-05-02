@@ -35,13 +35,13 @@ exit unless $poe;
 $poe->object_session(
                       new Jarvis::Persona::Crunchy(
                                                     { 
-                                                      'alias'       => 'crunchy',
-                                                      'ldap_domain' => 'websages.com',
-                                                      'ldap_binddn' => 'uid=crunchy,ou=People,dc=websages,dc=com',
-                                                      'ldap_bindpw' => $ENV{'LDAP_PASSWORD'},
-                                                      #'screenname'       => 'capncrunchbot',
-                                                      #'username'         => 'capncrunchbot',
-                                                      #'password'         => $ENV{'TWITTER_PASSWORD'},
+                                                      'alias'        => 'crunchy',
+                                                      'ldap_domain'  => 'websages.com',
+                                                      'ldap_binddn'  => 'uid=crunchy,ou=People,dc=websages,dc=com',
+                                                      'ldap_bindpw'  => $ENV{'LDAP_PASSWORD'},
+                                                      'twitter_name' => 'capncrunchbot',
+                                                      'password'     => $ENV{'TWITTER_PASSWORD'},
+                                                      'retry'        => 60,
                                                     }
                                                   )
                     );
