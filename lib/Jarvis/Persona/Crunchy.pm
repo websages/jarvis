@@ -109,21 +109,22 @@ sub new {
 }
 
 sub start{
-     my $self = $_[OBJECT]||shift;
-     my $kernel = $_[KERNEL];
-     print STDERR __PACKAGE__ ." start\n";
-     $self->{'megahal'} = new AI::MegaHAL(
-                                           'Path'     => '/usr/lib/share/crunchy',
-                                           'Banner'   => 0,
-                                           'Prompt'   => 0,
-                                           'Wrap'     => 0,
-                                           'AutoSave' => 1
-                                         );
-     if($self->{'ldap_enabled'} == 1){
-         print STDERR "[ ".$self->error()." ]" if $self->{'ERROR'};
-     }
-     $kernel->delay('delay_friend_timeline', 5);
-     return $self;
+    my $self = $_[OBJECT]||shift;
+    my $kernel = $_[KERNEL];
+    print STDERR __PACKAGE__ ." start\n";
+    $self->{'megahal'} = new AI::MegaHAL(
+                                          'Path'     => '/usr/lib/share/crunchy',
+                                          'Banner'   => 0,
+                                          'Prompt'   => 0,
+                                          'Wrap'     => 0,
+                                          'AutoSave' => 1
+                                        );
+    if($self->{'ldap_enabled'} == 1){
+        print STDERR "[ ".$self->error()." ]" if $self->{'ERROR'};
+    }
+    $self->{'twitter'}->yield('register');
+    $kernel->delay('delay_friend_timeline', 5);
+    return $self;
 }
 
 sub stop{
