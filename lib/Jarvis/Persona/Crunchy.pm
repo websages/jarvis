@@ -728,6 +728,7 @@ sub help {
 ################################################################################
 # End Help
 ################################################################################
+
 ################################################################################
 # Begin Twitter events
 ################################################################################
@@ -749,8 +750,8 @@ sub twitter_update_success {
 
 sub twitter_timeline_success {
     my($self, $kernel, $heap, $ret) = @_[OBJECT, KERNEL, HEAP, ARG0];
-print STDERR Data::Dumper->Dump([$ret]);
     my $count=0;
+print Data::Dumper->Dump([ $heap->{'locations'} ]);
     foreach my $tweet (@{ $ret }){
         #print "[\@". join("\n",keys(%{$tweet->{'user'}->{'screen_name}})) ."]: ".$tweet->{'text'}." ";
         my $text=$tweet->{'text'};
