@@ -110,6 +110,7 @@ sub new {
 
 sub start{
      my $self = $_[OBJECT]||shift;
+     my $kernel = $_[KERNEL];
      print STDERR __PACKAGE__ ." start\n";
      $self->{'megahal'} = new AI::MegaHAL(
                                            'Path'     => '/usr/lib/share/crunchy',
