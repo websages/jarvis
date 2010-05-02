@@ -119,6 +119,9 @@ sub input{
                       $kernel->post($sess, '_stop');
                   }
               }
+              delete $heap->{'spawned'}->{'crunchy'};
+              $r = "crunchy terminated.";
+
          }elsif($directly_addressed==1){ 
              if($msg->{'conversation'}->{'direct'} == 0){
                  $r = $who.": ".$self->{'megahal'}->do_reply( $what );
