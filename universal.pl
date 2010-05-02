@@ -20,7 +20,7 @@ use Jarvis::Persona::System;
 use POE::Builder;
 $|++;
 
-# get our hostname
+# get our fqd, hostname, and domain name
 my $fqdn     = hostname_long;
 my $hostname = $fqdn;         $hostname=~s/\..*$//;
 my $domain   = $fqdn;         $domain=~s/^[^\.]*\.//;
