@@ -328,10 +328,10 @@ sub input{
                  $kernel->post($sender, $respond_event, $msg, $r); 
              }
              return; 
-         }elsif($what=~m/^!*follow\s+\@(.+?)/){
+         }elsif($what=~m/^!*follow\s+\@(.\S+)/){
 print STDERR "1. $what\n";
              $self->twitter_follow($1,1);
-         }elsif($what=~m/^!*unfollow\s+\@(.+?)/){
+         }elsif($what=~m/^!*unfollow\s+\@(.\S+)/){
 print STDERR "2. $what\n";
              $self->twitter_follow($1,0);
          }elsif($what=~m/^\s*who\s*am\s*i[?\s]*/){
@@ -797,8 +797,8 @@ sub twitter_follow {
     my $tweeter = shift if @_;
     my $follow = shift if @_;
 print STDERR "[ $tweeter : $follow ]\n";
-    return undef unless $tweeter;
-    return undef unless $follow;
+    return undef unless defined($tweeter);
+    return undef unless defined($follow);
 print STDERR "....................\n";
     if($follow == 1){
         $self->{'twitter'}->yield( 'follow', $tweeter );
