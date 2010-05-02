@@ -497,6 +497,7 @@ sub toggle_shoutout{
     my $action_user = shift;
     my $action = shift;
     my $msg = shift;
+    my $r;
     $action_user=~s/\@.*//;
     $action_user="uid=".$action_user.",ou=People,".$self->{'ldap_basedn'};
     foreach my $entry ( $self->get_ldap_entry("(cn=shoutouts)") ){
