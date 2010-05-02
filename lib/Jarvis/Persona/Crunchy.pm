@@ -531,7 +531,7 @@ sub toggle_shoutout{
         }
         if($modified == 1){
             $entry->replace('uniqueMember' => @users);    
-            $self->update_ldap_entry({'entry' => $entry});
+            $self->update({'entry' => $entry});
             $r = "cn=shoutouts modified.";
         }
     }
