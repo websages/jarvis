@@ -445,7 +445,6 @@ sub update{
     my $self = shift;
     my $construct = shift if @_;
     my $entry = $construct->{'entry'} if $construct->{'entry'};
-print STDERR Data::Dumper->Dump([$entry]);
     return undef unless $entry;
     my ($servers,$mesg);
     $servers = [ $construct->{'server'} ] if $construct->{'server'};
@@ -532,7 +531,9 @@ sub toggle_shoutout{
             }
         }
         if($modified == 1){
+print STDERR Data::Dumper->Dump([$entry]);
             $entry->replace('uniqueMember' => @users);    
+print STDERR Data::Dumper->Dump([$entry]);
             $self->update({'entry' => $entry});
             $r = "cn=shoutouts modified.";
         }
