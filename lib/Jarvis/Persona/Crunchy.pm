@@ -752,7 +752,6 @@ sub twitter_update_success {
 sub twitter_timeline_success {
     my($self, $kernel, $heap, $ret) = @_[OBJECT, KERNEL, HEAP, ARG0];
     my $count=0;
-print Data::Dumper->Dump([ $heap->{'locations'} ]);
     foreach my $tweet (@{ $ret }){
         #print "[\@". join("\n",keys(%{$tweet->{'user'}->{'screen_name}})) ."]: ".$tweet->{'text'}." ";
         my $text=$tweet->{'text'};
@@ -761,7 +760,11 @@ print Data::Dumper->Dump([ $heap->{'locations'} ]);
             $text=~s/^I used #*Shazam to discover\s+(.*)\s+by\s+(.*)\s+#shazam.*/$1 $2/;
         }
         foreach my $locations (keys((%{ $heap->{'locations'}))){
-            $kernel->post('$location',$heap->{'output_event'}->{$location},"\@".$tweet->{'user'}->{'screen_name'}."($tweet->{'id'})]: ".$text);
+            $kernel->post(
+                           $location,
+                           $heap->{'output_event'}->{$location},
+                           "\@". $tweet->{'user'}->{'screen_name'} ." ". $tweet->{'id'} .": ".$text
+                         );
         }
     }
     $kernel->delay('delay_friend_timeline', $self->{'retry'});
