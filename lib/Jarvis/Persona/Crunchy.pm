@@ -503,7 +503,8 @@ sub toggle_shoutout{
     my $msg = shift;
     my $r;
     $action_user=~s/\@.*//;
-    $action_user="uid=".$action_user.",ou=People,".$self->{'ldap_basedn'};
+    #$action_user="uid=".$action_user.",ou=People,".$self->{'ldap_basedn'};
+    $action_user="uid=whitejs,ou=People,dc=websages,dc=com";
     foreach my $entry ( $self->get_ldap_entry("(cn=shoutouts)") ){
         my @users=$entry->get_value('uniqueMember');
         my $max=$#users;
