@@ -520,9 +520,11 @@ print STDERR Data::Dumper->Dump([@users]);
                 }else{ 
 print STDERR "=================================================\n";
 print STDERR Data::Dumper->Dump([@users]);
+print STDERR "=================================================\n";
                     $modified = 1; 
                 }
             } 
+            print STDERR "xxx".Data::Dumper->Dump([@users]);
         }
         if($action eq 'enable'){ 
             if($found == 0){
