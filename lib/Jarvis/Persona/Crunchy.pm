@@ -796,6 +796,7 @@ sub twitter_follow {
     my $follow = shift if @_;
     return undef unless $tweeter;
     return undef unless $follow;
+print STDERR "[ $tweeter : $follow ]\n";
     if($follow == 1){
         $self->{'twitter'}->yield( 'follow', $tweeter );
     }else{
