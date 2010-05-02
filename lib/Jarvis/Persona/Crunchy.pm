@@ -515,7 +515,7 @@ print STDERR Data::Dumper->Dump(\@users);
             my $tmp = shift (@users);
             if($action_user eq $tmp){
                 $found = 1;
-                if($action ne 'disable'){ 
+                if($action eq 'disable'){ 
                     unshift(@users,$tmp); 
                 }else{ 
 print STDERR "=================================================\n";
