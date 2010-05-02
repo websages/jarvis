@@ -104,8 +104,10 @@ sub input{
          my $r=""; # response
          if($what=~m/^\s*!*help\s*/){
              $r = "I need a help routine.";
-         }elsif($what=~m/^\s*!*become\s+(\S+)/){
-             $r = "spawning $1";
+         }elsif($what=~m/^\s*!*spawn\s+(\S+)/){
+             if($directly_addressed == 1){
+                 $r = "spawning $1";
+             }
          }elsif($directly_addressed==1){ 
              if($msg->{'conversation'}->{'direct'} == 0){
                  $r = $who.": ".$self->{'megahal'}->do_reply( $what );
