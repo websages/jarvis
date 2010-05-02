@@ -328,7 +328,6 @@ sub irc_join {
     my ($self, $kernel, $heap, $sender, $join, $channel) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0, ARG1];
     $join=~s/!.*//g;
     # tell the personality there is a new player
-    print STDERR "[ $join ]\n";
     $kernel->post( $self->{'persona'}, 'channel_join', $join, $channel );
 }
 1;
