@@ -728,18 +728,17 @@ sub help {
 ################################################################################
 # End Help
 ################################################################################
-
 ################################################################################
 # Begin Twitter events
 ################################################################################
 sub delay_friend_timeline {
     my($self, $kernel, $heap) = @_[OBJECT, KERNEL, HEAP];
-    $self->{'twitter'}->yield('friend_timeline');
+    $heap->{ $self->alias() }->{'twitter'}->yield('friend_timeline');
 }
 
 sub new_tweet {
     my($self, $kernel, $heap, $status) = @_[OBJECT, KERNEL, HEAP, ARG0];
-    $self->{'twitter'}->yield( 'update', $status );
+    $heap->{ $self->alias() }->{'twitter'}->yield( 'update', $status );
 }
 
 sub twitter_update_success {
@@ -761,7 +760,7 @@ sub twitter_timeline_success {
         print $count++. "[\@".$tweet->{'user'}->{'screen_name'}."($tweet->{'id'})]: ".$text." ";
         print "\n";
     }
-    $kernel->delay('delay_friend_timeline', $self->{'retry'});
+    $kernel->delay($self->alias().'_delay_friend_timeline', $self->{'retry'});
 }
 
 sub twitter_error {
