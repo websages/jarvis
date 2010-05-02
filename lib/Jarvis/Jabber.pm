@@ -74,6 +74,7 @@ sub new{
                           refuse_subscription  => 'refuse_subscription',
                           approve_subscription => 'approve_subscription',
                           xmpp_reply           => 'xmpp_reply',
+                          say_public           => 'say_public',
                         };
 
     return $self;
@@ -469,7 +470,7 @@ sub join_channel() {
                      alias        => $self->alias(),
                      channel      => $r,
                      nick         => $n,
-                     output_event => 'say',
+                     output_event => 'say_public',
                    }
                  );
     $kernel->post($self->alias(),'output_event',$node,$heap->{'sid'});
