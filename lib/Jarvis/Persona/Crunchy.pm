@@ -761,7 +761,7 @@ sub twitter_timeline_success {
         }
 print STDERR Data::Dumper->Dump([$heap->{'locations'}]);
         foreach my $location (keys(%{ $heap->{'locations'} })){
-            foreach $channel (keys(%{ $heap->{'locations'}->{$location} })){
+            foreach my $channel (keys(%{ $heap->{'locations'}->{$location} })){
                 $kernel->post(
                                $location,
                                $channel,
