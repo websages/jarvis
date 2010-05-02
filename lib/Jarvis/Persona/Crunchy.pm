@@ -84,7 +84,6 @@ sub new {
             print STDERR "Cannot resolve srv records for _ldap._tcp.".$self->{'ldap_domain'}.". LDAP operations will be disabled.\n";
             $self->{'ldap_enabled'}=0;
         }
-        #print STDERR $self->{'ldap_uri'}."\n";
     }
 
     bless($self,$class);
@@ -599,6 +598,8 @@ sub help {
                   'shoutout'  => [
                                    "description: Send a textpage to everyone",
                                    "syntax/use : !shoutout beer @ bbh now, bitches.",
+                                   "enaable : !enable shoutout",
+                                   "disable : !disable shoutout",
                                  ],
                   'standings' => [
                                    "description: Baseball standings",
