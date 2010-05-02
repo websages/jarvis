@@ -500,11 +500,12 @@ sub toggle_shoutout{
     $action_user=~s/\@.*//;
     foreach my $entry ( $self->get_ldap_entry("(cn=shoutouts)") ){
         my @users=$entry->get_value('uniqueMember');
-        foreach my $user (@users){
-            $user=~s/,.*//;
-            $user=~s/uid=//;
-            print STDERR "$action_user :: $user\n";
-        }
+        print Data::Dumper->Dump([@users]); 
+       # foreach my $user (@users){
+       #     $user=~s/,.*//;
+       #     $user=~s/uid=//;
+       #     print STDERR "$action_user :: $user\n";
+       # }
     }
     
 
