@@ -114,8 +114,10 @@ sub input{
                  }
              }
          }elsif($what=~m/^\s*!*terminate\s+crunchy/){
-              foreach my $sess (@{ $heap->{'spawned'}->{'crunchy'} }){
-                  $kernel->post($sess, '_stop');
+             if($directly_addressed == 1){
+                  foreach my $sess (@{ $heap->{'spawned'}->{'crunchy'} }){
+                      $kernel->post($sess, '_stop');
+                  }
               }
          }elsif($directly_addressed==1){ 
              if($msg->{'conversation'}->{'direct'} == 0){
