@@ -106,12 +106,17 @@ sub input{
              $r = "I need a help routine.";
          }elsif($what=~m/^\s*!*spawn\s+crunchy/){
              if($directly_addressed == 1){
-                 if($self->spawn_crunchy()){
+                 $heap->{'spawned'}->{'crunchy'} = $self->spawn_crunchy();
+                 if(defined($heap->{'spawned'}->{'crunchy'})){
                      $r = "crunchy spawned";
                  }else{
-                     $r = "somethign went wrong spawning crunchy";
+                     $r = "something went wrong spawning crunchy";
                  }
              }
+         }elsif($what=~m/^\s*!*terminate\s+crunchy/){
+              foreach my $sess (@{ $heap->{'spawned'}->{'crunchy'} }){
+                  $kernel->post($sess, '_stop');
+              }
          }elsif($directly_addressed==1){ 
              if($msg->{'conversation'}->{'direct'} == 0){
                  $r = $who.": ".$self->{'megahal'}->do_reply( $what );
@@ -207,6 +212,6 @@ sub spawn_crunchy{
                                            }
                                          ),
                         );
-   return true;
+   return [ 'crunchy', 'irc_client' ];
 }
 1;
