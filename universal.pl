@@ -44,7 +44,7 @@ $poe->object_session(
                       new Jarvis::IRC(
                                        {
                                          'alias'        => 'system_session',
-                                         'nickname'     => $hostname
+                                         'nickname'     => $hostname,
                                          'ircname'      => $fqdn,
                                          'server'       => '127.0.0.1',
                                          'domain'       => $domain,
