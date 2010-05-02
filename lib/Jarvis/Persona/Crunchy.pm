@@ -328,9 +328,9 @@ sub input{
                  $kernel->post($sender, $respond_event, $msg, $r); 
              }
              return; 
-         }elsif($what=~m/^!*follow\s+(\@.+?)/){
+         }elsif($what=~m/^!*follow\s+\@(.+?)/){
              $self->twitter_follow($1,1);
-         }elsif($what=~m/^!*unfollow\s+(\@.+?)/){
+         }elsif($what=~m/^!*unfollow\s+\@(.+?)/){
              $self->twitter_follow($1,0);
          }elsif($what=~m/^\s*who\s*am\s*i[?\s]*/){
              $pirate=0;
