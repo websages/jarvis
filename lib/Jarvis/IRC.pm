@@ -176,9 +176,10 @@ sub irc_001 {
                        $self->{'persona'}, 
                        'channel_add', 
                        { 
-                         alias   => $self->alias(),
-                         channel => $_,
-                         nick    => $self->{'nickname'},
+                         alias          => $self->alias(),
+                         channel        => $_,
+                         nick           => $self->{'nickname'},
+                         'output_event' => 'irc_public',
                        }
                      );
         # we join our channels

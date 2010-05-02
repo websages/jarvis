@@ -209,6 +209,7 @@ sub channel_add{
                 @{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} } },
                 $construct->{'nick'}
               );
+         $heap->{'output_event'}->{ $construct->{'alias'} } =  $construct->{'output_event'};
 }
 
 sub channel_del{
@@ -739,7 +740,7 @@ sub delay_friend_timeline {
 
 sub new_tweet {
     my($self, $kernel, $heap, $status) = @_[OBJECT, KERNEL, HEAP, ARG0];
-    $heap->{ $self->alias() }->{'twitter'}->yield( 'update', $status );
+    $self->{'twitter'}->yield( 'update', $status );
 }
 
 sub twitter_update_success {
@@ -762,7 +763,7 @@ print Data::Dumper->Dump([ $heap->{'locations'} ]);
         print $count++. "[\@".$tweet->{'user'}->{'screen_name'}."($tweet->{'id'})]: ".$text." ";
         print "\n";
     }
-    $kernel->delay($self->alias().'_delay_friend_timeline', $self->{'retry'});
+    $kernel->delay('delay_friend_timeline', $self->{'retry'});
 }
 
 sub twitter_error {

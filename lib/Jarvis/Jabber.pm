@@ -461,9 +461,10 @@ sub join_channel() {
                    $self->{'persona'},
                    'channel_add',
                    {
-                     alias   => $self->alias(),
-                     channel => $r,
-                     nick    => $n,
+                     alias        => $self->alias(),
+                     channel      => $r,
+                     nick         => $n,
+                     output_event => 'say',
                    }
                  );
     $kernel->post($self->alias(),'output_event',$node,$heap->{'sid'});
