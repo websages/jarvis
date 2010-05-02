@@ -404,6 +404,11 @@ sub output_event()
         $kernel->post($sid, 'output_handler', $node);
 }
 
+sub say_public(){
+    my ($self, $kernel, $heap, $channel, $statement) = @_[OBJECT, KERNEL, HEAP, ARG0, ARG1];
+    print STDERR "xmpp: $channel $statement\n";
+}
+
 # This is the error event. Any error conditions that arise from any point 
 # during connection or negotiation to any time during normal operation will be
 # send to this event from PCJ. For a list of possible error events and exported
