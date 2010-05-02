@@ -515,11 +515,15 @@ print STDERR Data::Dumper->Dump([@users]);
             my $tmp = shift (@users);
             if($action_user eq $tmp){
                 $found = 1;
-                if($action ne 'disable'){ unshift(@users,$tmp); }else{ $modified = 1; }
-            } 
-        }
+                if($action ne 'disable'){ 
+                    unshift(@users,$tmp); 
+                }else{ 
 print STDERR "=================================================\n";
 print STDERR Data::Dumper->Dump([@users]);
+                    $modified = 1; 
+                }
+            } 
+        }
         if($action eq 'enable'){ 
             if($found == 0){
                 push(@users,$action_user);
