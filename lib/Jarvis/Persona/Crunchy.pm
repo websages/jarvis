@@ -329,11 +329,9 @@ sub input{
              }
              return; 
          }elsif($what=~m/^!*follow\s+\@(.\S+)/){
-print STDERR "1. $what\n";
-             $self->twitter_follow($1,1);
+             $r = $self->twitter_follow($1,1);
          }elsif($what=~m/^!*unfollow\s+\@(.\S+)/){
-print STDERR "2. $what\n";
-             $self->twitter_follow($1,0);
+             $r = $self->twitter_follow($1,0);
          }elsif($what=~m/^\s*who\s*am\s*i[?\s]*/){
              $pirate=0;
              $msg->{'reason'}='whoami';
@@ -802,8 +800,10 @@ print STDERR "[ $tweeter : $follow ]\n";
 print STDERR "....................\n";
     if($follow == 1){
         $self->{'twitter'}->yield( 'follow', $tweeter );
+        return "following \@$tweeter\n";
     }else{
         $self->{'twitter'}->yield( 'unfollow', $tweeter );
+        return "unfollowing \@$tweeter\n";
     }
 }
 ################################################################################
