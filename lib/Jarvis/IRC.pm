@@ -52,6 +52,7 @@ print Data::Dumper->Dump([$construct]);
     $self->{'states'} = [
                           'start', 
                           'stop', 
+                          'say', 
                           'irc_default', 
                           'irc_001', 
                           'irc_401', 
@@ -179,7 +180,7 @@ sub irc_001 {
                          alias          => $self->alias(),
                          channel        => $_,
                          nick           => $self->{'nickname'},
-                         'output_event' => 'irc_public',
+                         'output_event' => 'say',
                        }
                      );
         # we join our channels
@@ -211,6 +212,11 @@ sub irc_public {
               };
     $kernel->post("$self->{'persona'}", "input", $msg);
 
+}
+
+sub say {
+    my ($self, $kernel, $heap, $sender, $channel, $statement) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0, ARG1];
+    $self->{'irc_client'}->yield( privmsg => [ $channel ] => $statement );
 }
 
 sub irc_public_reply{
