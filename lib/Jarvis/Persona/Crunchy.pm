@@ -328,6 +328,10 @@ sub input{
                  $kernel->post($sender, $respond_event, $msg, $r); 
              }
              return; 
+         }elsif($what=~m/^!*follow\s+(\@\S+)/){
+             $self->twitter_follow($1,1);
+         }elsif($what=~m/^!*unfollow\s+(\@\S+)/){
+             $self->twitter_follow($1,0);
          }elsif($what=~m/^\s*who\s*am\s*i[?\s]*/){
              $pirate=0;
              $msg->{'reason'}='whoami';
@@ -784,6 +788,19 @@ sub twitter_error {
 sub enable_twitter {
     my($self, $kernel, $heap, $res) = @_[OBJECT, KERNEL, HEAP, ARG0];
     $heap->{'twitter_enabled'} = 1;
+}
+
+sub twitter_follow {
+    my $self = shift;
+    my $tweeter = shift if @_;
+    my $follow = shift if @_;
+    return undef unless $tweeter;
+    return undef unless $follow;
+    if($follow == 1){
+        $self->{'twitter'}->yield( 'follow', $tweeter );
+    }else{
+        $self->{'twitter'}->yield( 'unfollow', $tweeter );
+    }
 }
 ################################################################################
 # End Twitter events
