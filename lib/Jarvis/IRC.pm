@@ -106,6 +106,7 @@ sub stop  {
         print STDERR ref($self)." failed to disconnect.\n"; 
     }
   
+    if($self->{'irc_client'}->yield('quit' => 'terminated.')){
     $self->{'irc_client'}->yield( unregister => 'all' );
 }
 
