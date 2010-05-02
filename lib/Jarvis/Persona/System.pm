@@ -120,7 +120,7 @@ sub input{
                   }
               }
               delete $heap->{'spawned'}->{'crunchy'};
-              $r = "crunchy terminated.";
+              $r = "crunchy terminated";
 
          }elsif($directly_addressed==1){ 
              if($msg->{'conversation'}->{'direct'} == 0){
@@ -184,7 +184,7 @@ sub channel_del{
 sub spawn_crunchy{
     my $self=shift;
     #my $persona = shift if @_;
-    my $poe = new POE::Builder({ 'debug' => '0','trace' => '1' });
+    my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
     return undef unless $poe;
     $poe->object_session(
                           new Jarvis::Persona::Crunchy(
