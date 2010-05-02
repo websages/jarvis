@@ -9,6 +9,7 @@ if(!defined($ENV{'XMPP_PASSWORD'})){
 }
 
 BEGIN { unshift @INC, './lib' if -d './lib'; }
+use Sys::Hostname::Long;
 use Data::Dumper;
 use Jarvis::IRC;
 use Jarvis::Jabber;
@@ -18,6 +19,13 @@ use Jarvis::Persona::System;
 #use Jarvis::Persona::Watcher;
 use POE::Builder;
 $|++;
+
+my $fqdn = hostname_long;
+my $hostname = $fqdn;
+$hostname=~s/\..*$//;
+my $domainame = $fqdn;
+$domainname=~s/^[^\.]*\.//;
+print $hostname : $domainname;
 
 # get a handle for our builder
 my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
@@ -36,10 +44,10 @@ $poe->object_session(
                       new Jarvis::IRC(
                                        {
                                          'alias'        => 'system_session',
-                                         'nickname'     => 'loki',
-                                         'ircname'      => 'loki.websages.com',
+                                         'nickname'     => $hostname
+                                         'ircname'      => $fqdn,
                                          'server'       => '127.0.0.1',
-                                         'domain'       => 'websages.com',
+                                         'domain'       => $domain,
                                          'channel_list' => [ '#asgard' ],
                                          'persona'      => 'system',
                                        }
@@ -49,12 +57,12 @@ $poe->object_session(
 $poe->object_session( 
                       new Jarvis::Jabber(
                                           {
-                                            'alias'           => 'loki_xmpp',
-                                            'ip'              => 'thor.websages.com',
+                                            'alias'           => $hostname.'_xmpp',
+                                            'ip'              => $fqdn,
                                             'port'            => '5222',
-                                            'hostname'        => 'websages.com',
-                                            'username'        => 'crunchy',
-                                            'password'        => $ENV{'XMPP_PASSWORD'},
+                                            'hostname'        => $domain,
+                                            'username'        => $hostname,
+                                            'password'        => $ENV{'HOST_SECRET'},
                                             'channel_list'    => [ 'asgard@conference.websages.com/loki' ],
                                             'persona'         => 'system',
                                             'ignore_direct'   => 1,
