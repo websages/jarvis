@@ -499,18 +499,40 @@ sub toggle_shoutout{
     my $msg = shift;
     $action_user=~s/\@.*//;
     $action_user="uid=".$action_user.",ou=People,".$self->{'ldap_basedn'};
-print STDERR ": $action_user :\n";
     foreach my $entry ( $self->get_ldap_entry("(cn=shoutouts)") ){
         my @users=$entry->get_value('uniqueMember');
         print Data::Dumper->Dump([@users]); 
-       # foreach my $user (@users){
-       #     $user=~s/,.*//;
-       #     $user=~s/uid=//;
-       #     print STDERR "$action_user :: $user\n";
-       # }
+        my $max=$#users;
+        my $count=0;
+        my $found=0;
+        my $modified=0;
+        while($count++ <= $max){
+            my $tmp = shift (@users);
+            if($action_user eq $tmp){
+                $found = 1;
+                if($action ne 'disable'){ unshift(@users,$tmp); }else{ $modified = 1; }
+            } 
+        }
+        if($action eq 'enable'){ 
+            if($found == 0){
+                push(@users,$action_users);
+                $modified = 1;
+            }else{
+                $r = "$action_user is already in cn=shoutout (you're already good to go)";
+            }
+        }
+        if($action eq 'disable'){ 
+            if($found == 0){
+                $r = "$action_user is not in cn=shoutout (you're already removed)";
+            }
+        }
+        if($modified == 1){
+            $entry->replace('uniqueMember' => @users);    
+            $self->update_ldap_entry({'entry' => $entry});
+            $r = "cn=shoutouts modified.";
+        }
     }
-    
-
+    return $r; 
 }
 
 sub shoutout{
