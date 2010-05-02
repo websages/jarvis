@@ -506,7 +506,7 @@ sub toggle_shoutout{
     $action_user="uid=".$action_user.",ou=People,".$self->{'ldap_basedn'};
     foreach my $entry ( $self->get_ldap_entry("(cn=shoutouts)") ){
         my @users=$entry->get_value('uniqueMember');
-print STDERR Data::Dumper->Dump([@users]);
+print STDERR Data::Dumper->Dump(\@users);
         my $max=$#users;
         my $count=0;
         my $found=0;
@@ -519,13 +519,13 @@ print STDERR Data::Dumper->Dump([@users]);
                     unshift(@users,$tmp); 
                 }else{ 
 print STDERR "=================================================\n";
-print STDERR Data::Dumper->Dump([@users]);
+print STDERR Data::Dumper->Dump(\@users);
 print STDERR "=================================================\n";
                     $modified = 1; 
                 }
             } 
         }
-print STDERR "xxx".Data::Dumper->Dump([@users]);
+print STDERR "xxx\n".Data::Dumper->Dump(\@users)."xxx\n";
         if($action eq 'enable'){ 
             if($found == 0){
                 push(@users,$action_user);
