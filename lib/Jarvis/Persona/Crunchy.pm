@@ -503,7 +503,7 @@ sub toggle_shoutout{
         foreach my $user (@users){
             $user=~s/,.*//;
             $user=~s/uid=//;
-            print STDERR "$acton_user :: $user\n";
+            print STDERR "$action_user :: $user\n";
         }
     }
     
