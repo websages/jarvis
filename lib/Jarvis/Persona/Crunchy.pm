@@ -514,9 +514,10 @@ print STDERR Data::Dumper->Dump(\@users);
         while($count++ <= $max){
             my $tmp = shift (@users);
             if($action_user eq $tmp){
+print STDERR "FOUND\n";
                 $found = 1;
-                if($action eq 'disable'){ 
-                    unshift(@users,$tmp); 
+                if($action ne 'disable'){ 
+                    push(@users,$tmp); 
                 }else{ 
 print STDERR "=================================================\n";
 print STDERR Data::Dumper->Dump(\@users);
