@@ -146,7 +146,6 @@ sub authen_reply{
             $user=~s/\@.*//;
             # if the nick didn't translate to a userid, they may not be logged in, 
             # but the request may have been for a userid, so let's try to look that up...
-print Data::Dumper->Dump([$msg]);
             if(!defined($user)){
                 $user = $msg->{'conversation'}->{'nick'};
             }
@@ -156,7 +155,7 @@ print Data::Dumper->Dump([$msg]);
                     my @pager_count = $user_entry->get_value('pageremail');
                     if($#pager_count >=0){
                         foreach my $mail ($user_entry->get_value('pageremail') ){
-                            my $mx = Mail::Send->new(Subject => '['.$msg->{'conversation'}->{'originator'}.']',To => "$mail"); 
+                            my $mx = Mail::Send->new(Subject => $msg->{'conversation'}->{'originator'},To => "$mail"); 
                             my $mail_fh = $mx->open; 
                             print $mail_fh $msg->{'conversation'}->{'body'};
                             $mail_fh->close;
@@ -272,7 +271,7 @@ sub input{
              $r = $self->fortune();
          }elsif($what=~m/^!shoutout\s*(.*)/){
              my $shoutout=$1;
-             $r = $self->shoutout($1);
+             $r = $self->shoutout($1,$who);
              $pirate=0;
          }elsif($what=~m/^!tell\s+(.+?):*\s+(.+?)$/){
              my ($recipient,$message)=($1,$2);
@@ -487,6 +486,7 @@ sub is_channel_operator{
 sub shoutout{
     my $self=shift;
     my $shoutout=shift if @_;
+    my $originator=shift if @_;
     my @list;
     return "shoutout what?" unless $shoutout;
     foreach my $entry ( $self->get_ldap_entry("(cn=shoutouts)") ){
@@ -497,7 +497,7 @@ sub shoutout{
             push(@list,$user);
             foreach my $user_entry ( $self->get_ldap_entry("(uid=$user)") ){
                 foreach my $mail ($user_entry->get_value('pageremail') ){
-                    my $mx = Mail::Send->new(Subject=> "shoutout!", To => "$mail"); 
+                    my $mx = Mail::Send->new(Subject=> "shoutout![$originator]", To => "$mail"); 
                     my $mail_fh = $mx->open; 
                     print $mail_fh $shoutout;
                     $mail_fh->close;
