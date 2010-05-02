@@ -511,7 +511,6 @@ sub toggle_shoutout{
         my $found=0;
         my $modified=0;
         while($count++ <= $max){
-print STDERR "$count:". join(" ",@users)."\n";
             my $tmp = shift (@users);
             if($action_user eq $tmp){
                 $found = 1;
@@ -520,7 +519,9 @@ print STDERR "$count:". join(" ",@users)."\n";
                 }else{ 
                     $modified = 1; 
                 }
-            } 
+            }else{
+                push(@users,$tmp); 
+            }
         }
         if($action eq 'enable'){ 
             if($found == 0){
