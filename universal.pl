@@ -41,7 +41,7 @@ $poe->object_session(
                                                       'ldap_bindpw'  => $ENV{'LDAP_PASSWORD'},
                                                       'twitter_name' => 'capncrunchbot',
                                                       'password'     => $ENV{'TWITTER_PASSWORD'},
-                                                      'retry'        => 30,
+                                                      'retry'        => 300,
                                                     }
                                                   )
                     );

@@ -766,7 +766,7 @@ sub twitter_timeline_success {
                                    $location,
                                    $heap->{'output_event'}->{$location},
                                    $channel,
-                                   "\@". $tweet->{'user'}->{'screen_name'} ." ". $tweet->{'id'} .": ".$text
+                                   "[\@". $tweet->{'user'}->{'screen_name'}."]: ".$text
                                  );
                 }
             }
