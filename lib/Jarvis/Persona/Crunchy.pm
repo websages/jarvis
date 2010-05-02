@@ -749,6 +749,7 @@ sub twitter_update_success {
 
 sub twitter_timeline_success {
     my($self, $kernel, $heap, $ret) = @_[OBJECT, KERNEL, HEAP, ARG0];
+print STDERR "-----------------------\n";
     my $count=0;
     foreach my $tweet (@{ $ret }){
         #print "[\@". join("\n",keys(%{$tweet->{'user'}->{'screen_name}})) ."]: ".$tweet->{'text'}." ";
