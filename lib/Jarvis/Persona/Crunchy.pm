@@ -760,12 +760,11 @@ sub twitter_timeline_success {
             $text=~s/^I used #*Shazam to discover\s+(.*)\s+by\s+(.*)\s+#shazam.*/$1 $2/;
         }
         foreach my $location (keys(%{ $heap->{'locations'} })){
-print STDERR $location."\n";
-#            $kernel->post(
-#                           $location,
-#                           $heap->{'output_event'}->{$location},
-#                           "\@". $tweet->{'user'}->{'screen_name'} ." ". $tweet->{'id'} .": ".$text
-#                         );
+            $kernel->post(
+                           $location,
+                           $heap->{'output_event'}->{$location},
+                           "\@". $tweet->{'user'}->{'screen_name'} ." ". $tweet->{'id'} .": ".$text
+                         );
         }
     }
     $kernel->delay('delay_friend_timeline', $self->{'retry'});
