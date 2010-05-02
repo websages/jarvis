@@ -40,9 +40,7 @@ $poe->object_session(
                                          'ircname'      => 'loki.websages.com',
                                          'server'       => '127.0.0.1',
                                          'domain'       => 'websages.com',
-                                         'channel_list' => [ 
-                                                             '#asgard',
-                                                           ],
+                                         'channel_list' => [ '#asgard' ],
                                          'persona'      => 'system',
                                        }
                                      ), 
@@ -57,9 +55,7 @@ $poe->object_session(
                                             'hostname'        => 'websages.com',
                                             'username'        => 'crunchy',
                                             'password'        => $ENV{'XMPP_PASSWORD'},
-                                            'channel_list'    => [ 
-                                                                   'asgard@conference.websages.com/loki',
-                                                                 ],
+                                            'channel_list'    => [ 'asgard@conference.websages.com/loki' ],
                                             'persona'         => 'system',
                                             'ignore_direct'   => 1,
                                           }

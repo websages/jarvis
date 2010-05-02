@@ -2,6 +2,7 @@ package Jarvis::Persona::System;
 use AI::MegaHAL;
 use POE;
 use POSIX qw( setsid );
+use POE::Builder;
 
 sub new {
     my $class = shift;
@@ -89,6 +90,7 @@ sub input{
           $msg->{'conversation'}->{'body'},
           $msg->{'conversation'}->{'id'},
         );
+     print STDERR "[ $what ]\n";
      my $directly_addressed=$msg->{'conversation'}->{'direct'}||0;
      if(defined($what)){
          if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
