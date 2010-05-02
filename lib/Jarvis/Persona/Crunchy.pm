@@ -58,6 +58,7 @@ sub new {
                           'channel_add'                     => 'channel_add',
                           'channel_del'                     => 'channel_del',
                           'channel_join'                    => 'channel_join',
+                          'enable_twitter'                  => 'enable_twitter',
                           'new_tweet'                       => 'new_tweet',
                           'twitter_update_success'          => 'twitter_update_success',
                           'delay_friend_timeline'           => 'delay_friend_timeline',
@@ -124,6 +125,7 @@ sub start{
     }
     $self->{'twitter'}->yield('register');
     $kernel->delay('delay_friend_timeline', 5);
+    $kernel->delay('enable_twitter', 60);
     return $self;
 }
 
@@ -757,14 +759,16 @@ sub twitter_timeline_success {
             $text=~s/^I used #*Shazam to discover\s+(.*)\s+by\s+(.*)\s+http:\/\/.*/$1 $2/;
             $text=~s/^I used #*Shazam to discover\s+(.*)\s+by\s+(.*)\s+#shazam.*/$1 $2/;
         }
-        foreach my $location (keys(%{ $heap->{'locations'} })){
-            foreach my $channel (keys(%{ $heap->{'locations'}->{$location} })){
-                $kernel->post(
-                               $location,
-                               $heap->{'output_event'}->{$location},
-                               $channel,
-                               "\@". $tweet->{'user'}->{'screen_name'} ." ". $tweet->{'id'} .": ".$text
-                             );
+        if($heap->{'twitter_enabled'}){
+            foreach my $location (keys(%{ $heap->{'locations'} })){
+                foreach my $channel (keys(%{ $heap->{'locations'}->{$location} })){
+                    $kernel->post(
+                                   $location,
+                                   $heap->{'output_event'}->{$location},
+                                   $channel,
+                                   "\@". $tweet->{'user'}->{'screen_name'} ." ". $tweet->{'id'} .": ".$text
+                                 );
+                }
             }
         }
     }
@@ -775,6 +779,11 @@ sub twitter_error {
     my($self, $kernel, $heap, $res) = @_[OBJECT, KERNEL, HEAP, ARG0];
     print STDERR "twitter_error\n". Data::Dumper->Dump([$res->{'_rc'}, $res->{'_content'}]) ."\n";
     #$heap->{ircd}->yield(daemon_cmd_notice => $conf->{botname}, $conf->{channel}, 'Twitter error');
+}
+
+sub enable_twitter {
+    my($self, $kernel, $heap, $res) = @_[OBJECT, KERNEL, HEAP, ARG0];
+    $heap->{'twitter_enabled'} = 1;
 }
 ################################################################################
 # End Twitter events
