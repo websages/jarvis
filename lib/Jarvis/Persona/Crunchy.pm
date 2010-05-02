@@ -538,8 +538,8 @@ sub toggle_shoutout{
             }
         }
         if($modified == 1){
-print STDERR Data::Dumper->Dump([$entry]);
             $entry->replace('uniqueMember' => @users);    
+print STDERR Data::Dumper->Dump([$entry]);
             $self->update({'entry' => $entry});
             $r = "cn=shoutouts modified.";
         }
