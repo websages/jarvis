@@ -764,8 +764,8 @@ print STDERR Data::Dumper->Dump([$heap->{'locations'}]);
             foreach my $channel (keys(%{ $heap->{'locations'}->{$location} })){
                 $kernel->post(
                                $location,
-                               $channel,
                                $heap->{'output_event'}->{$location},
+                               $channel,
                                "\@". $tweet->{'user'}->{'screen_name'} ." ". $tweet->{'id'} .": ".$text
                              );
             }
