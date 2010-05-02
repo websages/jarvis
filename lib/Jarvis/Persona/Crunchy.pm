@@ -498,6 +498,8 @@ sub toggle_shoutout{
     my $action = shift;
     my $msg = shift;
     $action_user=~s/\@.*//;
+    $action_user="uid=".$action_user.",ou=People,".$self->{'ldap_basedn'};
+print STDERR ": $action_user :\n";
     foreach my $entry ( $self->get_ldap_entry("(cn=shoutouts)") ){
         my @users=$entry->get_value('uniqueMember');
         print Data::Dumper->Dump([@users]); 
