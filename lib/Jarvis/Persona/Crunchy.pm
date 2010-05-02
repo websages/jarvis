@@ -98,7 +98,7 @@ sub new {
     }
     $self->{'cfg'} = {
                        'screenname' => $self->{'twitter_name'},
-                       'username'   => $self->{'username'},
+                       'username'   => $self->{'twitter_name'},
                        'password'   => $self->{'password'},
                        'retry'      => $self->{'retry'},
                       };
