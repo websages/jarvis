@@ -506,6 +506,7 @@ sub toggle_shoutout{
     $action_user="uid=".$action_user.",ou=People,".$self->{'ldap_basedn'};
     foreach my $entry ( $self->get_ldap_entry("(cn=shoutouts)") ){
         my @users=$entry->get_value('uniqueMember');
+print STDERR Data::Dumper->Dump([@users]);
         my $max=$#users;
         my $count=0;
         my $found=0;
@@ -525,15 +526,14 @@ sub toggle_shoutout{
                 $r = "$action_user is already in cn=shoutout (you're already good to go)";
             }
         }
+print STDERR Data::Dumper->Dump([@users]);
         if($action eq 'disable'){ 
             if($found == 0){
                 $r = "$action_user is not in cn=shoutout (you're already removed)";
             }
         }
         if($modified == 1){
-print STDERR Data::Dumper->Dump([$entry]);
             $entry->replace('uniqueMember' => @users);    
-print STDERR Data::Dumper->Dump([$entry]);
             $self->update({'entry' => $entry});
             $r = "cn=shoutouts modified.";
         }
