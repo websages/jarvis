@@ -524,8 +524,8 @@ print STDERR "=================================================\n";
                     $modified = 1; 
                 }
             } 
-            print STDERR "xxx".Data::Dumper->Dump([@users]);
         }
+print STDERR "xxx".Data::Dumper->Dump([@users]);
         if($action eq 'enable'){ 
             if($found == 0){
                 push(@users,$action_user);
