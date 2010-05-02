@@ -90,7 +90,7 @@ sub input{
           $msg->{'conversation'}->{'body'},
           $msg->{'conversation'}->{'id'},
         );
-     print STDERR "[ $what ]\n";
+
      my $directly_addressed=$msg->{'conversation'}->{'direct'}||0;
      if(defined($what)){
          if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
@@ -102,13 +102,27 @@ sub input{
              }
          }
          my $r=""; # response
-         if($directly_addressed==1){ 
+         if($what=~m/^\s*!*help\s*/){
+             $r = "I need a help routine.";
+         }elsif($directly_addressed==1){ 
              if($msg->{'conversation'}->{'direct'} == 0){
-                 $kernel->post($sender, $respond_event, $msg, $who.": ".$self->{'megahal'}->do_reply( $what ));
+                 $r = $who.": ".$self->{'megahal'}->do_reply( $what );
              }else{
-                 $kernel->post($sender, $respond_event, $msg, $self->{'megahal'}->do_reply( $what ));
+                 $r = $self->{'megahal'}->do_reply( $what );
+             }
+         } # ignore if we didn't match anything.
+
+         # respond
+         if($r){
+             if($r ne ""){
+                     $kernel->post($sender, $respond_event, $msg, $r);
              }
          }
+
+
+
+
+
      }
      return $self->{'alias'};
 }
