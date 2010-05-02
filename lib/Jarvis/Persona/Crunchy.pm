@@ -476,7 +476,7 @@ sub update{
          }
     }
     my $errors=$self->error();
-    print STDERR "$error\n" if($error ne "");
+    print STDERR "$errors\n" if($errors ne "");
     return $self;
 }
 
