@@ -100,7 +100,7 @@ sub stop  {
     my $self = $_[OBJECT]; 
     my $kernel = $_[KERNEL];
     print STDERR ref($self)." stopped.\n"; 
-    $self->{'irc_client'}->yield('disconnect');
+    $self->{'irc_client'}->yield( disconnect => {} );
 }
 
 sub states { my $self = $_[OBJECT]; return $self->{'states'};           }
