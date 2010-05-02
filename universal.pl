@@ -60,7 +60,7 @@ $poe->object_session(
                                             'port'            => '5222',
                                             'hostname'        => $domain,
                                             'username'        => $hostname,
-                                            'password'        => $ENV{'HOST_SECRET'},
+                                            'password'        => $ENV{'XMPP_PASSWORD'},
                                             'channel_list'    => [ 'asgard@conference.websages.com/loki' ],
                                             'persona'         => 'system',
                                             'ignore_direct'   => 1,
