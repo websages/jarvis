@@ -133,7 +133,7 @@ sub authen_reply{
                $r = "I cannot authenticate you at this time. Is the room anonymous or am I not a moderator?\n";
             }
             $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r); 
-        }elsif($msg->{'reason'} eq 'channel_join'){ 
+        }elsif($msg->{'reason'} eq 'channel_join'){
             my ($u,$d) = split('@',$user);
             if($d eq $self->{'ldap_domain'}){
                 if($self->is_channel_operator($u)){
@@ -141,7 +141,7 @@ sub authen_reply{
                     print STDERR "/op $msg->{'conversation'}->{'nick'}\n";
                 }
             }
-        }elsif($msg->{'reason'} eq 'tell_request'){ 
+        }elsif($msg->{'reason'} eq 'tell_request'){
             $user=~s/\@.*//;
             # if the nick didn't translate to a userid, they may not be logged in, 
             # but the request may have been for a userid, so let's try to look that up...
@@ -168,6 +168,10 @@ sub authen_reply{
                $r = "$user has no ldap entry\n";
             }
             $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r); 
+        }elsif($msg->{'reason'} eq 'enable_shoutout'){
+            print STDERR "\$self->shoutout($user,'enable');";
+        }elsif($msg->{'reason'} eq 'disable_shoutout'){
+            print STDERR "\$self->shoutout($user,'disable');";
         }else{ 
             # authorize request_id in the $heap->{'requests'} queue
             print STDERR "implement authorization request queue\n";
@@ -276,7 +280,7 @@ sub input{
              $msg->{'reason'}='enable_shoutout';
              $kernel->post($sender, 'authen', $msg); 
          }elsif($what=~m/^!disable\s+shoutouts*/){
-             $msg->{'reason'}='enable_shoutout';
+             $msg->{'reason'}='disable_shoutout';
              $kernel->post($sender, 'authen', $msg); 
          }elsif($what=~m/^!tell\s+(.+?):*\s+(.+?)$/){
              my ($recipient,$message)=($1,$2);
