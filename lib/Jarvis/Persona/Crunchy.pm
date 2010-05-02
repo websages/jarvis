@@ -760,8 +760,9 @@ print Data::Dumper->Dump([ $heap->{'locations'} ]);
             $text=~s/^I used #*Shazam to discover\s+(.*)\s+by\s+(.*)\s+http:\/\/.*/$1 $2/;
             $text=~s/^I used #*Shazam to discover\s+(.*)\s+by\s+(.*)\s+#shazam.*/$1 $2/;
         }
-        print $count++. "[\@".$tweet->{'user'}->{'screen_name'}."($tweet->{'id'})]: ".$text." ";
-        print "\n";
+        foreach my $locations (keys((%{ $heap->{'locations'}))){
+            $kernel->post('$location',$heap->{'output_event'}->{$location},"\@".$tweet->{'user'}->{'screen_name'}."($tweet->{'id'})]: ".$text);
+        }
     }
     $kernel->delay('delay_friend_timeline', $self->{'retry'});
 }
