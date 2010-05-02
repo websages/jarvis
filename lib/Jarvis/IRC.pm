@@ -99,14 +99,13 @@ sub start {
 sub stop  { 
     my $self = $_[OBJECT]; 
     my $kernel = $_[KERNEL];
-    $self->{'irc_client'}->yield('disconnect');
-    if($self->{'irc_client'}->yield('connected')){
+    $self->{'irc_client'}->yield( disconnect );
+    if($self->{'irc_client'}->yield( connected )){
         print STDERR ref($self)." disconnected.\n"; 
     }else{
         print STDERR ref($self)." failed to disconnect.\n"; 
     }
-  
-    if($self->{'irc_client'}->yield('quit' => 'terminated.')){
+    $self->{'irc_client'}->yield( quit => 'terminated.');
     $self->{'irc_client'}->yield( unregister => 'all' );
 }
 
