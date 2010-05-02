@@ -125,7 +125,7 @@ sub start{
     }
     $self->{'twitter'}->yield('register');
     $kernel->delay('delay_friend_timeline', 5);
-    $kernel->delay('enable_twitter', 60);
+    $kernel->delay('enable_twitter', 20);
     return $self;
 }
 
