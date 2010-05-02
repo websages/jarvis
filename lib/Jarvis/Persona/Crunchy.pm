@@ -272,6 +272,12 @@ sub input{
              my $shoutout=$1;
              $r = $self->shoutout($1,$who);
              $pirate=0;
+         }elsif($what=~m/^!enable\s+shoutouts*/){
+             $msg->{'reason'}='enable_shoutout';
+             $kernel->post($sender, 'authen', $msg); 
+         }elsif($what=~m/^!disable\s+shoutouts*/){
+             $msg->{'reason'}='enable_shoutout';
+             $kernel->post($sender, 'authen', $msg); 
          }elsif($what=~m/^!tell\s+(.+?):*\s+(.+?)$/){
              my ($recipient,$message)=($1,$2);
              # first we try to dereference the nickname
@@ -598,7 +604,7 @@ sub help {
                   'shoutout'  => [
                                    "description: Send a textpage to everyone",
                                    "syntax/use : !shoutout beer @ bbh now, bitches.",
-                                   "enaable : !enable shoutout",
+                                   "enable : !enable shoutout",
                                    "disable : !disable shoutout",
                                  ],
                   'standings' => [
