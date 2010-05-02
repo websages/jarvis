@@ -745,7 +745,6 @@ sub new_tweet {
 
 sub twitter_update_success {
     my($self, $kernel, $heap, $ret) = @_[OBJECT, KERNEL, HEAP, ARG0];
-    print STDERR "twitter_update_success\n";
     #$heap->{ircd}->yield(daemon_cmd_notice => $conf->{botname}, $conf->{channel}, $ret->{text});
 }
 
@@ -753,13 +752,11 @@ sub twitter_timeline_success {
     my($self, $kernel, $heap, $ret) = @_[OBJECT, KERNEL, HEAP, ARG0];
     my $count=0;
     foreach my $tweet (@{ $ret }){
-        #print "[\@". join("\n",keys(%{$tweet->{'user'}->{'screen_name}})) ."]: ".$tweet->{'text'}." ";
         my $text=$tweet->{'text'};
         if($tweet->{'user'}->{'screen_name'} eq 'mediacas'){
             $text=~s/^I used #*Shazam to discover\s+(.*)\s+by\s+(.*)\s+http:\/\/.*/$1 $2/;
             $text=~s/^I used #*Shazam to discover\s+(.*)\s+by\s+(.*)\s+#shazam.*/$1 $2/;
         }
-print STDERR Data::Dumper->Dump([$heap->{'locations'}]);
         foreach my $location (keys(%{ $heap->{'locations'} })){
             foreach my $channel (keys(%{ $heap->{'locations'}->{$location} })){
                 $kernel->post(
@@ -782,5 +779,4 @@ sub twitter_error {
 ################################################################################
 # End Twitter events
 ################################################################################
-
 1;

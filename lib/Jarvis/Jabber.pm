@@ -407,7 +407,12 @@ sub output_event()
 
 sub say_public(){
     my ($self, $kernel, $heap, $channel, $statement) = @_[OBJECT, KERNEL, HEAP, ARG0, ARG1];
-    print STDERR "xmpp: $channel $statement\n";
+    my ( $who, $type ) = ( $channel, 'groupchat' );
+    my $node = XNode->new('message');
+    $node->attr('to', $who);
+    if($type eq 'groupchat'){ $node->attr('type', $type); }
+    $node->insert_tag('body')->data($statement);
+    $kernel->post($self->alias(),'output_event', $node, $heap->{'sid'});
 }
 
 # This is the error event. Any error conditions that arise from any point 
