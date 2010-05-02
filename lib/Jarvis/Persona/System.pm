@@ -106,8 +106,11 @@ sub input{
              $r = "I need a help routine.";
          }elsif($what=~m/^\s*!*spawn\s+crunchy/){
              if($directly_addressed == 1){
-                 $r = "spawning crunchy";
-                 $self->spawn_crunchy();
+                 if($self->spawn_crunchy()){
+                     $r = "crunchy spawned";
+                 }else{
+                     $r = "somethign went wrong spawning crunchy";
+                 }
              }
          }elsif($directly_addressed==1){ 
              if($msg->{'conversation'}->{'direct'} == 0){
@@ -171,6 +174,8 @@ sub channel_del{
 sub spawn_crunchy{
     my $self=shift;
     #my $persona = shift if @_;
+    my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
+    return undef unless $poe;
     $poe->object_session(
                           new Jarvis::Persona::Crunchy(
                                                         {
@@ -202,5 +207,6 @@ sub spawn_crunchy{
                                            }
                                          ),
                         );
+   return true;
 }
 1;
