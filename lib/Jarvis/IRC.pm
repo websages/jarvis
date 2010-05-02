@@ -21,7 +21,6 @@ sub new {
    $class = ref($class)||$class;
    my $self = {}; 
    my $construct = shift if @_;
-print Data::Dumper->Dump([$construct]);
     # list of required constructor elements
     $self->{'must'} = ["channel_list","nickname","alias","persona","domain"];
 
