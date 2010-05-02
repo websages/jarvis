@@ -20,12 +20,12 @@ use Jarvis::Persona::System;
 use POE::Builder;
 $|++;
 
+# get our hostname
 my $fqdn = hostname_long;
 my $hostname = $fqdn;
 $hostname=~s/\..*$//;
 my $domainame = $fqdn;
 $domainname=~s/^[^\.]*\.//;
-print $hostname : $domainname;
 
 # get a handle for our builder
 my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
@@ -43,7 +43,7 @@ $poe->object_session(
 $poe->object_session(  
                       new Jarvis::IRC(
                                        {
-                                         'alias'        => 'system_session',
+                                         'alias'        => $hostname.'_irc',
                                          'nickname'     => $hostname,
                                          'ircname'      => $fqdn,
                                          'server'       => '127.0.0.1',
