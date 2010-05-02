@@ -169,9 +169,9 @@ sub authen_reply{
             }
             $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r); 
         }elsif($msg->{'reason'} eq 'enable_shoutout'){
-            print STDERR "\$self->shoutout($user,'enable');";
+            $self->toggle_shoutout($user,'enable',$msg);
         }elsif($msg->{'reason'} eq 'disable_shoutout'){
-            print STDERR "\$self->shoutout($user,'disable');";
+            $self->toggle_shoutout($user,'disable',$msg);
         }else{ 
             # authorize request_id in the $heap->{'requests'} queue
             print STDERR "implement authorization request queue\n";
@@ -490,6 +490,24 @@ sub is_channel_operator{
         }
     }
     return undef;
+}
+
+sub toggle_shoutout{
+    my $self = shift;
+    my $action_user = shift;
+    my $action = shift;
+    my $msg = shift;
+    $action_user=~s/\@.*//;
+    foreach my $entry ( $self->get_ldap_entry("(cn=shoutouts)") ){
+        my @users=$entry->get_value('uniqueMember');
+        foreach my $user (@users){
+            $user=~s/,.*//;
+            $user=~s/uid=//;
+            print STDERR "$acton_user :: $user\n";
+        }
+    }
+    
+
 }
 
 sub shoutout{
