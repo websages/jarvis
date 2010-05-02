@@ -518,6 +518,8 @@ print STDERR Data::Dumper->Dump([@users]);
                 if($action ne 'disable'){ unshift(@users,$tmp); }else{ $modified = 1; }
             } 
         }
+print STDERR "=================================================\n";
+print STDERR Data::Dumper->Dump([@users]);
         if($action eq 'enable'){ 
             if($found == 0){
                 push(@users,$action_user);
@@ -526,7 +528,6 @@ print STDERR Data::Dumper->Dump([@users]);
                 $r = "$action_user is already in cn=shoutout (you're already good to go)";
             }
         }
-print STDERR Data::Dumper->Dump([@users]);
         if($action eq 'disable'){ 
             if($found == 0){
                 $r = "$action_user is not in cn=shoutout (you're already removed)";
