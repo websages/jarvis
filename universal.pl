@@ -21,11 +21,9 @@ use POE::Builder;
 $|++;
 
 # get our hostname
-my $fqdn = hostname_long;
-my $hostname = $fqdn;
-$hostname=~s/\..*$//;
-my $domainame = $fqdn;
-$domainname=~s/^[^\.]*\.//;
+my $fqdn     = hostname_long;
+my $hostname = $fqdn;         $hostname=~s/\..*$//;
+my $domain   = $fqdn;         $domain=~s/^[^\.]*\.//;
 
 # get a handle for our builder
 my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
