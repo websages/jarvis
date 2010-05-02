@@ -475,6 +475,8 @@ sub update{
              $mesg->code && $self->error($mesg->code." ".$mesg->error);
          }
     }
+    my $errors=$self->error();
+    print STDERR "$error\n" if($error ne "");
     return $self;
 }
 
@@ -504,7 +506,6 @@ sub toggle_shoutout{
     $action_user="uid=".$action_user.",ou=People,".$self->{'ldap_basedn'};
     foreach my $entry ( $self->get_ldap_entry("(cn=shoutouts)") ){
         my @users=$entry->get_value('uniqueMember');
-        print Data::Dumper->Dump([@users]); 
         my $max=$#users;
         my $count=0;
         my $found=0;
