@@ -136,6 +136,15 @@ sub input{
                      $r = "something went wrong spawning crunchy";
                  }
              }
+         }elsif($what=~m/^\s*!*spawn\s+beta/){
+             if($directly_addressed == 1){
+                 $heap->{'spawned'}->{'beta'} = $self->spawn_crunchy();
+                 if(defined($heap->{'spawned'}->{'beta'})){
+                     $r = "beta spawned";
+                 }else{
+                     $r = "something went wrong spawning beta";
+                 }
+             }
          }elsif($what=~m/^\s*!*terminate\s+crunchy/){
              if($directly_addressed == 1){
                   foreach my $sess (@{ $heap->{'spawned'}->{'crunchy'} }){
@@ -239,4 +248,42 @@ sub spawn_crunchy{
                         );
    return [ 'crunchy', 'irc_client' ];
 }
+
+sub spawn_beta{
+    my $self=shift;
+    #my $persona = shift if @_;
+    my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
+    return undef unless $poe;
+    $poe->object_session(
+                          new Jarvis::Persona::Crunchy(
+                                                        {
+                                                          'alias'        => 'beta',
+                                                          'ldap_domain'  => 'websages.com',
+                                                          'ldap_binddn'  => 'uid=crunchy,ou=People,dc=websages,dc=com',
+                                                          'ldap_bindpw'  => $ENV{'LDAP_PASSWORD'},
+                                                          'twitter_name' => 'capncrunchbot',
+                                                          'password'     => $ENV{'TWITTER_PASSWORD'},
+                                                          'retry'        => 300,
+                                                        }
+                                                      )
+                        );
+
+    $poe->object_session(
+                          new Jarvis::IRC(
+                                           {
+                                             'alias'        => 'irc_client',
+                                             'nickname'     => 'beta',
+                                             'ircname'      => 'Cap\'n Crunchbot',
+                                             'server'       => '127.0.0.1',
+                                             'domain'       => 'websages.com',
+                                             'channel_list' => [
+                                                                 '#puppies',
+                                                               ],
+                                             'persona'      => 'crunchy',
+                                           }
+                                         ),
+                        );
+   return [ 'crunchy', 'irc_client' ];
+}
+1;
 1;
