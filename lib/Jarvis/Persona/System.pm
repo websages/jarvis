@@ -15,7 +15,9 @@ sub new {
     $self->{'must'} = [ 'alias' ];
 
     # hash of optional constructor elements (key), and their default (value) if not specified
-    $self->{'may'} = {};
+    $self->{'may'} = {
+                       'brainpath' => '/dev/shm/brain/system',
+                     };
 
     # set our required values fron the constructor or the defaults
     foreach my $attr (@{ $self->{'must'} }){
@@ -53,23 +55,20 @@ sub new {
 sub start{
     my $self = $_[OBJECT]||shift;
     print STDERR __PACKAGE__ ." start\n";
-    my @brainpath = split('/',"/dev/shm/brain/system"); 
+    my @brainpath = split('/',$self->{'brainpath'}); 
     shift(@brainpath); # remove the null in [0]
+    # mkdir -p
     my $bpath="";
-my $count=0;
-print STDERR Data::Dumper->Dump([@brainpath]);
     while(my $append = shift(@brainpath)){
-print $count++;
         $bpath = $bpath.'/'.$append;
         if(! -d $bpath ){ mkdir($bpath); }
-        print STDERR "[ ". $bpath. " ]\n"; 
     }
-    if(! -f "/dev/shm/brain/system/megahal.trn"){ 
+    if(! -f $self->{'brainpath'}."/megahal.trn"){ 
         my $agent = LWP::UserAgent->new();
         $agent->agent( 'Mozilla/5.0' );
         my $response = $agent->get("http://github.com/cjg/megahal/raw/master/data/megahal.trn");
         if ( $response->content ne '0' ) {
-            my $fh = FileHandle->new("> /dev/shm/brain/system/megahal.trn");
+            my $fh = FileHandle->new("> $self->{'brainpath'}/megahal.trn");
             if (defined $fh) {
                 print $fh $response->content;
                 $fh->close;
