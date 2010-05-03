@@ -226,12 +226,12 @@ sub spawn_crunchy{
                           new Jarvis::IRC(
                                            {
                                              'alias'        => 'irc_client',
-                                             'nickname'     => 'newcrunchy',
+                                             'nickname'     => 'crunchy',
                                              'ircname'      => 'Cap\'n Crunchbot',
                                              'server'       => '127.0.0.1',
                                              'domain'       => 'websages.com',
                                              'channel_list' => [
-                                                                 '#puppies',
+                                                                 '#soggies',
                                                                ],
                                              'persona'      => 'crunchy',
                                            }
