@@ -463,7 +463,6 @@ sub get_ldap_entry {
     }
     my $mesg;
     while( my $server = shift(@{ $servers })){
-print STDERR Data::Dumper->Dump([$server, $self->{'ldap_binddn'}, $self->{'ldap_bindpw'}]);
         if($server=~m/(.*)/){
             $server=$1 if ($server=~m/(^[A-Za-z0-9\-\.\/:]+$)/);
         }
@@ -602,6 +601,10 @@ sub shoutout{
     my @list;
     return "shoutout what?" unless $shoutout;
     my $shoutouts = $self->get_ldap_entry("(cn=shoutouts)");
+    if($ref($shoutouts) ne 'ARRAY'){
+        $shoutouts = [ $shoutouts ];
+    }
+print STDERR Data::Dumper->Dump([$shoutouts]);
     return $self->error() unless defined($shoutouts);
     foreach my $entry (@{ $shoutouts }){
         my @users = $entry->get_value('uniqueMember');
