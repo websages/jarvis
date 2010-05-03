@@ -288,7 +288,7 @@ sub spawn_beta{
                                              'channel_list' => [
                                                                  '#puppies',
                                                                ],
-                                             'persona'      => 'crunchy',
+                                             'persona'      => 'beta',
                                            }
                                          ),
                         );
