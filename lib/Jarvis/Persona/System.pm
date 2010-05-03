@@ -57,11 +57,12 @@ sub start{
     my $bpath="";
 my $count=0;
 print STDERR Data::Dumper->Dump([@brainpath]);
-    while(shift(@brainpath)){
+    while(my $append=shift(@brainpath)){
 print $count++;
         $bpath = $bpath.'/'.$_;
         print STDERR "[ ". $bpath. " ]\n"; 
     }
+if($count < 1){ die;}
     if(! -d "/dev/shm/brain"){ mkdir("/dev/shm/brain"); }
     if(! -d "/dev/shm/brain/system"){ mkdir("/dev/shm/brain/system"); }
     if(! -f "/dev/shm/brain/system/megahal.trn"){ 
