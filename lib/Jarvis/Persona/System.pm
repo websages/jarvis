@@ -154,6 +154,15 @@ sub input{
               delete $heap->{'spawned'}->{'crunchy'};
               $r = "crunchy terminated";
 
+         }elsif($what=~m/^\s*!*terminate\s+crunchy/){
+             if($directly_addressed == 1){
+                  foreach my $sess (@{ $heap->{'spawned'}->{'beta'} }){
+                      $kernel->post($sess, '_stop');
+                  }
+              }
+              delete $heap->{'spawned'}->{'beta'};
+              $r = "beta terminated";
+
          }elsif($directly_addressed==1){ 
              if($msg->{'conversation'}->{'direct'} == 0){
                  $r = $who.": ".$self->{'megahal'}->do_reply( $what );
@@ -271,9 +280,9 @@ sub spawn_beta{
     $poe->object_session(
                           new Jarvis::IRC(
                                            {
-                                             'alias'        => 'irc_client',
+                                             'alias'        => 'beta_irc_client',
                                              'nickname'     => 'beta',
-                                             'ircname'      => 'Cap\'n Crunchbot',
+                                             'ircname'      => 'beta Cap\'n Crunchbot',
                                              'server'       => '127.0.0.1',
                                              'domain'       => 'websages.com',
                                              'channel_list' => [
@@ -283,7 +292,6 @@ sub spawn_beta{
                                            }
                                          ),
                         );
-   return [ 'crunchy', 'irc_client' ];
+   return [ 'beta', 'beta_irc_client' ];
 }
-1;
 1;
