@@ -138,7 +138,7 @@ sub input{
              }
          }elsif($what=~m/^\s*!*spawn\s+beta/){
              if($directly_addressed == 1){
-                 $heap->{'spawned'}->{'beta'} = $self->spawn_crunchy();
+                 $heap->{'spawned'}->{'beta'} = $self->spawn_beta();
                  if(defined($heap->{'spawned'}->{'beta'})){
                      $r = "beta spawned";
                  }else{
@@ -154,7 +154,7 @@ sub input{
               delete $heap->{'spawned'}->{'crunchy'};
               $r = "crunchy terminated";
 
-         }elsif($what=~m/^\s*!*terminate\s+crunchy/){
+         }elsif($what=~m/^\s*!*terminate\s+beta/){
              if($directly_addressed == 1){
                   foreach my $sess (@{ $heap->{'spawned'}->{'beta'} }){
                       $kernel->post($sess, '_stop');
