@@ -601,7 +601,7 @@ sub shoutout{
     my @list;
     return "shoutout what?" unless $shoutout;
     my $shoutouts = $self->get_ldap_entry("(cn=shoutouts)");
-    if($ref($shoutouts) ne 'ARRAY'){
+    if($ref($shoutouts) ne 'ARRAY')){
         $shoutouts = [ $shoutouts ];
     }
 print STDERR Data::Dumper->Dump([$shoutouts]);
