@@ -600,8 +600,8 @@ sub shoutout{
     my $originator=shift if @_;
     my @list;
     return "shoutout what?" unless $shoutout;
+print STDERR Data::Dumper->Dump([$self->get_ldap_entry("(cn=shoutouts)")]);
     foreach my $entry ( $self->get_ldap_entry("(cn=shoutouts)") ){
-print STDERR Data::Dumper->Dump([$entry]);
         my @users = $entry->get_value('uniqueMember');
         foreach my $user (@users){
             $user=~s/,.*//;
