@@ -1,13 +1,11 @@
 #!/usr/bin/perl
 $ENV{'PATH'}='/usr/local/bin:/usr/bin:/bin';
 $ENV{'IFS'}=' \t\n';
-
 # abort if we have no xmpp creds
 if(!defined($ENV{'XMPP_PASSWORD'})){
     print "Please set XMPP_PASSWORD\n";
     exit 1;
 }
-
 BEGIN { unshift @INC, './lib' if -d './lib'; }
 use Sys::Hostname::Long;
 use Data::Dumper;

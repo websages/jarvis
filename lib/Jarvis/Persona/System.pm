@@ -280,7 +280,7 @@ sub spawn_beta{
     $poe->object_session(
                           new Jarvis::IRC(
                                            {
-                                             'alias'        => 'beta_irc_client',
+                                             'alias'        => 'beta_irc',
                                              'nickname'     => 'beta',
                                              'ircname'      => 'beta Cap\'n Crunchbot',
                                              'server'       => '127.0.0.1',
@@ -292,6 +292,6 @@ sub spawn_beta{
                                            }
                                          ),
                         );
-   return [ 'beta', 'beta_irc_client' ];
+   return [ 'beta', 'beta_irc' ];
 }
 1;
