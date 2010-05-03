@@ -3,6 +3,7 @@ use AI::MegaHAL;
 use POE;
 use POSIX qw( setsid );
 use POE::Builder;
+use LWP::UserAgent;
 
 sub new {
     my $class = shift;
@@ -50,16 +51,30 @@ sub new {
 }
 
 sub start{
-     my $self = $_[OBJECT]||shift;
-     print STDERR __PACKAGE__ ." start\n";
-     $self->{'megahal'} = new AI::MegaHAL(
-                                           'Path'     => '/usr/lib/share/crunchy',
-                                           'Banner'   => 0,
-                                           'Prompt'   => 0,
-                                           'Wrap'     => 0,
-                                           'AutoSave' => 1
-                                         );
-     return $self;
+    my $self = $_[OBJECT]||shift;
+    print STDERR __PACKAGE__ ." start\n";
+    if(! -d "/dev/shm/brain"){ mkdir("/dev/shm/brain"); }
+    if(! -d "/dev/shm/brain/system"){ mkdir("/dev/shm/brain/system"); }
+    if(! -f "/dev/shm/brain/system/megahal.trn"){ 
+        my $agent = LWP::UserAgent->new();
+        $agent->agent( 'Mozilla/5.0' );
+        my $response = $agent->get("http://github.com/cjg/megahal/raw/master/data/megahal.trn");
+        if ( $response->content ne '0' ) {
+            my $fh = FileHandle->new("> /dev/shm/brain/megahal.trn");
+            if (defined $fh) {
+                print $fh $response->content;
+                $fh->close;
+            }
+        }
+    }
+    $self->{'megahal'} = new AI::MegaHAL(
+                                          'Path'     => '/dev/shm/brain',
+                                          'Banner'   => 0,
+                                          'Prompt'   => 0,
+                                          'Wrap'     => 0,
+                                          'AutoSave' => 1
+                                        );
+    return $self;
 }
 
 sub stop{

@@ -113,8 +113,22 @@ sub start{
     my $self = $_[OBJECT]||shift;
     my $kernel = $_[KERNEL];
     print STDERR __PACKAGE__ ." start\n";
+    if(! -d "/dev/shm/brain"){ mkdir("/dev/shm/brain"); }
+    if(! -d "/dev/shm/brain/crunchy"){ mkdir("/dev/shm/brain/crunchy"); }
+    if(! -f "/dev/shm/brain/crunchy/megahal.trn"){ 
+        my $agent = LWP::UserAgent->new();
+        $agent->agent( 'Mozilla/5.0' );
+        my $response = $agent->get("http://github.com/cjg/megahal/raw/master/data/megahal.trn");
+        if ( $response->content ne '0' ) {
+            my $fh = FileHandle->new("> /dev/shm/brain/megahal.trn");
+            if (defined $fh) {
+                print $fh $response->content;
+                $fh->close;
+            }
+        }   
+    }
     $self->{'megahal'} = new AI::MegaHAL(
-                                          'Path'     => '/usr/lib/share/crunchy',
+                                          'Path'     => '/dev/shm/brain/crunchy'
                                           'Banner'   => 0,
                                           'Prompt'   => 0,
                                           'Wrap'     => 0,
