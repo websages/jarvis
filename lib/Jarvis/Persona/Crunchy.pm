@@ -600,7 +600,8 @@ sub shoutout{
     my $originator=shift if @_;
     my @list;
     return "shoutout what?" unless $shoutout;
-    push(@{ my $shoutouts },$self->get_ldap_entry("(cn=shoutouts)"));
+    my $shoutouts;
+    push(@{ $shoutouts },$self->get_ldap_entry("(cn=shoutouts)"));
 print STDERR Data::Dumper->Dump([$shoutouts]);
     return $self->error() unless defined($shoutouts);
     foreach my $entry (@{ $shoutouts }){
