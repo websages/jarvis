@@ -289,7 +289,7 @@ sub input{
      # Response handlers
      ###########################################################################     
      my $pirate=1;
-     my $directly_addressed=$msg->{'conversation'}->{'direct'}||0;
+     my $directly_addressed = $msg->{'conversation'}->{'direct'}||0;
      if(defined($what)){
          if(defined($heap->{'locations'}->{$sender_alias}->{$where})){ 
              foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){ 
@@ -550,7 +550,7 @@ sub toggle_shoutout{
     my $r;
     $action_user=~s/\@.*//;
     #$action_user="uid=".$action_user.",ou=People,".$self->{'ldap_basedn'};
-    $action_user="uid=whitejs,ou=People,dc=websages,dc=com";
+    #$action_user="uid=whitejs,ou=People,dc=websages,dc=com";
     foreach my $entry ( $self->get_ldap_entry("(cn=shoutouts)") ){
         my @users=$entry->get_value('uniqueMember');
         my $max=$#users;
