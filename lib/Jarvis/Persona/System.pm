@@ -59,7 +59,7 @@ my $count=0;
 print STDERR Data::Dumper->Dump([@brainpath]);
     while(my $append=shift(@brainpath)){
 print $count++;
-        $bpath = $bpath.'/'.$_;
+        $bpath = $bpath.'/'.$append;
         print STDERR "[ ". $bpath. " ]\n"; 
     }
 if($count < 1){ die;}
