@@ -57,14 +57,12 @@ sub start{
     my $bpath="";
 my $count=0;
 print STDERR Data::Dumper->Dump([@brainpath]);
-    while(my $append=shift(@brainpath)){
+    while(shift(@brainpath)){
 print $count++;
-        $bpath = $bpath.'/'.$append;
+        $bpath = $bpath.'/'.$_;
+        if(! -d $bpath ){ mkdir($bpath); }
         print STDERR "[ ". $bpath. " ]\n"; 
     }
-if($count < 1){ die;}
-    if(! -d "/dev/shm/brain"){ mkdir("/dev/shm/brain"); }
-    if(! -d "/dev/shm/brain/system"){ mkdir("/dev/shm/brain/system"); }
     if(! -f "/dev/shm/brain/system/megahal.trn"){ 
         my $agent = LWP::UserAgent->new();
         $agent->agent( 'Mozilla/5.0' );
