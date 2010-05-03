@@ -261,7 +261,7 @@ sub spawn_crunchy{
 sub spawn_beta{
     my $self=shift;
     #my $persona = shift if @_;
-    my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
+    my $poe = new POE::Builder({ 'debug' => '0','trace' => '1' });
     return undef unless $poe;
     $poe->object_session(
                           new Jarvis::Persona::Crunchy(
