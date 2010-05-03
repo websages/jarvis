@@ -61,7 +61,7 @@ $poe->object_session(
                                             'hostname'        => $domain,
                                             'username'        => $hostname,
                                             'password'        => $ENV{'XMPP_PASSWORD'},
-                                            'channel_list'    => [ 'asgard@conference.websages.com/'$hostname ],
+                                            'channel_list'    => [ 'asgard@conference.websages.com/'.$hostname ],
                                             'persona'         => 'system',
                                             'ignore_direct'   => 1,
                                           }
