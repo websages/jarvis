@@ -128,7 +128,7 @@ sub start{
         }   
     }
     $self->{'megahal'} = new AI::MegaHAL(
-                                          'Path'     => '/dev/shm/brain/crunchy'
+                                          'Path'     => '/dev/shm/brain/crunchy',
                                           'Banner'   => 0,
                                           'Prompt'   => 0,
                                           'Wrap'     => 0,
