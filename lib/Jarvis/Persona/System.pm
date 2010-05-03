@@ -204,7 +204,7 @@ sub spawn_crunchy{
     $poe->object_session(
                           new Jarvis::Persona::Crunchy(
                                                         {
-                                                          'alias'        => 'crunchy',
+                                                          'alias'        => 'crunchy2',
                                                           'ldap_domain'  => 'websages.com',
                                                           'ldap_binddn'  => 'uid=crunchy,ou=People,dc=websages,dc=com',
                                                           'ldap_bindpw'  => $ENV{'LDAP_PASSWORD'},
@@ -214,8 +214,6 @@ sub spawn_crunchy{
                                                         }
                                                       )
                         );
-
-
     $poe->object_session(
                           new Jarvis::IRC(
                                            {
