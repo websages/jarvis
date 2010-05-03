@@ -53,13 +53,14 @@ sub new {
 sub start{
     my $self = $_[OBJECT]||shift;
     print STDERR __PACKAGE__ ." start\n";
-    my @brainpath = split('/',"/dev/shm/brain/system"); shift(@brainpath);
+    my @brainpath = split('/',"/dev/shm/brain/system"); 
+    shift(@brainpath); # remove the null in [0]
     my $bpath="";
 my $count=0;
 print STDERR Data::Dumper->Dump([@brainpath]);
-    while(shift(@brainpath)){
+    while(my $append = shift(@brainpath)){
 print $count++;
-        $bpath = $bpath.'/'.$_;
+        $bpath = $bpath.'/'.$append;
         if(! -d $bpath ){ mkdir($bpath); }
         print STDERR "[ ". $bpath. " ]\n"; 
     }
