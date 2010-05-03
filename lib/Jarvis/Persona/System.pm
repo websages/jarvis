@@ -53,7 +53,7 @@ sub new {
 sub start{
     my $self = $_[OBJECT]||shift;
     print STDERR __PACKAGE__ ." start\n";
-    my @brainpath = split('/',"/dev/shm/brain/system");
+    my @brainpath = split('/',"/dev/shm/brain/system"); shift(@brainpath);
     my $bpath="";
 my $count=0;
 print STDERR Data::Dumper->Dump([@brainpath]);
