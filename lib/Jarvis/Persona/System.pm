@@ -60,7 +60,7 @@ sub start{
         $agent->agent( 'Mozilla/5.0' );
         my $response = $agent->get("http://github.com/cjg/megahal/raw/master/data/megahal.trn");
         if ( $response->content ne '0' ) {
-            my $fh = FileHandle->new("> /dev/shm/brain/megahal.trn");
+            my $fh = FileHandle->new("> /dev/shm/brain/system/megahal.trn");
             if (defined $fh) {
                 print $fh $response->content;
                 $fh->close;
