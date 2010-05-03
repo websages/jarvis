@@ -720,14 +720,14 @@ sub help {
                                    "description: Baseball standings",
                                    "syntax/use : To piss off Heath.",
                                  ],
-#                  'weather'   => [
-#                                   "description: Weather report",
-#                                   "syntax/use : !weather <zip/city/whatevah>.",
-#                                 ],
-#                  'insult'    => [
-#                                   "description: Insult someone",
-#                                   "syntax/use : !insult <target (optional)>",
-#                                 ],
+                  'weather'   => [
+                                   "description: Weather report",
+                                   "syntax/use : !weather <zip/city/whatevah>.",
+                                 ],
+                  'insult'    => [
+                                   "description: Insult someone",
+                                   "syntax/use : !insult <target (optional)>",
+                                 ],
                   'tell'      => [
                                    "description: Send a textpage to an individual",
                                    "syntax/use : !tell james: you are a fag.",
