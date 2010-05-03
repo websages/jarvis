@@ -217,7 +217,6 @@ sub irc_public {
                                     'body' => $what,
                                   }
               };
-print STDERR Data::Dumper->Dump([$self->{'persona'}, $msg]);
     $kernel->post("$self->{'persona'}", "input", $msg);
 
 }
