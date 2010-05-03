@@ -53,6 +53,10 @@ sub new {
 sub start{
     my $self = $_[OBJECT]||shift;
     print STDERR __PACKAGE__ ." start\n";
+    my @brainpath = split('/',"/dev/shm/brain/system");
+    while my $bpath.='/'.shift(@brainpath){
+        print STDERR "[ ". $bpath. " ]\n"; 
+    }
     if(! -d "/dev/shm/brain"){ mkdir("/dev/shm/brain"); }
     if(! -d "/dev/shm/brain/system"){ mkdir("/dev/shm/brain/system"); }
     if(! -f "/dev/shm/brain/system/megahal.trn"){ 
