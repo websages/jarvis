@@ -57,7 +57,7 @@ sub start{
     my $bpath="";
 print STDERR Data::Dumper->Dump([@brainpath]);
     while(my $append=shift(@brainpath)){
-        $bpath.=$bpath.'/'.$append;
+        $bpath = $bpath.'/'.$append;
         print STDERR "[ ". $bpath. " ]\n"; 
     }
     if(! -d "/dev/shm/brain"){ mkdir("/dev/shm/brain"); }
