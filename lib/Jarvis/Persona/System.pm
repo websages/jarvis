@@ -55,6 +55,7 @@ sub start{
     print STDERR __PACKAGE__ ." start\n";
     my @brainpath = split('/',"/dev/shm/brain/system");
     my $bpath="";
+print STDERR Data::Dumper->Dump([@brainpath]);
     while(my $append=shift(@brainpath)){
         $bpath.=$bpath.'/'.$append;
         print STDERR "[ ". $bpath. " ]\n"; 
