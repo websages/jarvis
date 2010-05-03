@@ -54,7 +54,8 @@ sub start{
     my $self = $_[OBJECT]||shift;
     print STDERR __PACKAGE__ ." start\n";
     my @brainpath = split('/',"/dev/shm/brain/system");
-    while my $bpath.='/'.shift(@brainpath){
+    my $bpath="";
+    while($bpath .= '/' . shift(@brainpath)){
         print STDERR "[ ". $bpath. " ]\n"; 
     }
     if(! -d "/dev/shm/brain"){ mkdir("/dev/shm/brain"); }
