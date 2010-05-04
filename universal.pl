@@ -28,7 +28,13 @@ my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
 exit unless $poe;
 
 # instantiate the system personality
-$poe->object_session(
+$poe->yaml_sess(<<"...");
+---
+class: Jarvis::Persona::System
+init: 
+  alias: system
+...
+
                       new Jarvis::Persona::System(
                                                    { 
                                                      'alias' => 'system',

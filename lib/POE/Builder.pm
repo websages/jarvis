@@ -2,6 +2,7 @@ package POE::Builder;
 #use POE::API::Peek;
 use strict;
 use warnings;
+use YAML;
 use POE;
 sub new { 
     my $class = shift; 
@@ -54,6 +55,15 @@ sub heap_objects{
     my $self = shift; 
     return $self->{'session_struct'}->{'objects'} if $self->{'session_struct'}->{'objects'};
     return undef;
+}
+
+# shortcut for yaml
+sub yaml_sess(){
+   my $self=shift;
+   my $yaml=shift if @_;
+   my $ctor=YAML::Load($yaml);
+   $self->object_session( new $ctor->{'class'}( $ctor->{'init'} ) );
+   return $self;
 }
 
 sub object_session(){
