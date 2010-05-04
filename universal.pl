@@ -49,19 +49,19 @@ init:
   persona: system
 ...
 # connect to jabber
-$poe->object_session( 
-                      new Jarvis::Jabber(
-                                          {
-                                            'alias'           => $hostname.'_xmpp',
-                                            'ip'              => $fqdn,
-                                            'port'            => '5222',
-                                            'hostname'        => $domain,
-                                            'username'        => $hostname,
-                                            'password'        => $ENV{'XMPP_PASSWORD'},
-                                            'channel_list'    => [ 'asgard@conference.websages.com/'.$hostname ],
-                                            'persona'         => 'system',
-                                            'ignore_direct'   => 1,
-                                          }
-                                        ), 
-                    );
+$poe->yaml_sess(<<"...");
+---
+class: Jarvis::Jabber
+init: 
+  alias: $hostname.'_xmpp'
+  ip: $fqdn
+  port: 5222
+  hostname: $domain
+  username: $hostname
+  password: $ENV{'XMPP_PASSWORD'}
+  channel_list: 
+    - 'asgard@conference.websages.com/'.$hostname
+  persona: system
+  ignore_direct: 1
+...
 POE::Kernel->run();
