@@ -39,7 +39,7 @@ $poe->yaml_sess(<<"...");
 ---
 class: Jarvis::IRC
 init:
-  alias: $hostname.'_irc',
+  alias: $hostname.'_irc'
   nickname: $hostname
   ircname: $fqdn
   server: 127.0.0.1
@@ -60,7 +60,7 @@ init:
   username: $hostname
   password: $ENV{'XMPP_PASSWORD'}
   channel_list: 
-    - 'asgard\@conference.websages.com/'.$hostname
+    - asgard\@conference.websages.com/$hostname
   persona: system
   ignore_direct: 1
 ...
