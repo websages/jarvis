@@ -34,13 +34,6 @@ class: Jarvis::Persona::System
 init: 
   alias: system
 ...
-
-                      new Jarvis::Persona::System(
-                                                   { 
-                                                     'alias' => 'system',
-                                                   }
-                                                 )
-                    );
 # connect to irc
 $poe->object_session(  
                       new Jarvis::IRC(
