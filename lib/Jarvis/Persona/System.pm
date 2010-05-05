@@ -228,6 +228,7 @@ sub spawn_crunchy{
     my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
     return undef unless $poe;
     $poe->yaml_sess(<<"    ...");
+    ---
     class: Jarvis::Persona::Crunchy
     init:
       alias: crunchy
@@ -239,6 +240,7 @@ sub spawn_crunchy{
       retry: 300
     ...
     $poe->yaml_sess(<<"    ...");
+    ---
     class: new Jarvis::IRC
     init:
       alias: irc_client
