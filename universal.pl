@@ -27,41 +27,45 @@ my $domain   = $fqdn;         $domain=~s/^[^\.]*\.//;
 my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
 exit unless $poe;
 
-# instantiate the system personality
+# instantiate the system personality so we have something to talk to
 $poe->yaml_sess(<<"...");
 ---
 class: Jarvis::Persona::System
 init: 
   alias: system
 ...
+
 # connect to irc
 $poe->yaml_sess(<<"...");
 ---
 class: Jarvis::IRC
 init:
-  alias: $hostname.'_irc'
-  nickname: $hostname
-  ircname: $fqdn
+  alias: ${hostname}_irc
+  nickname: ${hostname}
+  ircname: ${fqdn}
   server: 127.0.0.1
-  domain: $domain
+  domain: ${domain}
   channel_list:
-    - '#asgard'
+    - #asgard
   persona: system
 ...
+
 # connect to jabber
 $poe->yaml_sess(<<"...");
 ---
 class: Jarvis::Jabber
 init: 
-  alias: $hostname.'_xmpp'
-  ip: $fqdn
+  alias: ${hostname}_xmpp
+  ip: ${fqdn}
   port: 5222
-  hostname: $domain
-  username: $hostname
-  password: $ENV{'XMPP_PASSWORD'}
+  hostname: ${domain}
+  username: ${hostname}
+  password: ${ENV{'XMPP_PASSWORD'}}
   channel_list: 
-    - asgard\@conference.websages.com/$hostname
+    - asgard\@conference.websages.com/${hostname}
   persona: system
   ignore_direct: 1
 ...
+
+# fire up the kernel
 POE::Kernel->run();
