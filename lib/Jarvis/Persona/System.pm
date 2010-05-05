@@ -227,35 +227,30 @@ sub spawn_crunchy{
     #my $persona = shift if @_;
     my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
     return undef unless $poe;
-    $poe->object_session(
-                          new Jarvis::Persona::Crunchy(
-                                                        {
-                                                          'alias'        => 'crunchy',
-                                                          'ldap_domain'  => 'websages.com',
-                                                          'ldap_binddn'  => 'uid=crunchy,ou=People,dc=websages,dc=com',
-                                                          'ldap_bindpw'  => $ENV{'LDAP_PASSWORD'},
-                                                          'twitter_name' => 'capncrunchbot',
-                                                          'password'     => $ENV{'TWITTER_PASSWORD'},
-                                                          'retry'        => 300,
-                                                        }
-                                                      )
-                        );
-    $poe->object_session(
-                          new Jarvis::IRC(
-                                           {
-                                             'alias'        => 'irc_client',
-                                             'nickname'     => 'crunchy',
-                                             'ircname'      => 'Cap\'n Crunchbot',
-                                             'server'       => '127.0.0.1',
-                                             'domain'       => 'websages.com',
-                                             'channel_list' => [
-                                                                 '#soggies',
-                                                               ],
-                                             'persona'      => 'crunchy',
-                                           }
-                                         ),
-                        );
-   return [ 'crunchy', 'irc_client' ];
+    $poe->yaml_sess(<<"    ...");
+    class: Jarvis::Persona::Crunchy
+    init:
+      alias: crunchy
+      ldap_domain: websages.com
+      ldap_binddn: uid=crunchy,ou=People,dc=websages,dc=com
+      ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
+      twitter_name: capncrunchbot
+      password: ${ENV{'TWITTER_PASSWORD'}}
+      retry: 300
+    ...
+    $poe->yaml_sess(<<"    ...");
+    class: new Jarvis::IRC
+    init:
+      alias: irc_client
+      nickname: crunchy
+      ircname: Cap'n Crunchbot
+      server: 127.0.0.1
+      domain: websages.com
+      channel_list:
+        - #soggies
+      persona: crunchy
+    ...
+    return [ 'crunchy', 'irc_client' ];
 }
 
 sub spawn_beta{
