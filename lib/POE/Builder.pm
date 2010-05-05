@@ -72,8 +72,8 @@ sub indented_yaml{
              if($char eq ' '){
                  $spcidx++;
              }else{
-                 if(($minidx == -1) || ($minidx > $spcidx)){
-                     $minidx=$spcidx;
+                 if(($min_indent == -1) || ($min_indent > $spcidx)){
+                     $min_indent=$spcidx;
                  }
              }
          }
