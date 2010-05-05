@@ -1,14 +1,16 @@
 package POE::Builder;
-#use POE::API::Peek;
+################################################################################
+# Just a little conceptual integrity wrapper...
+################################################################################
 use strict;
 use warnings;
-use YAML;
+use JSON;
 use POE;
+use YAML;
 sub new { 
     my $class = shift; 
     my $self = {}; 
     my $construct = shift if @_;
-    #my $self->{'peek'} = POE::API::Peek->new();
     $self->{'session_struct'}={};
 
     # list of required constructor elements
@@ -57,11 +59,38 @@ sub heap_objects{
     return undef;
 }
 
+sub indented_yaml{
+     my $self = shift;
+     my $iyaml = shift if @_;
+     return undef unless $iyaml;
+     my @lines = split('\n', $iyaml);
+     my $min_indent=-1;
+     foreach my $line (@lines){
+         my $chars = split('',$line);
+         my $spcidx=0;
+         foreach my $char (@chars){
+             if($char eq ' '){
+                 $spcidx++;
+             }else{
+                 if(($minidx == -1) || ($minidx > $spcidx)){
+                     $minidx=$spcidx;
+                 }
+             }
+         }
+     }
+     foreach my $line (@lines){
+         $line=~s/ {$min_indent}//;
+     }
+     my $yaml=join('\n',$yaml);
+     return YAML::Load($yaml);
+
+}
+
 # shortcut for yaml
 sub yaml_sess(){
    my $self=shift;
    my $yaml=shift if @_;
-   my $ctor=YAML::Load($yaml);
+   my $ctor=$self->indented_yaml($yaml);
    $self->object_session( $ctor->{'class'}->new( $ctor->{'init'} ) );
    return $self;
 }
@@ -72,15 +101,6 @@ sub object_session(){
     my $set_alias = shift if @_;
     my $object_states = $object->states();
     my $aliased_object_states = $object_states;;
-    #foreach my $event (keys(%{ $object_states })){
-    #    if($event =~m /^_/){
-    #        # if it starts with and _underscore, prepend the alias to it, so we don't collide
-    #        $aliased_object_states->{$object->alias().$event} = $object_states->{$event};
-    #    }else{
-    #        # otherwise, just pass the event straight through.
-    #        $aliased_object_states->{$event} = $object_states->{$event};
-    #    }
-    #}
     push( @{ $self->{'sessions'} }, POE::Session->create(
                           options => { debug => $self->{'debug'}, trace => $self->{'trace'} },
                           object_states =>  [ $object => $aliased_object_states ],
