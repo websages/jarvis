@@ -84,6 +84,7 @@ sub indented_yaml{
          $line=~s/ {$min_indent}//;
      }
      my $yaml=join('\n',@lines).'\n';
+print STDERR $yaml;
      return YAML::Load($yaml);
 }
 
