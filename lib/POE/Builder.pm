@@ -59,6 +59,8 @@ sub heap_objects{
     return undef;
 }
 
+# As long as the yaml lines up with itself, 
+# you can indent as much as you want to keep the here statements pretty
 sub indented_yaml{
      my $self = shift;
      my $iyaml = shift if @_;
@@ -66,7 +68,7 @@ sub indented_yaml{
      my @lines = split('\n', $iyaml);
      my $min_indent=-1;
      foreach my $line (@lines){
-         my $chars = split('',$line);
+         my @chars = split('',$line);
          my $spcidx=0;
          foreach my $char (@chars){
              if($char eq ' '){
