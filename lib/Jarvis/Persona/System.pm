@@ -241,7 +241,7 @@ sub spawn_crunchy{
     ...
     $poe->yaml_sess(<<"    ...");
     ---
-    class: new Jarvis::IRC
+    class: Jarvis::IRC
     init:
       alias: irc_client
       nickname: crunchy
