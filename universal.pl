@@ -36,19 +36,19 @@ init:
 ...
 
 # connect to irc
-$poe->yaml_sess(<<"...");
----
-class: Jarvis::IRC
-init:
-  alias: ${hostname}_irc
-  nickname: ${hostname}
-  ircname: ${fqdn}
-  server: 127.0.0.1
-  domain: ${domain}
-  channel_list:
-    - #asgard
-  persona: system
-...
+$poe->yaml_sess(<<"                   ...");
+                   ---
+                   class: Jarvis::IRC
+                   init:
+                     alias: ${hostname}_irc
+                     nickname: ${hostname}
+                     ircname: ${fqdn}
+                     server: 127.0.0.1
+                     domain: ${domain}
+                     channel_list:
+                       - #asgard
+                     persona: system
+                   ...
 
 # connect to jabber
 $poe->yaml_sess(<<"...");
