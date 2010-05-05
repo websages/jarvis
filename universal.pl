@@ -1,13 +1,12 @@
 #!/usr/bin/perl
 $ENV{'PATH'}='/usr/local/bin:/usr/bin:/bin';
 $ENV{'IFS'}=' \t\n';
+BEGIN { unshift @INC, './lib' if -d './lib'; }
 # abort if we have no xmpp creds
 if(!defined($ENV{'XMPP_PASSWORD'})){
     print "Please set XMPP_PASSWORD\n";
     exit 1;
 }
-BEGIN { unshift @INC, './lib' if -d './lib'; }
-use Sys::Hostname::Long;
 use Data::Dumper;
 use Jarvis::IRC;
 use Jarvis::Jabber;
@@ -16,6 +15,7 @@ use Jarvis::Persona::Crunchy;
 use Jarvis::Persona::System;
 #use Jarvis::Persona::Watcher;
 use POE::Builder;
+use Sys::Hostname::Long;
 $|++;
 
 # get our fqd, hostname, and domain name
@@ -34,22 +34,20 @@ class: Jarvis::Persona::System
 init: 
   alias: system
 ...
-
 # connect to irc
-$poe->yaml_sess(<<"                   ...");
-                   ---
-                   class: Jarvis::IRC
-                   init:
-                     alias: ${hostname}_irc
-                     nickname: ${hostname}
-                     ircname: ${fqdn}
-                     server: 127.0.0.1
-                     domain: ${domain}
-                     channel_list:
-                       - #asgard
-                     persona: system
-                   ...
-
+$poe->yaml_sess(<<"...");
+---
+class: Jarvis::IRC
+init:
+  alias: ${hostname}_irc
+  nickname: ${hostname}
+  ircname: ${fqdn}
+  server: 127.0.0.1
+  domain: ${domain}
+  channel_list:
+    - #asgard
+  persona: system
+...
 # connect to jabber
 $poe->yaml_sess(<<"...");
 ---
@@ -66,6 +64,5 @@ init:
   persona: system
   ignore_direct: 1
 ...
-
 # fire up the kernel
 POE::Kernel->run();
