@@ -27,7 +27,6 @@ sub new {
     foreach my $key (keys(%{ $oload_hash })){
         $self->{'may'}->{ $key } = $oload_hash->{ $key };
     }
-print Data::Dumper->Dump([$self->{'may'}]);
     # set our required values fron the constructor or the defaults
     foreach my $attr (@{ $self->{'must'} }){
          if(defined($construct->{$attr})){

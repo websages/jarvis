@@ -17,7 +17,7 @@ sub may {
 }
 
 sub persona_start{
-
+    my $self=shift;
     my @brainpath = split('/',$self->{'brainpath'}); 
     shift(@brainpath); # remove the null in [0]
     # mkdir -p
@@ -38,7 +38,7 @@ sub persona_start{
             }
         }
     }
-print STDERR $self->{'brainpath'}."\n";
+print STDERR "[ ". $self->{'brainpath'} ." ]\n";
     $self->{'megahal'} = new AI::MegaHAL(
                                           'Path'     => $self->{'brainpath'},
                                           'Banner'   => 0,
