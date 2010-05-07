@@ -89,16 +89,55 @@ sub persona_start{
 #   It should return a list reference to the list of one-line replies.
 #   You will also need to subroutines or inline code to handle these actions.
 ################################################################################
+sub input{
+    my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
+    # un-wrap the $msg
+    my ( $sender_alias, $respond_event, $who, $where, $what, $id ) =
+       ( 
+         $msg->{'sender_alias'},
+         $msg->{'reply_event'},
+         $msg->{'conversation'}->{'nick'},
+         $msg->{'conversation'}->{'room'},
+         $msg->{'conversation'}->{'body'},
+         $msg->{'conversation'}->{'id'},
+       );
+    my $direct=$msg->{'conversation'}->{'direct'}||0;
+    if(defined($what)){
+        if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
+            foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
+                if($what=~m/^\s*$chan_nick\s*:*\s*/){
+                    $what=~s/^\s*$chan_nick\s*:*\s*//;
+                    $direct=1;
+                }
+            }
+        }
+        my $replies=[];
+        for ( $what ) {
+            /^\s*!*help\s*/           && do { $replies = $self->help($line); last; }
+            /\"(.+?)\"\s+--\s*(.+?)$/ && do { $replies = [ $self->quote($what) ]; last; }
+            /(https*:\S+)/            && do { $replies = [ $self->link($what, $who) ]; last; }
+            /^\s*fortune\s*$/         && do { $replies = [ $self->fortune() ]; last; }
+            /^!shoutout\s*(.*)/       && do { $replies = [ $self->shoutout($1,$who) ]; last; }
+            /.*/                      && do { $replies = [ $self->megahal($line) ] if $direct; last; }
+            /.*/                      && do { $replies = [];  last; }
+        }
+        if($direct==1){             
+            foreach my $line (@{ $replies }){
+                if($msg->{'conversation'}->{'direct'} == 0){
+                    if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $who.': '.$line); }
+                }else{
+                    if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $line); } 
+                }
+            }
+        }else{
+            foreach my $line (@{ $replies }){
+                    if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $line); } 
+            }
+        }
+    }
+    return $self->{'alias'};
+}
 
-#    for ( $what ) {
-#        /^\s*!*help\s*/            && return $self->help($line);
-#        /\"(.+?)\"\s+--\s*(.+?)$/  && return [ piratespeak( $self->quote($what) ) ];
-#        /(https*:\S+)/             && return [ $self->link($what, $who) ];
-#        /^\s*fortune\s*$/          && return [ piratespeak( $self->fortune() ) ];
-#        /^!shoutout\s*(.*)/        && return [ $self->shoutout($1,$who) ];
-#        /.*/                       && return [ piratespeak( $self->megahal($line) ) ] if $direct;
-#        /.*/                       && return []; 
-#    }
 
 
 ################################################################################

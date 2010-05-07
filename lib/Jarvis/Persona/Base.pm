@@ -174,7 +174,8 @@ sub channel_del{
 
 ################################################################################
 # the messages get routed here from the connectors, a reply is formed, and 
-# posted back to the sender_alias,reply event
+# posted back to the sender_alias,reply event (this function will need to be
+# overloaded...
 ################################################################################
 sub input{
     my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
