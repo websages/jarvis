@@ -195,7 +195,7 @@ sub input{
                  }
              }
          }
-         my $replies=$self->input_handler($what,$directly_addressed);
+         my $replies=$self->input_handler($msg);
          if($directly_addressed==1){ 
              foreach my $line (@{ $replies }){
                  if($msg->{'conversation'}->{'direct'} == 0){

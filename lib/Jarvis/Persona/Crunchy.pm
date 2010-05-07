@@ -96,6 +96,7 @@ sub input_handler{
 print STDERR Data::Dumper->Dump([$msg]);
     my $line="";
     my $what="";
+    my $who="";
     my $direct=0;
     for ( $line ) {
         /^\s*!*help\s*/            && return $self->help($line);
