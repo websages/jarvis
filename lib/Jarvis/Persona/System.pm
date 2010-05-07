@@ -164,18 +164,29 @@ sub spawn{
             my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
             return undef unless $poe;
             
-            push( 
-                 @{ $self->{$persona} }, 
-                 $poe->object_session( $p->{'persona'}->{'class'}->new( $p->{'persona'}->{'init'} ) )
-            );
+            $poe->object_session( $p->{'persona'}->{'class'}->new( $p->{'persona'}->{'init'} ) );
+            push( @{ $self->{'spawned'}->{$persona} }, $p->{'persona'}->{'init'}->{'alias'} );
+
             foreach my $conn (@{ $p->{'connectors'} }){
-                push( @{ $self->{$persona} }, $poe->object_session( $conn->{'class'}->new( $conn->{'init'} ) ));
+                push( @{ $self->{'spawned'}->{$persona} }, $conn->{'init'}->{'alias'} );
+                $poe->object_session( $conn->{'class'}->new( $conn->{'init'} ) );
             }
-            print Data::Dumper->Dump([$self->{$persona}]);
+
+            print Data::Dumper->Dump([ $self->{'spawned'} ]);
             return "$persona spawned."
         }
     }
     return "I don't know how to become $persona." if(!$found);
+}
+
+sub terminate {
+    my $self=shift;
+    my $persona = shift if @_;
+    if(defined($self->{'spawned'}->{$persona})){
+        foreach my $sess (@{ defined($self->{'spawned'}->{$persona} }){
+            $kernel->post($sess, '_stop');
+        }
+    }
 }
 
 # As long as the yaml lines up with itself, 
@@ -205,6 +216,5 @@ sub indented_yaml{
      my $yaml=join("\n",@lines)."\n";
      return YAML::Load($yaml);
 }
-
 
 1;
