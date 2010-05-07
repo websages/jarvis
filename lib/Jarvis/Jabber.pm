@@ -429,28 +429,34 @@ sub error_event()
         {
                 my ($call, $code, $err) = @_[ARG1..ARG3];
                 print "Socket error: $call, $code, $err\n";
-                print "Reconnecting!\n";
                 if($heap->{'reconnect_count'} < 10){
+                    print "Reconnecting!\n";
                     $heap->{'reconnect_count'}++;
                     $kernel->post($sender, 'reconnect');
+                }else{
+                    print "Giving Up!\n";
                 }
         
         } elsif($error == +PCJ_SOCKETDISCONNECT) {
                 
                 print "We got disconneted\n";
-                print "Reconnecting!\n";
                 if($heap->{'reconnect_count'} < 10){
+                    print "Reconnecting!\n";
                     $heap->{'reconnect_count'}++;
                     $kernel->post($sender, 'reconnect');
+                }else{
+                    print "Giving Up!\n";
                 }
         
         } elsif($error == +PCJ_CONNECTFAIL) {
 
                 print "Connect failed\n";
-                print "Retrying connection!\n";
                 if($heap->{'reconnect_count'} < 10){
                     $heap->{'reconnect_count'}++;
+                    print "Retrying connection!\n";
                     $kernel->post($sender, 'reconnect');
+                }else{
+                    print "Giving Up!\n";
                 }
         
         } elsif ($error == +PCJ_SSLFAIL) {
