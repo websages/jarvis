@@ -95,7 +95,7 @@ sub input_handler{
     my $line=shift;
     my $direct=shift||0;
     for ( $line ) {
-        /^\s*!*help\s*/   && return  [ $self->help($line)    ];
+        /^\s*!*help\s*/   && return  $self->help($line);
         /.*/              && return  [ $self->megahal($line) ] if $direct;
         /.*/              && return  [                       ]; 
     }
