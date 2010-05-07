@@ -63,7 +63,7 @@ init:
   ip: thor.websages.com
   port: 5222
   hostname: ${domain}
-  username: crunchy
+  username: ${hostname}
   password: ${ENV{'XMPP_PASSWORD'}}
   channel_list: 
     - asgard\@conference.websages.com/${hostname}
