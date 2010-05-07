@@ -93,7 +93,6 @@ sub start {
     my $kernel = $_[KERNEL];
     my $session = $_[SESSION];
     $self->on_start(); 
-    print STDERR ref($self)." started.\n"; 
 }
 
 sub stop  { 
@@ -107,7 +106,6 @@ sub stop  {
     #}
     $self->{'irc_client'}->yield( 'quit' => 'terminated.');
     $self->{'irc_client'}->yield( 'unregister' => 'all' );
-    print STDERR ref($self)." stopped.\n"; 
 }
 
 sub states { my $self = $_[OBJECT]; return $self->{'states'};           }
@@ -176,7 +174,7 @@ sub irc_001 {
     # accessing the heap of the sender. Then we register and connect to the
     # specified server.
     my $sender_heap = $sender->get_heap();
-    print "Connected to ", $sender_heap->server_name(), "\n";
+    #print "Connected to ", $sender_heap->server_name(), "\n";
     for(@{ $self->{'channel_list'} }){
         # notify the persona that we're adding the channel and nick 
         # or there is no way for the persona to know what he's called in what channels
