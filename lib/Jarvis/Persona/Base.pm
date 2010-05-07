@@ -200,7 +200,7 @@ sub input{
          }
          my $replies=[];
          for ( $what ) {
-             /^\s*!*help\s*/ && do { $replies = [ "i need a help routine" ]if($direct); last; }
+             /^\s*!*help\s*/ && do { $replies = [ "i need a help routine" ] if($direct); last; };
              /.*/ && last;
          }
          if($direct==1){ 
