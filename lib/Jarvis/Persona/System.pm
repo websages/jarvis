@@ -70,7 +70,6 @@ sub may {
 
 sub persona_start{
     my $self=shift;
-    print STDERR __PACKAGE__ ." start\n";
     my @brainpath = split('/',$self->{'brainpath'}); 
     shift(@brainpath); # remove the null in [0]
     # mkdir -p

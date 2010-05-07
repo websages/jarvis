@@ -91,7 +91,6 @@ sub may {
 sub persona_start{
     my $self = $_[OBJECT]||shift;
     my $kernel = $_[KERNEL];
-    print STDERR __PACKAGE__ ." start\n";
     return $self;
 }
 
@@ -108,14 +107,12 @@ sub persona_states{
 sub start{
     my $self = $_[OBJECT]||shift;
     my $kernel = $_[KERNEL];
-    print STDERR __PACKAGE__ ." start\n";
     $kernel->post($self->alias(),'persona_start');
     return $self;
 }
 
 sub stop{
      my $self = $_[OBJECT]||shift;
-     print STDERR __PACKAGE__ ." stop\n";
      return $self;
 }
 
