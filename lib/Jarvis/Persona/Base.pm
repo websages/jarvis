@@ -48,11 +48,12 @@ sub new {
 
     # collect our states for POE
     $self->{'states'} = { 
-                          'start'       => 'start',
-                          'stop'        => 'stop',
-                          'input'       => 'input',
-                          'channel_add' => 'channel_add',
-                          'channel_del' => 'channel_del',
+                          'start'         => 'start',
+                          'persona_start' => 'persona_start',
+                          'stop'          => 'stop',
+                          'input'         => 'input',
+                          'channel_add'   => 'channel_add',
+                          'channel_del'   => 'channel_del',
                         };
     my $pstates = $self->persona_states(); 
     if(ref($pstates) eq 'HASH'){
@@ -88,6 +89,7 @@ sub may {
 # a handler for persona init routines (overload me)
 sub persona_start{
     my $self = $_[OBJECT]||shift;
+    my $kernel = $_[KERNEL];
     print STDERR __PACKAGE__ ." start\n";
     return $self;
 }
@@ -104,8 +106,9 @@ sub persona_states{
 ################################################################################
 sub start{
     my $self = $_[OBJECT]||shift;
+    my $kernel = $_[KERNEL];
     print STDERR __PACKAGE__ ." start\n";
-    $self->persona_start();
+    $kernel->post($self->alias(),'persona_start');
     return $self;
 }
 
