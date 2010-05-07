@@ -10,7 +10,7 @@ if(!defined($ENV{'XMPP_PASSWORD'})){
 use Data::Dumper;
 use Jarvis::IRC;
 use Jarvis::Jabber;
-use Jarvis::Persona::MegaHAL;
+use Jarvis::Persona::Crunchy;
 use POE::Builder;
 use Sys::Hostname::Long;
 $|++;
@@ -30,7 +30,7 @@ exit unless $poe;
 ########################################
 my $persona = << "...";
 ---
-class: Jarvis::Persona::MegaHAL
+class: Jarvis::Persona::Crunchy
 init: 
   alias: system
 ...
