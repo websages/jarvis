@@ -215,7 +215,7 @@ sub ldap_srv_records{
 sub authen_reply{
     my ($self, $kernel, $heap, $msg, $user) = @_[OBJECT, KERNEL, HEAP, ARG0, ARG1];
     my $r;
-print STDERR Data::Dumper->Dump([$msg,$usr]);
+print STDERR Data::Dumper->Dump([$msg,$user]);
     if(defined($msg->{'reason'})){
         if($msg->{'reason'} eq 'whoami'){
             if(defined($user)){
