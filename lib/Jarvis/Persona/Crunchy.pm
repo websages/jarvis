@@ -146,6 +146,7 @@ sub input{
             /^\s*who\s*am\s*i[?\s]*/    && do {
                                                 $pirate=0;
                                                 $msg->{'reason'}='whoami';
+print STDERR Data::Dumper->Dump([$msg]);
                                                 $kernel->post($sender, 'authen', $msg);
                                                 last;
                                               };
