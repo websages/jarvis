@@ -6,54 +6,57 @@ use POSIX qw( setsid );
 use POE::Builder;
 use LWP::UserAgent;
 
-my $known_personas = <<"...";
----
- - crunchy:
-     persona:
-       class: Jarvis::Persona::Crunchy
-       init:
-         alias: crunchy
-         ldap_domain: websages.com
-         ldap_binddn: uid=crunchy,ou=People,dc=websages,dc=com
-         ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
-         twitter_name: capncrunchbot
-         password: ${ENV{'TWITTER_PASSWORD'}}
-         retry: 300
-     connectors:
-       - class: Jarvis::IRC
-         init:
-           alias: irc_client
-           nickname: crunchy
-           ircname: "Cap'n Crunchbot"
-           server: 127.0.0.1
-           domain: websages.com
-           channel_list:
-             - #soggies
-           persona: crunchy
- - berry:
-     persona:
-       class: Jarvis::Persona::Crunchy
-       init:
-         alias: beta
-         ldap_domain: websages.com
-         ldap_binddn: uid=crunchy,ou=People,dc=websages,dc=com
-         ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
-         twitter_name: capncrunchbot
-         password: ${ENV{'TWITTER_PASSWORD'}}
-         retry: 300
-     connectors:
-       - class: Jarvis::IRC
-         init:
-           alias: beta_irc
-           nickname: beta
-           ircname: "beta Cap'n Crunchbot"
-           server: 127.0.0.1
-           domain: websages.com
-           channel_list:
-             - #puppies
-           persona: beta
-...
-
+sub known_personas{
+    my $self=shift;
+    return  <<"    ...";
+    ---
+     - crunchy:
+         persona:
+           class: Jarvis::Persona::Crunchy
+           init:
+             alias: crunchy
+             ldap_domain: websages.com
+             ldap_binddn: uid=crunchy,ou=People,dc=websages,dc=com
+             ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
+             twitter_name: capncrunchbot
+             password: ${ENV{'TWITTER_PASSWORD'}}
+             retry: 300
+         connectors:
+           - class: Jarvis::IRC
+             init:
+               alias: irc_client
+               nickname: crunchy
+               ircname: "Cap'n Crunchbot"
+               server: 127.0.0.1
+               domain: websages.com
+               channel_list:
+                 - #soggies
+               persona: crunchy
+     - berry:
+         persona:
+           class: Jarvis::Persona::Crunchy
+           init:
+             alias: beta
+             ldap_domain: websages.com
+             ldap_binddn: uid=crunchy,ou=People,dc=websages,dc=com
+             ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
+             twitter_name: capncrunchbot
+             password: ${ENV{'TWITTER_PASSWORD'}}
+             retry: 300
+         connectors:
+           - class: Jarvis::IRC
+             init:
+               alias: beta_irc
+               nickname: beta
+               ircname: "beta Cap'n Crunchbot"
+               server: 127.0.0.1
+               domain: websages.com
+               channel_list:
+                 - #puppies
+               persona: beta
+    ...
+}
+    
 sub must {
     my $self = shift;
     return  [ ];
@@ -153,65 +156,10 @@ sub spawn{
     my $self=shift;
     my $persona = shift if @_;
     $persona=~s/^\s+//;
+    
+    
     my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
     return undef unless $poe;
-    $poe->yaml_sess(<<"    ...");
-    ---
-    class: Jarvis::Persona::Crunchy
-    init:
-      alias: crunchy
-      ldap_domain: websages.com
-      ldap_binddn: uid=crunchy,ou=People,dc=websages,dc=com
-      ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
-      twitter_name: capncrunchbot
-      password: ${ENV{'TWITTER_PASSWORD'}}
-      retry: 300
-    ...
-    $poe->yaml_sess(<<"    ...");
-    ---
-    class: Jarvis::IRC
-    init:
-      alias: irc_client
-      nickname: crunchy
-      ircname: Cap'n Crunchbot
-      server: 127.0.0.1
-      domain: websages.com
-      channel_list:
-        - #soggies
-      persona: crunchy
-    ...
-    return [ 'crunchy', 'irc_client' ];
 }
 
-sub spawn_beta{
-    my $self=shift;
-    #my $persona = shift if @_;
-    my $poe = new POE::Builder({ 'debug' => '0','trace' => '1' });
-    return undef unless $poe;
-    $poe->yaml_sess(<<"    ...");
-    ---
-    class: Jarvis::Persona::Crunchy
-    init:
-      alias: beta
-      ldap_domain: websages.com
-      ldap_binddn: uid=crunchy,ou=People,dc=websages,dc=com
-      ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
-      twitter_name: capncrunchbot
-      password: ${ENV{'TWITTER_PASSWORD'}}
-      retry: 300
-    ...
-    $poe->yaml_sess(<<"    ...");
-    class: Jarvis::IRC
-    init:
-      alias: beta_irc
-      nickname: beta
-      ircname: beta Cap'n Crunchbot
-      server: 127.0.0.1
-      domain: websages.com
-      channel_list:
-        - #puppies
-      persona: beta
-    ...
-    return [ 'beta', 'beta_irc' ];
-}
 1;
