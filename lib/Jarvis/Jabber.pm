@@ -136,7 +136,9 @@ sub authen {
 
 sub status_event()
 {
+print STDERR "1\n";
         my ($self, $kernel, $sender, $heap, $state) = @_[OBJECT, KERNEL, SENDER, HEAP, ARG0];
+print STDERR "2\n";
         my $jabstat= [ 'PCJ_CONNECT', 'PCJ_CONNECTING', 'PCJ_CONNECTED',
                        'PCJ_STREAMSTART', 'PCJ_SSLNEGOTIATE', 'PCJ_SSLSUCCESS',
                        'PCJ_AUTHNEGOTIATE', 'PCJ_AUTHSUCCESS', 'PCJ_BINDNEGOTIATE',
@@ -146,6 +148,7 @@ sub status_event()
                        'PCJ_STREAMEND', 'PCJ_SHUTDOWN_START', 'PCJ_SHUTDOWN_FINISH', ];
 
         
+print STDERR "3\n";
         # In the example we only watch to see when PCJ is finished building the
         # connection. When PCJ_INIT_FINISHED occurs, the connection ready for use.
         # Until this status event is fired, any nodes sent out will be queued. It's
@@ -158,36 +161,49 @@ sub status_event()
                 # method? PCJ stores the jid that was negotiated during connecting and 
                 # is retrievable through the jid() method
 
+print STDERR "3.1\n";
                 my $jid = $heap->{$self->alias()}->jid();
                 # print "INIT FINISHED! \n";
+print STDERR "3.2\n";
                 $heap->{'reconnect_count'} = 0; 
                 #print "JID: $jid \n";
                 #print "SID: ". $sender->ID() ." \n\n";
                 
+print STDERR "3.3\n";
                 $heap->{'jid'} = $jid;
+print STDERR "3.4\n";
                 $heap->{'sid'} = $sender->ID();
         
+print STDERR "3.5\n";
                 $kernel->post($self->alias().'component','output_handler', XNode->new('presence'));
                 
                 # And here is the purge_queue. This is to make sure we haven't sent
                 # nodes while something catastrophic has happened (like reconnecting).
                 
+print STDERR "3.6\n";
                 $kernel->post($self->alias().'component','purge_queue');
 
+print STDERR "3.7\n";
                 if(defined($self->{'channel_list'})){
+print STDERR "3.8\n";
                     foreach my $muc (@{ $self->{'channel_list'} }){
+print STDERR "3.9\n";
                         $kernel->post($self->alias(),'join_channel', $muc);
+print STDERR "3.10\n";
                     }
+print STDERR "3.11\n";
                 }
    
                 # Ignore incoming messages for 1 second, so we don't re-respond to crap in the replay buffer
                 $kernel->delay_add('enable_input', 1);
+print STDERR "3.12\n";
 
                 #for(1..10)
                 #{
                 #        $kernel->delay_add('test_message', int(rand(10)));
                 #}
         }
+print STDERR "4\n";
         # print "Status received: $jabstat->[$state] \n";
 }
 
