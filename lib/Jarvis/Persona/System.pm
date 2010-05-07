@@ -5,10 +5,11 @@ use POE;
 use POSIX qw( setsid );
 use POE::Builder;
 use LWP::UserAgent;
+use YAML;
 
 sub known_personas{
     my $self=shift;
-    return  <<"    ...";
+    $self->{'known_personas'} = YAML::Load(<<"    ...");
     ---
      - crunchy:
          persona:
@@ -96,6 +97,7 @@ sub persona_start{
                                           'Wrap'     => 0,
                                           'AutoSave' => 1
                                         );
+    $self->known_personas();
     return $self;
 }
 
@@ -156,8 +158,11 @@ sub spawn{
     my $self=shift;
     my $persona = shift if @_;
     $persona=~s/^\s+//;
-    
-    
+    if(defined($self->{'known_personas'}->{$persona})){
+        return "$persona spawned."
+    }else{
+        return "I don't know how to become $persona."
+    }
     my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
     return undef unless $poe;
 }
