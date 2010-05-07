@@ -188,21 +188,22 @@ sub input{
          $msg->{'conversation'}->{'body'},
          $msg->{'conversation'}->{'id'},
        );
-    my $directly_addressed=$msg->{'conversation'}->{'direct'}||0;
+    my $direct=$msg->{'conversation'}->{'direct'}||0;
     if(defined($what)){
          if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
              foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
                  if($what=~m/^\s*$chan_nick\s*:*\s*/){
                      $what=~s/^\s*$chan_nick\s*:*\s*//;
-                     $directly_addressed=1;
+                     $direct=1;
                  }
              }
          }
          my $replies=[];
          for ( $what ) {
+             /^\s*!*help\s*/ && do { $replies = [ "i need a help routine" ]if($direct); last; }
              /.*/ && last;
          }
-         if($directly_addressed==1){ 
+         if($direct==1){ 
              foreach my $line (@{ $replies }){
                  if($msg->{'conversation'}->{'direct'} == 0){
                      if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $who.': '.$line); }
