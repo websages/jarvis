@@ -94,6 +94,9 @@ sub input_handler{
     my $self=shift;
     my $msg=shift; 
 print STDERR Data::Dumper->Dump([$msg]);
+    my $line="";
+    my $what="";
+    my $direct=0;
     for ( $line ) {
         /^\s*!*help\s*/            && return $self->help($line);
         /\"(.+?)\"\s+--\s*(.+?)$/  && return [ piratespeak( $self->quote($what) ) ];
