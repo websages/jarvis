@@ -183,7 +183,7 @@ sub terminate {
     my $self=shift;
     my $persona = shift if @_;
     if(defined($self->{'spawned'}->{$persona})){
-        foreach my $sess (@{ defined($self->{'spawned'}->{$persona} })){
+        foreach my $sess (@{ $self->{'spawned'}->{$persona} }){
             $kernel->post($sess, '_stop');
         }
     }
