@@ -1,19 +1,3 @@
-         }elsif($what=~m/^\s*fortune\s*$/){
-             $r = $self->fortune();
-         }elsif($what=~m/^!shoutout\s*(.*)/){
-             my $shoutout=$1;
-             $r = $self->shoutout($1,$who);
-             $pirate=0;
-         }elsif($what=~m/^!enable\s+shoutouts*/){
-             $msg->{'reason'}='enable_shoutout';
-             $kernel->post($sender, 'authen', $msg); 
-         }elsif($what=~m/^!disable\s+shoutouts*/){
-             $msg->{'reason'}='disable_shoutout';
-             $kernel->post($sender, 'authen', $msg); 
-         }elsif($what=~m/^!weather\s+(.+?)$/){
-             $r = qx( ruby /usr/local/bin/weather.rb $1 );
-         }elsif($what=~m/^!insult\s+(.+?)$/){
-             $r = qx( ruby /usr/local/bin/insult.rb $1 );
          }elsif($what=~m/^!tell\s+(.+?):*\s+(.+?)$/){
              my ($recipient,$message)=($1,$2);
              # first we try to dereference the nickname

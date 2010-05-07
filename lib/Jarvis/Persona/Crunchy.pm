@@ -112,14 +112,37 @@ sub input{
             }
         }
         my $replies=[];
+        my $pirate=1;
         for ( $what ) {
-            /^\s*!*help\s*/           && do { $replies = $self->help($what); last; };
-            /\"(.+?)\"\s+--\s*(.+?)$/ && do { $replies = [ $self->quote($what) ]; last; };
-            /(https*:\S+)/            && do { $replies = [ $self->link($what, $who) ]; last; };
-            /^\s*fortune\s*$/         && do { $replies = [ $self->fortune() ]; last; };
-            /^!shoutout\s*(.*)/       && do { $replies = [ $self->shoutout($1,$who) ]; last; };
-            /.*/                      && do { $replies = [ $self->megahal($what) ] if $direct; last; };
-            /.*/                      && do { last; };
+            /^\s*!*help\s*/             && do { $replies = $self->help($what); last; };
+            /\"(.+?)\"\s+--\s*(.+?)$/   && do { $replies = [ $self->quote($what) ]; last; };
+            /(https*:\S+)/              && do { $replies = [ $self->link($what, $who) ]; last; };
+            /^\s*fortune\s*$/           && do { $replies = [ $self->fortune() ]; last; };
+            /^!shoutout\s*(.*)/         && do { $replies = [ $self->shoutout($1,$who) ]; last; };
+            /^!enable\s+shoutouts*/     && do {
+                                                $msg->{'reason'}='enable_shoutout';
+                                                $kernel->post($sender, 'authen', $msg);
+                                                last;
+                                            };
+            /^!disable\s+shoutouts*/    && do {
+                                                $msg->{'reason'}='disable_shoutout';
+                                                $kernel->post($sender, 'authen', $msg);
+                                                $last;
+                                              };
+            /^!weather\s+(.+?)$/        && do { $replies = [ qx( ruby /usr/local/bin/weather.rb $1 )]; last; };
+            /^!insult\s+(.+?)$/         && do { $replies = [ qx( ruby /usr/local/bin/insult.rb $1 ) ]; last; };
+            /^!tell\s+(.+?):*\s+(.+?)$/ && do {
+                                                my ($recipient,$message)=($1,$2);
+                                                # first we try to dereference the nickname
+                                                $msg->{'reason'}  = 'tell_request';
+                                                $msg->{'conversation'}->{'originator'} = $msg->{'conversation'}->{'nick'};
+                                                $msg->{'conversation'}->{'nick'}  = $recipient;
+                                                $msg->{'conversation'}->{'body'}  = $message;
+                                                $kernel->post($sender,'authen',$msg);
+                                              };
+            /^!standings\s*(.*)/        && do { $replies = $self->standings(); $pirate=0; last; }
+            /.*/                        && do { $replies = [ $self->megahal($what) ] if($direct);      last; };
+            /.*/                        && do { last; };
         }
         if($direct==1){             
             foreach my $line (@{ $replies }){
@@ -311,14 +334,6 @@ sub quote{
     $agent->agent( 'Mozilla/5.0' );
     my $response = $agent->get('http://tumble.wcyd.org/quote/?quote=' . "$quote" . "&author=$author");
     return "quote added" if($response->is_success);
-}
-
-sub tell{
-    my $self=shift;
-    my $nick=shift if @_;
-    my $message=shift if @_;
-    return undef unless $nick;
-    return undef unless $message;
 }
 
 ################################################################################

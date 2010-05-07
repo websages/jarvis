@@ -191,33 +191,39 @@ sub input{
        );
     my $direct=$msg->{'conversation'}->{'direct'}||0;
     if(defined($what)){
-         if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
-             foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
-                 if($what=~m/^\s*$chan_nick\s*:*\s*/){
-                     $what=~s/^\s*$chan_nick\s*:*\s*//;
-                     $direct=1;
-                 }
-             }
-         }
-         my $replies=[];
-         for ( $what ) {
-             /^\s*!*help\s*/ && do { $replies = [ "i need a help routine" ] if($direct); last; };
-             /.*/            && do { $replies = [ "i don't understand"    ] if($direct); last; };
-             /.*/            && do { last; }
-         }
-         if($direct==1){ 
-             foreach my $line (@{ $replies }){
-                 if($msg->{'conversation'}->{'direct'} == 0){
-                     if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $who.': '.$line); }
-                 }else{
-                     if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $line); } 
-                 }
-             }
-         }else{
-             foreach my $line (@{ $replies }){
-                     if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $line); } 
-             }
-         }
+        if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
+            foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
+                if($what=~m/^\s*$chan_nick\s*:*\s*/){
+                    $what=~s/^\s*$chan_nick\s*:*\s*//;
+                    $direct=1;
+                }
+            }
+        }
+        my $replies=[];
+        ########################################################################
+        #                                                                      #
+        ########################################################################
+        for ( $what ) {
+            /^\s*!*help\s*/ && do { $replies = [ "i need a help routine" ] if($direct); last; };
+            /.*/            && do { $replies = [ "i don't understand"    ] if($direct); last; };
+            /.*/            && do { last; }
+        }
+        ########################################################################
+        #                                                                      #
+        ########################################################################
+        if($direct==1){ 
+            foreach my $line (@{ $replies }){
+                if($msg->{'conversation'}->{'direct'} == 0){
+                    if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $who.': '.$line); }
+                }else{
+                    if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $line); } 
+                }
+            }
+        }else{
+            foreach my $line (@{ $replies }){
+                    if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $line); } 
+            }
+        }
     }
     return $self->{'alias'};
 }
