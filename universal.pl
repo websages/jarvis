@@ -58,6 +58,7 @@ init:
 my $xmpp_connection = << "...";
 ---
 class: Jarvis::Jabber
+trace: 1
 init: 
   alias: ${hostname}_xmpp
   ip: thor.websages.com

@@ -92,19 +92,23 @@ sub yaml_sess(){
    my $self=shift;
    my $yaml=shift if @_;
    my $ctor=$self->indented_yaml($yaml);
-   $self->object_session( $ctor->{'class'}->new( $ctor->{'init'} ) );
+   $self->object_session( 
+                          $ctor->{'class'}->new( $ctor->{'init'} ), 
+                          { 
+                            'debug' => $ctor->{'debug'}||0,  
+                            'trace' => $ctor->{'trace'}||0,
+                          } 
+                        );
    return $self;
 }
 
 sub object_session(){
     my $self=shift;
     my $object = shift if @_;
-    my $set_alias = shift if @_;
     my $object_states = $object->states();
-    my $aliased_object_states = $object_states;;
     push( @{ $self->{'sessions'} }, POE::Session->create(
                           options => { debug => $self->{'debug'}, trace => $self->{'trace'} },
-                          object_states =>  [ $object => $aliased_object_states ],
+                          object_states =>  [ $object => $object_states ],
                           inline_states =>  {
                                               _start   => sub { 
                                                                 my ($kernel, $heap) = @_[KERNEL, HEAP];

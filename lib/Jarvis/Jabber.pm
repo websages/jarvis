@@ -177,10 +177,9 @@ sub status_event()
                 $kernel->post($self->alias().'component','purge_queue');
 
 print STDERR Data::Dumper->Dump([ $self->{'channel_list'} ]);
+
                 if(defined($self->{'channel_list'})){
                     foreach my $muc (@{ $self->{'channel_list'} }){
-                        #$heap->{'roomnick'} = 'system@conference.websages.com/crunchy';
-                        #$kernel->yield(presence_subscribe','whitejs@websages.com');
                         $kernel->post($self->alias(),'join_channel', $muc);
                     }
                 }
