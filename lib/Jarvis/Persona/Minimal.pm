@@ -25,6 +25,7 @@ print STDERR "==>[ $line ]\n";
 sub help(){
     my $self=shift;
     my $topic=shift if @_;
+print STDERR ": IN help() :\n";
     $topic=~s/^\s+//;
     return  [ "commands: help spawn terminate" ];
 }
