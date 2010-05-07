@@ -146,7 +146,6 @@ sub input{
             /^\s*who\s*am\s*i[?\s]*/    && do {
                                                 $pirate=0;
                                                 $msg->{'reason'}='whoami';
-print STDERR Data::Dumper->Dump([$msg]);
                                                 $kernel->post($sender, 'authen', $msg);
                                                 last;
                                               };
@@ -216,6 +215,7 @@ sub ldap_srv_records{
 sub authen_reply{
     my ($self, $kernel, $heap, $msg, $user) = @_[OBJECT, KERNEL, HEAP, ARG0, ARG1];
     my $r;
+print STDERR Data::Dumper->Dump([$msg,$usr]);
     if(defined($msg->{'reason'})){
         if($msg->{'reason'} eq 'whoami'){
             if(defined($user)){
