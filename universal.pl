@@ -21,7 +21,7 @@ my $hostname = $fqdn;         $hostname=~s/\..*$//;
 my $domain   = $fqdn;         $domain=~s/^[^\.]*\.//;
 
 # get a handle for our builder
-my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
+my $poe = new POE::Builder({ 'debug' => '0','trace' => '1' });
 exit unless $poe;
 
 ########################################
@@ -58,7 +58,6 @@ init:
 my $xmpp_connection = << "...";
 ---
 class: Jarvis::Jabber
-trace: 1
 init: 
   alias: ${hostname}_xmpp
   ip: thor.websages.com

@@ -92,14 +92,7 @@ sub yaml_sess(){
    my $self=shift;
    my $yaml=shift if @_;
    my $ctor=$self->indented_yaml($yaml);
-print STDERR Data::Dumper->Dump([$ctor->{'debug'}, $ctor->{'trace'}]);
-   $self->object_session( 
-                          $ctor->{'class'}->new( $ctor->{'init'} ), 
-                          { 
-                            'debug' => $ctor->{'debug'}||0,  
-                            'trace' => $ctor->{'trace'}||0,
-                          } 
-                        );
+   $self->object_session( $ctor->{'class'}->new( $ctor->{'init'} ), );
    return $self;
 }
 
