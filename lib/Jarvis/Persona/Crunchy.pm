@@ -270,7 +270,9 @@ sub megahal{
 
 sub fortune{
     my $self=shift;
-    return  qx( /usr/games/fortune -s );
+    my $fortune=qx( /usr/games/fortune -s );
+    $fortune=~s/\n/ /g;
+    return $fortune;
 }
 
 sub link{
