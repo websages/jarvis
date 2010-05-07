@@ -13,8 +13,8 @@ sub input_handler{
     my $self=shift;
     my $line=shift;
     my $direct=shift||0;
+print STDERR "=>: $line :\n";
     for ( $line ) {
-print STDERR "==>[ $line ]\n";
         /^\s*!*help(.*)/      && return $self->help($1);
         /^\s*!*spawn(.*)/     && return $self->spawn($1)     if $direct;
         /^\s*!*terminate(.*)/ && return $self->terminate($1) if $direct;
@@ -25,22 +25,24 @@ print STDERR "==>[ $line ]\n";
 sub help(){
     my $self=shift;
     my $topic=shift if @_;
-print STDERR ": IN help() :\n";
+print STDERR ": in help() :\n";
     $topic=~s/^\s+//;
     return  [ "commands: help spawn terminate" ];
 }
 
 sub spawn(){
     my $self=shift;
-    my $object=shift if @_;
-    $object=~s/^\s+//;
+print STDERR ": in spawn() :\n";
+    my $target=shift if @_;
+    $target=~s/^\s+// if $target;
     return  [ "I need a spawn routine" ];
 }
 
 sub terminate(){
     my $self=shift;
-    my $object=shift if @_;
-    $object=~s/^\s+//;
+print STDERR ": in terminate() :\n";
+    my $target=shift if @_;
+    $target=~s/^\s+// if $target;
     return  [ "I need a terminate routine" ];
 }
 
