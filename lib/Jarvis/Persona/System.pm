@@ -46,7 +46,7 @@ my $known_personas = <<"...";
          init:
            alias: beta_irc
            nickname: beta
-           ircname: 'beta Cap'n Crunchbot'
+           ircname: "beta Cap'n Crunchbot"
            server: 127.0.0.1
            domain: websages.com
            channel_list:
