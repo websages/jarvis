@@ -159,23 +159,20 @@ sub spawn{
     my $persona = shift if @_;
     $persona=~s/^\s+//;
     my $found=0;
-    print STDERR Data::Dumper->Dump ([ $self->{'known_personas'} ]);
     foreach my $p (@{ $self->{'known_personas'} }){
-        if(defined($p->{ $persona })){
-            if($p->{'name'} eq $persona){
-                my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
-                return undef unless $poe;
-                
-                push( 
-                     @{ $self->{$persona} }, 
-                     $poe->object_session( $p->{'persona'}->{'class'}->new( $p->{'persona'}->{'init'} ) )
-                );
-                foreach my $conn (@{ $p->{'connectors'} }){
-                    push( @{ $self->{$persona} }, $poe->object_session( $conn->{'class'}->new( $conn->{'init'} ) ));
-                }
-                print Data::Dumper->Dump([$self->{$persona}]);
-                return "$persona spawned."
+        if($p->{'name'} eq $persona){
+            my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
+            return undef unless $poe;
+            
+            push( 
+                 @{ $self->{$persona} }, 
+                 $poe->object_session( $p->{'persona'}->{'class'}->new( $p->{'persona'}->{'init'} ) )
+            );
+            foreach my $conn (@{ $p->{'connectors'} }){
+                push( @{ $self->{$persona} }, $poe->object_session( $conn->{'class'}->new( $conn->{'init'} ) ));
             }
+            print Data::Dumper->Dump([$self->{$persona}]);
+            return "$persona spawned."
         }
     }
     return "I don't know how to become $persona." if(!$found);
