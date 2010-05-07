@@ -7,13 +7,13 @@ use parent Jarvis::Persona::Base;
 # a handler for mandatory constructor variables (overload me)
 sub must {
     my $self=shift;
-    return [];
+    return ();
 }
 
 # a handler for optional constructor variables (overload me)
 sub may {
     my $self=shift;
-    return {};
+    return { 'option' => 1 };
 }
 
 # a handler for persona init routines (overload me)
