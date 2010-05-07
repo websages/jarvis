@@ -9,9 +9,9 @@ use YAML;
 
 sub known_personas{
     my $self=shift;
-    $self->{'known_personas'} = $self->indented_yaml(<<"    ...");
+    $self->{'known_personas'} = $self->indented_yaml(<<"    ..."));
     ---
-     - crunchy:
+     - name: crunchy
          persona:
            class: Jarvis::Persona::Crunchy
            init:
@@ -33,7 +33,7 @@ sub known_personas{
                channel_list:
                  - #soggies
                persona: crunchy
-     - berry:
+     - name: berry
          persona:
            class: Jarvis::Persona::Crunchy
            init:
@@ -158,13 +158,18 @@ sub spawn{
     my $self=shift;
     my $persona = shift if @_;
     $persona=~s/^\s+//;
-    if(defined($self->{'known_personas'}->{$persona})){
-        return "$persona spawned."
-    }else{
-        return "I don't know how to become $persona."
+    my $found=0;
+    foreach my $p (@{ $persona }){
+        if(defined($self->{'known_personas'}->{$persona})){
+            if($p->{'name'} eq $persona){
+                my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
+                return undef unless $poe;
+                my $session_id = $poe->object_session( $p->{'class'}->new( $p->{'init'} ) );
+                return "$persona spawned [$session_id]."
+            }
+        }
     }
-    my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
-    return undef unless $poe;
+    return "I don't know how to become $persona." if(!$found);
 }
 
 # As long as the yaml lines up with itself, 
