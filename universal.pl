@@ -68,7 +68,6 @@ init:
   channel_list: 
     - asgard\@conference.websages.com/${hostname}
   persona: system
-  ignore_direct: 1
 ...
 
 print STDERR Data::Dumper->Dump([ YAML::Load($xmpp_connection) ]);
