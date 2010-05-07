@@ -14,8 +14,10 @@ sub new {
     # list of required constructor elements
     $self->{'must'} = [ 'alias' ];
     # an optional overloaded subroutine can provide more.
-    push(@{ $self->{'must'} }, $self->must() );
-
+    my $oload_list=$self->must();
+    while(my $oload_may = shift @{ $oload_list }){
+        push(@{ $self->{'must'} }, $oload_may );
+    }
 
     # hash of optional constructor elements (key), and their default (value) if not specified
     $self->{'may'} = { };
