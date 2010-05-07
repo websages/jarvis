@@ -28,7 +28,7 @@ exit unless $poe;
 # define the system personality 
 # (so we have something to talk to)
 ########################################
-my $persona << "...";
+my $persona = << "...";
 ---
 class: Jarvis::Persona::Minimal
 init: 
@@ -38,7 +38,7 @@ init:
 ########################################
 # definition to connect to irc
 ########################################
-my $irc_connection << "...";
+my $irc_connection = << "...";
 ---
 class: Jarvis::IRC
 init:
@@ -55,7 +55,7 @@ init:
 ########################################
 # definition to connect to ejabberd
 ########################################
-my $xmpp_connection << "...";
+my $xmpp_connection = << "...";
 ---
 class: Jarvis::Jabber
 init: 
