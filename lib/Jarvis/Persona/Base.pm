@@ -201,7 +201,8 @@ sub input{
          my $replies=[];
          for ( $what ) {
              /^\s*!*help\s*/ && do { $replies = [ "i need a help routine" ] if($direct); last; };
-             /.*/ && last;
+             /.*/            && do { $replies = [ "i don't understand"    ] if($direct); last; };
+             /.*/            && do { last; }
          }
          if($direct==1){ 
              foreach my $line (@{ $replies }){
