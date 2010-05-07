@@ -69,3 +69,5 @@ sub megahal{
     my $what=shift if @_;
     return  $self->{'megahal'}->do_reply( $what );
 }
+
+1;
