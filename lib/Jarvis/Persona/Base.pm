@@ -1,4 +1,6 @@
 package Jarvis::Persona::Base;
+use strict;
+use warnings;
 use AI::MegaHAL;
 use POE;
 use POSIX qw( setsid );
@@ -171,7 +173,8 @@ sub channel_del{
 }
 
 ################################################################################
-# the messages get routed here from the connectors
+# the messages get routed here from the connectors, a reply is formed, and 
+# posted back to the sender_alias,reply event
 ################################################################################
 sub input{
     my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
@@ -195,7 +198,10 @@ sub input{
                  }
              }
          }
-         my $replies=$self->input_handler($msg);
+         my $replies=[];
+         for ( $what ) {
+             /.*/ && break;
+         }
          if($directly_addressed==1){ 
              foreach my $line (@{ $replies }){
                  if($msg->{'conversation'}->{'direct'} == 0){

@@ -84,21 +84,13 @@ sub persona_start{
 
 ################################################################################
 # Here is what you must provide: 
-#   A function named "input_handler" that takes $what and $directly_addressed
+#   A function named "input" that takes $what and $directly_addressed
 #   as arguments, that will regex out the appropriate commands and act on them.
 #   It should return a list reference to the list of one-line replies.
 #   You will also need to subroutines or inline code to handle these actions.
 ################################################################################
 
-sub input_handler{
-    my $self=shift;
-    my $msg=shift; 
-print STDERR Data::Dumper->Dump([$msg]);
-    my $line="";
-    my $what="";
-    my $who="";
-    my $direct=0;
-    for ( $line ) {
+    for ( $what ) {
         /^\s*!*help\s*/            && return $self->help($line);
         /\"(.+?)\"\s+--\s*(.+?)$/  && return [ piratespeak( $self->quote($what) ) ];
         /(https*:\S+)/             && return [ $self->link($what, $who) ];
@@ -107,7 +99,6 @@ print STDERR Data::Dumper->Dump([$msg]);
         /.*/                       && return [ piratespeak( $self->megahal($line) ) ] if $direct;
         /.*/                       && return []; 
     }
-}
 
 ################################################################################
 # 
