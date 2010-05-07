@@ -1,4 +1,4 @@
-package Jarvis::Persona::Base.pm;
+package Jarvis::Persona::Base;
 use AI::MegaHAL;
 use POE;
 use POSIX qw( setsid );

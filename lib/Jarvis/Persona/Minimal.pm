@@ -1,4 +1,4 @@
-package Jarvis::Persona::Minimal.pm;
+package Jarvis::Persona::Minimal;
 use parent Jarvis::Persona::Base;
 
 ################################################################################
