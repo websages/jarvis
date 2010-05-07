@@ -154,6 +154,7 @@ sub input{
         }
         if($direct==1){             
             foreach my $line (@{ $replies }){
+                $line=piratespeak($line) if $pirate;
                 if($msg->{'conversation'}->{'direct'} == 0){
                     if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $who.': '.$line); }
                 }else{
@@ -162,7 +163,8 @@ sub input{
             }
         }else{
             foreach my $line (@{ $replies }){
-                    if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $line); } 
+                $line=piratespeak($line) if $pirate;
+                if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $line); } 
             }
         }
     }
