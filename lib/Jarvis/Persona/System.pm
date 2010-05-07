@@ -130,7 +130,15 @@ sub input{
         for ( $what ) {
             /^\s*!*help\s*/          && do { $replies = [ "i need a help routine" ] if($direct); last; };
             /^\s*!*spawn\s*(.*)/     && do { $replies = [ $self->spawn($1) ] if($direct); last;};
-            /^\s*!*terminate\s*(.*)/ && do { $replies = [ $self->terminate($1) ] if($direct); last;};
+            /^\s*!*terminate\s*(.*)/ && do { 
+                                             if($direct){
+                                                 for (@{ $self->{'spawned'}->{$persona} }){ 
+                                                     push(@{ $replies },"stopping $_");
+                                                     $kernel->post($_,'_stop'); 
+                                                 }
+                                                 last;
+                                             }
+                                           };
             /.*/                     && do { $replies = [ "i don't understand"    ] if($direct); last; };
             /.*/                     && do { last; }
         }
@@ -177,16 +185,6 @@ sub spawn{
         }
     }
     return "I don't know how to become $persona." if(!$found);
-}
-
-sub terminate {
-    my $self=shift;
-    my $persona = shift if @_;
-    if(defined($self->{'spawned'}->{$persona})){
-        foreach my $sess (@{ $self->{'spawned'}->{$persona} }){
-            $kernel->post($sess, '_stop');
-        }
-    }
 }
 
 # As long as the yaml lines up with itself, 
