@@ -11,7 +11,7 @@ sub must {
 }
 
 # a handler for optional constructor variables (overload me)
-sub must {
+sub may {
     my $self=shift;
     return {};
 }
