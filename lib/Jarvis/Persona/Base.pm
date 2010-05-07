@@ -201,6 +201,10 @@ sub input{
                      if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $line); } 
                  }
              }
+         }else{
+             foreach my $line (@{ $replies }){
+                     if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $line); } 
+             }
          }
     }
     return $self->{'alias'};
