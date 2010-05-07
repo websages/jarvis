@@ -12,49 +12,49 @@ sub known_personas{
     $self->{'known_personas'} = $self->indented_yaml(<<"    ...");
     ---
      - name: crunchy
-         persona:
-           class: Jarvis::Persona::Crunchy
+       persona:
+         class: Jarvis::Persona::Crunchy
+         init:
+           alias: crunchy
+           ldap_domain: websages.com
+           ldap_binddn: uid=crunchy,ou=People,dc=websages,dc=com
+           ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
+           twitter_name: capncrunchbot
+           password: ${ENV{'TWITTER_PASSWORD'}}
+           retry: 300
+       connectors:
+         - class: Jarvis::IRC
            init:
-             alias: crunchy
-             ldap_domain: websages.com
-             ldap_binddn: uid=crunchy,ou=People,dc=websages,dc=com
-             ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
-             twitter_name: capncrunchbot
-             password: ${ENV{'TWITTER_PASSWORD'}}
-             retry: 300
-         connectors:
-           - class: Jarvis::IRC
-             init:
-               alias: irc_client
-               nickname: crunchy
-               ircname: "Cap'n Crunchbot"
-               server: 127.0.0.1
-               domain: websages.com
-               channel_list:
-                 - #soggies
-               persona: crunchy
+             alias: irc_client
+             nickname: crunchy
+             ircname: "Cap'n Crunchbot"
+             server: 127.0.0.1
+             domain: websages.com
+             channel_list:
+               - #soggies
+             persona: crunchy
      - name: berry
-         persona:
-           class: Jarvis::Persona::Crunchy
+       persona:
+         class: Jarvis::Persona::Crunchy
+         init:
+           alias: beta
+           ldap_domain: websages.com
+           ldap_binddn: uid=crunchy,ou=People,dc=websages,dc=com
+           ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
+           twitter_name: capncrunchbot
+           password: ${ENV{'TWITTER_PASSWORD'}}
+           retry: 300
+       connectors:
+         - class: Jarvis::IRC
            init:
-             alias: beta
-             ldap_domain: websages.com
-             ldap_binddn: uid=crunchy,ou=People,dc=websages,dc=com
-             ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
-             twitter_name: capncrunchbot
-             password: ${ENV{'TWITTER_PASSWORD'}}
-             retry: 300
-         connectors:
-           - class: Jarvis::IRC
-             init:
-               alias: beta_irc
-               nickname: beta
-               ircname: "beta Cap'n Crunchbot"
-               server: 127.0.0.1
-               domain: websages.com
-               channel_list:
-                 - #puppies
-               persona: beta
+             alias: beta_irc
+             nickname: beta
+             ircname: "beta Cap'n Crunchbot"
+             server: 127.0.0.1
+             domain: websages.com
+             channel_list:
+               - #puppies
+             persona: beta
     ...
 }
     
