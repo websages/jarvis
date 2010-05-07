@@ -133,10 +133,13 @@ sub input{
             /^\s*!*terminate\s*(.*)/ && do { 
                                              my $persona=$1; $persona=~s/^\s+//;
                                              if($direct){
+                                                 my $r="stopping $persona [ ";
                                                  for (@{ $self->{'spawned'}->{$persona} }){ 
-                                                     push(@{ $replies },"stopping $_");
+                                                     $r.="$_ ";
                                                      $kernel->post($_,'_stop'); 
+                                                     $r.=" ]";
                                                  }
+                                                 $replies = [ $r ];
                                                  delete $self->{'spawned'}->{$persona};
                                                  last;
                                              }
@@ -184,8 +187,6 @@ sub spawn{
                 push( @{ $self->{'spawned'}->{$persona} }, $conn->{'init'}->{'alias'} );
                 $poe->object_session( $conn->{'class'}->new( $conn->{'init'} ) );
             }
-
-            print Data::Dumper->Dump([ $self->{'spawned'} ]);
             return "$persona spawned."
         }
     }
