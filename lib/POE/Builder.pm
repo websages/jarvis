@@ -106,6 +106,7 @@ sub object_session(){
     my $self=shift;
     my $object = shift if @_;
     my $object_states = $object->states();
+print STDERR Data::Dumper->Dump([$self->{'debug'}, $self->{'trace'}]);
     push( @{ $self->{'sessions'} }, POE::Session->create(
                           options => { debug => $self->{'debug'}, trace => $self->{'trace'} },
                           object_states =>  [ $object => $object_states ],
