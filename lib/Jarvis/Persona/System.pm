@@ -9,7 +9,7 @@ use YAML;
 
 sub known_personas{
     my $self=shift;
-    $self->{'known_personas'} = YAML::Load(<<"    ...");
+    $self->{'known_personas'} = YAML::Load($self->indented_yaml(<<"    ..."));
     ---
      - crunchy:
          persona:
@@ -166,5 +166,34 @@ sub spawn{
     my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
     return undef unless $poe;
 }
+
+# As long as the yaml lines up with itself, 
+# you can indent as much as you want to keep the here statements pretty
+sub indented_yaml{
+     my $self = shift;
+     my $iyaml = shift if @_;
+     return undef unless $iyaml;
+     my @lines = split('\n', $iyaml);
+     my $min_indent=-1;
+     foreach my $line (@lines){   
+         my @chars = split('',$line);
+         my $spcidx=0;
+         foreach my $char (@chars){
+             if($char eq ' '){
+                 $spcidx++;
+             }else{
+                 if(($min_indent == -1) || ($min_indent > $spcidx)){
+                     $min_indent=$spcidx;
+                 }
+             }
+         }
+     }
+     foreach my $line (@lines){
+         $line=~s/ {$min_indent}//;
+     }
+     my $yaml=join("\n",@lines)."\n";
+     return YAML::Load($yaml);
+}
+
 
 1;
