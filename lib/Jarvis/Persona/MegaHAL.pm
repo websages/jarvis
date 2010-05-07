@@ -50,20 +50,61 @@ sub persona_states{
 
 ################################################################################
 # Here is what you must provide: 
-#   A function named "input_handler" that takes $what and $directly_addressed
+#   A function named "input" that takes $what and $directly_addressed
 #   as arguments, that will regex out the appropriate commands and act on them.
 #   It should return a list reference to the list of one-line replies.
 #   You will also need to subroutines or inline code to handle these actions.
 ################################################################################
 
-sub input_handler{
-    my $self=shift;
-    my $line=shift;
-    my $direct=shift||0;
-    for ( $line ) {
-        /.*/ && return  [ $self->megahal($line) ];
+sub input{
+    my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
+    # un-wrap the $msg
+    my ( $sender_alias, $respond_event, $who, $where, $what, $id ) =
+       ( 
+         $msg->{'sender_alias'},
+         $msg->{'reply_event'},
+         $msg->{'conversation'}->{'nick'},
+         $msg->{'conversation'}->{'room'},
+         $msg->{'conversation'}->{'body'},
+         $msg->{'conversation'}->{'id'},
+       );
+    my $direct=$msg->{'conversation'}->{'direct'}||0;
+    if(defined($what)){
+        if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
+            foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
+                if($what=~m/^\s*$chan_nick\s*:*\s*/){
+                    $what=~s/^\s*$chan_nick\s*:*\s*//;
+                    $direct=1;
+                }
+            }
+        }
+        my $replies=[];
+        ########################################################################
+        #                                                                      #
+        ########################################################################
+        for ( $line ) {
+            /.*/ && return  [ $self->megahal($line) ];
+        }
+        ########################################################################
+        #                                                                      #
+        ########################################################################
+        if($direct==1){
+            foreach my $line (@{ $replies }){
+                if($msg->{'conversation'}->{'direct'} == 0){
+                    if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $who.': '.$line); }
+                }else{
+                    if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $line); }
+                }
+            }
+        }else{
+            foreach my $line (@{ $replies }){
+                    if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $line); }
+            }
+        }
     }
+    return $self->{'alias'};
 }
+
 
 sub megahal{
     my $self=shift;
