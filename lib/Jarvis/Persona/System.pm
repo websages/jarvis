@@ -132,12 +132,12 @@ sub input{
             /^\s*!*spawn\s*(.*)/     && do { $replies = [ $self->spawn($1) ] if($direct); last;};
             /^\s*!*terminate\s*(.*)/ && do { 
                                              my $persona=$1; $persona=~s/^\s+//;
-print STDERR "[ $persona ]\n";
                                              if($direct){
                                                  for (@{ $self->{'spawned'}->{$persona} }){ 
                                                      push(@{ $replies },"stopping $_");
                                                      $kernel->post($_,'_stop'); 
                                                  }
+                                                 delete $self->{'spawned'}->{$persona};
                                                  last;
                                              }
                                            };
