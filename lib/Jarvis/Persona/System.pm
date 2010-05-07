@@ -159,6 +159,7 @@ sub spawn{
     my $persona = shift if @_;
     $persona=~s/^\s+//;
     my $found=0;
+    print STDERR Data::Dumper->Dump ([ $self->{'known_personas'} ]);
     foreach my $p (@{ $self->{'known_personas'} }){
         if(defined($p->{ $persona })){
             if($p->{'name'} eq $persona){
