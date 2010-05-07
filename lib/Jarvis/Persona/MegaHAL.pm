@@ -1,6 +1,7 @@
 package Jarvis::Persona::MegaHAL;
 use parent Jarvis::Persona::Base;
 use AI::MegaHAL;
+use LWP::UserAgent;
 
 sub must {
     my $self=shift;
