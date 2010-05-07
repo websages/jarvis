@@ -164,8 +164,19 @@ sub spawn{
             if($p->{'name'} eq $persona){
                 my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
                 return undef unless $poe;
-                my $session_id = $poe->object_session( $p->{'class'}->new( $p->{'init'} ) );
-                return "$persona spawned [$session_id]."
+                
+                push( 
+                     @{ $self->{$persona} }, 
+                     $poe->object_session( $p->{'persona'}->{'class'}->new( $p->{'persona'}->{'init'} ) ); 
+                );
+                foreach my $conn (@{ $p->{'connectors'} }){
+                    push( 
+                         @{ $self->{$persona} }, 
+                         $poe->object_session( $conn->{'class'}->new( $conn->{'init'} ) ); 
+                    );
+                }
+                print Data::Dumper->Dump([$self->{$persona}]);
+                return "$persona spawned."
             }
         }
     }
