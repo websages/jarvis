@@ -60,7 +60,7 @@ my $xmpp_connection = << "...";
 class: Jarvis::Jabber
 init: 
   alias: ${hostname}_xmpp
-  ip: 127.0.0.1
+  ip: thor.websages.com
   port: 5222
   hostname: ${domain}
   username: crunchy
