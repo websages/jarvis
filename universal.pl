@@ -10,7 +10,7 @@ if(!defined($ENV{'XMPP_PASSWORD'})){
 use Data::Dumper;
 use Jarvis::IRC;
 use Jarvis::Jabber;
-use Jarvis::Persona::Minimal;
+use Jarvis::Persona::MegaHAL;
 use POE::Builder;
 use Sys::Hostname::Long;
 $|++;
