@@ -46,20 +46,20 @@ init:
   persona: system
 ...
 # connect to jabber
-#$poe->yaml_sess(<<"...");
-#---
-#class: Jarvis::Jabber
-#init: 
-#  alias: ${hostname}_xmpp
-#  ip: ${fqdn}
-#  port: 5222
-#  hostname: ${domain}
-#  username: ${hostname}
-#  password: ${ENV{'XMPP_PASSWORD'}}
-#  channel_list: 
-#    - asgard\@conference.websages.com/${hostname}
-#  persona: system
-#  ignore_direct: 1
-#...
-## fire up the kernel
+$poe->yaml_sess(<<"...");
+---
+class: Jarvis::Jabber
+init: 
+  alias: ${hostname}_xmpp
+  ip: thor.websages.com
+  port: 5222
+  hostname: ${domain}
+  username: ${hostname}
+  password: ${ENV{'XMPP_PASSWORD'}}
+  channel_list: 
+    - asgard\@conference.websages.com/${hostname}
+  persona: system
+  ignore_direct: 1
+...
+# fire up the kernel
 POE::Kernel->run();
