@@ -73,13 +73,13 @@ sub new {
 # Functions typically overloaded in the personas that inherit the base one
 ################################################################################
 # a handler for mandatory constructor variables (overload me)
-sub may {
+sub must {
     my $self=shift;
     return [];
 }
 
 # a handler for optional constructor variables (overload me)
-sub must {
+sub may {
     my $self=shift;
     return {};
 }
