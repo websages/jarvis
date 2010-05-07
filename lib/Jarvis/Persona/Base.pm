@@ -58,7 +58,7 @@ sub new {
                           'channel_del'   => 'channel_del',
                         };
     my $pstates = $self->persona_states(); 
-print DATA::Dumper->Dump([$pstates]);
+print Data::Dumper->Dump([$pstates]);
     if(ref($pstates) eq 'HASH'){
         # the standard case returning a hash of { 'event' => 'subname' }
         foreach my $key (keys(%{ $pstates })){
@@ -71,7 +71,7 @@ print DATA::Dumper->Dump([$pstates]);
             $self->{'states'}->{ $key } = $key;
         }
     }
-print DATA::Dumper->Dump([$self->{'states'}]);
+print Data::Dumper->Dump([$self->{'states'}]);
     return $self;
 }
 
