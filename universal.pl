@@ -30,7 +30,7 @@ exit unless $poe;
 ########################################
 my $persona = << "...";
 ---
-class: Jarvis::Persona::Minimal
+class: Jarvis::Persona::MegaHAL
 init: 
   alias: system
 ...
