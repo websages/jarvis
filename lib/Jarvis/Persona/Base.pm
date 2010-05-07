@@ -26,6 +26,7 @@ sub new {
     }
 
     # set our required values fron the constructor or the defaults
+print Data::Dumper->Dump([ $self->{'must'}, $self->{'may'} ]);
     foreach my $attr (@{ $self->{'must'} }){
          if(defined($construct->{$attr})){
              $self->{$attr} = $construct->{$attr};
