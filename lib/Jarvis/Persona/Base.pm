@@ -73,7 +73,7 @@ sub new {
 # Functions typically overloaded in the personas that inherit the base one
 ################################################################################
 # a handler for mandatory constructor variables (overload me)
-sub must {
+sub may {
     my $self=shift;
     return [];
 }
@@ -90,6 +90,15 @@ sub persona_start{
     print STDERR __PACKAGE__ ." start\n";
     return $self;
 }
+
+# a handler for persona POE event states, return a list or hash to be added to $self->{'states'}
+sub persona_states{
+    my $self = $_[OBJECT]||shift;
+    return undef;
+}
+
+
+
 
 ################################################################################
 # standard functions each persona needs to communicate with the connectors

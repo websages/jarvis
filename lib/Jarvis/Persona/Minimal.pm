@@ -2,28 +2,6 @@ package Jarvis::Persona::Minimal;
 use parent Jarvis::Persona::Base;
 
 ################################################################################
-# Functions typically overloaded in the personas that inherit the base one
-################################################################################
-# a handler for mandatory constructor variables (overload me)
-sub must {
-    my $self=shift;
-    return ();
-}
-
-# a handler for optional constructor variables (overload me)
-sub may {
-    my $self=shift;
-    return { 'option' => 1 };
-}
-
-# a handler for persona init routines (overload me)
-sub persona_start{
-    my $self = $_[OBJECT]||shift;
-    print STDERR __PACKAGE__ ." start\n";
-    return $self;
-}
-
-################################################################################
 # Here is what you must provide: 
 #   A function named "input_handler" that takes $what and $directly_addressed
 #   as arguments, that will regex out the appropriate commands and act on them.
