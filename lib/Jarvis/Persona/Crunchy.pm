@@ -140,7 +140,7 @@ sub input{
                                                 $msg->{'conversation'}->{'body'}  = $message;
                                                 $kernel->post($sender,'authen',$msg);
                                               };
-            /^!standings\s*(.*)/        && do { $replies = $self->standings(); $pirate=0; last; }
+            /^!standings\s*(.*)/        && do { $replies = $self->standings(); $pirate=0; last; };
             /.*/                        && do { $replies = [ $self->megahal($what) ] if($direct);      last; };
             /.*/                        && do { last; };
         }
