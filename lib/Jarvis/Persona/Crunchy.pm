@@ -41,6 +41,7 @@ sub persona_states{
 
 sub persona_start{
     my $self = $_[OBJECT]||shift;
+    my $kernel = $_[KERNEL];
     if(! -d "/dev/shm/brain"){ mkdir("/dev/shm/brain"); }
     if(! -d "/dev/shm/brain/crunchy"){ mkdir("/dev/shm/brain/crunchy"); }
     if(! -f "/dev/shm/brain/crunchy/megahal.trn"){
