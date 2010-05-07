@@ -131,6 +131,8 @@ sub input{
             /^\s*!*help\s*/          && do { $replies = [ "i need a help routine" ] if($direct); last; };
             /^\s*!*spawn\s*(.*)/     && do { $replies = [ $self->spawn($1) ] if($direct); last;};
             /^\s*!*terminate\s*(.*)/ && do { 
+                                             my $persona=$1; $persona=~s/^\s+//;
+print STDERR "[ $persona ]\n";
                                              if($direct){
                                                  for (@{ $self->{'spawned'}->{$persona} }){ 
                                                      push(@{ $replies },"stopping $_");
