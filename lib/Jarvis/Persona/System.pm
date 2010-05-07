@@ -161,6 +161,7 @@ sub spawn{
     my $found=0;
     foreach my $p (@{ $persona }){
         if(defined($self->{'known_personas'}->{$persona})){
+print STDERR "$p->{'name'}\n";
             if($p->{'name'} eq $persona){
                 my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
                 return undef unless $poe;
