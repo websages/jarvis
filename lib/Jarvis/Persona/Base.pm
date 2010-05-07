@@ -200,7 +200,7 @@ sub input{
          }
          my $replies=[];
          for ( $what ) {
-             /.*/ && break;
+             /.*/ && last;
          }
          if($directly_addressed==1){ 
              foreach my $line (@{ $replies }){
