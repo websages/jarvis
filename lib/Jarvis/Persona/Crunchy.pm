@@ -25,7 +25,7 @@ sub may {
 }
 
 sub persona_states{
-    my $self = $_[OBJECT]||shift;
+    my $self = shift;
     return {
              'authen_reply'                    => 'authen_reply',
              'channel_join'                    => 'channel_join',

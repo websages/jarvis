@@ -61,13 +61,13 @@ sub new {
     if(ref($pstates) eq 'HASH'){
         # the standard case returning a hash of { 'event' => 'subname' }
         foreach my $key (keys(%{ $pstates })){
-            $self->{'may'}->{ $key } = $oload_hash->{ $key };
+            $self->{'states'}->{ $key } = $oload_hash->{ $key };
         }
     }elsif(ref($pstates) eq 'ARRAY'){
         # for the shorthand case returning a list 
         #   of events that are identical to subroutine names
         foreach my $key (@{ $oload_hash }){
-            $self->{'may'}->{ $key } = $key;
+            $self->{'states'}->{ $key } = $key;
         }
     }
     return $self;
