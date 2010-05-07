@@ -9,7 +9,7 @@ use YAML;
 
 sub known_personas{
     my $self=shift;
-    $self->{'known_personas'} = YAML::Load($self->indented_yaml(<<"    ..."));
+    $self->{'known_personas'} = $self->indented_yaml(<<"    ...");
     ---
      - crunchy:
          persona:
