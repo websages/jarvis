@@ -113,13 +113,13 @@ sub input{
         }
         my $replies=[];
         for ( $what ) {
-#            /^\s*!*help\s*/           && do { $replies = $self->help($what); last; };
-#            /\"(.+?)\"\s+--\s*(.+?)$/ && do { $replies = [ $self->quote($what) ]; last; };
-#            /(https*:\S+)/            && do { $replies = [ $self->link($what, $who) ]; last; };
-#            /^\s*fortune\s*$/         && do { $replies = [ $self->fortune() ]; last; };
-#            /^!shoutout\s*(.*)/       && do { $replies = [ $self->shoutout($1,$who) ]; last; };
+            /^\s*!*help\s*/           && do { $replies = $self->help($what); last; };
+            /\"(.+?)\"\s+--\s*(.+?)$/ && do { $replies = [ $self->quote($what) ]; last; };
+            /(https*:\S+)/            && do { $replies = [ $self->link($what, $who) ]; last; };
+            /^\s*fortune\s*$/         && do { $replies = [ $self->fortune() ]; last; };
+            /^!shoutout\s*(.*)/       && do { $replies = [ $self->shoutout($1,$who) ]; last; };
             /.*/                      && do { $replies = [ $self->megahal($what) ] if $direct; last; };
-            /.*/                      && do { last; }
+            /.*/                      && do { last; };
         }
         if($direct==1){             
             foreach my $line (@{ $replies }){
