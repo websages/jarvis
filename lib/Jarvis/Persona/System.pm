@@ -169,7 +169,7 @@ sub spawn{
     my $persona = shift if @_;
     $persona=~s/^\s+//;
     my $found=0;
-    if defined($self->{'spawned'}->{$persona}) {
+    if(defined( $self->{'spawned'}->{$persona} )){
         return "Please terminate existing $persona sessons before attempting to spawn another.";
     }
     foreach my $p (@{ $self->{'known_personas'} }){
