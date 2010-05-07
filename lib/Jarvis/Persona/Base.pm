@@ -62,7 +62,7 @@ print Data::Dumper->Dump([$pstates]);
     if(ref($pstates) eq 'HASH'){
         # the standard case returning a hash of { 'event' => 'subname' }
         foreach my $key (keys(%{ $pstates })){
-            $self->{'states'}->{ $key } = $oload_hash->{ $key };
+            $self->{'states'}->{ $key } = $pstates->{ $key };
         }
     }elsif(ref($pstates) eq 'ARRAY'){
         # for the shorthand case returning a list 
