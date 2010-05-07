@@ -167,13 +167,10 @@ sub spawn{
                 
                 push( 
                      @{ $self->{$persona} }, 
-                     $poe->object_session( $p->{'persona'}->{'class'}->new( $p->{'persona'}->{'init'} ) ); 
+                     $poe->object_session( $p->{'persona'}->{'class'}->new( $p->{'persona'}->{'init'} ) )
                 );
                 foreach my $conn (@{ $p->{'connectors'} }){
-                    push( 
-                         @{ $self->{$persona} }, 
-                         $poe->object_session( $conn->{'class'}->new( $conn->{'init'} ) ); 
-                    );
+                    push( @{ $self->{$persona} }, $poe->object_session( $conn->{'class'}->new( $conn->{'init'} ) ));
                 }
                 print Data::Dumper->Dump([$self->{$persona}]);
                 return "$persona spawned."
