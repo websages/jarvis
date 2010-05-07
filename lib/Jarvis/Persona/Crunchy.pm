@@ -92,12 +92,16 @@ sub persona_start{
 
 sub input_handler{
     my $self=shift;
-    my $line=shift;
-    my $direct=shift||0;
+    my $msg=shift; 
+print STDERR Data::Dumper->Dump([$msg]);
     for ( $line ) {
-        /^\s*!*help\s*/   && return  $self->help($line);
-        /.*/              && return  [ $self->megahal($line) ] if $direct;
-        /.*/              && return  [                       ]; 
+        /^\s*!*help\s*/            && return $self->help($line);
+        /\"(.+?)\"\s+--\s*(.+?)$/  && return [ piratespeak( $self->quote($what) ) ];
+        /(https*:\S+)/             && return [ $self->link($what, $who) ];
+        /^\s*fortune\s*$/          && return [ piratespeak( $self->fortune() ) ];
+        /^!shoutout\s*(.*)/        && return [ $self->shoutout($1,$who) ];
+        /.*/                       && return [ piratespeak( $self->megahal($line) ) ] if $direct;
+        /.*/                       && return []; 
     }
 }
 
