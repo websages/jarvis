@@ -24,15 +24,21 @@ my $domain   = $fqdn;         $domain=~s/^[^\.]*\.//;
 my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
 exit unless $poe;
 
-# instantiate the system personality so we have something to talk to
-$poe->yaml_sess(<<"...");
+########################################
+# define the system personality 
+# (so we have something to talk to)
+########################################
+my $persona << "...";
 ---
 class: Jarvis::Persona::Minimal
 init: 
   alias: system
 ...
-# connect to irc
-$poe->yaml_sess(<<"...");
+
+########################################
+# definition to connect to irc
+########################################
+my $irc_connection << "...";
 ---
 class: Jarvis::IRC
 init:
@@ -45,8 +51,11 @@ init:
     - #asgard
   persona: system
 ...
-# connect to jabber
-$poe->yaml_sess(<<"...");
+
+########################################
+# definition to connect to ejabberd
+########################################
+my $xmpp_connection << "...";
 ---
 class: Jarvis::Jabber
 init: 
@@ -54,12 +63,20 @@ init:
   ip: 127.0.0.1
   port: 5222
   hostname: ${domain}
-  username: ${hostname}
+  username: crunchy
   password: ${ENV{'XMPP_PASSWORD'}}
   channel_list: 
     - asgard\@conference.websages.com/${hostname}
   persona: system
   ignore_direct: 1
 ...
+
+print STDERR Data::Dumper->Dump([ YAML::Load($xmpp_connection) ]);
+################################################################################
+# Do the work
+################################################################################
+$poe->yaml_sess($persona);
+$poe->yaml_sess($irc_connection);
+$poe->yaml_sess($xmpp_connection);
 # fire up the kernel
 POE::Kernel->run();
