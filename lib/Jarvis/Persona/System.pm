@@ -6,6 +6,54 @@ use POSIX qw( setsid );
 use POE::Builder;
 use LWP::UserAgent;
 
+my $known_personas = <<"...";
+---
+ - crunchy:
+     persona:
+       class: Jarvis::Persona::Crunchy
+       init:
+         alias: crunchy
+         ldap_domain: websages.com
+         ldap_binddn: uid=crunchy,ou=People,dc=websages,dc=com
+         ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
+         twitter_name: capncrunchbot
+         password: ${ENV{'TWITTER_PASSWORD'}}
+         retry: 300
+     connectors:
+       - class: Jarvis::IRC
+         init:
+           alias: irc_client
+           nickname: crunchy
+           ircname: Cap'n Crunchbot
+           server: 127.0.0.1
+           domain: websages.com
+           channel_list:
+             - #soggies
+           persona: crunchy
+ - berry:
+     persona:
+       class: Jarvis::Persona::Crunchy
+       init:
+         alias: beta
+         ldap_domain: websages.com
+         ldap_binddn: uid=crunchy,ou=People,dc=websages,dc=com
+         ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
+         twitter_name: capncrunchbot
+         password: ${ENV{'TWITTER_PASSWORD'}}
+         retry: 300
+     connectors:
+       - class: Jarvis::IRC
+         init:
+           alias: beta_irc
+           nickname: beta
+           ircname: 'beta Cap'n Crunchbot'
+           server: 127.0.0.1
+           domain: websages.com
+           channel_list:
+             - #puppies
+           persona: beta
+...
+
 sub must {
     my $self = shift;
     return  [ ];
@@ -48,13 +96,67 @@ sub persona_start{
     return $self;
 }
 
+sub input{
+    my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
+    # un-wrap the $msg
+    my ( $sender_alias, $respond_event, $who, $where, $what, $id ) =
+       ( 
+         $msg->{'sender_alias'},
+         $msg->{'reply_event'},
+         $msg->{'conversation'}->{'nick'},
+         $msg->{'conversation'}->{'room'},
+         $msg->{'conversation'}->{'body'},
+         $msg->{'conversation'}->{'id'},
+       );
+    my $direct=$msg->{'conversation'}->{'direct'}||0;
+    if(defined($what)){
+        if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
+            foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
+                if($what=~m/^\s*$chan_nick\s*:*\s*/){
+                    $what=~s/^\s*$chan_nick\s*:*\s*//;
+                    $direct=1;
+                }
+            }
+        }
+        my $replies=[];
+        ########################################################################
+        #                                                                      #
+        ########################################################################
+        for ( $what ) {
+            /^\s*!*help\s*/          && do { $replies = [ "i need a help routine" ] if($direct); last; };
+            /^\s*!*spawn\s*(.*)/     && do { $replies = [ $self->spawn($1) ] if($direct); last;};
+            /^\s*!*terminate\s*(.*)/ && do { $replies = [ $self->terminate($1) ] if($direct); last;};
+            /.*/                     && do { $replies = [ "i don't understand"    ] if($direct); last; };
+            /.*/                     && do { last; }
+        }
+        ########################################################################
+        #                                                                      #
+        ########################################################################
+        if($direct==1){
+            foreach my $line (@{ $replies }){
+                if($msg->{'conversation'}->{'direct'} == 0){
+                    if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $who.': '.$line); }
+                }else{
+                    if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $line); }
+                }
+            }
+        }else{
+            foreach my $line (@{ $replies }){
+                    if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $line); }
+            }
+        }
+    }
+    return $self->{'alias'};
+}
 
-
-sub spawn_crunchy{
+sub spawn{
     my $self=shift;
-    #my $persona = shift if @_;
+    my $persona = shift if @_;
+    $persona=~s/^\s+//;
     my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
     return undef unless $poe;
+
+
     $poe->yaml_sess(<<"    ...");
     ---
     class: Jarvis::Persona::Crunchy
