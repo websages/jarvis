@@ -141,6 +141,16 @@ sub input{
                                                 $kernel->post($sender,'authen',$msg);
                                               };
             /^!standings\s*(.*)/        && do { @{ $replies } = $self->standings(); $pirate=0; last; };
+
+
+            /^!*follow\s+\@(.\S+)/      && do { $replies =  [ $self->twitter_follow($1,1) ]; last; };
+            /^!*unfollow\s+\@(.\S+)/    && do { $replies =  [ $self->twitter_follow($1,0); ]; last; };
+            /^\s*who\s*am\s*i[?\s]*/    && do {
+                                                $pirate=0;
+                                                $msg->{'reason'}='whoami';
+                                                $kernel->post($sender, 'authen', $msg);
+                                                last;
+                                              };
             /.*/                        && do { $replies = [ $self->megahal($what) ] if($direct);      last; };
             /.*/                        && do { last; };
         }
