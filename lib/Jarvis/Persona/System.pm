@@ -137,8 +137,8 @@ sub input{
                                                  for (@{ $self->{'spawned'}->{$persona} }){ 
                                                      $r.="$_ ";
                                                      $kernel->post($_,'_stop'); 
-                                                     $r.=" ]";
                                                  }
+                                                 $r.=" ]";
                                                  $replies = [ $r ];
                                                  delete $self->{'spawned'}->{$persona};
                                                  last;
