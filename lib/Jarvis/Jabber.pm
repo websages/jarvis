@@ -159,7 +159,7 @@ sub status_event()
                 # is retrievable through the jid() method
 
                 my $jid = $heap->{$self->alias()}->jid();
-                print "INIT FINISHED! \n";
+                # print "INIT FINISHED! \n";
                 $heap->{'reconnect_count'} = 0; 
                 #print "JID: $jid \n";
                 #print "SID: ". $sender->ID() ." \n\n";
