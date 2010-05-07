@@ -24,7 +24,7 @@ my $known_personas = <<"...";
          init:
            alias: irc_client
            nickname: crunchy
-           ircname: Cap'n Crunchbot
+           ircname: "Cap'n Crunchbot"
            server: 127.0.0.1
            domain: websages.com
            channel_list:
@@ -155,8 +155,6 @@ sub spawn{
     $persona=~s/^\s+//;
     my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
     return undef unless $poe;
-
-
     $poe->yaml_sess(<<"    ...");
     ---
     class: Jarvis::Persona::Crunchy
