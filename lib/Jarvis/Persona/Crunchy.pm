@@ -1,7 +1,7 @@
 package Jarvis::Persona::Crunchy;
 use strict;
 use warnings;
-use parent Jarvis::Persona::Base;
+use parent 'Jarvis::Persona::Base';
 use IRCBot::Chatbot::Pirate;
 use POE::Component::Client::Twitter;
 use POE;
