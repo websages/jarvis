@@ -38,7 +38,6 @@ sub persona_start{
             }
         }
     }
-print STDERR "[ ". $self->{'brainpath'} ." ]\n";
     $self->{'megahal'} = new AI::MegaHAL(
                                           'Path'     => $self->{'brainpath'},
                                           'Banner'   => 0,

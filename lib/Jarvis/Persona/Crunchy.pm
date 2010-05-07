@@ -212,6 +212,16 @@ sub ldap_srv_records{
     return $self;
 }
 
+################################################################################
+# when you send an 'authen' event with a message bundle ($msg) to the connector 
+# it should make a best-effort attempt to figure out who the actual user behind
+# the nick is, and it will reply to 'authen_reply' of the requesting session
+# along with the $msg. The $msg sent to authen on the connector should contain
+# a 'reason' field that the reply_event may take action on.
+# Typically, you could just take the message bundle the connector just sent you,
+#  and: #  $msg->{'reason'}='whoami'; $kernel->post($sender, 'authen', $msg);
+# and then handle the 'reason' $whoami below...
+################################################################################
 sub authen_reply{
     my ($self, $kernel, $heap, $msg, $user) = @_[OBJECT, KERNEL, HEAP, ARG0, ARG1];
     my $r;

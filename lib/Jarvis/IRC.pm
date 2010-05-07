@@ -316,7 +316,6 @@ sub irc_whois {
             if($reply->{'nick'} eq $request->{'authen'}->{'conversation'}->{'nick'}){
                 my $domain=$reply->{'host'};
                 if($domain eq '127.0.0.1'){ $domain = $self->{'domain'}; }
- 
                 $kernel->post(
                                $request->{'sender'}, 
                                'authen_reply', 
