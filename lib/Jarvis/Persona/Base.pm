@@ -16,8 +16,8 @@ sub new {
     $self->{'must'} = [ 'alias' ];
     # an optional overloaded subroutine can provide more.
     my $oload_list=$self->must();
-    while(my $oload_may = shift @{ $oload_list }){
-        push(@{ $self->{'must'} }, $oload_may );
+    while(my $oload_must = shift @{ $oload_list }){
+        push(@{ $self->{'must'} }, $oload_must );
     }
 
     # hash of optional constructor elements (key), and their default (value) if not specified
@@ -27,7 +27,7 @@ sub new {
     foreach my $key (keys(%{ $oload_hash })){
         $self->{'may'}->{ $key } = $oload_hash->{ $key };
     }
-
+print Data::Dumper->Dump([$self->{'may'}]);
     # set our required values fron the constructor or the defaults
     foreach my $attr (@{ $self->{'must'} }){
          if(defined($construct->{$attr})){
