@@ -14,25 +14,31 @@ sub input_handler{
     my $line=shift;
     my $direct=shift||0;
     for ( $line ) {
-        /^\s*!*help\s*/          && return $self->help();
-        /^\s*!*spawn\s+(.*)/     && return $self->spawn($1)     if $direct;
-        /^\s*!*terminate\s+(.*)/ && return $self->terminate($1) if $direct;
-        /.*/                     && return  []; # say nothing by default
+        /^\s*!*help(.*)/      && return $self->help($1);
+        /^\s*!*spawn(.*)/     && return $self->spawn($1)     if $direct;
+        /^\s*!*terminate(.*)/ && return $self->terminate($1) if $direct;
+        /.*/                  && return  [];                             # say nothing by default
     }
 }
 
 sub help(){
     my $self=shift;
+    my $topic=shift if @_;
+    $topic=~s/^\s+//;
     return  [ "commands: help spawn terminate" ];
 }
 
 sub spawn(){
     my $self=shift;
+    my $object=shift if @_;
+    $object=~s/^\s+//;
     return  [ "I need a spawn routine" ];
 }
 
 sub terminate(){
     my $self=shift;
+    my $object=shift if @_;
+    $object=~s/^\s+//;
     return  [ "I need a terminate routine" ];
 }
 

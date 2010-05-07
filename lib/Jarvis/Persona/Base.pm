@@ -3,7 +3,6 @@ use AI::MegaHAL;
 use POE;
 use POSIX qw( setsid );
 use POE::Builder;
-use LWP::UserAgent;
 
 sub new {
     my $class = shift;
@@ -93,14 +92,12 @@ sub persona_start{
     return $self;
 }
 
-# a handler for persona POE event states, return a list or hash to be added to $self->{'states'}
+# a handler for persona POE event states, return a list or hash 
+# to be added to $self->{'states'} (overload me)
 sub persona_states{
     my $self = $_[OBJECT]||shift;
     return undef;
 }
-
-
-
 
 ################################################################################
 # standard functions each persona needs to communicate with the connectors
