@@ -176,34 +176,7 @@ sub status_event()
                 
                 $kernel->post($self->alias().'component','purge_queue');
 
-#                my $online_node=XNode->new('presence',[ 'show', 'Online']);
-#                $kernel->yield(output_event',$online_node);
-#
-#                my $reserved_nick_req = XNode->new('iq', [ 
-#                                                           'from', $jid,
-#                                                           'id', 'crunchy',
-#                                                           'to', 'system@websages.com',
-#                                                           'type', 'get',
-#                                                         ]
-#                                                  );
-#                $reserved_nick_req->insert_tag('query', [
-#                                              'xmlns', 'http://jabber.org/protocol/disco#info', 
-#                                              'node', 'x-roomuser-item'
-#                                            ]
-#                                  );
-#                $kernel->yield(output_event', $reserved_nick_req);
-#
-#                my $node=XNode->new('presence', [ 
-#                                                  'to', 'system@conference.websages.com/crunchy',
-#                                                  'from', $jid,
-#                                                  'x', [xmlns=>"http://jabber.org/protocol/muc"],
-#                                                ]
-#                                   );
-#                my $child_node=XNode->new('x',[xmlns=>"http://jabber.org/protocol/muc"]);
-#                $node->insert_tag($child_node);
-#
-#                $kernel->yield(output_event',$node);
-               
+print STDERR Data::Dumper->Dump([ $self->{'channel_list'} ]);
                 if(defined($self->{'channel_list'})){
                     foreach my $muc (@{ $self->{'channel_list'} }){
                         #$heap->{'roomnick'} = 'system@conference.websages.com/crunchy';
