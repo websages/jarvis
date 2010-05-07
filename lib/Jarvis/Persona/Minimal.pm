@@ -14,6 +14,7 @@ sub input_handler{
     my $line=shift;
     my $direct=shift||0;
     for ( $line ) {
+print STDERR "==>[ $line ]\n";
         /^\s*!*help(.*)/      && return $self->help($1);
         /^\s*!*spawn(.*)/     && return $self->spawn($1)     if $direct;
         /^\s*!*terminate(.*)/ && return $self->terminate($1) if $direct;

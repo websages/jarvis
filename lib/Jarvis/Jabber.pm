@@ -434,18 +434,18 @@ sub error_event()
                     $heap->{'reconnect_count'}++;
                     $kernel->post($sender, 'reconnect');
                 }else{
-                    print "Giving Up!\n";
+                    print "Max connect attempts exceeded. Giving Up.\n";
                 }
         
         } elsif($error == +PCJ_SOCKETDISCONNECT) {
                 
-                print "We got disconneted\n";
+                print "We got disconnected\n";
                 if($heap->{'reconnect_count'} < 10){
                     print "Reconnecting!\n";
                     $heap->{'reconnect_count'}++;
                     $kernel->post($sender, 'reconnect');
                 }else{
-                    print "Giving Up!\n";
+                    print "Max connect attempts exceeded. Giving Up.\n";
                 }
         
         } elsif($error == +PCJ_CONNECTFAIL) {
@@ -456,7 +456,7 @@ sub error_event()
                     print "Retrying connection!\n";
                     $kernel->post($sender, 'reconnect');
                 }else{
-                    print "Giving Up!\n";
+                    print "Max connect attempts exceeded. Giving Up.\n";
                 }
         
         } elsif ($error == +PCJ_SSLFAIL) {

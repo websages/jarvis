@@ -196,13 +196,13 @@ sub input{
          if($directly_addressed==1){ 
              foreach my $line (@{ $replies }){
                  if($msg->{'conversation'}->{'direct'} == 0){
-                     if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $who.':'.$line); }
+                     if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $who.': '.$line); }
                  }else{
                      if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $line); } 
                  }
              }
          }
-    } # ignore if we didn't match anything.
+    }
     return $self->{'alias'};
 }
 
@@ -220,8 +220,6 @@ sub input_handler{
     my $direct=shift||0;
     for ( $line ) {
         /^\s*!*help\s*/          && return $self->help();
-        /^\s*!*spawn\s+(.*)/     && return $self->spawn($1)     if $direct;
-        /^\s*!*terminate\s+(.*)/ && return $self->terminate($1) if $direct;
         /.*/                     && return $self->{'megahal'}->do_reply($what);
     }
 }
@@ -230,25 +228,3 @@ sub help(){
     my $self=shift;
     return  [ "I need a help routine" ];
 }
-
-sub spawn(){
-    my $self=shift;
-    $heap->{'spawned'}->{'crunchy'} = $self->spawn_crunchy();
-    if(defined($heap->{'spawned'}->{'crunchy'})){
-        return [ "crunchy spawned" ];
-    }else{
-        return [ "something went wrong spawning crunchy" ];
-    }
-    return  [ ];
-}
-
-sub terminate(){
-    my $self=shift;
-    foreach my $sess (@{ $heap->{'spawned'}->{'crunchy'} }){
-        $kernel->post($sess, '_stop');
-    }
-    delete $heap->{'spawned'}->{'crunchy'};
-    return [ "crunchy terminated" ];
-}
-
-1;

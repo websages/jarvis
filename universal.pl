@@ -51,7 +51,7 @@ $poe->yaml_sess(<<"...");
 class: Jarvis::Jabber
 init: 
   alias: ${hostname}_xmpp
-  ip: thor.websages.com
+  ip: 127.0.0.1
   port: 5222
   hostname: ${domain}
   username: ${hostname}
