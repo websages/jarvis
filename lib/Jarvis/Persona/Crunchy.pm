@@ -127,7 +127,7 @@ sub input{
             /^!disable\s+shoutouts*/    && do {
                                                 $msg->{'reason'}='disable_shoutout';
                                                 $kernel->post($sender, 'authen', $msg);
-                                                $last;
+                                                last;
                                               };
             /^!weather\s+(.+?)$/        && do { $replies = [ qx( ruby /usr/local/bin/weather.rb $1 )]; last; };
             /^!insult\s+(.+?)$/         && do { $replies = [ qx( ruby /usr/local/bin/insult.rb $1 ) ]; last; };
