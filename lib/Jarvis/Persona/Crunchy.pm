@@ -90,15 +90,16 @@ sub persona_start{
 #   You will also need to subroutines or inline code to handle these actions.
 ################################################################################
 
-    for ( $what ) {
-        /^\s*!*help\s*/            && return $self->help($line);
-        /\"(.+?)\"\s+--\s*(.+?)$/  && return [ piratespeak( $self->quote($what) ) ];
-        /(https*:\S+)/             && return [ $self->link($what, $who) ];
-        /^\s*fortune\s*$/          && return [ piratespeak( $self->fortune() ) ];
-        /^!shoutout\s*(.*)/        && return [ $self->shoutout($1,$who) ];
-        /.*/                       && return [ piratespeak( $self->megahal($line) ) ] if $direct;
-        /.*/                       && return []; 
-    }
+#    for ( $what ) {
+#        /^\s*!*help\s*/            && return $self->help($line);
+#        /\"(.+?)\"\s+--\s*(.+?)$/  && return [ piratespeak( $self->quote($what) ) ];
+#        /(https*:\S+)/             && return [ $self->link($what, $who) ];
+#        /^\s*fortune\s*$/          && return [ piratespeak( $self->fortune() ) ];
+#        /^!shoutout\s*(.*)/        && return [ $self->shoutout($1,$who) ];
+#        /.*/                       && return [ piratespeak( $self->megahal($line) ) ] if $direct;
+#        /.*/                       && return []; 
+#    }
+
 
 ################################################################################
 # 
