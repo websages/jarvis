@@ -83,6 +83,24 @@ sub unique_members{
    return @values;
 }
 
+sub entry_attr{
+    my $self = shift;
+    my $entrydn = shift if @_;
+    my $attr = shift if @_;
+    return undef unless $entrydn;
+    return undef unless $attr;
+    my @values;
+    my $entries;
+    @{ $entries } = $self->get_ldap_entry($entrydn);
+    foreach my $entry (@{ $entries }){
+        my $attribute;
+        foreach $attribute ( $entry->get_value($attr) ){
+            push(@values, $attribute);
+        }
+    }
+   return @values;
+}
+
 sub get_ldap_entry {
     my $self = shift;
     my $filter = shift if @_;
