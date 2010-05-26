@@ -58,9 +58,69 @@ sub must {
     return  [ ];
 }
 
+################################################################################
+# These are conventions for the way we set up hosts...
+################################################################################
+sub dnsdomainname{
+    my self = shift;
+    open DOMAIN, "dnsdomainname|"; 
+    my $domain=<DOMAIN>; 
+    close DOMAIN; 
+    return $domain; 
+}
+
+sub secret{
+    my self = shift;
+    open SECRET, "secret|"; 
+    my $secret=<SECRET>; 
+    close SECRET; 
+    return $secret; 
+}
+
+sub binddn{
+    my self = shift;
+    open FQDN, "hostname -f|"; 
+    my $fqdn=<FQDN>; 
+    close FQDN; 
+    my $bindn=$fqdn;
+    my @bindparts=split(/\./,$fqdn);
+    my $basename = shift(@bindparts);
+    my $basedn = "ou=Hosts,dc=". join(",dc=",@bindparts);
+    $binddn = "cn=". $basename . "," . $basedn;
+    return $binddn;
+}
+
+################################################################################
+# This depends on websages internal conventions if you don't define them...
+################################################################################
 sub may {
     my $self = shift;
-    return  { 'brainpath' => '/dev/shm/brain/system' };
+    return  { 
+              'brainpath' => '/dev/shm/brain/system' 
+              'ldap_domain'  => $self->dnsdomainname();
+              'ldap_binddn'  => $self->binddn();
+              'ldap_bindpw'  => $self->secret();
+            };
+    
+}
+
+sub peers{
+    my $self = shift;
+    return undef unless $self->{'ldap_domain'};
+    return undef unless $self->{'ldap_binddn'};
+    return undef unless $self->{'ldap_bindpw'};
+
+    my $ldap = LDAP::Simple->new({ 
+                                   'domain' => $self->{'ldap_domain'},
+                                   'binddn' => $self->{'ldap_binddn'},
+                                   'bindpw' => $self->{'ldap_passwd'},
+                                 });
+
+}
+
+sub states{
+     my $self = $_[OBJECT]||shift;
+     return $self->{'states'};
 }
 
 sub persona_start{
@@ -93,7 +153,15 @@ sub persona_start{
                                           'AutoSave' => 1
                                         );
     $self->known_personas();
+    $self->peers();
     return $self;
+}
+
+sub persona_states{
+    my $self = $_[OBJECT]||shift;
+    return { 
+             'peer_check' => peer_check,
+           };
 }
 
 sub input{
