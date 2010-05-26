@@ -67,7 +67,6 @@ sub dnsdomainname{
     open DOMAIN, "dnsdomainname|"; 
     my $domain=<DOMAIN>; 
     close DOMAIN; 
-print STDERR "domain: $domain\n";
     return $domain; 
 }
 
@@ -76,7 +75,6 @@ sub secret{
     open SECRET, "/usr/local/sbin/secret|"; 
     my $secret=<SECRET>; 
     close SECRET; 
-print STDERR "secret: $secret\n";
     return $secret; 
 }
 
@@ -90,7 +88,6 @@ sub binddn{
     my $basename = shift(@bindparts);
     my $basedn = "ou=Hosts,dc=". join(",dc=",@bindparts);
     $binddn = "cn=". $basename . "," . $basedn;
-print STDERR "binddn: $binddn\n";
     return $binddn;
 }
 
