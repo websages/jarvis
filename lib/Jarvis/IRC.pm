@@ -65,6 +65,7 @@ sub new {
                           'irc_join',
                           'elevate_priv',
                           'channel_members',
+                          'irc_353',
                         ];
     #$self->{'states'} = { 
     #                      start                => 'start',
@@ -341,6 +342,11 @@ sub irc_join {
 sub channel_members {
     my ($self, $kernel, $heap, $sender, $channel) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
     $kernel->post( $self->{'irc_client'}, 'names', $channel );
+}
+
+sub irc_353{
+    my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_ ];
+    print STDERR Data::Dumper->Dump([@args]); 
 }
 
 1;
