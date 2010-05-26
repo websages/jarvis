@@ -67,7 +67,8 @@ sub dnsdomainname{
     open DOMAIN, "dnsdomainname|"; 
     my $domain=<DOMAIN>; 
     close DOMAIN; 
-    return $domain; 
+    if($domain=~m/(.*)/;
+    return $1;
 }
 
 sub secret{
@@ -98,8 +99,7 @@ sub may {
     my $self = shift;
     return  { 
               'brainpath' => '/dev/shm/brain/system' ,
-              #'ldap_domain'  => $self->dnsdomainname(),
-              'ldap_domain'  => 'websages.com',
+              'ldap_domain'  => $self->dnsdomainname(),
               'ldap_binddn'  => $self->binddn(),
               'ldap_bindpw'  => $self->secret(),
             };
