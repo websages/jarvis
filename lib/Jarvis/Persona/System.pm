@@ -115,7 +115,8 @@ sub peers{
                                    'binddn' => $self->{'ldap_binddn'},
                                    'bindpw' => $self->{'ldap_passwd'},
                                  });
-
+    $self->{'peers'} = $ldap->unique_members("cn=bot_managed");
+    return $self;
 }
 
 sub states{
@@ -154,6 +155,7 @@ sub persona_start{
                                         );
     $self->known_personas();
     $self->peers();
+print STDERR Data::Dumper->Dump([$self->{'peers'}]);
     return $self;
 }
 
