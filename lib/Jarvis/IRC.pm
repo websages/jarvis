@@ -64,6 +64,7 @@ sub new {
                           'irc_whois',
                           'irc_join',
                           'elevate_priv',
+                          'channel_members',
                         ];
     #$self->{'states'} = { 
     #                      start                => 'start',
@@ -336,4 +337,10 @@ sub irc_join {
     # tell the personality there is a new player
     $kernel->post( $self->{'persona'}, 'channel_join', $join, $channel );
 }
+
+sub channel_members {
+    my ($self, $kernel, $heap, $sender, $channel) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0, ARG1];
+    $kernel->post( $self->{'irc_client'}, 'names', $channel );
+}
+
 1;
