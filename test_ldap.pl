@@ -11,13 +11,9 @@ my $ldap = LDAP::Simple->new({
                                'bindpw' => $ENV{'LDAP_PASSWORD'},
                              });
 
-
 my @membs = $ldap->unique_members("cn=bot_managed");
 foreach my $member (@membs){
-   $member=~s/,.*//g;
-   print "$member:\n";
-   my @list = $ldap->entry_attr($member,'iphostnumber');
-   foreach my $item (@list){
-       print "$item\n";
-   }
+   $member=~s/,\s*ou=[Hh]osts\s*,$ldap->{'basedn'}//g;
+   $member=~s/^cn=//;
+   print $member.".websages.com\n";
 }
