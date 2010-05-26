@@ -113,7 +113,7 @@ sub peers{
     return undef unless $self->{'ldap_domain'};
     return undef unless $self->{'ldap_binddn'};
     return undef unless $self->{'ldap_bindpw'};
-
+    
     my $ldap = LDAP::Simple->new({ 
                                    'domain' => $self->{'ldap_domain'},
                                    'binddn' => $self->{'ldap_binddn'},
@@ -164,7 +164,6 @@ sub persona_start{
                                         );
     $self->known_personas();
     $self->peers();
-print STDERR "peers:" .Data::Dumper->Dump([$self->{'peers'}]);
     return $self;
 }
 
@@ -270,6 +269,18 @@ sub spawn{
         }
     }
     return "I don't know how to become $persona." if(!$found);
+}
+
+################################################################################
+# let the personality know that the connector is now watching a channel
+################################################################################
+sub channel_add{
+     #expects a constructor hash of { alias => <sender_alias>, channel => <some_tag>, nick => <nick in channel> }
+    my ($self, $kernel, $heap, $construct) = @_[OBJECT, KERNEL, HEAP, ARG0];
+         push ( 
+                @{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} } },
+                $construct->{'nick'}
+              );
 }
 
 # As long as the yaml lines up with itself, 
