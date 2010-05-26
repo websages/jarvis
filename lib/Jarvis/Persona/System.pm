@@ -62,7 +62,7 @@ sub must {
 # These are conventions for the way we set up hosts...
 ################################################################################
 sub dnsdomainname{
-    my self = shift;
+    $self = shift;
     open DOMAIN, "dnsdomainname|"; 
     my $domain=<DOMAIN>; 
     close DOMAIN; 
@@ -70,7 +70,7 @@ sub dnsdomainname{
 }
 
 sub secret{
-    my self = shift;
+    $self = shift;
     open SECRET, "secret|"; 
     my $secret=<SECRET>; 
     close SECRET; 
@@ -78,7 +78,7 @@ sub secret{
 }
 
 sub binddn{
-    my self = shift;
+    $self = shift;
     open FQDN, "hostname -f|"; 
     my $fqdn=<FQDN>; 
     close FQDN; 
