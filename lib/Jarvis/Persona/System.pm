@@ -281,6 +281,7 @@ sub channel_add{
                 @{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} } },
                 $construct->{'nick'}
               );
+    $kernel->post($construct->{'alias'},'channel_members',$construct->{'channel'});
 }
 
 # As long as the yaml lines up with itself, 
