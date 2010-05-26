@@ -117,6 +117,7 @@ sub peers{
                                    'bindpw' => $self->{'ldap_passwd'},
                                  });
     $self->{'peers'} = $ldap->unique_members("cn=bot_managed");
+print STDERR Data::Dumper->Dump([$ldap]);
     return $self;
 }
 
