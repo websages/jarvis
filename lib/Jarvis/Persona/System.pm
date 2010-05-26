@@ -98,7 +98,8 @@ sub may {
     my $self = shift;
     return  { 
               'brainpath' => '/dev/shm/brain/system' ,
-              'ldap_domain'  => $self->dnsdomainname(),
+              #'ldap_domain'  => $self->dnsdomainname(),
+              'ldap_domain'  => 'websages.com',
               'ldap_binddn'  => $self->binddn(),
               'ldap_bindpw'  => $self->secret(),
             };

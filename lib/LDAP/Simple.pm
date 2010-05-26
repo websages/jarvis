@@ -31,8 +31,7 @@ sub ldap_srv_records{
         $self->{'basedn'} =~s/\./,dc=/g;
         $self->{'basedn'} = "dc=".$self->{'basedn'};
         $self->{'resolver'} = Net::DNS::Resolver->new;
-        my $srv = $self->{'resolver'}->query( "_ldap._tcp.".$self->{'domain'}, "SRV" );
-print Data::Dumper->Dump([$srv]);
+        my $srv = $self->{'resolver'}->query( '_ldap._tcp.'.$self->{'domain'}, "SRV" );
         if($srv){
             foreach my $rr (grep { $_->type eq 'SRV' } $srv->answer) {
                 my $uri;
