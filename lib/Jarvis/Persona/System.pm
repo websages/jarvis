@@ -5,6 +5,7 @@ use POE;
 use POSIX qw( setsid );
 use POE::Builder;
 use LWP::UserAgent;
+use LDAP::Simple;
 use YAML;
 
 sub known_personas{
