@@ -171,7 +171,7 @@ sub persona_states{
     my $self = $_[OBJECT]||shift;
     return { 
              'peer_check' => 'peer_check',
-             'channel_member_reply' => 'channel_member_reply',
+             'channel_members_reply' => 'channel_members_reply',
            };
 }
 
@@ -285,7 +285,7 @@ sub channel_add{
     $kernel->post($construct->{'alias'},'channel_members',$construct->{'channel'});
 }
 
-sub channel_member_reply{
+sub channel_members_reply{
     my ($self, $kernel, $heap, $session, $channel, $members) = @_[OBJECT, KERNEL, HEAP, SESSION, ARG0, ARG1];
     print STDERR Data::Dumper->Dump([$channel,$members]);  
 }
