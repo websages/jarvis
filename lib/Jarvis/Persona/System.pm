@@ -72,7 +72,7 @@ print STDERR "domain: $domain\n";
 
 sub secret{
     $self = shift;
-    open SECRET, "secret|"; 
+    open SECRET, "/usr/local/sbin/secret|"; 
     my $secret=<SECRET>; 
     close SECRET; 
 print STDERR "secret: $secret\n";
