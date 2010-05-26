@@ -170,7 +170,8 @@ sub persona_start{
 sub persona_states{
     my $self = $_[OBJECT]||shift;
     return { 
-             'peer_check' => peer_check,
+             'peer_check' => 'peer_check',
+             'channel_member_reply' => 'channel_member_reply',
            };
 }
 
@@ -282,6 +283,11 @@ sub channel_add{
                 $construct->{'nick'}
               );
     $kernel->post($construct->{'alias'},'channel_members',$construct->{'channel'});
+}
+
+sub channel_member_reply{
+    my ($self, $kernel, $heap, $session, $channel, $members) = @_[OBJECT, KERNEL, HEAP, SESSION, ARG0, ARG1];
+    
 }
 
 # As long as the yaml lines up with itself, 

@@ -339,14 +339,43 @@ sub irc_join {
     $kernel->post( $self->{'persona'}, 'channel_join', $join, $channel );
 }
 
+# where the personality requests the channel members:
 sub channel_members {
     my ($self, $kernel, $heap, $sender, $channel) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
     $kernel->post( $self->{'irc_client'}, 'names', $channel );
+    push(@{ $heap->{'pending'} }, { 'channel_members' => $channel, 'sender' => $sender->ID } );
 }
 
+# where the irc_server responds to our 'names' request
 sub irc_353{
-    my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_ ];
-    print STDERR Data::Dumper->Dump([@args]); 
+    # irc_names
+    my ($self, $kernel, $heap, $sender, $server, $mstring, $mlist)=@_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    my ($channel, $members);
+    if($mstring=~m/=\s+(\S+)\s+:(.*)/){
+        $channel=$1;
+        @{ $members } = split(" ",$2);
+    }
+    my $max=$#{ $heap->{'pending'} };
+    my $count=0;
+    while ($count++ <= $max){
+        my $request = shift (@{ $heap->{'pending'} });
+        if(defined($request->{'channel_members'})){
+            #
+            if($channel eq $request->{'channel_members'}){
+                # this is the pending request that is waiting for a response
+                $kernel->post($request->{'sender'},'channel_names_reply',$channel,$members);
+            }else{
+                # this is not the pending request we're answering, push it back on the pending list
+                push(@{ $heap->{'pending'} }, $request );
+            }
+        }else{
+            # this is not the pending request we're answering, push it back on the pending list
+            push(@{ $heap->{'pending'} }, $request );
+        }
+    }
+    return;
 }
+
 
 1;
+
