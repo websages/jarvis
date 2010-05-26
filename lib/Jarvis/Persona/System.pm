@@ -100,7 +100,7 @@ sub may {
               'brainpath' => '/dev/shm/brain/system' ,
               'ldap_domain'  => $self->dnsdomainname(),
               'ldap_binddn'  => $self->binddn(),
-              'ldap_bindpw'  => $self->secret(),
+              'ldap_passwd'  => $self->secret(),
             };
     
 }

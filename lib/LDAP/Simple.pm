@@ -8,14 +8,14 @@ sub new{
     my $construct = shift if @_;
     bless($self,$class);
     $self->{'must'} = [ 'domain', 'binddn', 'bindpw' ];
-     foreach my $attr (@{ $self->{'must'} }){
-         if(defined($construct->{$attr})){
-             $self->{$attr} = $construct->{$attr};
-         }else{
-             print STDERR "Required session constructor attribute [$attr] not defined. ";
-             print STDERR "unable to define ". __PACKAGE__ ." object\n";
-             return undef;
-         }
+    foreach my $attr (@{ $self->{'must'} }){
+        if(defined($construct->{$attr})){
+            $self->{$attr} = $construct->{$attr};
+        }else{
+            print STDERR "Required session constructor attribute [$attr] not defined. ";
+            print STDERR "unable to define ". __PACKAGE__ ." object\n";
+            return undef;
+        }
     }
     $self->ldap_srv_records();
 }
