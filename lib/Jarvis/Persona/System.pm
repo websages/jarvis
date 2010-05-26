@@ -67,8 +67,10 @@ sub dnsdomainname{
     open DOMAIN, "dnsdomainname|"; 
     my $domain=<DOMAIN>; 
     close DOMAIN; 
-    if($domain=~m/(.*)/;
-    return $1;
+    if($domain=~m/(.*)/){
+        return $1;
+    }
+    return undef;
 }
 
 sub secret{
@@ -118,7 +120,6 @@ sub peers{
                                    'bindpw' => $self->{'ldap_bindpw'},
                                  });
     $self->{'peers'} = $ldap->unique_members("cn=bot_managed");
-print STDERR Data::Dumper->Dump([$ldap]);
     return $self;
 }
 
