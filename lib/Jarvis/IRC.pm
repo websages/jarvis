@@ -339,7 +339,7 @@ sub irc_join {
 }
 
 sub channel_members {
-    my ($self, $kernel, $heap, $sender, $channel) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0, ARG1];
+    my ($self, $kernel, $heap, $sender, $channel) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
     $kernel->post( $self->{'irc_client'}, 'names', $channel );
 }
 
