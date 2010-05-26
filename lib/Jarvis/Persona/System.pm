@@ -120,7 +120,7 @@ sub peers{
                                    'bindpw' => $self->{'ldap_bindpw'},
                                  });
     @peer_dns = $ldap->unique_members("cn=bot_managed");
-    while(my $dn=shift($peer_dns)){
+    while(my $dn=shift(@peer_dns)){
         $dn=~s/,.*//;
         $dn=~s/.*cn=//;
         push(@{ $self->{'peers'} },$dn);
