@@ -287,7 +287,7 @@ sub channel_add{
 
 sub channel_member_reply{
     my ($self, $kernel, $heap, $session, $channel, $members) = @_[OBJECT, KERNEL, HEAP, SESSION, ARG0, ARG1];
-    
+    print STDERR Data::Dumper->Dump([$channel,$members]);  
 }
 
 # As long as the yaml lines up with itself, 

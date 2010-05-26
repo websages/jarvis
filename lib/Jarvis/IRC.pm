@@ -363,7 +363,7 @@ sub irc_353{
             #
             if($channel eq $request->{'channel_members'}){
                 # this is the pending request that is waiting for a response
-                $kernel->post($request->{'sender'},'channel_names_reply',$channel,$members);
+                $kernel->post($request->{'sender'},'channel_members_reply',$channel,$members);
             }else{
                 # this is not the pending request we're answering, push it back on the pending list
                 push(@{ $heap->{'pending'} }, $request );
