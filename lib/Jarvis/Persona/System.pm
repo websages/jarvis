@@ -100,7 +100,7 @@ sub may {
               'brainpath' => '/dev/shm/brain/system' ,
               'ldap_domain'  => $self->dnsdomainname(),
               'ldap_binddn'  => $self->binddn(),
-              'ldap_passwd'  => $self->secret(),
+              'ldap_bindpw'  => $self->secret(),
             };
     
 }
@@ -114,7 +114,7 @@ sub peers{
     my $ldap = LDAP::Simple->new({ 
                                    'domain' => $self->{'ldap_domain'},
                                    'binddn' => $self->{'ldap_binddn'},
-                                   'bindpw' => $self->{'ldap_passwd'},
+                                   'bindpw' => $self->{'ldap_bindpw'},
                                  });
     $self->{'peers'} = $ldap->unique_members("cn=bot_managed");
 print STDERR Data::Dumper->Dump([$ldap]);
