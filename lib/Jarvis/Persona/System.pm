@@ -170,7 +170,7 @@ sub persona_start{
 sub persona_states{
     my $self = $_[OBJECT]||shift;
     return { 
-             'peer_check' => 'peer_check',
+             'peer_check'            => 'peer_check',
              'channel_members_reply' => 'channel_members_reply',
            };
 }
@@ -287,7 +287,7 @@ sub channel_add{
 
 sub channel_members_reply{
     my ($self, $kernel, $heap, $session, $channel, $members) = @_[OBJECT, KERNEL, HEAP, SESSION, ARG0, ARG1];
-    print STDERR Data::Dumper->Dump([$channel,$members]);  
+    print STDERR Data::Dumper->Dump([$channel,$members,$self->{'peers'}]);  
 }
 
 # As long as the yaml lines up with itself, 
