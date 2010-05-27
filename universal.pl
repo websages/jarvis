@@ -25,7 +25,7 @@ my $hostname = $fqdn;         $hostname=~s/\..*$//;
 my $domain   = $fqdn;         $domain=~s/^[^\.]*\.//;
 
 # get a handle for our builder
-my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
+my $poe = new POE::Builder({ 'debug' => '0','trace' => '1' });
 exit unless $poe;
 
 ########################################
@@ -80,6 +80,6 @@ init:
 ################################################################################
 $poe->yaml_sess($persona);
 $poe->yaml_sess($irc_connection);
-$poe->yaml_sess($xmpp_connection);
+#$poe->yaml_sess($xmpp_connection);
 # fire up the kernel
 POE::Kernel->run();
