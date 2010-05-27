@@ -218,6 +218,7 @@ sub input{
                                                  last;
                                              }
                                            };
+            /i don't understand/     && do { last; }; # bot storm!
             /.*/                     && do { $replies = [ "i don't understand"    ] if($direct); last; };
             /.*/                     && do { last; }
         }
