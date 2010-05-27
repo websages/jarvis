@@ -285,7 +285,11 @@ sub peer_check{
     my ($self, $kernel, $heap, $sender, $channel, $members) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0, ARG1];
     foreach my $peer (@{ $self->{'peers'} }){
         my $connector_alias=$kernel->alias_list($sender);
-        next if( defined( $heap->{'locations'}->{$connector_alias}->{$channel}->{$peer}));
+        my $thatsme=0;
+        foreach my $nick (@{ $heap->{'locations'}->{$connector_alias}->{$channel} }){
+            if($nick eq $peer){ $thatsme = 1; }
+        }
+        next if($thatsme);
         my $found=0;
         foreach my $member (@{ $members }){
             if($peer eq $member){ $found = 1; }
