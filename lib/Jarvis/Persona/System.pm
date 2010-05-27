@@ -287,7 +287,9 @@ sub peer_check{
             if($peer eq $member){ $found = 1; }
         }
         if($found == 1){
-            print STDERR "Found $peer in $channel\n";
+            print STDERR "$peer found in $channel\n";
+        }else{
+            print STDERR "$peer not found in $channel\n";
         }
     }
 }
