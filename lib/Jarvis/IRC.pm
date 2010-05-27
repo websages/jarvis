@@ -344,6 +344,7 @@ sub irc_join {
 # where the personality requests the channel members:
 sub channel_members {
     my ($self, $kernel, $heap, $sender, $channel, $respond_to) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0, ARG1];
+print STDERR Data::Dumper->Dump([$sender->ID]);
     push(@{ $heap->{'pending'} }, { 'channel_members' => $channel, 'sender' => $sender->ID, 'respond_to' => $respond_to } );
     $kernel->post( $self->{'irc_client'}, 'names', $channel );
 }
