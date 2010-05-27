@@ -281,7 +281,7 @@ sub channel_add{
 }
 
 sub peer_check{
-    my ($self, $kernel, $heap, $session, $channel, $members) = @_[OBJECT, KERNEL, HEAP, SESSION, ARG0, ARG1];
+    my ($self, $kernel, $heap, $sender, $channel, $members) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0, ARG1];
     foreach my $peer (@{ $self->{'peers'} }){
         my $found=0;
         foreach my $member (@{ $members }){
@@ -289,7 +289,7 @@ sub peer_check{
         }
         if($found == 1){
             print STDERR "$peer found in $channel\n";
-            $kernel->post($session, 'say_public', $channel, "$peer: ping");
+            $kernel->post($sender, 'say_public', $channel, "$peer: ping");
         }else{
             print STDERR "$peer not found in $channel\n";
         }
