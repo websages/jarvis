@@ -225,6 +225,7 @@ sub irc_public {
 
 sub say_public {
     my ($self, $kernel, $heap, $sender, $channel, $statement) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0, ARG1];
+print Data::Dumper->Dump([$channel, $statement]);
     $self->{'irc_client'}->yield( privmsg => [ $channel ] => $statement );
 }
 
