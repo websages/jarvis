@@ -284,7 +284,7 @@ sub channel_add{
 sub peer_check{
     my ($self, $kernel, $heap, $sender, $channel, $members) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0, ARG1];
     foreach my $peer (@{ $self->{'peers'} }){
-        next(if $peer eq $self->{'nickname'});
+        next if( $peer eq $self->{'nickname'});
         my $found=0;
         foreach my $member (@{ $members }){
             if($peer eq $member){ $found = 1; }
