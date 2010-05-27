@@ -363,6 +363,7 @@ sub irc_353{
         my $request = shift (@{ $heap->{'pending'} });
         if(defined($request->{'channel_members'})){
             #
+print STDERR Data::Dumper->Dump([$sender]);
             if($channel eq $request->{'channel_members'}){
                 # this is the pending request that is waiting for a response
                 $kernel->post($request->{'sender'},$request->{'respond_to'},$channel,$members);
