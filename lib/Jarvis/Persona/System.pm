@@ -171,13 +171,7 @@ sub persona_states{
     my $self = $_[OBJECT]||shift;
     return { 
              'peer_check'            => 'peer_check',
-             'channel_members_reply' => 'channel_members_reply',
            };
-}
-
-sub peer_check{
-    my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
-    return $self;
 }
 
 sub input{
@@ -282,11 +276,19 @@ sub channel_add{
                 @{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} } },
                 $construct->{'nick'}
               );
-    $kernel->post($construct->{'alias'},'channel_members',$construct->{'channel'});
+    $kernel->post($construct->{'alias'},'channel_members',$construct->{'channel'},{ 'respond' => 'peer_check' });
 }
 
-sub channel_members_reply{
+sub peer_check{
     my ($self, $kernel, $heap, $session, $channel, $members) = @_[OBJECT, KERNEL, HEAP, SESSION, ARG0, ARG1];
+    foreach my $peer (@{ $self->{'peers'} }){
+        my $found=0;
+        foreach my $member (@{ $members }){
+            if($peer eq $member){ $found = 1; }
+        }
+        if($found == 1){
+        }
+    }
     print STDERR Data::Dumper->Dump([$channel,$members,$self->{'peers'}]);  
 }
 

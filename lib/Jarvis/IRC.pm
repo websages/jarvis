@@ -341,9 +341,9 @@ sub irc_join {
 
 # where the personality requests the channel members:
 sub channel_members {
-    my ($self, $kernel, $heap, $sender, $channel) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
+    my ($self, $kernel, $heap, $sender, $channel, $why) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
+    push(@{ $heap->{'pending'} }, { 'channel_members' => $channel, 'sender' => $sender->ID, 'why' => $why } );
     $kernel->post( $self->{'irc_client'}, 'names', $channel );
-    push(@{ $heap->{'pending'} }, { 'channel_members' => $channel, 'sender' => $sender->ID } );
 }
 
 # where the irc_server responds to our 'names' request
@@ -363,7 +363,7 @@ sub irc_353{
             #
             if($channel eq $request->{'channel_members'}){
                 # this is the pending request that is waiting for a response
-                $kernel->post($request->{'sender'},'channel_members_reply',$channel,$members);
+                $kernel->post($request->{'sender'},$request->{'why'}->{'respond'},$channel,$members);
             }else{
                 # this is not the pending request we're answering, push it back on the pending list
                 push(@{ $heap->{'pending'} }, $request );
@@ -375,7 +375,6 @@ sub irc_353{
     }
     return;
 }
-
 
 1;
 
