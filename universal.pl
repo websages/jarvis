@@ -37,6 +37,7 @@ my $persona = << "...";
 class: Jarvis::Persona::System
 init: 
   alias: system
+  peer_group: cn=bot_managed
 ...
 
 ########################################

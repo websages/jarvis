@@ -104,6 +104,7 @@ sub may {
               'ldap_domain'  => $self->dnsdomainname(),
               'ldap_binddn'  => $self->binddn(),
               'ldap_bindpw'  => $self->secret(),
+              'peer_group'   => "cn=bot_managed",
             };
     
 }
@@ -119,7 +120,7 @@ sub peers{
                                    'binddn' => $self->{'ldap_binddn'},
                                    'bindpw' => $self->{'ldap_bindpw'},
                                  });
-    @peer_dns = $ldap->unique_members("cn=bot_managed");
+    @peer_dns = $ldap->unique_members($self->{'peer_group'});
     while(my $dn=shift(@peer_dns)){
         $dn=~s/,.*//;
         $dn=~s/.*cn=//;
