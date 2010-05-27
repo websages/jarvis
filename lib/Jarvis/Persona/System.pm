@@ -287,9 +287,9 @@ sub peer_check{
             if($peer eq $member){ $found = 1; }
         }
         if($found == 1){
+            print STDERR "Found $peer in $channel\n";
         }
     }
-    print STDERR Data::Dumper->Dump([$channel,$members,$self->{'peers'}]);  
 }
 
 # As long as the yaml lines up with itself, 
