@@ -276,7 +276,7 @@ sub channel_add{
                 @{ $heap->{'locations'}->{ $construct->{'alias'} }->{ $construct->{'channel'} } },
                 $construct->{'nick'}
               );
-    $kernel->post($construct->{'alias'},'channel_members',$construct->{'channel'}, 'peer_check');
+    $kernel->post($construct->{'alias'},'channel_members',$construct->{'channel'},'peer_check');
 }
 
 sub peer_check{
