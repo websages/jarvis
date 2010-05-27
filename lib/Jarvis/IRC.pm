@@ -66,6 +66,7 @@ sub new {
                           'elevate_priv',
                           'channel_members',
                           'irc_353',
+                          'say_public',
                         ];
     #$self->{'states'} = { 
     #                      start                => 'start',

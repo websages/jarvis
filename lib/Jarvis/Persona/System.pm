@@ -288,7 +288,7 @@ sub peer_check{
             if($peer eq $member){ $found = 1; }
         }
         if($found == 1){
-            print STDERR "$peer found in $channel\n";
+            kernel->post($session, 'say_public', $channel, "$peer: ping");
         }else{
             print STDERR "$peer not found in $channel\n";
         }
