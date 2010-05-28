@@ -75,6 +75,7 @@ sub persona_start{
                       };
 
     $self->{'twitter'} = POE::Component::Client::Twitter->spawn(%{ $self->{'cfg'} });
+print Data::Dumper->Dump($self->{'twitter'};
     $self->{'twitter'}->yield('register');
     $kernel->delay('delay_friend_timeline', 5);
     $kernel->delay('enable_twitter', 20);
