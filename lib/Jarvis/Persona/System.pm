@@ -315,7 +315,7 @@ sub peer_check{
                            {
                              'session'      => $sender,                     # to what session we post
                              'event'        => 'say_public',                # the event we post
-                             'args'         => ( $channel ,"$peer: ping") , # event arguments
+                             'args'         => [ $channel ,"$peer: ping" ], # event arguments
                              'reply_event'  => 'pong',                      # the expected reply event
                              'next_event'   => undef,                       # the action to take on return event
                              'expire_event' => 'where_is_peer',             # the action to take on return event expire
