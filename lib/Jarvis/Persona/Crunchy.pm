@@ -703,6 +703,7 @@ print STDERR "twitter_timeline_success\n";
             $text=~s/^I used #*Shazam to discover\s+(.*)\s+by\s+(.*)\s+http:\/\/.*/$1 $2/;
             $text=~s/^I used #*Shazam to discover\s+(.*)\s+by\s+(.*)\s+#shazam.*/$1 $2/;
         }
+print STDERR "enabled: $heap->{'twitter_enabled'}\n";
         if($heap->{'twitter_enabled'}){
             foreach my $location (keys(%{ $heap->{'locations'} })){
                 foreach my $channel (keys(%{ $heap->{'locations'}->{$location} })){
@@ -716,6 +717,7 @@ print STDERR "twitter_timeline_success\n";
             }
         }
     }
+print STDERR "delay_friend_timeline\n";
     $kernel->delay('delay_friend_timeline', $self->{'retry'});
 }
 
