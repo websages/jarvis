@@ -314,7 +314,7 @@ sub peer_check{
                            $self->alias(),
                            'queue',
                            {
-                             'session'      => $sender,                     # to what session we post
+                             'session'      => $sender->ID,                 # to what session we post
                              'event'        => 'say_public',                # the event we post
                              'args'         => [ $channel ,"$peer: ping" ], # event arguments
                              'reply_event'  => 'pong',                      # the expected reply event
