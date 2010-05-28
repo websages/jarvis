@@ -288,7 +288,6 @@ sub pending {
             if(time() < $pending->{'expire'}){
                 # but it's expired, so remove it from pending and do the expire_event;
                  print STDERR "expiring: $pending->{'job_id'}\n";
-                 print STDERR "expiring: $pending->{'job_id'}\n";
                  if(defined($pending->{'expire_event'})){
                     $kernel->post( 
                                    $pending->{'session'},
