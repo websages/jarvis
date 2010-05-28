@@ -258,8 +258,8 @@ sub pending {
     # loop through the pending list on the heap and try to find one that matches $edata
     while ($count++ <= $max){
         my $pending = shift (@{ $heap->{'pending'} });
-        if( ($edata->{'session'} eq $request->{'session'}) &&
-            ($edata->{'reply_event'} eq $request->{'reply_event'})){
+        if( ($edata->{'session'} eq $pending->{'session'}) &&
+            ($edata->{'reply_event'} eq $pending->{'reply_event'})){
             # this is the session and event that is pending.
             if(time() < $edata->{'expire'}){
                 # we're not expired, so do the next_event 
@@ -289,7 +289,7 @@ sub pending {
                  print STDERR "expiring: $pending->{'job_id'}\n";
             }else{
                 # and it's still fresh, so put it back in pending
-                push(@{ $heap->{'pending'} }, $request );
+                push(@{ $heap->{'pending'} }, $pending );
             }
         }
     }
