@@ -697,7 +697,6 @@ sub twitter_update_success {
 
 sub twitter_timeline_success {
     my($self, $kernel, $heap, $ret) = @_[OBJECT, KERNEL, HEAP, ARG0];
-print STDERR "twitter_timeline_success\n";
     my $count=0;
     foreach my $tweet (@{ $ret }){
         my $text=$tweet->{'text'};
@@ -705,8 +704,8 @@ print STDERR "twitter_timeline_success\n";
             $text=~s/^I used #*Shazam to discover\s+(.*)\s+by\s+(.*)\s+http:\/\/.*/$1 $2/;
             $text=~s/^I used #*Shazam to discover\s+(.*)\s+by\s+(.*)\s+#shazam.*/$1 $2/;
         }
-print STDERR "enabled: $heap->{'twitter_enabled'}\n";
-        if($heap->{'twitter_enabled'}){
+        if($heap->{'twitter_enabled'} == 1){
+print STDERR Data::Dumper->Dump([$heap->{'locations'}]);
             foreach my $location (keys(%{ $heap->{'locations'} })){
                 foreach my $channel (keys(%{ $heap->{'locations'}->{$location} })){
                     $kernel->post(
@@ -719,7 +718,6 @@ print STDERR "enabled: $heap->{'twitter_enabled'}\n";
             }
         }
     }
-print STDERR "delay_friend_timeline\n";
     $kernel->delay('delay_friend_timeline', $self->{'retry'});
 }
 
