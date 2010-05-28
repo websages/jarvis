@@ -319,7 +319,11 @@ sub peer_check{
                              'args'         => [ $channel ,"$peer: ping" ], # event arguments
                              'reply_event'  => 'pong',                      # the expected reply event
                              'next_event'   => undef,                       # the action to take on return event
-                             'expire_event' => 'where_is_peer',             # the action to take on return event expire
+                             'expire_event' => [                            # the action to take on return event expire
+                                                 $sender->ID, 
+                                                 'where_is_peer',
+                                                 $peer,
+                                               ],
                              'expire'       => time() + 10,                 # when the return event expires
                            }
                          );
