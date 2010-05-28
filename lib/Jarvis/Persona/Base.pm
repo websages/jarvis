@@ -240,7 +240,7 @@ sub queue{
 
     # post the data to the event to the session...
     my @args = @{ $edata->{'args'} };
-    $kernel->post($edata->{'session'}, $edata->{'event'}, @args });
+    $kernel->post($edata->{'session'}, $edata->{'event'}, @args );
 
     # add a expiration delay that will fire off pending at t='expire' (epoch time)
     $kernel->alarm_add('pending', $edata->{'expire'}, $edata);
