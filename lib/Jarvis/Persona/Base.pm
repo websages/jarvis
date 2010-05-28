@@ -259,7 +259,8 @@ sub pending {
     # loop through the pending list on the heap and try to find one that matches $edata
     while ($count++ <= $max){
         my $pending = shift (@{ $heap->{'pending'} });
-        if( ($edata->{'session'} eq $pending->{'session'}) &&
+print STDERR "$edata->{'session'} == $pending->{'session'}\n";
+        if( ($edata->{'session'} == $pending->{'session'}) &&
             ($edata->{'reply_event'} eq $pending->{'reply_event'})){
 print STDERR "Found Job ID $pending->{'job_id'}\n";
             # this is the session and event that is pending.
