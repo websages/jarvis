@@ -223,7 +223,7 @@ sub input{
                                                             $self->{'alias'},
                                                             'pending',
                                                             {
-                                                              'event'       => 'ping',
+                                                              'reply_event' => 'pong',
                                                               'session'     => $sender->ID,
                                                               'sender_nick' => $who,
                                                               'channel'     => $where,
@@ -308,8 +308,21 @@ sub peer_check{
             if($peer eq $member){ $found = 1; }
         }
         if($found == 1){
-            print STDERR "$peer found in $channel\n";
-            $kernel->post($sender, 'say_public', $channel, "$peer: ping");
+            #$kernel->post($sender, 'say_public', $channel, "$peer: ping");
+            $kernel->post(
+                           $self->alias(),
+                           'queue',
+                           {
+                             'session'      => $sender,                     # to what session we post
+                             'event'        => 'say_public',                # the event we post
+                             'args'         => ( $channel ,"$peer: ping") , # event arguments
+                             'reply_event'  => 'pong',                      # the expected reply event
+                             'next_event'   => undef,                       # the action to take on return event
+                             'expire_event' => 'where_is_peer',             # the action to take on return event expire
+                             'expire'       => time() + 60,                 # when the return event expires
+                           }
+                         );
+
         }else{
             print STDERR "$peer not found in $channel\n";
         }
