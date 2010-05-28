@@ -729,7 +729,9 @@ sub twitter_error {
 
 sub enable_twitter {
     my($self, $kernel, $heap, $res) = @_[OBJECT, KERNEL, HEAP, ARG0];
+print STDERR "1) enabled: $heap->{'twitter_enabled'}\n";
     $heap->{'twitter_enabled'} = 1;
+print STDERR "2) enabled: $heap->{'twitter_enabled'}\n";
 }
 
 sub twitter_follow {
