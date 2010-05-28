@@ -236,7 +236,7 @@ sub queue{
     %{ $edata } = %{ $event_data }; # clone the event_data
 
     $edata->{'job_id'} = $self->{'job_id'}++;
-    push(@{ $heap->{'pending'} }, $event_data);
+    push(@{ $heap->{'pending'} }, $edata );
 
     # post the data to the event to the session...
     my @args = @{ $edata->{'args'} };
