@@ -44,7 +44,7 @@ sub known_personas{
            ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
            twitter_name: capncrunchbot
            password: ${ENV{'TWITTER_PASSWORD'}}
-           retry: 300
+           retry: 20
        connectors:
          - class: Jarvis::IRC
            init:
