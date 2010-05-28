@@ -218,7 +218,7 @@ sub input{
                                                  last;
                                              }
                                            };
-            /ping/                   && do { $kernel->post($sender,'say_public',$where,"$who: pong"); last; };
+            /ping/                   && do { $kernel->post($sender,'say_public',$where,"$who: pong") if($direct); last; };
             /pong/                   && do { 
                                              $kernel->post(
                                                             $self->{'alias'},
