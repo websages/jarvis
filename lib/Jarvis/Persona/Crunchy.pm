@@ -14,13 +14,13 @@ use Mail::Send;
 sub may {
     my $self=shift;
     return {
-             'ldap_domain'  => undef,
-             'ldap_binddn'  => undef,
-             'ldap_bindpw'  => undef,
-             'twitter_name' => undef,
-             'username'     => undef,
-             'password'     => undef,
-             'retry'        => undef,
+             'ldap_domain'     => undef,
+             'ldap_binddn'     => undef,
+             'ldap_bindpw'     => undef,
+             'twitter_name'    => undef,
+             'username'        => undef,
+             'password'        => undef,
+             'retry'           => undef,
            };
 }
 
@@ -42,6 +42,7 @@ sub persona_states{
 sub persona_start{
     my $self = $_[OBJECT]||shift;
     my $kernel = $_[KERNEL];
+    my $heap = $_[HEAP];
     if(! -d "/dev/shm/brain"){ mkdir("/dev/shm/brain"); }
     if(! -d "/dev/shm/brain/crunchy"){ mkdir("/dev/shm/brain/crunchy"); }
     if(! -f "/dev/shm/brain/crunchy/megahal.trn"){
@@ -74,6 +75,7 @@ sub persona_start{
                        'retry'      => $self->{'retry'},
                       };
 
+    $heap->{'twitter_enabled'}=0;
     $self->{'twitter'} = POE::Component::Client::Twitter->spawn(%{ $self->{'cfg'} });
     $self->{'twitter'}->yield('register');
     $kernel->delay('delay_friend_timeline', 5);
