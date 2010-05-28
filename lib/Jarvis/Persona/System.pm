@@ -218,6 +218,7 @@ sub input{
                                                  last;
                                              }
                                            };
+            /ping/                   && do { $kernel->post($sender,'say_public',$where,"$who: pong"); last; };
             /pong/                   && do { 
                                              $kernel->post(
                                                             $self->{'alias'},
@@ -319,7 +320,7 @@ sub peer_check{
                              'reply_event'  => 'pong',                      # the expected reply event
                              'next_event'   => undef,                       # the action to take on return event
                              'expire_event' => 'where_is_peer',             # the action to take on return event expire
-                             'expire'       => time() + 60,                 # when the return event expires
+                             'expire'       => time() + 10,                 # when the return event expires
                            }
                          );
 
