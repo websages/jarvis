@@ -225,7 +225,6 @@ sub irc_public {
 
 sub say_public {
     my ($self, $kernel, $heap, $sender, $channel, $statement) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0, ARG1];
-print Data::Dumper->Dump([$channel, $statement]);
     $self->{'irc_client'}->yield( privmsg => [ $channel ] => $statement );
 }
 
@@ -363,7 +362,6 @@ sub irc_353{
         my $request = shift (@{ $heap->{'pending'} });
         if(defined($request->{'channel_members'})){
             #
-print STDERR Data::Dumper->Dump([$request]);
             if($channel eq $request->{'channel_members'}){
                 # this is the pending request that is waiting for a response
                 $kernel->post($request->{'sender'},$request->{'respond_to'},$channel,$members);
