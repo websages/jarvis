@@ -695,6 +695,7 @@ sub twitter_update_success {
 
 sub twitter_timeline_success {
     my($self, $kernel, $heap, $ret) = @_[OBJECT, KERNEL, HEAP, ARG0];
+print STDERR "twitter_timeline_success\n";
     my $count=0;
     foreach my $tweet (@{ $ret }){
         my $text=$tweet->{'text'};
