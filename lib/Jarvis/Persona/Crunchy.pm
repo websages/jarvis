@@ -705,9 +705,9 @@ sub twitter_timeline_success {
             $text=~s/^I used #*Shazam to discover\s+(.*)\s+by\s+(.*)\s+#shazam.*/$1 $2/;
         }
         if($heap->{'twitter_enabled'} == 1){
-print STDERR Data::Dumper->Dump([$heap->{'locations'}]);
             foreach my $location (keys(%{ $heap->{'locations'} })){
                 foreach my $channel (keys(%{ $heap->{'locations'}->{$location} })){
+print STDERR Data::Dumper->Dump([$location,$heap->{'output_event'}->{$location},$channel,"[\@". $tweet->{'user'}->{'screen_name'}."]: ".$text]);
                     $kernel->post(
                                    $location,
                                    $heap->{'output_event'}->{$location},
@@ -729,9 +729,7 @@ sub twitter_error {
 
 sub enable_twitter {
     my($self, $kernel, $heap, $res) = @_[OBJECT, KERNEL, HEAP, ARG0];
-print STDERR "1) enabled: $heap->{'twitter_enabled'}\n";
     $heap->{'twitter_enabled'} = 1;
-print STDERR "2) enabled: $heap->{'twitter_enabled'}\n";
 }
 
 sub twitter_follow {
