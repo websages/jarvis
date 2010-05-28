@@ -263,7 +263,7 @@ sub pending {
             # this is the session and event that is pending.
             if(time() < $edata->{'expire'}){
                 # we're not expired, so do the next_event 
-                if(defined($pending->{'next_event'}){
+                if(defined($pending->{'next_event'})){
                     print STDERR "clearing: $pending->{'job_id'}\n";
                     $kernel->post(
                                    $pending->{'session'},
@@ -273,7 +273,7 @@ sub pending {
                 }
             }else{
                 # we're expired, so do the expire_event 
-                if(defined($pending->{'expire_event'}){
+                if(defined($pending->{'expire_event'})){
                     print STDERR "expiring: $pending->{'job_id'}\n";
                     $kernel->post(
                                    $pending->{'session'},
@@ -287,6 +287,14 @@ sub pending {
             if(time() < $edata->{'expire'}){
                 # but it's expired, so remove it from pending and do the expire_event;
                  print STDERR "expiring: $pending->{'job_id'}\n";
+                 if(defined($pending->{'expire_event'})){
+                    print STDERR "expiring: $pending->{'job_id'}\n";
+                    $kernel->post( 
+                                   $pending->{'session'},
+                                   $pending->{'expire_event'},
+                                   $pending->{'data'},
+                                 );
+                }
             }else{
                 # and it's still fresh, so put it back in pending
                 push(@{ $heap->{'pending'} }, $pending );
