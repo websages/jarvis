@@ -261,7 +261,9 @@ sub pending {
         my $pending = shift (@{ $heap->{'pending'} });
         if( ($edata->{'session'} eq $pending->{'session'}) &&
             ($edata->{'reply_event'} eq $pending->{'reply_event'})){
+print STDERR "Found Job ID $pending->{'job_id'}\n";
             # this is the session and event that is pending.
+print STDERR time()." < $pending->{'expire'} ?\n";
             if(time() < $pending->{'expire'}){
                 # we're not expired, so do the next_event 
                 if(defined($pending->{'next_event'})){
