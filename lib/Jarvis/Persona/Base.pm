@@ -259,16 +259,13 @@ sub pending {
     # loop through the pending list on the heap and try to find one that matches $edata
     while ($count++ <= $max){
         my $pending = shift (@{ $heap->{'pending'} });
-print STDERR "$edata->{'session'} == $pending->{'session'}\n";
         if( ($edata->{'session'} == $pending->{'session'}) &&
             ($edata->{'reply_event'} eq $pending->{'reply_event'})){
-print STDERR "Found Job ID $pending->{'job_id'}\n";
             # this is the session and event that is pending.
-print STDERR time()." < $pending->{'expire'} ?\n";
             if(time() < $pending->{'expire'}){
                 # we're not expired, so do the next_event 
+                print STDERR "clearing: $pending->{'job_id'}\n";
                 if(defined($pending->{'next_event'})){
-                    print STDERR "clearing: $pending->{'job_id'}\n";
                     $kernel->post(
                                    $pending->{'session'},
                                    $pending->{'next_event'},
@@ -277,8 +274,8 @@ print STDERR time()." < $pending->{'expire'} ?\n";
                 }
             }else{
                 # we're expired, so do the expire_event 
+                print STDERR "expiring: $pending->{'job_id'}\n";
                 if(defined($pending->{'expire_event'})){
-                    print STDERR "expiring: $pending->{'job_id'}\n";
                     $kernel->post(
                                    $pending->{'session'},
                                    $pending->{'expire_event'},
@@ -291,8 +288,8 @@ print STDERR time()." < $pending->{'expire'} ?\n";
             if(time() < $pending->{'expire'}){
                 # but it's expired, so remove it from pending and do the expire_event;
                  print STDERR "expiring: $pending->{'job_id'}\n";
+                 print STDERR "expiring: $pending->{'job_id'}\n";
                  if(defined($pending->{'expire_event'})){
-                    print STDERR "expiring: $pending->{'job_id'}\n";
                     $kernel->post( 
                                    $pending->{'session'},
                                    $pending->{'expire_event'},
