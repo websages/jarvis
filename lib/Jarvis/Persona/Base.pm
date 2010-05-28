@@ -262,7 +262,7 @@ sub pending {
         if( ($edata->{'session'} eq $pending->{'session'}) &&
             ($edata->{'reply_event'} eq $pending->{'reply_event'})){
             # this is the session and event that is pending.
-            if(time() < $edata->{'expire'}){
+            if(time() < $pending->{'expire'}){
                 # we're not expired, so do the next_event 
                 if(defined($pending->{'next_event'})){
                     print STDERR "clearing: $pending->{'job_id'}\n";
@@ -285,7 +285,7 @@ sub pending {
             }
         }else{
             # This is not the pending request that came in
-            if(time() < $edata->{'expire'}){
+            if(time() < $pending->{'expire'}){
                 # but it's expired, so remove it from pending and do the expire_event;
                  print STDERR "expiring: $pending->{'job_id'}\n";
                  if(defined($pending->{'expire_event'})){
