@@ -707,12 +707,6 @@ sub twitter_timeline_success {
         if($heap->{'twitter_enabled'} == 1){
             foreach my $location (keys(%{ $heap->{'locations'} })){
                 foreach my $channel (keys(%{ $heap->{'locations'}->{$location} })){
-print STDERR Data::Dumper->Dump([
-                                  $location,
-                                  'say_public',
-                                  $channel,
-                                  "[\@". $tweet->{'user'}->{'screen_name'}."]: ".$text
-                                ]);
                     $kernel->post(
                                    $location,
                                    'say_public',
