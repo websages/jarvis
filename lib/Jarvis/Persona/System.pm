@@ -268,7 +268,7 @@ sub spawn{
         if($p->{'name'} eq $persona){
             my $poe = new POE::Builder({ 'debug' => '0','trace' => '1' });
             return undef unless $poe;
-            
+          print STDERR Data::Dumper->Dump([$p->{'persona'}->{'init'}]); 
             $poe->object_session( $p->{'persona'}->{'class'}->new( $p->{'persona'}->{'init'} ) );
             push( @{ $self->{'spawned'}->{$persona} }, $p->{'persona'}->{'init'}->{'alias'} );
 
