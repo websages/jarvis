@@ -218,6 +218,19 @@ sub input{
                                                  last;
                                              }
                                            };
+            /pong/                   && do { 
+                                             $kernel->post(
+                                                            $self->{'alias'},
+                                                            'pending',
+                                                            {
+                                                              'event'       => 'ping',
+                                                              'session'     => $sender->ID,
+                                                              'sender_nick' => $who,
+                                                              'channel'     => $where,
+                                                            }
+                                                          ) if($direct);
+                                             last; 
+                                           }; # bot storm!
             /i don't understand/     && do { last; }; # bot storm!
             /.*/                     && do { $replies = [ "i don't understand"    ] if($direct); last; };
             /.*/                     && do { last; }

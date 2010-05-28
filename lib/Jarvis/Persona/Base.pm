@@ -11,6 +11,7 @@ sub new {
     my $self = {};
     my $construct = shift if @_;
     bless($self,$class);
+    $self->{'job_id'} = 0;
 
     # list of required constructor elements
     $self->{'must'} = [ 'alias' ];
@@ -55,6 +56,8 @@ sub new {
                           'input'         => 'input',
                           'channel_add'   => 'channel_add',
                           'channel_del'   => 'channel_del',
+                          'pending'       => 'pending',
+                          'queue'         => 'queue',
                         };
     my $pstates = $self->persona_states(); 
     if(ref($pstates) eq 'HASH'){
@@ -222,6 +225,74 @@ sub input{
         }
     }
     return $self->{'alias'};
+}
+
+################################################################################
+# add something to the pending queue
+################################################################################
+sub queue{
+    my ($self, $kernel, $heap, $sender, $event_data)=@_[OBJECT,  KERNEL,  HEAP,  SENDER, ARG0];
+    my $edata;
+    %{ $edata } = %{ $event_data }; # clone the event_data
+
+    $edata->{'job_id'} = $self->{'job_id'}++;
+    push(@{ $heap->{'pending'} }, $event_data);
+
+    # post the data to the event to the session...
+    $kernel->post($edata->{'session'}, $edata->{'event'}, $edata);
+
+    # add a expiration delay that will fire off pending at t='expire' (epoch time)
+    $kernel->alarm_add('pending', $edata->{'expire'}, $edata);
+}
+
+################################################################################
+# remove something from the pending queue (by reply-event or expiration)
+################################################################################
+sub pending {
+    my ($self, $kernel, $heap, $sender, $event_data)=@_[OBJECT,  KERNEL,  HEAP,  SENDER, ARG0];
+    my $max=$#{ $heap->{'pending'} };
+    my $count=0;
+    my $edata;
+    %{ $edata } = %{ $event_data }; # clone the event_data
+
+    # loop through the pending list on the heap and try to find one that matches $edata
+    while ($count++ <= $max){
+        my $pending = shift (@{ $heap->{'pending'} });
+        if( ($edata->{'session'} eq $request->{'session'}) &&
+            ($edata->{'reply_event'} eq $request->{'reply_event'})){
+            # this is the session and event that is pending.
+            if(time() < $edata->{'expire'}){
+                # we're not expired, so do the next_event 
+                if(defined($pending->{'next_event'}){
+                    print STDERR "clearing: $pending->{'job_id'}\n";
+                    $kernel->post(
+                                   $pending->{'session'},
+                                   $pending->{'next_event'},
+                                   $pending->{'data'},
+                                 );
+                }
+            }else{
+                # we're expired, so do the expire_event 
+                if(defined($pending->{'expire_event'}){
+                    print STDERR "expiring: $pending->{'job_id'}\n";
+                    $kernel->post(
+                                   $pending->{'session'},
+                                   $pending->{'expire_event'},
+                                   $pending->{'data'},
+                                 );
+                }
+            }
+        }else{
+            # This is not the pending request that came in
+            if(time() < $edata->{'expire'}){
+                # but it's expired, so remove it from pending and do the expire_event;
+                 print STDERR "expiring: $pending->{'job_id'}\n";
+            }else{
+                # and it's still fresh, so put it back in pending
+                push(@{ $heap->{'pending'} }, $request );
+            }
+        }
+    }
 }
 
 1;
