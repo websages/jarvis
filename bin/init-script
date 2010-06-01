@@ -106,7 +106,7 @@ case "$1" in
             touch ${PID_FILE}
             chown ${RUN_AS} ${PID_FILE}
         fi
-	if start-stop-daemon --start --quiet --oknodo --pidfile ${PID_FILE} --chdir ${GIT_REPO} --chuid ${RUN_AS} --exec ${GIT_REPO}/universal.pl > /dev/null 2>&1; then
+	if start-stop-daemon --start --quiet --oknodo --pidfile ${PID_FILE} --chdir ${GIT_REPO} --chuid ${RUN_AS} --exec ${GIT_REPO}/universal.pl > /dev/null 2>&1 &; then
 	    log_end_msg 0
 	else
 	    log_end_msg 1
