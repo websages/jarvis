@@ -17,6 +17,8 @@ use Jarvis::Persona::Crunchy;
 use Jarvis::Persona::Jarvis;
 use POE::Builder;
 use Sys::Hostname::Long;
+daemonize();
+
 $|++;
 
 # get our fqd, hostname, and domain name
@@ -83,3 +85,9 @@ $poe->yaml_sess($irc_connection);
 #$poe->yaml_sess($xmpp_connection);
 # fire up the kernel
 POE::Kernel->run();
+
+sub daemonize {
+    defined( my $pid = fork() ) or die "Can't fork: $!\n";
+    exit if $pid;
+    setsid or die "Can't start a new session: $!\n";
+}
