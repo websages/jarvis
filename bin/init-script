@@ -112,7 +112,7 @@ case "$1" in
                           --chuid ${RUN_AS} \
                           --exec ${GIT_REPO}/universal.pl -- > /dev/null 2>&1 &
         SSD_EXIT=$?
-        echo $!
+        echo $! > ${PID_FILE}
 	if [ ${SSD_EXIT} ]; then
 	    log_end_msg 0
 	else
