@@ -107,6 +107,9 @@ case "$1" in
             chown ${RUN_AS} ${PID_FILE}
         fi
         COUNT=$(ps -ef | grep "${GIT_REPO}/uni[v]ersal" | awk -v runas="${RUN_AS}" '{if($1==runas){print $2}}'|wc -l)
+echo 
+echo "-=[ ${COUNT} ]=-"
+echo 
         if [ $COUNT -gt 0 ]; then
 	    start-stop-daemon --start --quiet --oknodo \
                               --pidfile ${PID_FILE} \
