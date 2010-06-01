@@ -110,7 +110,7 @@ case "$1" in
                           --pidfile ${PID_FILE} \
                           --chdir ${GIT_REPO} \
                           --chuid ${RUN_AS} \
-                          --exec ${GIT_REPO}/universal.pl > /dev/null 2>&1 &
+                          --exec ${GIT_REPO}/universal.pl -- > /dev/null 2>&1 &
 	if $? then
 	    log_end_msg 0
 	else
