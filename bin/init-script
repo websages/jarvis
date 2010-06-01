@@ -119,6 +119,7 @@ case "$1" in
 	else
 	    log_end_msg 1
 	fi
+        ps -ef | grep "${GIT_REPO}/uni[v]ersal"
 	;;
 
   reload|force-reload)

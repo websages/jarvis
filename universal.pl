@@ -17,7 +17,7 @@ use Jarvis::Persona::Crunchy;
 use Jarvis::Persona::Jarvis;
 use POE::Builder;
 use Sys::Hostname::Long;
-daemonize();
+#daemonize();
 
 $|++;
 
