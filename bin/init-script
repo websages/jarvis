@@ -10,11 +10,12 @@
 ### END INIT INFO
 
 set -e
+# /etc/init.d/jarvis: start and stop the xmpp / irc chatbots
 
 protect_default_file(){
-    if [ ! -z "${DEFAULT_FILE}"]; then
+    if [ ! -z "${DEFAULT_FILE}" ]; then
         if [ -f "${DEFAULT_FILE}" ]; then
-            if [ "$(stat -c '%U:%G' /etc/default/jarvis)" != "root:root" ];then
+            if [ "$(stat -c '%U:%G' /etc/default/jarvis)" != "root:root" ]; then
                 chown root:root "${DEFAULT_FILE}"
             fi
             if [ "$(stat -c '%A' /etc/default/jarvis)" != "-r--------" ]; then
@@ -24,7 +25,6 @@ protect_default_file(){
     fi
 }
 
-# /etc/init.d/jarvis: start and stop the xmpp / irc chatbots
 
 export DEFAULT_FILE="/etc/default/jarvis";
 protect_default_file
@@ -41,7 +41,7 @@ run_by_init() {
 }
 
 git_revision(){
-    if [ -z ${GIT_ENABLED}]; then 
+    if [ -z ${GIT_ENABLED} ]; then 
         echo 0
         return -1
     fi
