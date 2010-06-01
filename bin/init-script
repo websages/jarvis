@@ -17,7 +17,7 @@ protect_default_file(){
             if [ "$(stat -c '%U:%G' /etc/default/jarvis)" != "root:root" ];then
                 chown root:root "${DEFAULT_FILE}"
             fi
-            if [ "$(stat -c '%A' /etc/default/jarvis)" != "-r--------" ] then
+            if [ "$(stat -c '%A' /etc/default/jarvis)" != "-r--------" ]; then
                 chmod 0400 "${DEFAULT_FILE}"
             fi
         fi
