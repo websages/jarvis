@@ -81,6 +81,9 @@ git_rollback(){
 }
 
 export PATH="${PATH:+$PATH:}/usr/sbin:/sbin"
+if [ -z "${PID_FILE}" ]; then
+    export PID_FILE="/var/run/jarvis.pid"
+fi
 if [ -z "${RUN_AS}" ]; then
     export RUN_AS='root'
 fi
@@ -97,6 +100,12 @@ case "$1" in
   start)
 	log_daemon_msg "Starting ${LOG_NAME}" "${DAEMON_NAME}"
         protect_default_file
+        if [ ! -f "${PID_FILE}" ]; then 
+            PID_DIR=$(dirname $PID_FILE)
+            if [ ! -d ${PID_DIR} ] ;then mkdir -p ${PID_DIR}; fi
+            touch ${PID_FILE}
+            chown ${RUN_AS} ${PID_FILE}
+        fi
 	if start-stop-daemon --start --quiet --oknodo --pidfile /var/run/jarvis.pid --chdir ${GIT_REPO} --chuid ${RUN_AS} --exec ${GIT_REPO}/universal.pl ; then
 	    log_end_msg 0
 	else
