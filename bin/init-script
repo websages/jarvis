@@ -64,6 +64,7 @@ git_update(){
     if [ ! -d ${GIT_REPO}  ]; then 
         echo "GIT_REPO DOES NOT EXIST"
         if [ ! -z "${GIT_SOURCE}" ]; then
+            (cd "${GIT_ROOT}"; git clone "${GIT_SOURCE}")
         else
             echo "GIT_SOURCE NOT DEFINED CANNOT CREATE GIT_REPO"
             return -1;
