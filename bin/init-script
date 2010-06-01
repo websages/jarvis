@@ -110,7 +110,7 @@ case "$1" in
 echo 
 echo "-=[ ${COUNT} ]=-"
 echo 
-        if [ $COUNT -gt 0 ]; then
+        if [ ${COUNT} -eq 0 ]; then
 	    start-stop-daemon --start --quiet --oknodo \
                               --pidfile ${PID_FILE} \
                               --chdir ${GIT_REPO} \
