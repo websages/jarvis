@@ -42,10 +42,8 @@ sub new {
     # set our optional values fron the constructor or the defaults
     foreach my $attr (keys(%{ $self->{'may'} })){
          if(defined($construct->{$attr})){
-print STDERR "getting $attr from constructor: $construct->{$attr}\n";
              $self->{$attr} = $construct->{$attr};
          }else{
-print STDERR "getting $attr from defaults $self->{'may'}->{$attr}\n";
              $self->{$attr} = $self->{'may'}->{$attr};
          }
     }

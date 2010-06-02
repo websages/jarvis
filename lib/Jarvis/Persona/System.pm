@@ -170,7 +170,7 @@ sub persona_start{
                                         );
     $self->known_personas();
     $self->peers();
-print STDERR Data::Dumper->Dump([$self->may()]);
+print STDERR Data::Dumper->Dump([$self->peers()]);
     return $self;
 }
 
