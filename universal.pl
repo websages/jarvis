@@ -40,6 +40,7 @@ class: Jarvis::Persona::System
 init: 
   alias: system
   peer_group: cn=bot_managed
+  ldap_bindpw: ${ENV{'SECRET'}}
 ...
 
 ########################################
