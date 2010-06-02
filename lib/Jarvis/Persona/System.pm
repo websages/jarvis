@@ -108,7 +108,7 @@ sub may {
               'brainpath' => '/dev/shm/brain/system' ,
               'ldap_domain'  => $self->dnsdomainname(),
               'ldap_binddn'  => $self->binddn(),
-              'ldap_bindpw'  => $self->secret(),
+              'ldap_bindpw'  => $self->secret(),         #only works if run as root, supply instead
               'peer_group'   => "cn=bot_managed",
             };
     
