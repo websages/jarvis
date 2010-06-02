@@ -82,7 +82,7 @@ init:
 ################################################################################
 $poe->yaml_sess($persona);
 $poe->yaml_sess($irc_connection);
-#$poe->yaml_sess($xmpp_connection);
+$poe->yaml_sess($xmpp_connection);
 # fire up the kernel
 POE::Kernel->run();
 

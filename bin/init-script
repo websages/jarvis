@@ -72,6 +72,12 @@ git_update(){
     else
         (cd ${GIT_REPO}; git pull origin master)
     fi
+    # This is a temporary hack until the init script is stable:
+    NOW=$(md5sum /etc/init.d/jarvis|awk '{print $2}')
+    NEW=$(md5sum ${GIT_REPO}/bin/init-script|awk '{print $2}')
+    if [ "${NOW}" != "${NEW}" ];then
+        install -m 0744 ${GIT_REPO}/bin/init-script /etc/init.d/jarvis
+    fi
 }
 
 git_rollback(){
@@ -100,6 +106,7 @@ case "$1" in
   start)
 	log_daemon_msg "Starting ${LOG_NAME}" "${DAEMON_NAME}"
         protect_default_file
+        git-update
         if [ ! -f "${PID_FILE}" ]; then 
             PID_DIR=$(dirname $PID_FILE)
             if [ ! -d ${PID_DIR} ] ;then mkdir -p ${PID_DIR}; fi
