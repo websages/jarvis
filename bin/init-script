@@ -106,7 +106,7 @@ case "$1" in
   start)
 	log_daemon_msg "Starting ${LOG_NAME}" "${DAEMON_NAME}"
         protect_default_file
-        git-update
+        git_update
         if [ ! -f "${PID_FILE}" ]; then 
             PID_DIR=$(dirname $PID_FILE)
             if [ ! -d ${PID_DIR} ] ;then mkdir -p ${PID_DIR}; fi
