@@ -66,6 +66,7 @@ sub new {
                           'elevate_priv',
                           'channel_members',
                           'irc_353',
+                          'irc_invite',
                           'say_public',
                         ];
     #$self->{'states'} = { 
@@ -377,5 +378,12 @@ sub irc_353{
     return;
 }
 
-1;
+# where the irc_server responds to our 'names' request
+sub irc_invite{
+    # irc_names
+    my ($self, $kernel, $heap, $sender, @args)=@_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    print STDERR Data::Dumper->Dump([@args]);
+    return;
+}
 
+1;
