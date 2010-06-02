@@ -102,11 +102,16 @@ if [ -z "${DAEMON_NAME}" ]; then
     export DAEMON_NAME='universal.pl'
 fi
 
+if [ -z "${LOG_FILE}" ]; then
+    export LOG_FILE='/dev/null'
+fi
+
 case "$1" in
   start)
 	log_daemon_msg "Starting ${LOG_NAME}" "${DAEMON_NAME}"
         protect_default_file
         git_update
+        export GIT_REVISION=$(git_revision)
         if [ ! -f "${PID_FILE}" ]; then 
             PID_DIR=$(dirname $PID_FILE)
             if [ ! -d ${PID_DIR} ] ;then mkdir -p ${PID_DIR}; fi
@@ -119,7 +124,7 @@ case "$1" in
                               --pidfile ${PID_FILE} \
                               --chdir ${GIT_REPO} \
                               --chuid ${RUN_AS} \
-                              --exec ${GIT_REPO}/universal.pl -- > /dev/null 2>&1 &
+                              --exec ${GIT_REPO}/universal.pl -- > ${LOG_FILE} 2>&1 &
             SSD_EXIT=$?
             echo $! > ${PID_FILE}
 	    if [ ${SSD_EXIT} ]; then
