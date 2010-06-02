@@ -352,6 +352,7 @@ sub irc_353{
     # irc_names
     my ($self, $kernel, $heap, $sender, $server, $mstring, $mlist)=@_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     my ($channel, $members);
+print STDERR ": $mstring :\n";
     if($mstring=~m/=\s+(\S+)\s+:(.*)/){
         $channel=$1;
         @{ $members } = split(" ",$2);
