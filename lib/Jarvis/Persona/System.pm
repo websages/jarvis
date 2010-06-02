@@ -126,7 +126,6 @@ sub peers{
                                    'bindpw' => $self->{'ldap_bindpw'},
                                  });
     @peer_dns = $ldap->unique_members($self->{'peer_group'});
-print STDERR Data::Dumper->Dump([@peer_dns]);
     while(my $dn=shift(@peer_dns)){
         $dn=~s/,.*//;
         $dn=~s/.*cn=//;
@@ -171,6 +170,7 @@ sub persona_start{
                                         );
     $self->known_personas();
     $self->peers();
+print STDERR Data::Dumper->Dump([$self->{'peers'}]);
     return $self;
 }
 
