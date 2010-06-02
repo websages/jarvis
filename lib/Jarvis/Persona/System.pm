@@ -126,6 +126,7 @@ sub peers{
                                    'bindpw' => $self->{'ldap_bindpw'},
                                  });
     @peer_dns = $ldap->unique_members($self->{'peer_group'});
+print STDERR Data::Dumper->Dump([@peer_dns]);
     while(my $dn=shift(@peer_dns)){
         $dn=~s/,.*//;
         $dn=~s/.*cn=//;
@@ -313,7 +314,6 @@ sub peer_check{
             if($peer eq $member){ $found = 1; }
         }
         if($found == 1){
-            $kernel->post($sender, 'say_public', $channel, "$peer: ping");
             $kernel->post(
                            $self->alias(),
                            'queue',
