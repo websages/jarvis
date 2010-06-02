@@ -313,7 +313,7 @@ sub peer_check{
             if($peer eq $member){ $found = 1; }
         }
         if($found == 1){
-            #$kernel->post($sender, 'say_public', $channel, "$peer: ping");
+            $kernel->post($sender, 'say_public', $channel, "$peer: ping");
             $kernel->post(
                            $self->alias(),
                            'queue',
