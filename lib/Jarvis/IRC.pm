@@ -353,9 +353,9 @@ sub irc_353{
     my ($self, $kernel, $heap, $sender, $server, $mstring, $mlist)=@_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     my ($channel, $members);
 print STDERR ": $mstring :\n";
-    if($mstring=~m/\s+[\@=]\s+(\S+)\s+:(.*)/){
+    if($mstring=~m/(\S+)\s+:(.*)/){
         $channel=$1;
-print STDERR ": $channel :\n";
+print STDERR "[ $channel ]\n";
         @{ $members } = split(" ",$2);
     }
     my $max=$#{ $heap->{'pending'} };
