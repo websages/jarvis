@@ -324,7 +324,7 @@ sub peer_check{
                              'next_event'   => undef,                       # the action to take on return event
                              'expire_event' => [                            # the action to take on return event expire
                                                  $sender->ID, 
-                                                 'where_is_peer',
+                                                 'peer_no_reply',
                                                  $peer,
                                                ],
                              'expire'       => time() + 10,                 # when the return event expires
