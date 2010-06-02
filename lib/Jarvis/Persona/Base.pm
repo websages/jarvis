@@ -40,6 +40,7 @@ sub new {
     }
 
     # set our optional values fron the constructor or the defaults
+print STDERR Data::Dumper->Dump([$construct]);
     foreach my $attr (keys(%{ $self->{'may'} })){
          if(defined($construct->{$attr})){
 print STDERR "getting $attr from constructor\n";
