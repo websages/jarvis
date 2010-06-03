@@ -21,7 +21,7 @@ sub known_personas{
          init:
            alias: crunchy
            ldap_domain: websages.com
-           ldap_binddn: uid=$host,ou=People,dc=websages,dc=com
+           ldap_binddn: uid=$host,ou=Hosts,dc=websages,dc=com
            ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
            twitter_name: capncrunchbot
            password: ${ENV{'TWITTER_PASSWORD'}}
@@ -43,7 +43,7 @@ sub known_personas{
          init:
            alias: beta
            ldap_domain: websages.com
-           ldap_binddn: uid=$host,ou=People,dc=websages,dc=com
+           ldap_binddn: uid=$host,ou=Hosts,dc=websages,dc=com
            ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
            twitter_name: capncrunchbot
            password: ${ENV{'TWITTER_PASSWORD'}}
