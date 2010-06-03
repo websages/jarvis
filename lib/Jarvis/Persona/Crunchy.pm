@@ -526,8 +526,8 @@ sub shoutout{
     my @list;
     return "shoutout what?" unless $shoutout;
     my $shoutouts;
-    print STDERR Data::Dumper->Dump([$shoutouts]);
     push(@{ $shoutouts },$self->get_ldap_entry("(cn=shoutouts)"));
+    print STDERR Data::Dumper->Dump([$shoutouts]);
     return $self->error() unless defined($shoutouts);
     foreach my $entry (@{ $shoutouts }){
         my @users = $entry->get_value('uniqueMember');
