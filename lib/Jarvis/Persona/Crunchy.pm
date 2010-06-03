@@ -387,7 +387,7 @@ sub get_ldap_entry {
         @{ $servers }= split(/\,\s+/,$self->{'ldap_uri'})
     }
     my $mesg;
-    print STDERR Data::Dumper->Dump([$self->{'ldap_bindpw'},$self->{'ldap_binddn'}, $self->{'ldap_basedn'}, $filter]);
+    print STDERR Data::Dumper->Dump([$servers, $self->{'ldap_bindpw'},$self->{'ldap_binddn'}, $self->{'ldap_basedn'}, $filter]);
     while( my $server = shift(@{ $servers })){
         if($server=~m/(.*)/){
             $server=$1 if ($server=~m/(^[A-Za-z0-9\-\.\/:]+$)/);
