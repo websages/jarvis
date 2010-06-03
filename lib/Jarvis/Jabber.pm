@@ -171,6 +171,7 @@ sub reconnect_all{
       $kernel->post($self->alias().'component','purge_queue');
       if(defined($self->{'channel_list'})){
           foreach my $muc (@{ $self->{'channel_list'} }){
+              print STDERR $self->alais(), 'join_channel', $muc, "\n";
               $kernel->post($self->alias(),'join_channel', $muc);
           }
       }
@@ -389,8 +390,8 @@ sub error_event()
                     $heap->{'reconnect_count'}++;
                     $kernel->post($sender, 'reconnect');
                 }else{
-                    print "Max connect attempts exceeded. Giving up for 5 minutes.\n";
-                    $kernel->delay('reconnect_all', 300); 
+                    print "Max connect attempts exceeded. Giving up for 3 minutes.\n";
+                    $kernel->delay('reconnect_all', 180); 
                 }
         
         } elsif($error == +PCJ_SOCKETDISCONNECT) {
@@ -401,8 +402,8 @@ sub error_event()
                     $heap->{'reconnect_count'}++;
                     $kernel->post($sender, 'reconnect');
                 }else{
-                    print "Max connect attempts exceeded. Giving up for 5 minutes.\n";
-                    $kernel->delay('reconnect_all', 300); 
+                    print "Max connect attempts exceeded. Giving up for 3 minutes.\n";
+                    $kernel->delay('reconnect_all', 180); 
                 }
         
         } elsif($error == +PCJ_CONNECTFAIL) {
@@ -413,8 +414,8 @@ sub error_event()
                     print "Retrying connection!\n";
                     $kernel->post($sender, 'reconnect');
                 }else{
-                    print "Max connect attempts exceeded. Giving up for 5 minutes.\n";
-                    $kernel->delay('reconnect_all', 300); 
+                    print "Max connect attempts exceeded. Giving up for 3 minutes.\n";
+                    $kernel->delay('reconnect_all', 180); 
                 }
         
         } elsif ($error == +PCJ_SSLFAIL) {
