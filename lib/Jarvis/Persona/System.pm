@@ -7,9 +7,12 @@ use POE::Builder;
 use LWP::UserAgent;
 use LDAP::Simple;
 use YAML;
+use Sys::Hostname::Long;
 
 sub known_personas{
     my $self=shift;
+    my $host=hostname_long();
+    $host=~s/\..*//g;
     $self->{'known_personas'} = $self->indented_yaml(<<"    ...");
     ---
      - name: crunchy
@@ -18,7 +21,7 @@ sub known_personas{
          init:
            alias: crunchy
            ldap_domain: websages.com
-           ldap_binddn: uid=crunchy,ou=People,dc=websages,dc=com
+           ldap_binddn: uid=$host,ou=People,dc=websages,dc=com
            ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
            twitter_name: capncrunchbot
            password: ${ENV{'TWITTER_PASSWORD'}}
