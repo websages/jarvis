@@ -118,7 +118,7 @@ sub input{
         for ( $what ) {
             /^\s*!*help\s*/             && do { $replies = $self->help($what); last; };
             /\"(.+?)\"\s+--\s*(.+?)$/   && do { $replies = [ $self->quote($what) ]; last; };
-            /(https*:\S+)/              && do { $replies = [ $self->link($what, $who) ]; last; };
+            /(https*:\S+)/              && do { $replies = [ $self->link($1, $who) ]; last; };
             /^\s*fortune\s*$/           && do { $replies = [ $self->fortune() ]; last; };
             /^!shoutout\s*(.*)/         && do { $replies = [ $self->shoutout($1,$who) ]; last; };
             /^!enable\s+shoutouts*/     && do {
@@ -331,6 +331,7 @@ sub link{
     $url =~ s/\&/\%26/g;
     my $response = $agent->get("http://tumble.wcyd.org/irclink/?user=". $nick . "&source=irc&url=$url");
     if ( $response->content eq '0' ) {
+        print STDERR "Invalid link: $url\n";
         return 'Invalid link!'
     }else{
         return 'http://tumble.wcyd.org/irclink/?' . $response->content;

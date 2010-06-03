@@ -75,6 +75,7 @@ sub new{
                           approve_subscription => 'approve_subscription',
                           xmpp_reply           => 'xmpp_reply',
                           say_public           => 'say_public',
+                          reconnect_all        => 'reconnect_all',
                         };
 
     return $self;
@@ -153,25 +154,34 @@ sub status_event()
         # the responsibility of the end developer to purge the queue via the 
         # purge_queue event.
 
-        if($state == +PCJ_INIT_FINISHED)
-        {        
-          my $jid = $heap->{$self->alias()}->jid();
-          $heap->{'reconnect_count'} = 0; 
-          $heap->{'jid'} = $jid;
-          $heap->{'sid'} = $sender->ID();
-          $kernel->post($self->alias().'component','output_handler', XNode->new('presence'));
-          
-          # And here is the purge_queue. This is to make sure we haven't sent
-          # nodes while something catastrophic has happened (like reconnecting).
-          $kernel->post($self->alias().'component','purge_queue');
-          if(defined($self->{'channel_list'})){
-              foreach my $muc (@{ $self->{'channel_list'} }){
-                  $kernel->post($self->alias(),'join_channel', $muc);
-              }
-          }
-          # Ignore incoming messages for 1 second, so we don't re-respond to crap in the replay buffer
-          $kernel->delay_add('enable_input', 1);
+        if($state == +PCJ_INIT_FINISHED){ 
+            $heap->{'reconnect_count'} = 0; 
+            $heap->{'jid'} = $heap->{$self->alias()}->jid();
+            $heap->{'sid'} = $sender->ID();
+            $kernel->post($self->alias(), 'reconnect_all'); 
+        }elsif($state == +PCJ_INIT_FINISHED){ 
+            
+        }else{
+            print STDERR $jabstat->[$state]."\n";
         }
+}
+
+sub reconnect_all{
+    my ($self, $kernel, $sender, $heap, @args) = @_[OBJECT, KERNEL, SENDER, HEAP, ARG0 .. $#_];
+      $kernel->post($self->alias().'component','output_handler', XNode->new('presence'));
+          
+      # And here is the purge_queue. This is to make sure we haven't sent
+      # nodes while something catastrophic has happened (like reconnecting).
+      $kernel->post($self->alias().'component','purge_queue');
+
+      if(defined($self->{'channel_list'})){
+          foreach my $muc (@{ $self->{'channel_list'} }){
+              print STDERR $self->alias()," ",'join_channel'," ", $muc, "\n";
+              $kernel->post($self->alias(),'join_channel', $muc);
+          }
+      }
+      # Ignore incoming messages for 1 second, so we don't re-respond to crap in the replay buffer
+      $kernel->delay_add('enable_input', 1);
 }
 
 # This is the input event. We receive all data from the server through this
@@ -216,6 +226,7 @@ sub input_event() {
     my ($self, $kernel, $heap, $node) = @_[OBJECT, KERNEL, HEAP, ARG0];
     #print "\n\nINCOMING:\n".$node->to_str()."\n\n\n";
     print STDERR ">>  ".$node->to_str()."\n\n" if($self->{'DEBUG'} > 2);
+    print STDERR ">>  ".$node->to_str()."\n\n";
 
     # allow everyone in websages to subscribe to our presence. /*FIXME move regex to constructor */
     if($node->name() eq 'presence'){
@@ -385,7 +396,8 @@ sub error_event()
                     $heap->{'reconnect_count'}++;
                     $kernel->post($sender, 'reconnect');
                 }else{
-                    print "Max connect attempts exceeded. Giving Up.\n";
+                    print "Max connect attempts exceeded. Giving up for 3 minutes.\n";
+                    $kernel->delay('reconnect_all', 180); 
                 }
         
         } elsif($error == +PCJ_SOCKETDISCONNECT) {
@@ -396,7 +408,8 @@ sub error_event()
                     $heap->{'reconnect_count'}++;
                     $kernel->post($sender, 'reconnect');
                 }else{
-                    print "Max connect attempts exceeded. Giving Up.\n";
+                    print "Max connect attempts exceeded. Giving up for 3 minutes.\n";
+                    $kernel->delay('reconnect_all', 180); 
                 }
         
         } elsif($error == +PCJ_CONNECTFAIL) {
@@ -407,7 +420,8 @@ sub error_event()
                     print "Retrying connection!\n";
                     $kernel->post($sender, 'reconnect');
                 }else{
-                    print "Max connect attempts exceeded. Giving Up.\n";
+                    print "Max connect attempts exceeded. Giving up for 3 minutes.\n";
+                    $kernel->delay('reconnect_all', 180); 
                 }
         
         } elsif ($error == +PCJ_SSLFAIL) {
