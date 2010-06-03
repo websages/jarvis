@@ -529,6 +529,7 @@ sub shoutout{
     push(@{ $shoutouts },$self->get_ldap_entry("(cn=shoutouts)"));
     print STDERR Data::Dumper->Dump([$shoutouts]);
     return unless defined $shoutouts;
+    return;
     foreach my $entry (@{ $shoutouts }){
         my @users = $entry->get_value('uniqueMember');
         foreach my $user (@users){
