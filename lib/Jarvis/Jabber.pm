@@ -154,7 +154,10 @@ sub status_event()
         # the responsibility of the end developer to purge the queue via the 
         # purge_queue event.
 
-        if($state == +PCJ_INIT_FINISHED){ $kernel->post($self->alias(), 'reconnect_all'); 
+        if($state == +PCJ_INIT_FINISHED){ 
+            $kernel->post($self->alias(), 'reconnect_all'); 
+        }else{
+            print STDERR $jabbstat->[$state]."\n";
         }
 }
 
