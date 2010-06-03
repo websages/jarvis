@@ -156,7 +156,7 @@ sub status_event()
 
         if($state == +PCJ_INIT_FINISHED){ 
             $heap->{'reconnect_count'} = 0; 
-            $heap->{'jid'} = $jid;
+            $heap->{'jid'} = $heap->{$self->alias()}->jid();
             $heap->{'sid'} = $sender->ID();
             $kernel->post($self->alias(), 'reconnect_all'); 
         elsif($state == +PCJ_INIT_FINISHED){ 
