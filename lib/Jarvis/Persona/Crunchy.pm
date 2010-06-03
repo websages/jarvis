@@ -401,6 +401,7 @@ sub get_ldap_entry {
                                      'scope'  => 'sub',
                                      'filter' => $filter
                                    );
+print STDERR Data::Dumper->Dump([$records]);
         unless($records->{'resultCode'}){
             undef $servers;
             $self->error($records->{'resultCode'}) if $records->{'resultCode'};
