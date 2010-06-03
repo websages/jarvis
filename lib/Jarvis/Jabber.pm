@@ -171,7 +171,7 @@ sub reconnect_all{
       $kernel->post($self->alias().'component','purge_queue');
       if(defined($self->{'channel_list'})){
           foreach my $muc (@{ $self->{'channel_list'} }){
-              print STDERR $self->alais(), 'join_channel', $muc, "\n";
+              print STDERR $self->alias(), 'join_channel', $muc, "\n";
               $kernel->post($self->alias(),'join_channel', $muc);
           }
       }
