@@ -155,7 +155,12 @@ sub status_event()
         # purge_queue event.
 
         if($state == +PCJ_INIT_FINISHED){ 
+            $heap->{'reconnect_count'} = 0; 
+            $heap->{'jid'} = $jid;
+            $heap->{'sid'} = $sender->ID();
             $kernel->post($self->alias(), 'reconnect_all'); 
+        elsif($state == +PCJ_INIT_FINISHED){ 
+            
         }else{
             print STDERR $jabstat->[$state]."\n";
         }
@@ -163,15 +168,12 @@ sub status_event()
 
 sub reconnect_all{
     my ($self, $kernel, $sender, $heap, @args) = @_[OBJECT, KERNEL, SENDER, HEAP, ARG0 .. $#_];
-      my $jid = $heap->{$self->alias()}->jid();
-      $heap->{'reconnect_count'} = 0; 
-      $heap->{'jid'} = $jid;
-      $heap->{'sid'} = $sender->ID();
       $kernel->post($self->alias().'component','output_handler', XNode->new('presence'));
           
       # And here is the purge_queue. This is to make sure we haven't sent
       # nodes while something catastrophic has happened (like reconnecting).
       $kernel->post($self->alias().'component','purge_queue');
+
       if(defined($self->{'channel_list'})){
           foreach my $muc (@{ $self->{'channel_list'} }){
               print STDERR $self->alias()," ",'join_channel'," ", $muc, "\n";
@@ -224,6 +226,7 @@ sub input_event() {
     my ($self, $kernel, $heap, $node) = @_[OBJECT, KERNEL, HEAP, ARG0];
     #print "\n\nINCOMING:\n".$node->to_str()."\n\n\n";
     print STDERR ">>  ".$node->to_str()."\n\n" if($self->{'DEBUG'} > 2);
+    print STDERR ">>  ".$node->to_str()."\n\n";
 
     # allow everyone in websages to subscribe to our presence. /*FIXME move regex to constructor */
     if($node->name() eq 'presence'){
