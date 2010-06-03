@@ -237,6 +237,16 @@ sub input{
                                                           ) if($direct);
                                              last; 
                                            }; # bot storm!
+            #/reload/                 && do { 
+            #                                 # for each persona that has operator status
+            #                                 #     join the room as the system persona
+            #                                 #     have that persona op the system persona
+            #                                 #     terminate the persona
+            #                                 #     tell peer to spawn persona in control channel
+            #                                 #     when persona shows up, give it operator status
+            #                                 # quit the channel
+            #                                 # reload
+            #                               };
             /i don't understand/     && do { last; }; # bot storm!
             /.*/                     && do { $replies = [ "i don't understand"    ] if($direct); last; };
             /.*/                     && do { last; }
