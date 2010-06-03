@@ -157,7 +157,7 @@ sub status_event()
         if($state == +PCJ_INIT_FINISHED){ 
             $kernel->post($self->alias(), 'reconnect_all'); 
         }else{
-            print STDERR $jabbstat->[$state]."\n";
+            print STDERR $jabstat->[$state]."\n";
         }
 }
 
