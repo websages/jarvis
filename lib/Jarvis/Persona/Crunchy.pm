@@ -386,6 +386,7 @@ sub get_ldap_entry {
     if($self->{'ldap_uri'}){
         @{ $servers }= split(/\,\s+/,$self->{'ldap_uri'})
     }
+    print STDERR Data::Dumper->Dump([$servers]);
     my $mesg;
     while( my $server = shift(@{ $servers })){
         if($server=~m/(.*)/){
@@ -510,8 +511,6 @@ sub toggle_shoutout{
         }
         if($modified == 1){
             $entry->replace('uniqueMember' => \@users);    
-            #print STDERR Data::Dumper->Dump([@users]);
-            #print STDERR Data::Dumper->Dump([$entry]);
             $self->update({'entry' => $entry});
             $r = "cn=shoutouts modified.";
         }
@@ -527,7 +526,6 @@ sub shoutout{
     return "shoutout what?" unless $shoutout;
     my $shoutouts;
     push(@{ $shoutouts },$self->get_ldap_entry("(cn=shoutouts)"));
-    print STDERR Data::Dumper->Dump([$shoutouts]);
     return unless defined $shoutouts->[0];
     foreach my $entry (@{ $shoutouts }){
         my @users = $entry->get_value('uniqueMember');
