@@ -159,7 +159,7 @@ sub status_event()
             $heap->{'jid'} = $heap->{$self->alias()}->jid();
             $heap->{'sid'} = $sender->ID();
             $kernel->post($self->alias(), 'reconnect_all'); 
-        elsif($state == +PCJ_INIT_FINISHED){ 
+        }elsif($state == +PCJ_INIT_FINISHED){ 
             
         }else{
             print STDERR $jabstat->[$state]."\n";
