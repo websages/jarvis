@@ -65,6 +65,7 @@ sub new {
                           'irc_join',
                           'elevate_priv',
                           'channel_members',
+                          'irc_318',
                           'irc_353',
                           'irc_invite',
                           'say_public',
@@ -278,7 +279,6 @@ sub authen {
     my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
     # we need to remember this for when the reply comes back
     push(@{ $heap->{'pending'} }, { 'authen' => $msg, 'sender' => $sender->ID } );
-print STDERR "-=[$msg->{'conversation'}->{'nick'}]=-\n";
     $self->{'irc_client'}->yield('whois', $msg->{'conversation'}->{'nick'} );
     # do nothing.
     return;
@@ -382,6 +382,12 @@ sub irc_353{
 # where the irc_server responds to our 'names' request
 sub irc_invite{
     # irc_names
+    my ($self, $kernel, $heap, $sender, @args)=@_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    print STDERR Data::Dumper->Dump([@args]);
+    return;
+}
+
+sub irc_318{
     my ($self, $kernel, $heap, $sender, @args)=@_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     print STDERR Data::Dumper->Dump([@args]);
     return;
