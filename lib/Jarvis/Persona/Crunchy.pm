@@ -243,7 +243,7 @@ sub authen_reply{
                $r = "I cannot authenticate you at this time. Is the room anonymous or am I not a moderator?\n";
             }
             $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r); 
-        if($msg->{'reason'} eq 'whois'){
+        }elsif($msg->{'reason'} eq 'whois'){
             if(defined($user)){
                $r = "I see $msg->{'conversation'}->{'nick'} as: $user";
             }else{
