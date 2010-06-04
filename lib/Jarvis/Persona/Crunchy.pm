@@ -151,7 +151,7 @@ sub input{
                                                 $kernel->post($sender, 'authen', $msg);
                                                 last;
                                               };
-            /^\s*who\s*is\s+((\S+)[?\s])*/    && do {
+            /^\s*who\s*is\s+((\S+)[?\s]*)/    && do {
                                                 $pirate=0;
                                                 $msg->{'reason'}='whois';
                                                 $msg->{'conversation'}->{'nick'}=$2;
