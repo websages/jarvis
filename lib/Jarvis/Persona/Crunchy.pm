@@ -242,14 +242,14 @@ sub authen_reply{
             if(defined($user)){
                $r = "I see you as: $user";
             }else{
-               $r = "I cannot authenticate you at this time. Is the room anonymous or am I not a moderator?\n";
+               $r = "I don't know who $msg->{'conversation'}->{'nick'} is.\n";
             }
             $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r); 
         }elsif($msg->{'reason'} eq 'whois'){
             if(defined($user)){
                $r = "I see $msg->{'conversation'}->{'nick'} as: $user";
             }else{
-               $r = "I cannot authenticate $msg->{'conversation'}->{'nick'} at this time. Is the room anonymous or am I not a moderator?\n";
+               $r = "I don't know who $msg->{'conversation'}->{'nick'} is.\n";
             }
             $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r); 
         }elsif($msg->{'reason'} eq 'channel_join'){
