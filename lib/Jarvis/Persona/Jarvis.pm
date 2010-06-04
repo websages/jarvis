@@ -3,6 +3,7 @@ use parent Jarvis::Persona::Base;
 
 ################################################################################
 # Jarvis is Just A Really Vigilant Infrastructure Sysadmin.
+# most of what he does will be done with an alarm() or delay()
 ################################################################################
 
 sub input{

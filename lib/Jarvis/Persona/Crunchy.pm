@@ -145,6 +145,7 @@ sub input{
             /^!standings\s*(.*)/        && do { @{ $replies } = $self->standings(); $pirate=0; last; };
             /^!*follow\s+\@(.\S+)/      && do { $replies =  [ $self->twitter_follow($1,1) ]; last; };
             /^!*unfollow\s+\@(.\S+)/    && do { $replies =  [ $self->twitter_follow($1,0) ]; last; };
+            /^!*tweet\s+(.*)/           && do { $kernel->post($self->alias(),'new_tweet',$1); last; };
             /^!*\s*who\s*am\s*i[?\s]*/  && do {
                                                 $pirate=0;
                                                 $msg->{'reason'}='whoami';
@@ -717,7 +718,10 @@ sub delay_friend_timeline {
 
 sub new_tweet {
     my($self, $kernel, $heap, $status) = @_[OBJECT, KERNEL, HEAP, ARG0];
+print STDERR "Tweeting: $status\n";
     $self->{'twitter'}->yield( 'update', $status );
+print STDERR "Tweeted: $status\n";
+    return;
 }
 
 sub twitter_update_success {
