@@ -151,7 +151,7 @@ sub input{
                                                 $kernel->post($sender, 'authen', $msg);
                                                 last;
                                               };
-            /^!*\s*who\s*.*\s*is\s+(\S+)[\?\s]*.*/ && do {
+            /^!*\s*who\s*.*\s*is\s+(\S+).*/ && do {
                                                        my $target=$1;
                                                        $target=~s/[!\?]*$//;
                                                        $pirate=0;
