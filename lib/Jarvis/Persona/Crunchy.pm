@@ -235,7 +235,6 @@ sub ldap_srv_records{
 sub authen_reply{
     my ($self, $kernel, $heap, $msg, $user) = @_[OBJECT, KERNEL, HEAP, ARG0, ARG1];
     my $r;
-print STDERR Data::Dumper->Dump([$msg,$user]);
     if(defined($msg->{'reason'})){
         if($msg->{'reason'} eq 'whoami'){
             if(defined($user)){
@@ -245,12 +244,12 @@ print STDERR Data::Dumper->Dump([$msg,$user]);
             }
             $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r); 
         }elsif($msg->{'reason'} eq 'whois'){
-print STDERR "WHOIS\n";
             if(defined($user)){
                $r = "I see $msg->{'conversation'}->{'nick'} as: $user";
             }else{
                $r = "I cannot authenticate $msg->{'conversation'}->{'nick'} at this time. Is the room anonymous or am I not a moderator?\n";
             }
+            $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r); 
         }elsif($msg->{'reason'} eq 'channel_join'){
             my ($u,$d) = split('@',$user);
             if($d eq $self->{'ldap_domain'}){
