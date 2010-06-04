@@ -148,6 +148,7 @@ sub input{
                                                 $replies = [ "disabled" ]; 
                                                 last;
                                               };
+            /^!flickr*/                 && do { $kernel->post($self->alias(), 'check_flickr'); last; };
             /^!weather\s+(.+?)$/        && do { $replies = [ qx( ruby /usr/local/bin/weather.rb $1 )]; last; };
             /^!insult\s+(.+?)$/         && do { $replies = [ qx( ruby /usr/local/bin/insult.rb $1 ) ]; last; };
             /^!tell\s+(.+?):*\s+(.+?)$/ && do {
