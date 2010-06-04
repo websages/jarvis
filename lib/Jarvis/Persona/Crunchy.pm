@@ -161,6 +161,7 @@ sub input{
                                                        last;
                                                      };
             /[Uu][Nn][Ii][Ss][Oo][Nn]/  && do { $replies = [ "The Way To Global Business Excellence!" ]; last; };
+            /[Bb][Ee][Rr][Rr]/          && do { $replies = [ "mmmmmmmm beer." ] if($direct); last if($direct); };
             /badger/                    && do { 
                                                 my $list = [ 
                                                              "badger badger badger",
@@ -173,7 +174,7 @@ sub input{
                                                 $replies = [ $list->[ int(rand(6)) ] ]; 
                                                 last; 
                                               };
-            /.*/                        && do { $replies = [ $self->megahal($what) ] if($direct);      last; };
+            /.*/                        && do { $replies = [ $self->megahal($what) ] if($direct); last; };
             /.*/                        && do { last; };
         }
         if($direct==1){             

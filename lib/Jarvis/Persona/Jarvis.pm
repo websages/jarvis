@@ -2,12 +2,9 @@ package Jarvis::Persona::Jarvis;
 use parent Jarvis::Persona::Base;
 
 ################################################################################
-# Here is what you must provide: 
-#   A function named "input" that takes $what and $directly_addressed
-#   as arguments, that will regex out the appropriate commands and act on them.
-#   It should return a list reference to the list of one-line replies.
-#   You will also need to subroutines or inline code to handle these actions.
+# Jarvis is Just A Really Vigilant Infrastructure Sysadmin.
 ################################################################################
+
 sub input{
     my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
     # un-wrap the $msg
