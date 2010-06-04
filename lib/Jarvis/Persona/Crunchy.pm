@@ -160,7 +160,7 @@ sub input{
                                                        $kernel->post($sender, 'authen', $msg);
                                                        last;
                                                      };
-            /[Uu][Nn][Ii][Ss][Oo][Nn]/  && do { $replies = [ "The Way To Global Business Excellence!" ] last; };
+            /[Uu][Nn][Ii][Ss][Oo][Nn]/  && do { $replies = [ "The Way To Global Business Excellence!" ]; last; };
             /badger/                    && do { 
                                                 my $list = [ 
                                                              "badger badger badger",
