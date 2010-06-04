@@ -151,6 +151,13 @@ sub input{
                                                 $kernel->post($sender, 'authen', $msg);
                                                 last;
                                               };
+            /^\s*who\s*is\s+(\S+)[?\s]*/    && do {
+                                                $pirate=0;
+                                                $msg->{'reason'}='whois';
+                                                $msg->{'conversation'}->{'nick'}=$1;
+                                                $kernel->post($sender, 'authen', $msg);
+                                                last;
+                                              };
             /.*/                        && do { $replies = [ $self->megahal($what) ] if($direct);      last; };
             /.*/                        && do { last; };
         }
@@ -224,6 +231,7 @@ sub ldap_srv_records{
 #  and: #  $msg->{'reason'}='whoami'; $kernel->post($sender, 'authen', $msg);
 # and then handle the 'reason' $whoami below...
 ################################################################################
+
 sub authen_reply{
     my ($self, $kernel, $heap, $msg, $user) = @_[OBJECT, KERNEL, HEAP, ARG0, ARG1];
     my $r;
@@ -235,6 +243,12 @@ sub authen_reply{
                $r = "I cannot authenticate you at this time. Is the room anonymous or am I not a moderator?\n";
             }
             $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r); 
+        if($msg->{'reason'} eq 'whois'){
+            if(defined($user)){
+               $r = "I see $msg->{'conversation'}->{'nick'} as: $user";
+            }else{
+               $r = "I cannot authenticate $msg->{'conversation'}->{'nick'} at this time. Is the room anonymous or am I not a moderator?\n";
+            }
         }elsif($msg->{'reason'} eq 'channel_join'){
             my ($u,$d) = split('@',$user);
             if($d eq $self->{'ldap_domain'}){
@@ -387,15 +401,12 @@ sub get_ldap_entry {
         @{ $servers }= split(/\,\s+/,$self->{'ldap_uri'})
     }
     my $mesg;
-    print STDERR Data::Dumper->Dump([$servers, $self->{'ldap_bindpw'},$self->{'ldap_binddn'}, $self->{'ldap_basedn'}, $filter]);
     while( my $server = shift(@{ $servers })){
-print STDERR "$server\n";
         if($server=~m/(.*)/){
             $server=$1 if ($server=~m/(^[A-Za-z0-9\-\.\/:]+$)/);
         }
         my $ldap = Net::LDAP->new($server) || warn "could not connect to $server $@";
         $mesg = $ldap->bind( $self->{'ldap_binddn'}, password => $self->{'ldap_bindpw'});
-print STDERR $mesg->error."\n";
         if($mesg->code != 0){ $self->error($mesg->error); }
         next if $mesg->code;
         my $records = $ldap->search(
@@ -403,7 +414,6 @@ print STDERR $mesg->error."\n";
                                      'scope'  => 'sub',
                                      'filter' => $filter
                                    );
-print STDERR Data::Dumper->Dump([$records]);
         unless($records->{'resultCode'}){
             undef $servers;
             $self->error($records->{'resultCode'}) if $records->{'resultCode'};
@@ -529,7 +539,6 @@ sub shoutout{
     return "shoutout what?" unless $shoutout;
     my $shoutouts;
     push(@{ $shoutouts },$self->get_ldap_entry("(cn=shoutouts)"));
-print STDERR Data::Dumper->Dump([$shoutouts]);
     return unless defined $shoutouts->[0];
     foreach my $entry (@{ $shoutouts }){
         my @users = $entry->get_value('uniqueMember');
