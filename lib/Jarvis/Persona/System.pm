@@ -41,7 +41,7 @@ sub known_personas{
        persona:
          class: Jarvis::Persona::Crunchy
          init:
-           alias: beta
+           alias: berry
            ldap_domain: websages.com
            ldap_binddn: cn=$host,ou=Hosts,dc=websages,dc=com
            ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
@@ -51,14 +51,14 @@ sub known_personas{
        connectors:
          - class: Jarvis::IRC
            init:
-             alias: beta_irc
-             nickname: beta
+             alias: berry_irc
+             nickname: berry
              ircname: "beta Cap'n Crunchbot"
              server: 127.0.0.1
              domain: websages.com
              channel_list:
                - #puppies
-             persona: beta
+             persona: berry
     ...
 }
     
