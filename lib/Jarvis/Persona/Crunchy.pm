@@ -241,6 +241,8 @@ sub check_flickr{
                                my ( $self, $tag, $attr ) = @_;
                                my $link = $_;
                                return unless $tag eq "img";
+                               $attr->{'width'}=~s/px//;
+                               $attr->{'height'}=~s/px//;
                                return unless ( $attr->{'width'} > 280 ) && ( $attr->{'height'} > 200 );
                                my $image = unpack( 'H*', get($attr->{'src'}) );
                                my $md5 = Digest::MD5->new();
