@@ -311,7 +311,6 @@ sub irc_401 {
 sub irc_whois {
     my ($self, $kernel, $heap, $sender, $reply) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
     # look through our pending requests for authen
-    print STDERR Data::Dumper->Dump([$heap->{'pending'},$reply]);
     my $max=$#{ $heap->{'pending'} };
     my $count=0;
     while ($count++ <= $max){
@@ -321,12 +320,6 @@ sub irc_whois {
                 my $domain=$reply->{'host'};
                 if($domain eq '127.0.0.1'){ $domain = $self->{'domain'}; }
                 print STDERR "FOO\n";
-                print STDERR "$kernel->post(
-                               $request->{'sender'}, 
-                               'authen_reply', 
-                               $request->{'authen'}, 
-                               $reply->{'user'} .'@'. $domain\n";
-                             );
                 $kernel->post(
                                $request->{'sender'}, 
                                'authen_reply', 
