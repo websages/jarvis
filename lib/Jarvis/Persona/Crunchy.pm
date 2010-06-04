@@ -261,10 +261,10 @@ print STDERR ":: $md5sum ::\n";
         #                                                                         $attr->{'alt'}, $link, $attr->{'src'}, $md5sum
         #                                                                       ) || print STDERR "$DBI::errstr\n";
         #                                               }
-                           }
-                                                "self,tagname,attr" 
-                                              ],
-                               report_tags => [ qw( img ) ]
+                           },
+                         "self,tagname,attr" 
+                       ],
+                       report_tags => [ qw( img ) ]
     );
     map { $parser->parse( get( $_ ), ); } keys %{$map};
 
