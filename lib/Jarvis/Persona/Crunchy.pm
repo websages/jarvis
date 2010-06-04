@@ -145,15 +145,15 @@ sub input{
             /^!standings\s*(.*)/        && do { @{ $replies } = $self->standings(); $pirate=0; last; };
             /^!*follow\s+\@(.\S+)/      && do { $replies =  [ $self->twitter_follow($1,1) ]; last; };
             /^!*unfollow\s+\@(.\S+)/    && do { $replies =  [ $self->twitter_follow($1,0) ]; last; };
-            /^!*\s*who\s*am\s*i[?\s]*/    && do {
+            /^!*\s*who\s*am\s*i[?\s]*/  && do {
                                                 $pirate=0;
                                                 $msg->{'reason'}='whoami';
                                                 $kernel->post($sender, 'authen', $msg);
                                                 last;
                                               };
-            /^!*\s*who\s*.*\s*is\s+(\S+).*/ && do {
+            /^!*\s*who\s*.*\s*is\s+(\S+)\s*$/ && do {
                                                        my $target=$1;
-                                                       $target=~s/[!\?]*$//;
+                                                       $target=~s/[\.,!\?]*$//;
                                                        $pirate=0;
                                                        $msg->{'reason'}='whois';
                                                        $msg->{'conversation'}->{'nick'}=$target;
