@@ -229,7 +229,7 @@ sub check_flickr{
     XML::Twig->new(
                     twig_handlers => {
                                        item => sub {
-                                                     $map->{$_->field( 'link' )}->{$a} = $_->field( $a );
+                                                     $map->{$_->field( 'link' )}->{$a} = $_->field( $a ) if defined($a);
                                                    }
                                      }
                   )->parse( $content );
@@ -270,7 +270,7 @@ print STDERR ":: $md5sum ::\n";
                        report_tags => [ qw( img ) ]
     );
     map { $parser->parse( get( $_ ), ); } keys %{$map};
-
+    $kernel->delay_adjust('check_flickr', 300);
 }
 
 ################################################################################
