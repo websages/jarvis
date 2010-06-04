@@ -749,6 +749,16 @@ sub twitter_timeline_success {
                                    $channel,
                                    "[\@". $tweet->{'user'}->{'screen_name'}."]: ".$text
                                  );
+                    if($text=~m/\@capncrunchbot/){
+                        my $nonick_text=$text;
+                        $nonick_text=~s/\@capncrunchbot//g;$text;
+                        print STDERR "tweet reply to: $nonick_text\n";
+                        $kernel->post(
+                                       $self->alias(),
+                                       'new_tweet',
+                                       "\@".$tweet->{'user'}->{'screen_name'}." ".piratespeak(megahal($nonick_text))
+                                     ); 
+                    }
                 }
             }
         }
