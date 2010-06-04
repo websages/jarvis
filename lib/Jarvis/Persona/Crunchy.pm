@@ -823,7 +823,7 @@ sub twitter_timeline_success {
                                  );
                     if($text=~m/\@capncrunchbot/){
                         my $nonick_text=$text;
-                        $nonick_text=~s/\@capncrunchbot//g;$text;
+                        $nonick_text=~s/\@capncrunchbot//g;
                         print STDERR "tweet reply to: $nonick_text\n";
                         $kernel->post(
                                        $self->alias(),
