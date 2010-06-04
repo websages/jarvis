@@ -278,6 +278,7 @@ sub authen {
     my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
     # we need to remember this for when the reply comes back
     push(@{ $heap->{'pending'} }, { 'authen' => $msg, 'sender' => $sender->ID } );
+print STDERR "-=[$msg->{'conversation'}->{'nick'}]=-\n";
     $self->{'irc_client'}->yield('whois', $msg->{'conversation'}->{'nick'} );
     # do nothing.
     return;
