@@ -124,7 +124,7 @@ case "$1" in
                               --pidfile ${PID_FILE} \
                               --chdir ${GIT_REPO} \
                               --chuid ${RUN_AS} \
-                              --exec ${GIT_REPO}/universal.pl -- > ${LOG_FILE} 2>&1 &
+                              --exec ${GIT_REPO}/universal.pl -- >> ${LOG_FILE} 2>&1 &
             SSD_EXIT=$?
             echo $! > ${PID_FILE}
 	    if [ ${SSD_EXIT} ]; then
