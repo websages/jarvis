@@ -229,7 +229,7 @@ sub check_flickr{
     XML::Twig->new(
                     twig_handlers => {
                                        item => sub {
-                                                     $map->{$_->field( 'link' )}->{$a} = $_->field( $a );
+                                                     $map->{ $_->field( 'link' ) }->{$a} = $_->field( $a );
                                                    }
                                      }
                   )->parse( $content );
