@@ -756,7 +756,10 @@ sub twitter_timeline_success {
                         $kernel->post(
                                        $self->alias(),
                                        'new_tweet',
-                                       "\@".$tweet->{'user'}->{'screen_name'}." ".piratespeak(megahal($nonick_text))
+                                       "\@".
+                                           $tweet->{'user'}->{'screen_name'}.
+                                           " ". 
+                                           piratespeak( $self->megahal( $nonick_text ) )
                                      ); 
                     }
                 }
