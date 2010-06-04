@@ -153,7 +153,7 @@ sub input{
                                               };
             /^!*\s*who\s*.*\s*is\s+(\S+)[\?\s]*.*/ && do {
                                                        my $target=$1;
-                                                       $target=~s/\?$//;
+                                                       $target=~s/[!\?]*$//;
                                                        $pirate=0;
                                                        $msg->{'reason'}='whois';
                                                        $msg->{'conversation'}->{'nick'}=$target;
