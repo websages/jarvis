@@ -10,6 +10,12 @@ use Net::LDAP;
 use Net::DNS;
 use LWP::UserAgent;
 use Mail::Send;
+# flickr
+use Digest::MD5;
+use DBI;
+use HTML::Parser;
+use LWP::Simple;
+use XML::Twig;
 
 sub may {
     my $self=shift;
@@ -35,6 +41,7 @@ sub persona_states{
              'delay_friend_timeline'           => 'delay_friend_timeline',
              'twitter.friend_timeline_success' => 'twitter_timeline_success',
              'twitter.response_error'          => 'twitter_error',
+             'check_flickr'                    => 'check_flickr',
            };
 }
 
@@ -79,10 +86,10 @@ sub persona_start{
     $self->{'twitter'} = POE::Component::Client::Twitter->spawn(%{ $self->{'cfg'} });
     $self->{'twitter'}->yield('register');
     $kernel->delay('delay_friend_timeline', 5);
+    $kernel->delay('check_flickr', 300);
     $kernel->delay('enable_twitter', 20);
     return $self;
 }
-
 
 ################################################################################
 # Here is what you must provide: 
@@ -211,6 +218,60 @@ sub input{
     return $self->{'alias'};
 }
 
+################################################################################
+# 
+################################################################################
+sub check_flickr{
+    my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    my $content = get( 'http://www.flickr.com/services/feeds/photos_public.gne?id=30378931@N00&format=rss_200');
+    XML::Twig->new(
+                    twig_handlers => {
+                                       item => sub {
+                                                     $map->{$_->field( 'link' )}->{$a} = $_->field( $a );
+                                                   }
+                                     }
+                  )->parse( $content );
+    #my $dbh = DBI->connect( 'dbi:mysql:tumble:172.16.0.2', 'nobody') || print STDERR "$DBI::errstr\n";
+    my $parser = HTML::Parser->new(
+        api_version => 3,
+        start_h     => [ 
+                         sub {
+                               my ( $self, $tag, $attr ) = @_;
+                               my $link = $_;
+                               return unless $tag eq "img";
+                               return unless ( $attr->{'width'} > 280 ) && ( $attr->{'height'} > 200 );
+                               my $image = unpack( 'H*', get($attr->{'src'}) );
+                               my $md5 = Digest::MD5->new();
+                               $md5->add( $image );
+                               my $md5sum = $md5->b64digest();
+print STDERR ":: $md5sum ::\n";
+        #                       my $exists = $dbh->do( qq{ SELECT imageID FROM image WHERE md5sum = '$md5sum' } ) || die( $DBI::errstr );
+        #                       unless ( $exists == 1 ) {
+        #                                                 my $sth = $dbh->prepare( qq{
+        #                                                                              INSERT INTO image (
+        #                                                                                  title, link, url, md5sum
+        #                                                                              ) VALUES (
+        #                                                                                  ?,?,?,?
+        #                                                                              )
+        #                                                                            } 
+        #                                                                        ) || print STDERR "$DBI::errstr\n";
+        #                   
+        #                                                 my $rv = $sth->execute(
+        #                                                                         $attr->{'alt'}, $link, $attr->{'src'}, $md5sum
+        #                                                                       ) || print STDERR "$DBI::errstr\n";
+        #                                               }
+                           }
+                                                "self,tagname,attr" 
+                                              ],
+                               report_tags => [ qw( img ) ]
+    );
+    map { $parser->parse( get( $_ ), ); } keys %{$map};
+
+}
+
+################################################################################
+# 
+################################################################################
 
 
 ################################################################################
