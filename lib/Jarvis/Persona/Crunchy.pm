@@ -151,24 +151,15 @@ sub input{
                                                 $kernel->post($sender, 'authen', $msg);
                                                 last;
                                               };
-            /^\s*who\s*is\s+(\S+)[\?\s]*/    && do {
-                                                my $target=$1;
-                                                $target=~s/\?$//;
-                                                $pirate=0;
-                                                $msg->{'reason'}='whois';
-                                                $msg->{'conversation'}->{'nick'}=$target;
-                                                $kernel->post($sender, 'authen', $msg);
-                                                last;
-                                              };
-            /^\s*who\s+the\s+fuck\s+is\s+(\S+)[\?\s]*/    && do {
-                                                my $target=$1;
-                                                $target=~s/\?$//;
-                                                $pirate=0;
-                                                $msg->{'reason'}='whois';
-                                                $msg->{'conversation'}->{'nick'}=$target;
-                                                $kernel->post($sender, 'authen', $msg);
-                                                last;
-                                              };
+            /^\s*who\s+.*\s*is\s+(\S+)[\?\s]*/ && do {
+                                                       my $target=$1;
+                                                       $target=~s/\?$//;
+                                                       $pirate=0;
+                                                       $msg->{'reason'}='whois';
+                                                       $msg->{'conversation'}->{'nick'}=$target;
+                                                       $kernel->post($sender, 'authen', $msg);
+                                                       last;
+                                                     };
             /.*/                        && do { $replies = [ $self->megahal($what) ] if($direct);      last; };
             /.*/                        && do { last; };
         }
