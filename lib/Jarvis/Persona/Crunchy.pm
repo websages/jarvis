@@ -119,7 +119,7 @@ sub input{
             /^\s*!*help\s*/             && do { $replies = $self->help($what); last; };
             /\"(.+?)\"\s+--\s*(.+?)$/   && do { $replies = [ $self->quote($what) ]; last; };
             /(https*:\S+)/              && do { $replies = [ $self->link($1, $who) ]; last; };
-            /^\s*fortune\s*$/           && do { $replies = [ $self->fortune() ]; last; };
+            /^\s*[Ff]ortune\s*$/           && do { $replies = [ $self->fortune() ]; last; };
             /^!shoutout\s*(.*)/         && do { $replies = [ $self->shoutout($1,$who) ]; last; };
             /^!enable\s+shoutouts*/     && do {
                                                 $msg->{'reason'}='enable_shoutout';
@@ -129,6 +129,16 @@ sub input{
             /^!disable\s+shoutouts*/    && do {
                                                 $msg->{'reason'}='disable_shoutout';
                                                 $kernel->post($sender, 'authen', $msg);
+                                                last;
+                                              };
+            /^!enable\s+twitter*/      && do {
+                                                $kernel->post($self->alias(), 'enable_twitter',$who);
+                                                $replies = [ "enabled" ]; 
+                                                last;
+                                              };
+            /^!disable\s+twitter*/      && do {
+                                                $kernel->post($self->alias(), 'disable_twitter',$who);
+                                                $replies = [ "disabled" ]; 
                                                 last;
                                               };
             /^!weather\s+(.+?)$/        && do { $replies = [ qx( ruby /usr/local/bin/weather.rb $1 )]; last; };
@@ -778,6 +788,11 @@ sub twitter_error {
 sub enable_twitter {
     my($self, $kernel, $heap, $res) = @_[OBJECT, KERNEL, HEAP, ARG0];
     $heap->{'twitter_enabled'} = 1;
+}
+
+sub disable_twitter {
+    my($self, $kernel, $heap, $who) = @_[OBJECT, KERNEL, HEAP, ARG0];
+    $heap->{'twitter_enabled'} = 0;
 }
 
 sub twitter_follow {
