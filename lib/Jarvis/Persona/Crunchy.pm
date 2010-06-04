@@ -160,6 +160,7 @@ sub input{
                                                        $kernel->post($sender, 'authen', $msg);
                                                        last;
                                                      };
+            /[Uu][Nn][Ii][Ss][Oo][Nn]/  && do { $replies = [ "The Way To Global Business Excellence!" ] last; };
             /badger/                    && do { 
                                                 my $list = [ 
                                                              "badger badger badger",
@@ -169,10 +170,9 @@ sub input{
                                                              "mushroom mushroom",
                                                              "SNAAAAKE OOOOOH IT'S A SNAAAAAAKE!",
                                                            ];
-                                                $replies = [ $list->[int(rand(6))] ]; 
+                                                $replies = [ $list->[ int(rand(6)) ] ]; 
                                                 last; 
                                               };
-            /[Uu][Nn][Ii][Ss][Oo][Nn]/  && do { $replies = [ "The Way To Global Business Excellence!" ] last; };
             /.*/                        && do { $replies = [ $self->megahal($what) ] if($direct);      last; };
             /.*/                        && do { last; };
         }
