@@ -161,7 +161,7 @@ sub input{
                                                        last;
                                                      };
             /[Uu][Nn][Ii][Ss][Oo][Nn]/  && do { $replies = [ "The Way To Global Business Excellence!" ]; last; };
-            /[Bb][Ee][Rr][Rr]/          && do { $replies = [ "mmmmmmmm beer." ] if($direct); last if($direct); };
+            /[Bb][Ee][Ee][Rr]/          && do { $replies = [ "mmmmmmmm beer." ] if($direct); last if($direct); };
             /badger/                    && do { 
                                                 my $list = [ 
                                                              "badger badger badger",
