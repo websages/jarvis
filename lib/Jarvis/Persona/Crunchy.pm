@@ -229,6 +229,7 @@ sub check_flickr{
     XML::Twig->new(
                     twig_handlers => {
                                        item => sub {
+                                                     my $a = '';
                                                      $map->{ $_->field( 'link' ) }->{$a} = $_->field( $a );
                                                    }
                                      }
