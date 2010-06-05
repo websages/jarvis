@@ -227,6 +227,7 @@ sub input{
 ################################################################################
 sub check_flickr{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    print STDERR "check_flickr start\n";
     my ($map);
     my @dbi;
     push (@dbi,$self->{'dbi_connect'}) if(defined($self->{'dbi_connect'}));
@@ -275,6 +276,7 @@ sub check_flickr{
     );
     map { $parser->parse( get( $_ ), ); } keys %{$map};
     $kernel->delay('check_flickr', 300);
+    print STDERR "check_flickr stop\n";
 }
 
 ################################################################################
