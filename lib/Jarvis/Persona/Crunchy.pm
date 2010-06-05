@@ -232,7 +232,7 @@ sub check_flickr{
     push (@dbi,$self->{'dbi_connect'}) if(defined($self->{'dbi_connect'}));
     push (@dbi,$self->{'dbi_user'}) if(defined($self->{'dbi_user'}));
     push (@dbi,$self->{'dbi_password'}) if(defined($self->{'dbi_password'}));
-    print STDERR Data::Dumper([@dbi]);
+    print STDERR Data::Dumper->Dump([@dbi]);
     my $content = get( 'http://www.flickr.com/services/feeds/photos_public.gne?id=30378931@N00&format=rss_200');
     XML::Twig->new(
                     twig_handlers => {
