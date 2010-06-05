@@ -232,7 +232,6 @@ sub check_flickr{
     push (@dbi,$self->{'dbi_connect'}) if(defined($self->{'dbi_connect'}));
     push (@dbi,$self->{'dbi_user'}) if(defined($self->{'dbi_user'}));
     push (@dbi,$self->{'dbi_password'}) if(defined($self->{'dbi_password'}));
-    print STDERR Data::Dumper->Dump([@dbi]);
     my $content = get( 'http://www.flickr.com/services/feeds/photos_public.gne?id=30378931@N00&format=rss_200');
     XML::Twig->new(
                     twig_handlers => {
@@ -242,7 +241,8 @@ sub check_flickr{
                                                    }
                                      }
                   )->parse( $content );
-    #my $dbh = DBI->connect( :172.16.0.2', 'nobody') || print STDERR "$DBI::errstr\n";
+    my $dbh = DBI->connect( @dbi) || print STDERR "$DBI::errstr\n";
+    print STDERR Data::Dumper->Dump([$dbh]);
     my $parser = HTML::Parser->new(
         api_version => 3,
         start_h     => [ 
@@ -257,8 +257,9 @@ sub check_flickr{
                                my $md5 = Digest::MD5->new();
                                $md5->add( $image );
                                my $md5sum = $md5->b64digest();
-print STDERR ":: $md5sum ::\n";
-        #                       my $exists = $dbh->do( qq{ SELECT imageID FROM image WHERE md5sum = '$md5sum' } ) || die( $DBI::errstr );
+                               my $exists = $dbh->do( qq{ SELECT imageID FROM image WHERE md5sum = '$md5sum' } ) ||
+                                   print STDERR "$DBI::errstr\n";
+                               print STDERR "exists: $exists\n";
         #                       unless ( $exists == 1 ) {
         #                                                 my $sth = $dbh->prepare( qq{
         #                                                                              INSERT INTO image (
