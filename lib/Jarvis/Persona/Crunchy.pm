@@ -288,6 +288,7 @@ sub check_flickr{
                              },
               _stop   => sub {
                                my $elapsed = time() - $_[HEAP]{ts_start};
+                               $kernel->delay('check_flickr', 300);
                                print STDERR "Session check_flickr [", $_[SESSION]->ID, "] elapsed seconds: $elapsed\n";
                              }
         },
