@@ -233,8 +233,8 @@ sub check_flickr{
     POE::Session->create(
         inline_states => {
             _start    => sub {
-                               $_[KERNEL]->yield("run_check");
                                $_[HEAP]{ts_start} = time();
+                               $_[KERNEL]->delay("run_check",5);
                                print STDERR "Session check_flickr start\n";
                              },
             run_check => sub {
@@ -292,7 +292,6 @@ sub check_flickr{
                              }
         },
     );
-    $kernel->delay('check_flickr', 300);
 }
 
 ################################################################################
