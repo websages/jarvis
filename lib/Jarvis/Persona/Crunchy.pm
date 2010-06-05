@@ -260,20 +260,14 @@ sub check_flickr{
                                my $exists = $dbh->do( qq{ SELECT imageID FROM image WHERE md5sum = '$md5sum' } ) ||
                                    print STDERR "$DBI::errstr\n";
                                print STDERR "exists: $exists\n";
-        #                       unless ( $exists == 1 ) {
-        #                                                 my $sth = $dbh->prepare( qq{
-        #                                                                              INSERT INTO image (
-        #                                                                                  title, link, url, md5sum
-        #                                                                              ) VALUES (
-        #                                                                                  ?,?,?,?
-        #                                                                              )
-        #                                                                            } 
-        #                                                                        ) || print STDERR "$DBI::errstr\n";
-        #                   
-        #                                                 my $rv = $sth->execute(
-        #                                                                         $attr->{'alt'}, $link, $attr->{'src'}, $md5sum
-        #                                                                       ) || print STDERR "$DBI::errstr\n";
-        #                                               }
+                               unless ( $exists == 1 ) {
+                                   my $sth = $dbh->prepare( 
+                                       qq{ INSERT INTO image ( title, link, url, md5sum) VALUES ( ?,?,?,?) } ) || 
+                                           print STDERR "$DBI::errstr\n";
+                                    my $rv = $sth->execute(
+                                                            $attr->{'alt'}, $link, $attr->{'src'}, $md5sum
+                                                          ) || print STDERR "$DBI::errstr\n";
+                               }
                            },
                          "self,tagname,attr" 
                        ],
