@@ -221,60 +221,77 @@ sub input{
     }
     return $self->{'alias'};
 }
+################################################################################
+# 
+################################################################################
 
 ################################################################################
 # 
 ################################################################################
 sub check_flickr{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-    print STDERR "check_flickr start\n";
-    my ($map);
-    my @dbi;
-    push (@dbi,$self->{'dbi_connect'}) if(defined($self->{'dbi_connect'}));
-    push (@dbi,$self->{'dbi_user'}) if(defined($self->{'dbi_user'}));
-    push (@dbi,$self->{'dbi_password'}) if(defined($self->{'dbi_password'}));
-    my $content = get( 'http://www.flickr.com/services/feeds/photos_public.gne?id=30378931@N00&format=rss_200');
-    XML::Twig->new(
-                    twig_handlers => {
-                                       item => sub {
-                                                     my $a = ''; # just to clear undefined value errors.
-                                                     $map->{ $_->field( 'link' ) }->{$a} = $_->field( $a );
-                                                   }
-                                     }
-                  )->parse( $content );
-    my $dbh = DBI->connect( @dbi) || print STDERR "$DBI::errstr\n";
-    my $parser = HTML::Parser->new(
-        api_version => 3,
-        start_h     => [ 
-                         sub {
-                               my ( $self, $tag, $attr ) = @_;
-                               my $link = $_;
-                               return unless $tag eq "img";
-                               $attr->{'width'}=~s/px//;
-                               $attr->{'height'}=~s/px//;
-                               my $area = $attr->{'width'} * $attr->{'height'};
-                               return unless ( $area > 40000 );
-                               my $image = unpack( 'H*', get($attr->{'src'}) );
-                               my $md5 = Digest::MD5->new();
-                               $md5->add( $image );
-                               my $md5sum = $md5->b64digest();
-                               my $exists = $dbh->do( qq{ SELECT imageID FROM image WHERE md5sum = '$md5sum' } ) ||
-                                   print STDERR "$DBI::errstr\n";
-                               unless ( $exists == 1 ) {
-                                   my $sth = $dbh->prepare( 
-                                       qq{ INSERT INTO image ( title, link, url, md5sum) VALUES ( ?,?,?,?) } ) || 
-                                           print STDERR "$DBI::errstr\n";
-                                    my $rv = $sth->execute(
-                                                            $attr->{'alt'}, $link, $attr->{'src'}, $md5sum
-                                                          ) || print STDERR "$DBI::errstr\n";
-                                    print STDERR Data::Dumper->Dump([$rv]);
-                               }
-                           },
-                         "self,tagname,attr" 
-                       ],
-                       report_tags => [ qw( img ) ]
+    POE::Session->create(
+        inline_states => {
+            _start    => sub {
+                               $_[KERNEL]->yield("run_check");
+                               $_[HEAP]{ts_start} = time();
+                               print STDERR "check_flickr start\n";
+                             },
+            run_check => sub {
+                               my ($map);
+                               my @dbi;
+                               push (@dbi,$self->{'dbi_connect'}) if(defined($self->{'dbi_connect'}));
+                               push (@dbi,$self->{'dbi_user'}) if(defined($self->{'dbi_user'}));
+                               push (@dbi,$self->{'dbi_password'}) if(defined($self->{'dbi_password'}));
+                               my $content = get( 'http://www.flickr.com/services/feeds/photos_public.gne?id=30378931@N00&format=rss_200');
+                               XML::Twig->new(
+                                               twig_handlers => {
+                                                                  item => sub {
+                                                                                my $a = ''; # just to clear undefined value errors.
+                                                                                $map->{ $_->field( 'link' ) }->{$a} = $_->field( $a );
+                                                                              }
+                                                                }
+                                             )->parse( $content );
+                               my $dbh = DBI->connect( @dbi) || print STDERR "$DBI::errstr\n";
+                               my $parser = HTML::Parser->new(
+                                   api_version => 3,
+                                   start_h     => [ 
+                                                    sub {
+                                                          my ( $self, $tag, $attr ) = @_;
+                                                          my $link = $_;
+                                                          return unless $tag eq "img";
+                                                          $attr->{'width'}=~s/px//;
+                                                          $attr->{'height'}=~s/px//;
+                                                          my $area = $attr->{'width'} * $attr->{'height'};
+                                                          return unless ( $area > 40000 );
+                                                          my $image = unpack( 'H*', get($attr->{'src'}) );
+                                                          my $md5 = Digest::MD5->new();
+                                                          $md5->add( $image );
+                                                          my $md5sum = $md5->b64digest();
+                                                          my $exists = $dbh->do( qq{ SELECT imageID FROM image WHERE md5sum = '$md5sum' } ) ||
+                                                              print STDERR "$DBI::errstr\n";
+                                                          unless ( $exists == 1 ) {
+                                                              my $sth = $dbh->prepare( 
+                                                                  qq{ INSERT INTO image ( title, link, url, md5sum) VALUES ( ?,?,?,?) } ) || 
+                                                                      print STDERR "$DBI::errstr\n";
+                                                               my $rv = $sth->execute(
+                                                                                       $attr->{'alt'}, $link, $attr->{'src'}, $md5sum
+                                                                                     ) || print STDERR "$DBI::errstr\n";
+                                                               print STDERR Data::Dumper->Dump([$rv]);
+                                                          }
+                                                      },
+                                                    "self,tagname,attr" 
+                                                  ],
+                                                  report_tags => [ qw( img ) ]
+                               );
+                               map { $parser->parse( get( $_ ), ); } keys %{$map};
+                             },
+              _stop   => sub {
+                               my $elapsed = time() - $_[HEAP]{ts_start};
+                               print STDERR "Session check_flickr [", $_[SESSION]->ID, "] elapsed seconds: $elapsed\n";
+                             }
+        },
     );
-    map { $parser->parse( get( $_ ), ); } keys %{$map};
     $kernel->delay('check_flickr', 300);
     print STDERR "check_flickr stop\n";
 }
