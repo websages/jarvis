@@ -251,7 +251,8 @@ sub check_flickr{
                                return unless $tag eq "img";
                                $attr->{'width'}=~s/px//;
                                $attr->{'height'}=~s/px//;
-                               return unless ( $attr->{'width'} > 280 ) && ( $attr->{'height'} > 200 );
+                               my $area = $attr->{'width'} * $attr->{'height'};
+                               return unless ( $area > 40000 );
                                my $image = unpack( 'H*', get($attr->{'src'}) );
                                my $md5 = Digest::MD5->new();
                                $md5->add( $image );
@@ -273,7 +274,7 @@ sub check_flickr{
                        report_tags => [ qw( img ) ]
     );
     map { $parser->parse( get( $_ ), ); } keys %{$map};
-    $kernel->delay_adjust('check_flickr', 300);
+    $kernel->delay('check_flickr', 300);
 }
 
 ################################################################################
