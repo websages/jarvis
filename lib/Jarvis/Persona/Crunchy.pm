@@ -235,7 +235,7 @@ sub check_flickr{
             _start    => sub {
                                $_[KERNEL]->yield("run_check");
                                $_[HEAP]{ts_start} = time();
-                               print STDERR "check_flickr start\n";
+                               print STDERR "Session check_flickr start\n";
                              },
             run_check => sub {
                                my ($map);
@@ -293,7 +293,6 @@ sub check_flickr{
         },
     );
     $kernel->delay('check_flickr', 300);
-    print STDERR "check_flickr stop\n";
 }
 
 ################################################################################
