@@ -269,6 +269,7 @@ print STDERR ":: $md5sum ::\n";
                        ],
                        report_tags => [ qw( img ) ]
     );
+    print STDERR Data::Dumper->Dump([$map]);
     map { $parser->parse( get( $_ ), ); } keys %{$map};
     $kernel->delay_adjust('check_flickr', 300);
 }
