@@ -229,9 +229,9 @@ sub check_flickr{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     my ($map);
     my @dbi;
-    push (@dbi,$self->{'dbi_connect'}) if(defined($self->{'dbi_connect'});
-    push (@dbi,$self->{'dbi_user'}) if(defined($self->{'dbi_user'});
-    push (@dbi,$self->{'dbi_password'}) if(defined($self->{'dbi_password'});
+    push (@dbi,$self->{'dbi_connect'}) if(defined($self->{'dbi_connect'}));
+    push (@dbi,$self->{'dbi_user'}) if(defined($self->{'dbi_user'}));
+    push (@dbi,$self->{'dbi_password'}) if(defined($self->{'dbi_password'}));
     print STDERR Data::Dumper([@dbi]);
     my $content = get( 'http://www.flickr.com/services/feeds/photos_public.gne?id=30378931@N00&format=rss_200');
     XML::Twig->new(
