@@ -27,6 +27,9 @@ sub may {
              'username'        => undef,
              'password'        => undef,
              'retry'           => undef,
+             'dbi_connect'     => 'dbi:mysql:tumble:172.16.0.2',
+             'dbi_user'        => 'nobody',
+             'dbi_password'    => undef,
            };
 }
 
@@ -225,16 +228,21 @@ sub input{
 sub check_flickr{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     my ($map);
+    my @dbi;
+    push (@dbi,$self->{'dbi_connect'}) if(defined($self->{'dbi_connect'});
+    push (@dbi,$self->{'dbi_user'}) if(defined($self->{'dbi_user'});
+    push (@dbi,$self->{'dbi_password'}) if(defined($self->{'dbi_password'});
+    print STDERR Data::Dumper([@dbi]);
     my $content = get( 'http://www.flickr.com/services/feeds/photos_public.gne?id=30378931@N00&format=rss_200');
     XML::Twig->new(
                     twig_handlers => {
                                        item => sub {
-                                                     my $a = '';
+                                                     my $a = ''; # just to clear undefined value errors.
                                                      $map->{ $_->field( 'link' ) }->{$a} = $_->field( $a );
                                                    }
                                      }
                   )->parse( $content );
-    #my $dbh = DBI->connect( 'dbi:mysql:tumble:172.16.0.2', 'nobody') || print STDERR "$DBI::errstr\n";
+    #my $dbh = DBI->connect( :172.16.0.2', 'nobody') || print STDERR "$DBI::errstr\n";
     my $parser = HTML::Parser->new(
         api_version => 3,
         start_h     => [ 
@@ -270,7 +278,6 @@ print STDERR ":: $md5sum ::\n";
                        ],
                        report_tags => [ qw( img ) ]
     );
-    print STDERR Data::Dumper->Dump([$map]);
     map { $parser->parse( get( $_ ), ); } keys %{$map};
     $kernel->delay_adjust('check_flickr', 300);
 }
