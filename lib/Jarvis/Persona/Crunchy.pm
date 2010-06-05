@@ -242,7 +242,6 @@ sub check_flickr{
                                      }
                   )->parse( $content );
     my $dbh = DBI->connect( @dbi) || print STDERR "$DBI::errstr\n";
-    print STDERR Data::Dumper->Dump([$dbh]);
     my $parser = HTML::Parser->new(
         api_version => 3,
         start_h     => [ 
@@ -259,7 +258,6 @@ sub check_flickr{
                                my $md5sum = $md5->b64digest();
                                my $exists = $dbh->do( qq{ SELECT imageID FROM image WHERE md5sum = '$md5sum' } ) ||
                                    print STDERR "$DBI::errstr\n";
-                               print STDERR "exists: $exists\n";
                                unless ( $exists == 1 ) {
                                    my $sth = $dbh->prepare( 
                                        qq{ INSERT INTO image ( title, link, url, md5sum) VALUES ( ?,?,?,?) } ) || 
@@ -267,6 +265,7 @@ sub check_flickr{
                                     my $rv = $sth->execute(
                                                             $attr->{'alt'}, $link, $attr->{'src'}, $md5sum
                                                           ) || print STDERR "$DBI::errstr\n";
+                                    print STDERR Data::Dumper->Dump([$rv]);
                                }
                            },
                          "self,tagname,attr" 
