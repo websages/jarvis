@@ -55,11 +55,11 @@ sub new {
                           'irc_default', 
                           'irc_001', 
                           'irc_401', 
-                          'irc_public', 
-                          'irc_ping', 
                           'irc_msg', 
-                          'irc_public_reply', 
+                          'irc_ping', 
                           'irc_private_reply',
+                          'irc_public', 
+                          'irc_public_reply', 
                           'authen',
                           'irc_whois',
                           'irc_join',
@@ -98,7 +98,8 @@ sub start {
     my $self = $_[OBJECT]; 
     my $kernel = $_[KERNEL];
     my $session = $_[SESSION];
-    $self->on_start(); 
+    $self->{'irc_client'}->yield( register => 'all' );
+    $self->{'irc_client'}->yield( connect => { } );
 }
 
 sub stop  { 
@@ -147,13 +148,6 @@ sub indented_yaml{
 ################################################################################
 # irc methods;
 ################################################################################
-sub on_start {
-    my $self = $_[OBJECT];
-    my $heap = $_[HEAP];
-    # retrieve our component's object from the heap where we stashed it
-    $self->{'irc_client'}->yield( register => 'all' );
-    $self->{'irc_client'}->yield( connect => { } );
-}
 
 sub irc_default {
     my $self = $_[OBJECT];
@@ -181,11 +175,9 @@ sub irc_001 {
     # specified server.
     my $sender_heap = $sender->get_heap();
     #print "Connected to ", $sender_heap->server_name(), "\n";
-print STDERR Data::Dumper->Dump([$self->{'channel_list'}]);
     for(@{ $self->{'channel_list'} }){
         # notify the persona that we're adding the channel and nick 
         # or there is no way for the persona to know what he's called in what channels
-print STDERR "\nJOINING: $_\n\n";
         $kernel->post(
                        $self->{'persona'}, 
                        'channel_add', 
