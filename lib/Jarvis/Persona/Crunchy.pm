@@ -30,6 +30,7 @@ sub may {
              'dbi_connect'     => 'dbi:mysql:tumble:172.16.0.2',
              'dbi_user'        => 'nobody',
              'dbi_password'    => undef,
+             'channel_tweets'  => undef,
            };
 }
 
