@@ -30,7 +30,6 @@ sub may {
              'dbi_connect'     => 'dbi:mysql:tumble:172.16.0.2',
              'dbi_user'        => 'nobody',
              'dbi_password'    => undef,
-             'channel_tweets'  => undef,
            };
 }
 
@@ -41,8 +40,6 @@ sub persona_states{
              'channel_join'                    => 'channel_join',
              'enable_twitter'                  => 'enable_twitter',
              'disable_twitter'                 => 'disable_twitter',
-             'enable_tweets'                   => 'enable_tweets',
-             'disable_tweets'                  => 'disable_tweets',
              'new_tweet'                       => 'new_tweet',
              'twitter_update_success'          => 'twitter_update_success',
              'delay_friend_timeline'           => 'delay_friend_timeline',
@@ -153,14 +150,6 @@ sub input{
             /^!disable\s+twitter.*/      && do {
                                                 $kernel->post($self->alias(), 'disable_twitter',$who);
                                                 $replies = [ "disabled" ]; 
-                                                last;
-                                              };
-            /^!enable\s+tweets.*/       && do {
-                                                $kernel->post($self->alias(), 'enable_tweets',$where);
-                                                last;
-                                              };
-            /^!disable\s+tweets.*/      && do {
-                                                $kernel->post($self->alias(), 'disable_tweets',$where);
                                                 last;
                                               };
             /^!flickr*/                 && do { $kernel->post($self->alias(), 'check_flickr'); last; };
@@ -809,9 +798,9 @@ sub help {
                                    "syntax/use : http://tumble.wcyd.org/",
                                  ],
                   'twitter'   => [
-                                   "description: enable/disable twitter/tweets",
-                                   "syntax/use : !{dis,en}able twitter (globally)",
-                                   "syntax/use : !{dis,en}able tweets (for this channel)",
+                                   "description: enable/disable twitter";
+                                   "enable : !en}able twitter",
+                                   "disable: !disable twitter",
                                  ],
                };
     if($line=~m/^!*help\s*$/){
@@ -861,16 +850,12 @@ sub twitter_timeline_success {
         if($heap->{'twitter_enabled'} == 1){
             foreach my $location (keys(%{ $heap->{'locations'} })){
                 foreach my $channel (keys(%{ $heap->{'locations'}->{$location} })){
-                    foreach my $twannel (@{ $self->{'channel_tweets'} }){
-                        if($twannel eq $channel){ 
-                            $kernel->post(
-                                           $location,
-                                           'say_public',
-                                           $channel,
-                                           "[\@". $tweet->{'user'}->{'screen_name'}."]: ".$text
-                                         );
-                        }
-                    }
+                    $kernel->post(
+                                   $location,
+                                   'say_public',
+                                   $channel,
+                                   "[\@". $tweet->{'user'}->{'screen_name'}."]: ".$text
+                                 );
                 }
             }
             if($text=~m/\@capncrunchbot/){
@@ -895,18 +880,6 @@ sub twitter_error {
     my($self, $kernel, $heap, $res) = @_[OBJECT, KERNEL, HEAP, ARG0];
     print STDERR "twitter_error\n". Data::Dumper->Dump([$res->{'_rc'}, $res->{'_content'}]) ."\n";
     #$heap->{ircd}->yield(daemon_cmd_notice => $conf->{botname}, $conf->{channel}, 'Twitter error');
-}
-
-sub enable_tweets {
-    my($self, $kernel, $heap, $where) = @_[OBJECT, KERNEL, HEAP, ARG0];
-    print STDERR "enable tweets for $where\n";
-    print STDERR "$self->{'channel_tweets'}\n";
-}
-
-sub disable_tweets {
-    my($self, $kernel, $heap, $where) = @_[OBJECT, KERNEL, HEAP, ARG0];
-    print STDERR "disable tweets for $where\n";
-    print STDERR "$self->{'channel_tweets'}\n";
 }
 
 sub enable_twitter {

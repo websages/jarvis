@@ -37,8 +37,6 @@ sub known_personas{
              channel_list:
                - #soggies
                - #twoggies
-             channel_tweets:
-               - #twoggies
              persona: crunchy
      - name: berry
        persona:
@@ -62,8 +60,6 @@ sub known_personas{
              channel_list:
                - #twoggies
                - #puppies
-             channel_tweets:
-               - #twoggies
              persona: berry
     ...
 }
