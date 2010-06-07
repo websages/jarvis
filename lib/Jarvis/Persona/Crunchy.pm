@@ -45,6 +45,7 @@ sub persona_states{
              'delay_friend_timeline'           => 'delay_friend_timeline',
              'twitter.friend_timeline_success' => 'twitter_timeline_success',
              'twitter.response_error'          => 'twitter_error',
+             'start_twitter_enabled'           => 0,
              'check_flickr'                    => 'check_flickr',
            };
 }
@@ -91,7 +92,7 @@ sub persona_start{
     $self->{'twitter'}->yield('register');
     $kernel->delay('delay_friend_timeline', 5);
     $kernel->delay('check_flickr', 300);
-    $kernel->delay('enable_twitter', 20);
+    $kernel->delay('enable_twitter', 20) if($self->{'start_twitter_enabled'} == 1);
     return $self;
 }
 
