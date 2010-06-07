@@ -61,6 +61,9 @@ sub known_personas{
              domain: websages.com
              channel_list:
                - #puppies
+               - #twoggies
+             channel_tweets:
+               - #twoggies
              persona: berry
     ...
 }
