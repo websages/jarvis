@@ -189,7 +189,7 @@ sub input{
                                                 $kernel->post($sender, 'authen', $msg);
                                                 last;
                                               };
-            /"the way to global business excellence"/i
+            /global business excellence/i
                                         && do { $replies = [ "Unison!" ]; last; };
             /unison/i                   && do { $replies = [ "The Way To Global Business Excellence!" ]; last; };
             /beer/i                     && do { $replies = [ "mmmmmmmm beer." ] if($direct); last if($direct); };
