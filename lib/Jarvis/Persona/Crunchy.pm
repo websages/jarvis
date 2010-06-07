@@ -899,11 +899,13 @@ sub twitter_error {
 sub enable_tweets {
     my($self, $kernel, $heap, $where) = @_[OBJECT, KERNEL, HEAP, ARG0];
     print STDERR "enable tweets for $where\n";
+    print STDERR "$self->{'channel_tweets'}\n";
 }
 
 sub disable_tweets {
     my($self, $kernel, $heap, $where) = @_[OBJECT, KERNEL, HEAP, ARG0];
     print STDERR "disable tweets for $where\n";
+    print STDERR "$self->{'channel_tweets'}\n";
 }
 
 sub enable_twitter {
