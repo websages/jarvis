@@ -29,6 +29,7 @@ sub may {
              'retry'           => undef,
              'dbi_connect'     => 'dbi:mysql:tumble:172.16.0.2',
              'dbi_user'        => 'nobody',
+             'start_twitter_enabled' => 0,
              'dbi_password'    => undef,
            };
 }
@@ -45,7 +46,6 @@ sub persona_states{
              'delay_friend_timeline'           => 'delay_friend_timeline',
              'twitter.friend_timeline_success' => 'twitter_timeline_success',
              'twitter.response_error'          => 'twitter_error',
-             'start_twitter_enabled'           => 0,
              'check_flickr'                    => 'check_flickr',
            };
 }
