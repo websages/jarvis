@@ -798,7 +798,7 @@ sub help {
                                    "syntax/use : http://tumble.wcyd.org/",
                                  ],
                   'twitter'   => [
-                                   "description: enable/disable twitter";
+                                   "description: enable/disable twitter",
                                    "enable : !en}able twitter",
                                    "disable: !disable twitter",
                                  ],
