@@ -39,7 +39,9 @@ sub persona_states{
              'authen_reply'                    => 'authen_reply',
              'channel_join'                    => 'channel_join',
              'enable_twitter'                  => 'enable_twitter',
+             'disable_twitter'                 => 'disable_twitter',
              'enable_tweets'                   => 'enable_tweets',
+             'disable_tweets'                  => 'disable_tweets',
              'new_tweet'                       => 'new_tweet',
              'twitter_update_success'          => 'twitter_update_success',
              'delay_friend_timeline'           => 'delay_friend_timeline',
@@ -892,6 +894,16 @@ sub twitter_error {
     my($self, $kernel, $heap, $res) = @_[OBJECT, KERNEL, HEAP, ARG0];
     print STDERR "twitter_error\n". Data::Dumper->Dump([$res->{'_rc'}, $res->{'_content'}]) ."\n";
     #$heap->{ircd}->yield(daemon_cmd_notice => $conf->{botname}, $conf->{channel}, 'Twitter error');
+}
+
+sub enable_tweets {
+    my($self, $kernel, $heap, $where) = @_[OBJECT, KERNEL, HEAP, ARG0];
+    print STDERR "enable tweets for $where\n";
+}
+
+sub disable_tweets {
+    my($self, $kernel, $heap, $where) = @_[OBJECT, KERNEL, HEAP, ARG0];
+    print STDERR "disable tweets for $where\n";
 }
 
 sub enable_twitter {
