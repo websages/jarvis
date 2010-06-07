@@ -39,6 +39,7 @@ sub persona_states{
              'authen_reply'                    => 'authen_reply',
              'channel_join'                    => 'channel_join',
              'enable_twitter'                  => 'enable_twitter',
+             'enable_tweets'                   => 'enable_tweets',
              'new_tweet'                       => 'new_tweet',
              'twitter_update_success'          => 'twitter_update_success',
              'delay_friend_timeline'           => 'delay_friend_timeline',
@@ -131,24 +132,32 @@ sub input{
             /(https*:\S+)/              && do { $replies = [ $self->link($1, $who) ]; last; };
             /^\s*[Ff]ortune\s*$/           && do { $replies = [ $self->fortune() ]; last; };
             /^!shoutout\s*(.*)/         && do { $replies = [ $self->shoutout($1,$who) ]; last; };
-            /^!enable\s+shoutouts*/     && do {
+            /^!enable\s+shoutouts.*/     && do {
                                                 $msg->{'reason'}='enable_shoutout';
                                                 $kernel->post($sender, 'authen', $msg);
                                                 last;
                                             };
-            /^!disable\s+shoutouts*/    && do {
+            /^!disable\s+shoutouts.*/    && do {
                                                 $msg->{'reason'}='disable_shoutout';
                                                 $kernel->post($sender, 'authen', $msg);
                                                 last;
                                               };
-            /^!enable\s+twitter*/      && do {
+            /^!enable\s+twitter.*/      && do {
                                                 $kernel->post($self->alias(), 'enable_twitter',$who);
                                                 $replies = [ "enabled" ]; 
                                                 last;
                                               };
-            /^!disable\s+twitter*/      && do {
+            /^!disable\s+twitter.*/      && do {
                                                 $kernel->post($self->alias(), 'disable_twitter',$who);
                                                 $replies = [ "disabled" ]; 
+                                                last;
+                                              };
+            /^!enable\s+tweets.*/       && do {
+                                                $kernel->post($self->alias(), 'enable_tweets',$where);
+                                                last;
+                                              };
+            /^!disable\s+tweets.*/      && do {
+                                                $kernel->post($self->alias(), 'disable_tweets',$where);
                                                 last;
                                               };
             /^!flickr*/                 && do { $kernel->post($self->alias(), 'check_flickr'); last; };
@@ -177,17 +186,21 @@ sub input{
                                                 $kernel->post($sender, 'authen', $msg);
                                                 last;
                                               };
-            /^!*\s*who\s*.*\s*is\s+(\S+)\s*$/ && do {
-                                                       my $target=$1;
-                                                       $target=~s/[\.,!\?]*$//;
-                                                       $pirate=0;
-                                                       $msg->{'reason'}='whois';
-                                                       $msg->{'conversation'}->{'nick'}=$target;
-                                                       $kernel->post($sender, 'authen', $msg);
-                                                       last;
-                                                     };
-            /[Uu][Nn][Ii][Ss][Oo][Nn]/  && do { $replies = [ "The Way To Global Business Excellence!" ]; last; };
-            /[Bb][Ee][Ee][Rr]/          && do { $replies = [ "mmmmmmmm beer." ] if($direct); last if($direct); };
+            /^!*\s*who\s*.*\s*is\s+(\S+)\s*$/
+                                        && do { 
+                                                my $target=$1;
+                                                $target=~s/[\.,!\?]*$//;
+                                                $pirate=0;
+                                                $msg->{'reason'}='whois';
+                                                $msg->{'conversation'}->{'nick'}=$target;
+                                                $kernel->post($sender, 'authen', $msg);
+                                                last;
+                                              };
+            /"the way to global business excellence"/i
+                                        && do { $replies = [ "Unison!" ]; last; };
+            /unison/i                   && do { $replies = [ "The Way To Global Business Excellence!" ]; last; };
+            /beer/i                     && do { $replies = [ "mmmmmmmm beer." ] if($direct); last if($direct); };
+
             /badger/                    && do { 
                                                 my $list = [ 
                                                              "badger badger badger",
@@ -792,6 +805,11 @@ sub help {
                                    "description: Our tumblelog",
                                    "syntax/use : http://tumble.wcyd.org/",
                                  ],
+                  'twitter'   => [
+                                   "description: enable/disable twitter/tweets",
+                                   "syntax/use : !{dis,en}able twitter (globally)",
+                                   "syntax/use : !{dis,en}able tweets (for this channel)",
+                                 ],
                };
     if($line=~m/^!*help\s*$/){
         return [ 'Available help topics: '. join(' ',(keys(%{ $help }))) ];
@@ -840,26 +858,30 @@ sub twitter_timeline_success {
         if($heap->{'twitter_enabled'} == 1){
             foreach my $location (keys(%{ $heap->{'locations'} })){
                 foreach my $channel (keys(%{ $heap->{'locations'}->{$location} })){
-                    $kernel->post(
-                                   $location,
-                                   'say_public',
-                                   $channel,
-                                   "[\@". $tweet->{'user'}->{'screen_name'}."]: ".$text
-                                 );
-                    if($text=~m/\@capncrunchbot/){
-                        my $nonick_text=$text;
-                        $nonick_text=~s/\@capncrunchbot//g;
-                        print STDERR "tweet reply to: $nonick_text\n";
-                        $kernel->post(
-                                       $self->alias(),
-                                       'new_tweet',
-                                       "\@".
-                                           $tweet->{'user'}->{'screen_name'}.
-                                           " ". 
-                                           piratespeak( $self->megahal( $nonick_text ) )
-                                     ); 
+                    foreach my $twannel (@{ $self->{'channel_tweets'}){
+                        if($twannel eq $channel){ 
+                            $kernel->post(
+                                           $location,
+                                           'say_public',
+                                           $channel,
+                                           "[\@". $tweet->{'user'}->{'screen_name'}."]: ".$text
+                                         );
+                        }
                     }
                 }
+            }
+            if($text=~m/\@capncrunchbot/){
+                my $nonick_text=$text;
+                $nonick_text=~s/\@capncrunchbot//g;
+                print STDERR "tweet reply to: $nonick_text\n";
+                $kernel->post(
+                               $self->alias(),
+                               'new_tweet',
+                               "\@".
+                                   $tweet->{'user'}->{'screen_name'}.
+                                   " ". 
+                                   piratespeak( $self->megahal( $nonick_text ) )
+                             ); 
             }
         }
     }
