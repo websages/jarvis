@@ -181,6 +181,7 @@ sub irc_001 {
     # specified server.
     my $sender_heap = $sender->get_heap();
     #print "Connected to ", $sender_heap->server_name(), "\n";
+print STDERR Data::Dumper->Dump([$self->{'channel_list'}]);
     for(@{ $self->{'channel_list'} }){
         # notify the persona that we're adding the channel and nick 
         # or there is no way for the persona to know what he's called in what channels
