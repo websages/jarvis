@@ -60,8 +60,8 @@ sub known_personas{
              server: 127.0.0.1
              domain: websages.com
              channel_list:
-               - #puppies
                - #twoggies
+               - #puppies
              channel_tweets:
                - #twoggies
              persona: berry
