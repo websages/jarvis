@@ -858,7 +858,7 @@ sub twitter_timeline_success {
         if($heap->{'twitter_enabled'} == 1){
             foreach my $location (keys(%{ $heap->{'locations'} })){
                 foreach my $channel (keys(%{ $heap->{'locations'}->{$location} })){
-                    foreach my $twannel (@{ $self->{'channel_tweets'}){
+                    foreach my $twannel (@{ $self->{'channel_tweets'} }){
                         if($twannel eq $channel){ 
                             $kernel->post(
                                            $location,
