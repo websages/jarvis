@@ -69,6 +69,7 @@ sub new {
                           'irc_353',
                           'irc_invite',
                           'say_public',
+                          'irc_error',
                         ];
     #$self->{'states'} = { 
     #                      start                => 'start',
@@ -393,5 +394,11 @@ sub irc_invite{
     return;
 }
 
+sub irc_error{
+    my ($self, $kernel, $heap, $sender, @args)=@_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    print STDERR "irc_error:\n";
+    print STDERR Data::Dumper->Dump([@args]);
+    return;
+}
 
 1;
