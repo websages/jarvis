@@ -146,6 +146,7 @@ sub ircJoin {
         james
         kevin
         scott
+        stahnma
         teyo
     );
 
@@ -267,6 +268,11 @@ sub ircHandleMsg {
         /^fortune$/ and do {
             $r = qx( /usr/local/bin/fortune -s );
             next;
+        };
+
+        /^fuck$/i and do { 
+           $r = "Things going well for you, $1? ";
+           next;
         };
 
         /^^!shoutout/ and do {
