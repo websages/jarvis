@@ -212,7 +212,12 @@ sub input{
                                                                      }
                                                                  }
                                                              }
-                                                             $ replies = [ $beers->[int(rand( $#{$beers} )+1)]->text() ];
+                                                             my $choice=undef;
+                                                             my $counter=0;
+                                                             while( (!defined($choice)) && ($counter++ < 3)){
+                                                                 $choice=$beers->[int(rand( $#{$beers} )+1)]; 
+                                                             }
+                                                             $replies = [ $choice->text() ];
                                                              last;
                                                            }
                                               };
