@@ -218,6 +218,7 @@ sub input{
                                                                  $choice=$beers->[int(rand( $#{$beers} )+1)]; 
                                                              }
                                                              $replies = [ $choice->text() ];
+                                                             $pirate=0;
                                                              last;
                                                            }
                                               };
