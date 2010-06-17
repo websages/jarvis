@@ -217,9 +217,11 @@ sub input{
                                                              while( (!defined($choice)) && ($counter++ < 3)){
                                                                  $choice=$beers->[int(rand( $#{$beers} )+1)]; 
                                                              }
-                                                             $replies = [ $choice->text() ];
-                                                             $pirate=0;
-                                                             last;
+                                                             if(defined($choice)){
+                                                                 $replies = [ $choice->text() ];
+                                                                 $pirate=0;
+                                                                 last;
+                                                               }
                                                            }
                                               };
             /badger/                    && do { 
