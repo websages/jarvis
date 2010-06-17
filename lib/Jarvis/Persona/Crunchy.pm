@@ -29,6 +29,7 @@ sub may {
              'retry'           => undef,
              'dbi_connect'     => 'dbi:mysql:tumble:172.16.0.2',
              'dbi_user'        => 'nobody',
+             'start_twitter_enabled' => 0,
              'dbi_password'    => undef,
            };
 }
@@ -91,7 +92,7 @@ sub persona_start{
     $self->{'twitter'}->yield('register');
     $kernel->delay('delay_friend_timeline', 5);
     $kernel->delay('check_flickr', 300);
-    $kernel->delay('enable_twitter', 20);
+    $kernel->delay('enable_twitter', 20) if($self->{'start_twitter_enabled'} == 1);
     return $self;
 }
 
@@ -188,7 +189,7 @@ sub input{
                                                 $kernel->post($sender, 'authen', $msg);
                                                 last;
                                               };
-            /"the way to global business excellence"/i
+            /global business excellence/i
                                         && do { $replies = [ "Unison!" ]; last; };
             /unison/i                   && do { $replies = [ "The Way To Global Business Excellence!" ]; last; };
             /beer/i                     && do { 
