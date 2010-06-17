@@ -191,8 +191,30 @@ sub input{
             /"the way to global business excellence"/i
                                         && do { $replies = [ "Unison!" ]; last; };
             /unison/i                   && do { $replies = [ "The Way To Global Business Excellence!" ]; last; };
-            /beer/i                     && do { $replies = [ "mmmmmmmm beer." ] if($direct); last if($direct); };
-
+            /beer/i                     && do { 
+                                                if($direct){ 
+                                                             use WWW::Mechanize;
+                                                             my $url='http://www.servingbeers.com/alcohol/'.['a'.. 'z']->[int(rand(26)+1)].'.html';
+                                                             my ($beers, $pages);
+                                                             my $mech = WWW::Mechanize->new();
+                                                             $mech->get( $url );
+                                                             foreach my $link ( $mech->links() ){
+                                                                 if($link->url()=~m/\/alcohol\/[0-9]+\//){
+                                                                     push(@{ $beers }, $link);
+                                                                 }
+                                                                 if($link->url()=~m/\/alcohol\/[a-z]_[0-9]+.html/){
+                                                                     $mech->get( $link->url() ) unless $link->text() eq "Next";
+                                                                     foreach my $link ( $mech->links() ){
+                                                                         if($link->url()=~m/\/alcohol\/[0-9]+\//){
+                                                                             push(@{ $beers }, $link);
+                                                                         }
+                                                                     }
+                                                                 }
+                                                             }
+                                                             $ replies = [ $beers->[int(rand( $#{$beers} )+1)]->text() ];
+                                                             last;
+                                                           }
+                                              };
             /badger/                    && do { 
                                                 my $list = [ 
                                                              "badger badger badger",
