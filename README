@@ -1,4 +1,3 @@
-
 #!/bin/bash
 if [ ! -d /var/log/irc ];then mkdir -p /var/log/irc; fi
 installing jarvis: (on lenny)
