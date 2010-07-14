@@ -495,6 +495,7 @@ sub link{
     my $nick=shift if @_;
     return undef unless $url;
     return undef unless $nick;
+    return undef if $url =~ m#^https://gist.github.com#i;
     my $agent = LWP::UserAgent->new();
     $agent->agent( 'Mozilla/5.0' );
     $url =~ s/\&/\%26/g;
