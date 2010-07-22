@@ -49,10 +49,6 @@ Net::HTTP::Proxy(proxy_host, proxy_port).start('www.google.com') do |http|
   xml_data = http.get("/ig/api?stock=#{symb}")
 end
 
-require 'hpricot'
-
-
-
 doc = Document.new xml_data.body
 company= XPath.first(doc, "//company/attribute::data")
 curr_price = XPath.first(doc, "//last/attribute::data").to_s
