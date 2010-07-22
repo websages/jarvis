@@ -155,6 +155,7 @@ sub input{
                                               };
             /^!flickr*/                 && do { $kernel->post($self->alias(), 'check_flickr'); last; };
             /^!weather\s+(.+?)$/        && do { $replies = [ qx( ruby /usr/local/bin/weather.rb $1 )]; last; };
+            /^!stock\s+(.+?)$/        && do { $replies = [ qx( ruby /usr/local/bin/stock.rb $1 )]; last; };
             /^!insult\s+(.+?)$/         && do { $replies = [ qx( ruby /usr/local/bin/insult.rb $1 ) ]; last; };
             /^!tell\s+(.+?):*\s+(.+?)$/ && do {
                                                 my ($recipient,$message)=($1,$2);
@@ -816,6 +817,10 @@ sub help {
                   'weather'   => [
                                    "description: Weather report",
                                    "syntax/use : !weather <zip/city/whatevah>.",
+                                 ],
+                  'stock'   => [
+                                   "description: Stock update",
+                                   "syntax/use : !stock <symbol>.",
                                  ],
                   'insult'    => [
                                    "description: Insult someone",
