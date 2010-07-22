@@ -174,7 +174,7 @@ sub ircHandleMsg {
             $_ =~ s/^\s+//;
 
             /^help$/ && do {
-                $r = "Available help topics: fortune soggies image insult quote link shoutout standings weather tell tumble";
+                $r = "Available help topics: fortune soggies image insult quote link shoutout standings weather tell tumble stock";
                 next;
             };
 
@@ -217,6 +217,11 @@ sub ircHandleMsg {
 		    /weather/ && do {
 		        $r  = "description: Weather report\n";
 			$r .= "syntax/use : !weather <zip/city/whatevah>.";
+		    };
+
+		    /stock/ && do {
+		        $r  = "description: Stock update\n";
+			$r .= "syntax/use : !stock <symbol>.";
 		    };
 
 		    /insult/ && do {
