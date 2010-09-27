@@ -281,14 +281,17 @@ sub check_flickr{
                                push (@dbi,$self->{'dbi_user'}) if(defined($self->{'dbi_user'}));
                                push (@dbi,$self->{'dbi_password'}) if(defined($self->{'dbi_password'}));
                                my $content = get( 'http://www.flickr.com/services/feeds/photos_public.gne?id=30378931@N00&format=rss_200');
-                               XML::Twig->new(
-                                               twig_handlers => {
-                                                                  item => sub {
-                                                                                my $a = ''; # just to clear undefined value errors.
-                                                                                $map->{ $_->field( 'link' ) }->{$a} = $_->field( $a );
-                                                                              }
-                                                                }
-                                             )->parse( $content );
+                               eval{
+                                     XML::Twig->new(
+                                                     twig_handlers => {
+                                                                        item => sub {
+                                                                                      my $a = ''; # just to clear undefined value errors.
+                                                                                      $map->{ $_->field( 'link' ) }->{$a} = $_->field( $a );
+                                                                                    }
+                                                                      }
+                                                   )->parse( $content );
+                               }
+                               warn $@ if $@;
                                my $dbh = DBI->connect( @dbi) || print STDERR "$DBI::errstr\n";
                                my $parser = HTML::Parser->new(
                                    api_version => 3,
