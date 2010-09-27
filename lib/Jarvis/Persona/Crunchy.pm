@@ -290,7 +290,7 @@ sub check_flickr{
                                                                                     }
                                                                       }
                                                    )->parse( $content );
-                               }
+                               };
                                warn $@ if $@;
                                my $dbh = DBI->connect( @dbi) || print STDERR "$DBI::errstr\n";
                                my $parser = HTML::Parser->new(
