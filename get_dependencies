@@ -7,5 +7,5 @@ apt-get install -y libpoe-perl libappconfig-perl liblog-dispatch-config-perl   \
                    libjson-perl libircbot-chatbot-pirate                       \
                    libpoe-component-client-twitter-perl libmailtools-perl      \
                    libio-socket-ssl-perl libnet-ssleay-perl                    \
-                   libcrypt-ssleay-perl 
+                   libcrypt-ssleay-perl libyaml-perl 
 

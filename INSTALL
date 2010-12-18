@@ -1,0 +1,40 @@
+#!/bin/bash
+if [ ! -d /var/cache/git ];then mkdir -p /var/cache/git; fi
+(cd /var/cache/git ; git clone gitosis@freyr.websages.com:jarvis.git)
+(cd /var/cache/git/jarvis; ./get_dependencies)
+install -m 0755 /var/cache/git/jarvis/bin/init-script /etc/init.d/jarvis
+cat<<EOF> /etc/default/jarvis
+# this is a bourne shell fragment.
+
+RUN_AS='opt'
+SECRET="\$(/usr/local/sbin/secret)"
+
+LDAP_DOMAIN="\$(dnsdomainname)"
+LDAP_BASEDN="dc=\$(echo \${LDAP_DOMAIN}|sed -e 's/\./,dc=/g')"
+LDAP_BINDDN="cn=\$(hostname -s),ou=Hosts,\${LDAP_BASEDN}"
+LDAP_PASSWD="\${SECRET}"
+LDAP_PASSWORD="\${LDAP_PASSWD}"
+
+XMPP_USERNAME="\$(hostname -s)@\$(dnsdomainname)"
+XMPP_PASSWORD="\${SECRET}"
+
+TWITTER_USERNAME=capncrunchbot
+TWITTER_PASSWORD=z0mgTw1tt3r\!
+
+GIT_ENABLED=1
+GIT_SOURCE='gitosis@\$(hostname -f):jarvis.git'
+GIT_ROOT='/var/cache/git'
+GIT_REPO="\${GIT_ROOT}/jarvis"
+
+LOG_FILE="/var/log/jarvis.log"
+
+export LDAP_DOMAIN LDAP_BASEDN LDAP_BINDDN LDAP_PASSWD LDAP_PASSWORD \
+       XMPP_USERNAME XMPP_PASSWORD       \
+       TWITTER_USERNAME TWITTER_PASSWORD \
+       GIT_ENABLED GIT_ROOT GIT_REPO     \
+       SECRET
+
+EOF
+chmod 400 /etc/default/jarvis
+
+/etc/init.d/jarvis restart; tail -f /var/log/jarvis.log
