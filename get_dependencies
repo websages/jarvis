@@ -1,0 +1,11 @@
+#!/bin/bash
+apt-get install -y libpoe-perl libappconfig-perl liblog-dispatch-config-perl   \
+                   libpoe-component-irc-perl libpoe-component-client-ldap-perl \
+                   libpoe-wheel-null-perl libpoe-component-logger-perl         \
+                   libfilter-template-perl libpoe-component-jabber-perl        \
+                   libxml-twig-perl libparent-perl libai-megahal-perl          \
+                   libjson-perl libircbot-chatbot-pirate                       \
+                   libpoe-component-client-twitter-perl libmailtools-perl      \
+                   libio-socket-ssl-perl libnet-ssleay-perl                    \
+                   libcrypt-ssleay-perl 
+
