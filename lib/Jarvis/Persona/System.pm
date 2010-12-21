@@ -348,7 +348,7 @@ sub peer_check{
                          );
 
         }else{
-            print STDERR "$peer not found in $channel\n";
+            $kernel->post($sender,'say_public',$channel,"$peer: whereyouat?");
         }
     }
 }
