@@ -353,7 +353,7 @@ sub peer_check{
     }
 }
 
-sub peer_check{
+sub peer_no_reply{
     my ($self, $kernel, $heap, $sender, $channel, $member) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0, ARG1];
     $kernel->post($sender,'say_public',$channel,"$member: whereyouat?");
 }
