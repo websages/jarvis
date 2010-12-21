@@ -848,7 +848,7 @@ sub help {
     }elsif($line=~m/^!*help\s+(.*)\s*/){
         my $subtopic = $1;
         if(defined($help->{$subtopic})){
-            return $help->{$subtopic};
+            return [ $help->{$subtopic} ];
         }else{
             return [ "I don't believe I can help you with that." ];
         }
