@@ -128,7 +128,7 @@ sub input{
         my $replies=[];
         my $pirate=1;
         for ( $what ) {
-            /^\s*!*help\s*/             && do { $replies = $self->help($what); last; };
+            /^\s*!*help\s+/             && do { $replies = $self->help($what); last; };
             /\"(.+?)\"\s+--\s*(.+?)$/   && do { $replies = [ $self->quote($what) ]; last; };
             /(https*:\S+)/              && do { $replies = [ $self->link($1, $who) ]; last; };
             /^\s*[Ff]ortune\s*$/           && do { $replies = [ $self->fortune() ]; last; };
