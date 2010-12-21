@@ -182,6 +182,7 @@ sub persona_states{
     my $self = $_[OBJECT]||shift;
     return { 
              'peer_check'            => 'peer_check',
+             'peer_no_reply'         => 'peer_no_reply',
            };
 }
 
@@ -340,7 +341,7 @@ sub peer_check{
                              'expire_event' => [                            # the action to take on return event expire
                                                  $sender->ID, 
                                                  'peer_no_reply',
-                                                 $peer,
+                                                 $channel, $peer,
                                                ],
                              'expire'       => time() + 10,                 # when the return event expires
                            }
@@ -350,6 +351,11 @@ sub peer_check{
             print STDERR "$peer not found in $channel\n";
         }
     }
+}
+
+sub peer_check{
+    my ($self, $kernel, $heap, $sender, $channel, $member) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0, ARG1];
+    $kernel->post($sender,'say_public',$channel,"$member: whereyouat?");
 }
 
 # As long as the yaml lines up with itself, 
