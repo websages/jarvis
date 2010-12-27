@@ -232,6 +232,7 @@ sub is_invite{
                     print STDERR $cnode->{'x'}->to_str()."\n";
                 }else{
                     print STDERR "goddamnit: ".ref($cnode->{'x'})."\n";
+                    print STDERR Data::Dumper->Dump([ $cnode->{'x'}]);
                 }
             }else{
                 print STDERR ref($cnode->{'x'})."\n";
