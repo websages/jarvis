@@ -283,6 +283,7 @@ sub input_event() {
         }
     }elsif($self->node_named($node,'invite')){
         print STDERR "joining: ". $self->invite_channel($node)."\n";
+        print Data::Dumper->Dump([$self]);
         $kernel->post($self->alias(),'join_channel', $self->invite_channel($node)."/vili" );
 
     }else{
