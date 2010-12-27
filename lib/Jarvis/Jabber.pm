@@ -225,8 +225,9 @@ sub is_invite{
         print STDERR $node->to_str()."\n\n";
         my $child_nodes = $node->get_children_hash();
         #print STDERR Data::Dumper->Dump([ keys(%{ $child_nodes }) ]);
-        print STDERR Data::Dumper->Dump([ $child_nodes ]);
-        print STDERR Data::Dumper->Dump([ $child_nodes->{'x'} ]);
+        #print STDERR Data::Dumper->Dump([ $child_nodes ]);
+        print STDERR ref($child_nodes->{'x'}."\n");
+        #print STDERR Data::Dumper->Dump([ $child_nodes->{'x'} ]);
         if(defined($child_nodes->{'x'}) && (ref($child_nodes->{'x'}) eq 'POE::Filter::XML::Node')){
             print STDERR Data::Dumper->Dump([ $child_nodes->{'x'} ]);
         #    my $child_child_nodes = $child_nodes->{'x'}->get_children_hash();
@@ -234,8 +235,6 @@ sub is_invite{
         #    return 1;
         #}else{
         #    print Data::Dumper->Dump([ keys(%{$child_nodes} )]);
-        }else{
-             print STDERR ref($child_nodes->{'x'}."\n");
         }
     }
     return undef;
