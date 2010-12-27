@@ -385,7 +385,7 @@ sub irc_353{
 sub irc_invite{
     # irc_names
     my ($self, $kernel, $heap, $sender, @args)=@_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-    print STDERR Data::Dumper->Dump([@args]);
+    $self->{'irc_client'}->yield( join => $args[1] );
     return;
 }
 
