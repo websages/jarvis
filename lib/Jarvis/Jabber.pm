@@ -223,9 +223,9 @@ sub is_invite{
     my $node=shift if(@_);
     if($node->name() eq 'message'){
         my $child_nodes = $node->get_children_hash();
+        print Data::Dumper->Dump([$child_nodes]);
         if(defined($child_nodes->{'x'}) && (ref($child_nodes->{'x'}) eq 'POE::Filter::XML::Node')){
-            my $child_child_nodes = $child_nodes->{'x'}->get_children_hash();
-            print Data::Dumper->Dump([$child_child_nodes]);
+            return 1;
         }
 
     }
