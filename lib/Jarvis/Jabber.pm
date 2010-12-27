@@ -225,13 +225,11 @@ sub is_invite{
         my $child_nodes = $node->get_children();
         if(ref($child_nodes) ne "ARRAY"){ $child_nodes = [ $child_nodes ]; } # forcearray
         foreach my $cnode( @{ $child_nodes } ){
-            print ref($cnode)."\n";
             print STDERR Data::Dumper->Dump([ $cnode->name() ])."\n";
             return $self->is_invite($cnode) if $self->is_invite($cnode);
         }
     }else{
-        print STDERR "invite found.\n";
-        return 1;
+        return $node;
     }
     return undef;
 }
@@ -278,7 +276,7 @@ sub input_event() {
             }
         }
     }elsif($self->is_invite($node)){
-        print STDERR "I should join ".$self->invite_channel($node)."\n";
+        print STDERR "I should join ".Data::Dumper->Dump([ $self->is_invite($node) ])."\n";
     }else{
         print STDERR "Unhandled Node: node->name(" .$node->name().")\n";
     }
