@@ -279,7 +279,7 @@ sub input_event() {
             }
         }
     }elsif($self->node_named($node,'invite')){
-        print STDERR "I should join ". $self->invite_channel($node) ])."\n";
+        print STDERR "I should join ". $self->invite_channel($node)."\n";
     }else{
         print STDERR "Unhandled Node: node->name(" .$node->name().")\n";
     }
