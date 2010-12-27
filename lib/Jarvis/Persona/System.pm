@@ -247,14 +247,25 @@ sub input{
             #                                 # for each persona that has operator status
             #                                 #     join the room as the system persona
             #                                 #     have that persona op the system persona
-            #                                 #     terminate the persona
+            #                                 #     terminate the persona (switch to another nick w/ops)
             #                                 #     tell peer to spawn persona in control channel
             #                                 #     when persona shows up, give it operator status
             #                                 # quit the channel
             #                                 # reload
             #                               };
             /i don't understand/     && do { last; }; # bot storm!
-            /^join\s+(.*)/           && do { $replies = [ "i need to join $1"     ] if($direct); last; };
+            /^join\s+(.*)/           && do { 
+                                             $replies = [ "i need to join $1"     ] if($direct); last; 
+                                             $kernel->post(
+                                                            $self->{'alias'},
+                                                            'channel_add',
+                                                            { 
+                                                              alias => $sender->ID,
+                                                              channel => $1,
+                                                              nick => $chan_nick
+                                                            },
+                                                          ) if($direct);
+                                           };
             /.*/                     && do { $replies = [ "i don't understand"    ] if($direct); last; };
             /.*/                     && do { last; }
         }
