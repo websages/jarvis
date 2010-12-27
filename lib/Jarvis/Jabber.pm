@@ -231,6 +231,8 @@ sub is_invite{
                 if(defined($child_nodes->{'x'}) && (ref($child_nodes->{'x'}) eq 'POE::Filter::XML::Node')){
                     print STDERR $child_nodes->{'x'}-to_str()."\n";
                 }
+            }else{
+                print STDERR "fuck: ".ref($child_nodes)."\n";
             }
         }
     }
