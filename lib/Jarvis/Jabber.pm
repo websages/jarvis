@@ -283,7 +283,7 @@ sub input_event() {
         }
     }elsif($self->node_named($node,'invite')){
         print STDERR "joining: ". $self->invite_channel($node)."\n";
-        $kernel->post($self->alias(),'join_channel', $self->invite_channel($node) );
+        $kernel->post($self->alias(),'join_channel', $self->invite_channel($node)."/vili" );
 
     }else{
         print STDERR "Unhandled Node: node->name(" .$node->name().")\n";
