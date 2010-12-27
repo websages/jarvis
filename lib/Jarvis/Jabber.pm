@@ -228,7 +228,6 @@ sub node_named{
         my $child_nodes = $node->get_children();
         if(ref($child_nodes) ne "ARRAY"){ $child_nodes = [ $child_nodes ]; } # forcearray
         foreach my $cnode( @{ $child_nodes } ){
-            print STDERR Data::Dumper->Dump([ $cnode->name() ])."\n";
             return $self->node_named($cnode,$search) if $self->node_named($cnode,$search);
         }
     }else{
@@ -286,7 +285,7 @@ sub input_event() {
         $kernel->post($self->alias(),'join_channel', $self->invite_channel($node)."/".$self->{'username'} );
 
     }else{
-        print STDERR "Unhandled Node: node->name(" .$node->name().")\n";
+        print STDERR "Unhandled Node: node->name(" .$node->name().")\n" if $self->{'DEBUG'} > 2;
     }
 
     # figure out to where to reply...

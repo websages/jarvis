@@ -391,8 +391,6 @@ sub irc_invite{
 
 sub invite{
     my ($self, $kernel, $heap, $sender, @args)=@_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-    print STDERR "invite:\n";
-    print STDERR Data::Dumper->Dump([@args]);
     $self->{'irc_client'}->yield( invite => @args );
     return;
 }
