@@ -221,24 +221,16 @@ sub pretty_xml{
 sub is_invite{
     my $self=shift;
     my $node=shift if(@_);
-    if($node->name() eq 'message'){
-        print STDERR $node->to_str()."\n\n";
-        my $child_nodes = $node->get_children_hash();
-        if(ref($child_nodes) -ne "ARRAY"){
-            $child_nodes = [ $child_nodes ];
-        }
-        foreach my $cnode( @{ $child_nodes } ){
-            print STDERR ref($cnode)."\n";
-        }
-#        if(defined($child_nodes->{'x'}) && (ref($child_nodes->{'x'}) eq 'POE::Filter::XML::Node')){
-#            print STDERR Data::Dumper->Dump([ $child_nodes->{'x'} ]);
-        #    my $child_child_nodes = $child_nodes->{'x'}->get_children_hash();
-        #    print Data::Dumper->Dump([ keys(%{$child_child_nodes} )]);
-        #    return 1;
-        #}else{
-        #    print Data::Dumper->Dump([ keys(%{$child_nodes} )]);
+#    if($node->name() eq 'message'){
+#        print STDERR $node->to_str()."\n\n";
+#        my $child_nodes = $node->get_children_hash();
+#        if(ref($child_nodes) -ne "ARRAY"){
+#            $child_nodes = [ $child_nodes ];
 #        }
-    }
+#        foreach my $cnode( @{ $child_nodes } ){
+#            print STDERR ref($cnode)."\n";
+#        }
+#    }
     return undef;
 }
 
