@@ -227,8 +227,10 @@ sub is_invite{
             $child_nodes = [ $child_nodes ];
         }
         foreach my $cnode( @{ $child_nodes } ){
-            if(defined($child_nodes->{'x'}) && (ref($child_nodes->{'x'}) eq 'POE::Filter::XML::Node')){
-                print STDERR $child_nodes->{'x'}-to_str()."\n";
+            if(ref($child_nodes) eq "HASH"){
+                if(defined($child_nodes->{'x'}) && (ref($child_nodes->{'x'}) eq 'POE::Filter::XML::Node')){
+                    print STDERR $child_nodes->{'x'}-to_str()."\n";
+                }
             }
         }
     }
