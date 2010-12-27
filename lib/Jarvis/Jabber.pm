@@ -255,7 +255,7 @@ sub input_event() {
             }
         }
     }elsif($node->name() eq 'message'){
-        print STDERR ">>  ".$node->to_str()."\n\n";
+        print STDERR Data::Dumper->Dump([ $node->attr() ])."\n";
     }else{
         print STDERR "-=[ node->name: " .$node->name()."]=-\n";
     }
