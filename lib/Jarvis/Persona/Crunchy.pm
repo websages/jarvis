@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use parent 'Jarvis::Persona::Base';
 use IRCBot::Chatbot::Pirate;
-use POE::Component::Client::Twitter;
+#use POE::Component::Client::Twitter;
 use POE;
 use POSIX qw( setsid );
 use Net::LDAP;
@@ -23,13 +23,13 @@ sub may {
              'ldap_domain'     => undef,
              'ldap_binddn'     => undef,
              'ldap_bindpw'     => undef,
-             'twitter_name'    => undef,
+#             'twitter_name'    => undef,
              'username'        => undef,
              'password'        => undef,
              'retry'           => undef,
              'dbi_connect'     => 'dbi:mysql:tumble:172.16.0.2',
              'dbi_user'        => 'nobody',
-             'start_twitter_enabled' => 0,
+#             'start_twitter_enabled' => 0,
              'dbi_password'    => undef,
            };
 }
@@ -39,13 +39,13 @@ sub persona_states{
     return {
              'authen_reply'                    => 'authen_reply',
              'channel_join'                    => 'channel_join',
-             'enable_twitter'                  => 'enable_twitter',
-             'disable_twitter'                 => 'disable_twitter',
-             'new_tweet'                       => 'new_tweet',
-             'twitter_update_success'          => 'twitter_update_success',
-             'delay_friend_timeline'           => 'delay_friend_timeline',
-             'twitter.friend_timeline_success' => 'twitter_timeline_success',
-             'twitter.response_error'          => 'twitter_error',
+#             'enable_twitter'                  => 'enable_twitter',
+#             'disable_twitter'                 => 'disable_twitter',
+#             'new_tweet'                       => 'new_tweet',
+#             'twitter_update_success'          => 'twitter_update_success',
+#             'delay_friend_timeline'           => 'delay_friend_timeline',
+#             'twitter.friend_timeline_success' => 'twitter_timeline_success',
+#             'twitter.response_error'          => 'twitter_error',
              'check_flickr'                    => 'check_flickr',
            };
 }
@@ -80,19 +80,19 @@ sub persona_start{
     if($self->{'ldap_enabled'} == 1){
         print STDERR "[ ".$self->error()." ]" if $self->{'ERROR'};
     }
-    $self->{'cfg'} = { 
-                       'screenname' => $self->{'twitter_name'},
-                       'username'   => $self->{'twitter_name'},
-                       'password'   => $self->{'password'},
-                       'retry'      => $self->{'retry'},
-                      };
+#    $self->{'cfg'} = { 
+#                       'screenname' => $self->{'twitter_name'},
+#                       'username'   => $self->{'twitter_name'},
+#                       'password'   => $self->{'password'},
+#                       'retry'      => $self->{'retry'},
+#                      };
 
-    $heap->{'twitter_enabled'}=0;
-    $self->{'twitter'} = POE::Component::Client::Twitter->spawn(%{ $self->{'cfg'} });
-    $self->{'twitter'}->yield('register');
-    $kernel->delay('delay_friend_timeline', 5);
+#    $heap->{'twitter_enabled'}=0;
+#    $self->{'twitter'} = POE::Component::Client::Twitter->spawn(%{ $self->{'cfg'} });
+#    $self->{'twitter'}->yield('register');
+#    $kernel->delay('delay_friend_timeline', 5);
+#    $kernel->delay('enable_twitter', 20) if($self->{'start_twitter_enabled'} == 1);
     $kernel->delay('check_flickr', 300);
-    $kernel->delay('enable_twitter', 20) if($self->{'start_twitter_enabled'} == 1);
     return $self;
 }
 
@@ -143,16 +143,16 @@ sub input{
                                                 $kernel->post($sender, 'authen', $msg);
                                                 last;
                                               };
-            /^!enable\s+twitter.*/      && do {
-                                                $kernel->post($self->alias(), 'enable_twitter',$who);
-                                                $replies = [ "enabled" ]; 
-                                                last;
-                                              };
-            /^!disable\s+twitter.*/      && do {
-                                                $kernel->post($self->alias(), 'disable_twitter',$who);
-                                                $replies = [ "disabled" ]; 
-                                                last;
-                                              };
+#            /^!enable\s+twitter.*/      && do {
+#                                                $kernel->post($self->alias(), 'enable_twitter',$who);
+#                                                $replies = [ "enabled" ]; 
+#                                                last;
+#                                              };
+#            /^!disable\s+twitter.*/      && do {
+#                                                $kernel->post($self->alias(), 'disable_twitter',$who);
+#                                                $replies = [ "disabled" ]; 
+#                                                last;
+#                                              };
             /^!flickr*/                 && do { $kernel->post($self->alias(), 'check_flickr'); last; };
             /^!weather\s+(.+?)$/        && do { $replies = [ qx( ruby /usr/local/bin/weather.rb $1 )]; last; };
             /^!stock\s+(.+?)$/        && do { $replies = [ qx( ruby /usr/local/bin/stock.rb $1 )]; last; };
@@ -167,13 +167,13 @@ sub input{
                                                 $kernel->post($sender,'authen',$msg);
                                               };
             /^!standings\s*(.*)/        && do { @{ $replies } = $self->standings(); $pirate=0; last; };
-            /^!*follow\s+\@(.\S+)/      && do { $replies =  [ $self->twitter_follow($1,1) ]; last; };
-            /^!*unfollow\s+\@(.\S+)/    && do { $replies =  [ $self->twitter_follow($1,0) ]; last; };
-            /^!*tweet\s+(.*)/           && do {
-                                                $kernel->post($self->alias(),'new_tweet',$1); 
-                                                $replies=[ "tweeterfish'd." ];
-                                                last; 
-                                              };
+#            /^!*follow\s+\@(.\S+)/      && do { $replies =  [ $self->twitter_follow($1,1) ]; last; };
+#            /^!*unfollow\s+\@(.\S+)/    && do { $replies =  [ $self->twitter_follow($1,0) ]; last; };
+#            /^!*tweet\s+(.*)/           && do {
+#                                                $kernel->post($self->alias(),'new_tweet',$1); 
+#                                                $replies=[ "tweeterfish'd." ];
+#                                                last; 
+#                                              };
             /^!*\s*who\s*am\s*i[?\s]*/  && do {
                                                 $pirate=0;
                                                 $msg->{'reason'}='whoami';
@@ -837,11 +837,11 @@ sub help {
                                    "description: Our tumblelog",
                                    "syntax/use : http://tumble.wcyd.org/",
                                  ],
-                  'twitter'   => [
-                                   "description: enable/disable twitter",
-                                   "enable : !en}able twitter",
-                                   "disable: !disable twitter",
-                                 ],
+#                  'twitter'   => [
+#                                   "description: enable/disable twitter",
+#                                   "enable : !en}able twitter",
+#                                   "disable: !disable twitter",
+#                                 ],
                };
     if($line=~m/^!*help\s*$/){
         return [ 'Available help topics: '. join(' ',(keys(%{ $help }))) ];
@@ -862,90 +862,90 @@ sub help {
 ################################################################################
 # Begin Twitter events
 ################################################################################
-sub delay_friend_timeline {
-    my($self, $kernel, $heap) = @_[OBJECT, KERNEL, HEAP];
-    $heap->{ $self->alias() }->{'twitter'}->yield('friend_timeline');
-}
+#sub delay_friend_timeline {
+#    my($self, $kernel, $heap) = @_[OBJECT, KERNEL, HEAP];
+#    $heap->{ $self->alias() }->{'twitter'}->yield('friend_timeline');
+#}
 
-sub new_tweet {
-    my($self, $kernel, $heap, $status) = @_[OBJECT, KERNEL, HEAP, ARG0];
-    $self->{'twitter'}->yield( 'update', $status );
-    return;
-}
+#sub new_tweet {
+#    my($self, $kernel, $heap, $status) = @_[OBJECT, KERNEL, HEAP, ARG0];
+#    $self->{'twitter'}->yield( 'update', $status );
+#    return;
+#}
 
-sub twitter_update_success {
-    my($self, $kernel, $heap, $ret) = @_[OBJECT, KERNEL, HEAP, ARG0];
-    #$heap->{ircd}->yield(daemon_cmd_notice => $conf->{botname}, $conf->{channel}, $ret->{text});
-}
+#sub twitter_update_success {
+#    my($self, $kernel, $heap, $ret) = @_[OBJECT, KERNEL, HEAP, ARG0];
+#    #$heap->{ircd}->yield(daemon_cmd_notice => $conf->{botname}, $conf->{channel}, $ret->{text});
+#}
 
-sub twitter_timeline_success {
-    my($self, $kernel, $heap, $ret) = @_[OBJECT, KERNEL, HEAP, ARG0];
-    my $count=0;
-    foreach my $tweet (@{ $ret }){
-        my $text=$tweet->{'text'};
-        if($tweet->{'user'}->{'screen_name'} eq 'mediacas'){
-            $text=~s/^I used #*Shazam to discover\s+(.*)\s+by\s+(.*)\s+http:\/\/.*/$1 $2/;
-            $text=~s/^I used #*Shazam to discover\s+(.*)\s+by\s+(.*)\s+#shazam.*/$1 $2/;
-        }
-        if($heap->{'twitter_enabled'} == 1){
-            foreach my $location (keys(%{ $heap->{'locations'} })){
-                foreach my $channel (keys(%{ $heap->{'locations'}->{$location} })){
-                    $kernel->post(
-                                   $location,
-                                   'say_public',
-                                   $channel,
-                                   "[\@". $tweet->{'user'}->{'screen_name'}."]: ".$text
-                                 );
-                }
-            }
-            if($text=~m/\@capncrunchbot/){
-                my $nonick_text=$text;
-                $nonick_text=~s/\@capncrunchbot//g;
-                print STDERR "tweet reply to: $nonick_text\n";
-                $kernel->post(
-                               $self->alias(),
-                               'new_tweet',
-                               "\@".
-                                   $tweet->{'user'}->{'screen_name'}.
-                                   " ". 
-                                   piratespeak( $self->megahal( $nonick_text ) )
-                             ); 
-            }
-        }
-    }
-    $kernel->delay('delay_friend_timeline', $self->{'retry'});
-}
+#sub twitter_timeline_success {
+#    my($self, $kernel, $heap, $ret) = @_[OBJECT, KERNEL, HEAP, ARG0];
+#    my $count=0;
+#    foreach my $tweet (@{ $ret }){
+#        my $text=$tweet->{'text'};
+#        if($tweet->{'user'}->{'screen_name'} eq 'mediacas'){
+#            $text=~s/^I used #*Shazam to discover\s+(.*)\s+by\s+(.*)\s+http:\/\/.*/$1 $2/;
+#            $text=~s/^I used #*Shazam to discover\s+(.*)\s+by\s+(.*)\s+#shazam.*/$1 $2/;
+#        }
+#        if($heap->{'twitter_enabled'} == 1){
+#            foreach my $location (keys(%{ $heap->{'locations'} })){
+#                foreach my $channel (keys(%{ $heap->{'locations'}->{$location} })){
+#                    $kernel->post(
+#                                   $location,
+#                                   'say_public',
+#                                   $channel,
+#                                   "[\@". $tweet->{'user'}->{'screen_name'}."]: ".$text
+#                                 );
+#                }
+#            }
+#            if($text=~m/\@capncrunchbot/){
+#                my $nonick_text=$text;
+#                $nonick_text=~s/\@capncrunchbot//g;
+#                print STDERR "tweet reply to: $nonick_text\n";
+#                $kernel->post(
+#                               $self->alias(),
+#                               'new_tweet',
+#                               "\@".
+#                                   $tweet->{'user'}->{'screen_name'}.
+#                                   " ". 
+#                                   piratespeak( $self->megahal( $nonick_text ) )
+#                             ); 
+#            }
+#        }
+#    }
+#    $kernel->delay('delay_friend_timeline', $self->{'retry'});
+#}
 
-sub twitter_error {
-    my($self, $kernel, $heap, $res) = @_[OBJECT, KERNEL, HEAP, ARG0];
-    print STDERR "twitter_error\n". Data::Dumper->Dump([$res->{'_rc'}, $res->{'_content'}]) ."\n";
-    #$heap->{ircd}->yield(daemon_cmd_notice => $conf->{botname}, $conf->{channel}, 'Twitter error');
-}
+#sub twitter_error {
+#    my($self, $kernel, $heap, $res) = @_[OBJECT, KERNEL, HEAP, ARG0];
+#    print STDERR "twitter_error\n". Data::Dumper->Dump([$res->{'_rc'}, $res->{'_content'}]) ."\n";
+#    #$heap->{ircd}->yield(daemon_cmd_notice => $conf->{botname}, $conf->{channel}, 'Twitter error');
+#}
 
-sub enable_twitter {
-    my($self, $kernel, $heap, $res) = @_[OBJECT, KERNEL, HEAP, ARG0];
-    $heap->{'twitter_enabled'} = 1;
-}
+#sub enable_twitter {
+#    my($self, $kernel, $heap, $res) = @_[OBJECT, KERNEL, HEAP, ARG0];
+#    $heap->{'twitter_enabled'} = 1;
+#}
 
-sub disable_twitter {
-    my($self, $kernel, $heap, $who) = @_[OBJECT, KERNEL, HEAP, ARG0];
-    $heap->{'twitter_enabled'} = 0;
-}
+#sub disable_twitter {
+#    my($self, $kernel, $heap, $who) = @_[OBJECT, KERNEL, HEAP, ARG0];
+#    $heap->{'twitter_enabled'} = 0;
+#}
 
-sub twitter_follow {
-    my $self = shift;
-    my $tweeter = shift if @_;
-    my $follow = shift if @_;
-    return undef unless defined($tweeter);
-    return undef unless defined($follow);
-    if($follow == 1){
-        $self->{'twitter'}->yield( 'follow', $tweeter );
-        return "following \@$tweeter\n";
-    }else{
-        $self->{'twitter'}->yield( 'unfollow', $tweeter );
-        return "unfollowing \@$tweeter\n";
-    }
-}
+#sub twitter_follow {
+#    my $self = shift;
+#    my $tweeter = shift if @_;
+#    my $follow = shift if @_;
+#    return undef unless defined($tweeter);
+#    return undef unless defined($follow);
+#    if($follow == 1){
+#        $self->{'twitter'}->yield( 'follow', $tweeter );
+#        return "following \@$tweeter\n";
+#    }else{
+#        $self->{'twitter'}->yield( 'unfollow', $tweeter );
+#        return "unfollowing \@$tweeter\n";
+#    }
+#}
 ################################################################################
 # End Twitter events
 ################################################################################
