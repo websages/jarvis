@@ -238,6 +238,8 @@ sub node_named{
 }
 
 sub invite_channel{
+    # the node we pass this needs to be the top-level node (POE::Filter::XML::Node) from the invite
+    # use a $self->node_named($node,'invite'); to see if the message node contains an invite node.
     my $self=shift;
     my $node=shift if @_;
     return $node->attr('from');
@@ -280,7 +282,9 @@ sub input_event() {
             }
         }
     }elsif($self->node_named($node,'invite')){
-        print STDERR "I should join ". $self->invite_channel($node)."\n";
+        print STDERR "joining: ". $self->invite_channel($node)."\n";
+        $kernel->post($self->alias(),'join_channel', $self->invite_channel($node) );
+
     }else{
         print STDERR "Unhandled Node: node->name(" .$node->name().")\n";
     }
