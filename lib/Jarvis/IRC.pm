@@ -71,6 +71,7 @@ sub new {
                           'say_public',
                           'irc_error',
                           'irc_quit',
+                          'invite',
                         ];
     #$self->{'states'} = { 
     #                      start                => 'start',
@@ -383,11 +384,19 @@ sub irc_353{
 
 # where the irc_server responds to our 'names' request
 sub irc_invite{
-    # irc_names
     my ($self, $kernel, $heap, $sender, @args)=@_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     $self->{'irc_client'}->yield( join => $args[1] );
     return;
 }
+
+sub invite{
+    my ($self, $kernel, $heap, $sender, @args)=@_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    print STDERR "invite:\n";
+    print STDERR Data::Dumper->Dump([@args]);
+    $self->{'irc_client'}->yield( invite => @args ] );
+    return;
+}
+
 
 sub irc_error{
     my ($self, $kernel, $heap, $sender, @args)=@_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
