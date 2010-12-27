@@ -224,10 +224,10 @@ sub is_invite{
     if($node->name() eq 'message'){
         my $child_nodes = $node->get_children_hash();
         if(defined($child_nodes->{''}) && (ref($child_nodes->{''}) eq 'POE::Filter::XML::Node')){
-            print Data::Dumper->Dump([$child_nodes]);
             return 1;
+        }else{
+            print Data::Dumper->Dump([ keys($child_nodes]) );
         }
-
     }
     return undef;
 }
@@ -276,7 +276,7 @@ sub input_event() {
     }elsif($self->is_invite($node)){
         print STDERR "I should join ".$self->invite_channel($node)."\n";
     }else{
-        print STDERR "-=[ node->name: " .$node->name()."]=-\n";
+        print STDERR "Unhandled Node: node->name(" .$node->name().")\n";
     }
 
     # figure out to where to reply...
