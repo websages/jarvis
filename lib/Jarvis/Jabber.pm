@@ -256,7 +256,9 @@ sub input_event() {
             }
         }
     }elsif($node->name() eq 'message'){
-        print STDERR "-=[ node->type: ".$node->type()."]=-\n";
+        if($node->attr('type') ){
+            print STDERR "-=[ node->type: ".$node->type()."]=-\n";
+        }
     }else{
         print STDERR "-=[ node->name: " .$node->name()."]=-\n";
     }
