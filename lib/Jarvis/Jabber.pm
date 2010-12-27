@@ -227,10 +227,9 @@ sub is_invite{
         if(ref($child_nodes) ne "ARRAY"){
             $child_nodes = [ $child_nodes ];
         }
-        return 1;
-#        foreach my $cnode( @{ $child_nodes } ){
-#            print STDERR ref($cnode)."\n";
-#        }
+        foreach my $cnode( @{ $child_nodes } ){
+            print STDERR ref($cnode)."\n";
+        }
     }
     return undef;
 }
