@@ -240,8 +240,7 @@ sub node_named{
 sub invite_channel{
     my $self=shift;
     my $node=shift if @_;
-    print Data::Dumper->Dump([$node]);
-    return "smeg\@conference.websages.com";
+    return $node->get_attr('from');
 }
 
 sub input_event() {
