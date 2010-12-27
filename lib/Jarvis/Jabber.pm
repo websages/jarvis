@@ -226,7 +226,7 @@ sub is_invite{
         if(defined($child_nodes->{''}) && (ref($child_nodes->{''}) eq 'POE::Filter::XML::Node')){
             return 1;
         }else{
-            print Data::Dumper->Dump([ keys(%{$child_nodes) }]);
+            print Data::Dumper->Dump([ keys(%{$child_nodes} )]);
         }
     }
     return undef;
