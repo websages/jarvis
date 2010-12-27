@@ -221,7 +221,6 @@ sub pretty_xml{
 sub input_event() {
     my ($self, $kernel, $heap, $node) = @_[OBJECT, KERNEL, HEAP, ARG0];
     print STDERR ">>  ".$node->to_str()."\n\n" if($self->{'DEBUG'} > 2);
-
     # allow everyone in websages to subscribe to our presence. /*FIXME move regex to constructor */
     if($node->name() eq 'presence'){
         if($node->attr('type') ){
@@ -256,9 +255,7 @@ sub input_event() {
             }
         }
     }elsif($node->name() eq 'message'){
-        if($node->attr('type') ){
-            print STDERR "-=[ node->type: ".$node->type()."]=-\n";
-        }
+        print STDERR ">>  ".$node->to_str()."\n\n";
     }else{
         print STDERR "-=[ node->name: " .$node->name()."]=-\n";
     }
