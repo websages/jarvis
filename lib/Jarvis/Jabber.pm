@@ -230,9 +230,11 @@ sub is_invite{
             if(ref($cnode) eq "HASH"){
                 if(defined($cnode->{'x'}) && (ref($cnode->{'x'}) eq 'POE::Filter::XML::Node')){
                     print STDERR $cnode->{'x'}->to_str()."\n";
+                }else{
+                    print STDERR "goddamnit: ".ref($cnode->{'x'})."\n";
                 }
             }else{
-                print STDERR ref($cnode)."\n";
+                print STDERR ref($cnode->{'x'})."\n";
             }
         }
     }
