@@ -228,10 +228,11 @@ sub is_invite{
             $child_nodes = [ $child_nodes ];
         }
         foreach my $cnode( @{ $child_nodes } ){
-            $self->is_invite($cnode);
+            return $self->is_invite($cnode) if $self->is_invite($cnode);
         }
     }else{
-        print STDERR "INVITE!";
+        print STDERR "invite found.\n";
+        return 1;
     }
     return undef;
 }
