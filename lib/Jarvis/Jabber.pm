@@ -218,6 +218,24 @@ sub pretty_xml{
     return $twig->sprint."\n";
 }
 
+sub is_invite{
+    my $self=shift;
+    my $node=shift if(@_);
+    if($node->name() eq 'message'){
+        if(defined($child_nodes->{'x'}) && (ref($child_nodes->{'x'}) eq 'POE::Filter::XML::Node')){
+            my $child_child_nodes = $child_nodes->{'x'}->get_children_hash();
+            print Data::Dumper->Dump([$child_child_nodes]);
+        }
+
+    }
+    return undef;
+}
+
+sub invite_channel{
+    my $self=shift;
+    return "smeg@conference.websages.com";
+}
+
 sub input_event() {
     my ($self, $kernel, $heap, $node) = @_[OBJECT, KERNEL, HEAP, ARG0];
     print STDERR ">>  ".$node->to_str()."\n\n" if($self->{'DEBUG'} > 2);
@@ -254,8 +272,8 @@ sub input_event() {
                 }
             }
         }
-    }elsif($node->name() eq 'message'){
-        print STDERR Data::Dumper->Dump([ $node->get_attrs(),$node->get_children_hash()])."\n";
+    }elsif($self->is_invite($node)){
+        print STDERR "I should join ".$self->invite_channel($node)."\n";
     }else{
         print STDERR "-=[ node->name: " .$node->name()."]=-\n";
     }
