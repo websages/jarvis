@@ -225,7 +225,7 @@ sub is_invite{
         print STDERR $node->to_str()."\n\n";
         my $child_nodes = $node->get_children_hash();
         if(ref($child_nodes) != "ARRAY"){
-            $child_nodes = [ $child_nodes ]:
+            $child_nodes = [ $child_nodes ];
         }
         foreach my $cnode( @{ $child_nodes } ){
             print STDERR ref($cnode)."\n";
