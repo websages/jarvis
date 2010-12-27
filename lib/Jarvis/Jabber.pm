@@ -224,7 +224,7 @@ sub is_invite{
     if($node->name() eq 'message'){
         print STDERR $node->to_str()."\n\n";
         my $child_nodes = $node->get_children_hash();
-        if(ref($child_nodes) -ne "ARRAY")){
+        if(ref($child_nodes) -ne "ARRAY"){
             $child_nodes = [ $child_nodes ];
         }
         foreach my $cnode( @{ $child_nodes } ){
