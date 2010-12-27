@@ -218,15 +218,18 @@ sub pretty_xml{
     return $twig->sprint."\n";
 }
 
-sub is_invite{
+sub node_named{
     my $self=shift;
     my $node=shift if(@_);
-    if( $node->name() ne "invite"){
+    my $search=shift if(@_);
+    return undef unless $node;
+    return undef unless $search;
+    if($node->name() ne $search){
         my $child_nodes = $node->get_children();
         if(ref($child_nodes) ne "ARRAY"){ $child_nodes = [ $child_nodes ]; } # forcearray
         foreach my $cnode( @{ $child_nodes } ){
             print STDERR Data::Dumper->Dump([ $cnode->name() ])."\n";
-            return $self->is_invite($cnode) if $self->is_invite($cnode);
+            return $self->node_named($cnode,$search) if $self->node_named($cnode,$search);
         }
     }else{
         return $node;
@@ -275,8 +278,8 @@ sub input_event() {
                 }
             }
         }
-    }elsif($self->is_invite($node)){
-        print STDERR "I should join ".Data::Dumper->Dump([ $self->is_invite($node) ])."\n";
+    }elsif($self->node_named($node,'invite')){
+        print STDERR "I should join ". $self->invite_channel($node) ])."\n";
     }else{
         print STDERR "Unhandled Node: node->name(" .$node->name().")\n";
     }
