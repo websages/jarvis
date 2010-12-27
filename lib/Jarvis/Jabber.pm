@@ -240,7 +240,7 @@ sub node_named{
 sub invite_channel{
     my $self=shift;
     my $node=shift if @_;
-    return $node->get_attr('from');
+    return $node->attr('from');
 }
 
 sub input_event() {
