@@ -361,7 +361,7 @@ sub peer_check{
                          );
 
         }else{
-            $kernel->post($sender,'say_public',$channel,"/invite $peer");
+            $kernel->post($sender,'invite',$peer,$channel);
         }
     }
 }
