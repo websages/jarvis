@@ -221,16 +221,17 @@ sub pretty_xml{
 sub is_invite{
     my $self=shift;
     my $node=shift if(@_);
-#    if($node->name() eq 'message'){
-#        print STDERR $node->to_str()."\n\n";
-#        my $child_nodes = $node->get_children_hash();
-#        if(ref($child_nodes) -ne "ARRAY"){
-#            $child_nodes = [ $child_nodes ];
-#        }
+    if($node->name() eq 'message'){
+        print STDERR $node->to_str()."\n\n";
+        my $child_nodes = $node->get_children_hash();
+        if(ref($child_nodes) -ne "ARRAY"){
+            $child_nodes = [ $child_nodes ];
+        }
+        return 1;
 #        foreach my $cnode( @{ $child_nodes } ){
 #            print STDERR ref($cnode)."\n";
 #        }
-#    }
+    }
     return undef;
 }
 
