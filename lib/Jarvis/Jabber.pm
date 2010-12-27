@@ -245,7 +245,6 @@ sub input_event() {
             # print STDERR $self->pretty_xml( $node->to_str() );
             # add to $heap->{'presence'} if we can see the jid
             # print STDERR "Arriving: ". $node->attr('from')."\n";
-
             my $child_nodes = $node->get_children_hash();
             if(defined($child_nodes->{'x'}) && (ref($child_nodes->{'x'}) eq 'POE::Filter::XML::Node')){
                 my $child_child_nodes = $child_nodes->{'x'}->get_children_hash();
@@ -257,6 +256,8 @@ sub input_event() {
                 }
             }
         }
+    }else{
+        print STDERR "-=[".$node->name()."]=-\n";
     }
 
     # figure out to where to reply...
