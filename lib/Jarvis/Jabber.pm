@@ -234,7 +234,7 @@ sub is_invite{
 
 sub invite_channel{
     my $self=shift;
-    return "smeg@conference.websages.com";
+    return "smeg\@conference.websages.com";
 }
 
 sub input_event() {
