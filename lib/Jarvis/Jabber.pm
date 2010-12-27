@@ -226,7 +226,7 @@ sub is_invite{
         if(ref($child_nodes) ne "ARRAY"){ $child_nodes = [ $child_nodes ]; } # forcearray
         foreach my $cnode( @{ $child_nodes } ){
             print ref($cnode)."\n";
-            print STDERR Data::Dumper->Dump([ $cnode->node->name() ])."\n";
+            print STDERR Data::Dumper->Dump([ $cnode->name() ])."\n";
             return $self->is_invite($cnode) if $self->is_invite($cnode);
         }
     }else{
