@@ -222,12 +222,10 @@ sub is_invite{
     my $self=shift;
     my $node=shift if(@_);
     if( !defined($node->attr('invite') )){
-        print Data::Dumper->Dump([ $node->get_attrs() ]);
         my $child_nodes = $node->get_children();
-        if(ref($child_nodes) ne "ARRAY"){
-            $child_nodes = [ $child_nodes ];
-        }
+        if(ref($child_nodes) ne "ARRAY"){ $child_nodes = [ $child_nodes ]; } # forcearray
         foreach my $cnode( @{ $child_nodes } ){
+            print Data::Dumper->Dump([ $cnode->get_attrs() ]);
             return $self->is_invite($cnode) if $self->is_invite($cnode);
         }
     }else{
