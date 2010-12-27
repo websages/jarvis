@@ -226,7 +226,7 @@ sub is_invite{
         my $child_nodes = $node->get_children_hash();
         #print STDERR Data::Dumper->Dump([ keys(%{ $child_nodes }) ]);
         #print STDERR Data::Dumper->Dump([ $child_nodes ]);
-        print STDERR ref($child_nodes->{'x'}."\n");
+        print STDERR ref($child_nodes->{'x'})."\n";
         #print STDERR Data::Dumper->Dump([ $child_nodes->{'x'} ]);
         if(defined($child_nodes->{'x'}) && (ref($child_nodes->{'x'}) eq 'POE::Filter::XML::Node')){
             print STDERR Data::Dumper->Dump([ $child_nodes->{'x'} ]);
