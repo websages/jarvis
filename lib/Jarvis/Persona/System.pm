@@ -254,6 +254,7 @@ sub input{
             #                                 # reload
             #                               };
             /i don't understand/     && do { last; }; # bot storm!
+            /^join\s+(.*)/           && do { $replies = [ "i need to join $1"     ] if($direct); last; };
             /.*/                     && do { $replies = [ "i don't understand"    ] if($direct); last; };
             /.*/                     && do { last; }
         }
