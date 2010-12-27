@@ -231,16 +231,15 @@ sub input{
                                            };
             /ping/                   && do { $kernel->post($sender,'say_public',$where,"$who: pong") if($direct); last; };
             /pong/                   && do { 
-                                            # $kernel->post(
-                                            print Data::Dumper->Dump([
-                                                                       $sender_alias,
-                                                                       'pending',
-                                                                       {
-                                                                         'session'     => $sender->ID,
-                                                                         'sender_nick' => $who,
-                                                                         'channel'     => $where,
-                                                                       }
-                                                                     ]) if($direct);
+                                            $kernel->post(
+                                                           $sender_alias,
+                                                           'pending',
+                                                           {
+                                                            'session'     => $sender->ID,
+                                                            'sender_nick' => $who,
+                                                            'channel'     => $where,
+                                                           }
+                                                         ) if($direct);
                                              last; 
                                            }; # bot storm!
             #/reload/                 && do { 
