@@ -223,8 +223,8 @@ sub is_invite{
     my $node=shift if(@_);
     if($node->name() eq 'message'){
         my $child_nodes = $node->get_children_hash();
-        print Data::Dumper->Dump([$child_nodes]);
-        if(defined($child_nodes->{'x'}) && (ref($child_nodes->{'x'}) eq 'POE::Filter::XML::Node')){
+        if(defined($child_nodes->{''}) && (ref($child_nodes->{''}) eq 'POE::Filter::XML::Node')){
+            print Data::Dumper->Dump([$child_nodes]);
             return 1;
         }
 
