@@ -222,13 +222,14 @@ sub is_invite{
     my $self=shift;
     my $node=shift if(@_);
     if($node->name() eq 'message'){
-        print STDERR $node->to_str()."\n\n";
         my $child_nodes = $node->get_children_hash();
         if(ref($child_nodes) ne "ARRAY"){
             $child_nodes = [ $child_nodes ];
         }
         foreach my $cnode( @{ $child_nodes } ){
-            print STDERR ref($cnode)."\n";
+            if(defined($child_nodes->{'x'}) && (ref($child_nodes->{'x'}) eq 'POE::Filter::XML::Node')){
+                print STDERR $child_nodes->{'x'}-to_str()."\n";
+            }
         }
     }
     return undef;
