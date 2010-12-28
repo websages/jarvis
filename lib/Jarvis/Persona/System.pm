@@ -359,8 +359,8 @@ sub peer_check{
                            }
                          );
 
-        #}else{
-        #    $kernel->post($sender,'invite',$peer,$channel);
+        }else{
+            $kernel->post($sender,'invite',$peer,$channel);
         }
     }
 }
