@@ -359,15 +359,15 @@ sub peer_check{
                            }
                          );
 
-        }else{
-            $kernel->post($sender,'invite',$peer,$channel);
+        #}else{
+        #    $kernel->post($sender,'invite',$peer,$channel);
         }
     }
 }
 
 sub peer_no_reply{
     my ($self, $kernel, $heap, $sender, $channel, $member) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0, ARG1];
-    $kernel->post($sender,'say_public',$channel,"$member: whereyouat?");
+    $kernel->post($sender,'invite',$peer,$channel);
 }
 
 # As long as the yaml lines up with itself, 
