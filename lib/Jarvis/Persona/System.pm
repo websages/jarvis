@@ -61,6 +61,25 @@ sub known_personas{
              channel_list:
                - #twoggies
              persona: berry
+     - name: jarvis
+       persona:
+         class: Jarvis::Persona::Jarvis
+         init:
+           alias: jarvis
+           ldap_domain: websages.com
+           ldap_binddn: cn=$host,ou=Hosts,dc=websages,dc=com
+           ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
+       connectors:
+         - class: Jarvis::IRC
+           init:
+             alias: irc_client
+             nickname: jarvis
+             ircname: "Just another really vigilant infrastructure sysadmin"
+             server: 127.0.0.1
+             domain: websages.com
+             channel_list:
+               - #heathsmom
+             persona: jarvis
     ...
 }
     
@@ -298,7 +317,7 @@ sub spawn{
     }
     foreach my $p (@{ $self->{'known_personas'} }){
         if($p->{'name'} eq $persona){
-            my $poe = new POE::Builder({ 'debug' => '0','trace' => '1' });
+            my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
             return undef unless $poe;
             $poe->object_session( $p->{'persona'}->{'class'}->new( $p->{'persona'}->{'init'} ) );
             push( @{ $self->{'spawned'}->{$persona} }, $p->{'persona'}->{'init'}->{'alias'} );
@@ -363,6 +382,10 @@ sub peer_check{
             $kernel->post($sender,'invite',$peer,$channel);
         }
     }
+}
+
+sub persona_check{
+
 }
 
 sub peer_no_reply{
