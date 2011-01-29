@@ -1,4 +1,5 @@
 #!/bin/bash
+
 if [ ! -d /var/log/irc ];then mkdir -p /var/log/irc; fi
 installing jarvis: (on lenny)
 apt-get install -y dh-make-perl build-essential \
