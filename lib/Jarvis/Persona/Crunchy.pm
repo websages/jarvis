@@ -116,6 +116,7 @@ sub input{
          $msg->{'conversation'}->{'id'},
        );
     my $direct=$msg->{'conversation'}->{'direct'}||0;
+    $msg->{'conversation'}->{'direct'}=$direct;
     if(defined($what)){
         if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
             foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
@@ -240,7 +241,7 @@ sub input{
             /.*/                        && do { $replies = [ $self->megahal($what) ] if($direct); last; };
             /.*/                        && do { last; };
         }
-        if($direct==1){             
+        if($direct == 1){             
             foreach my $line (@{ $replies }){
                 $line=piratespeak($line) if $pirate;
                 if($msg->{'conversation'}->{'direct'} == 0){
@@ -271,8 +272,8 @@ sub check_flickr{
         inline_states => {
             _start    => sub {
                                $_[HEAP]{ts_start} = time();
-                               $_[KERNEL]->delay("run_check",5);
                                print STDERR "Session check_flickr start\n";
+                               $_[KERNEL]->yeild("run_check");
                              },
             run_check => sub {
                                my ($map);

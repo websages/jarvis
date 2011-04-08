@@ -1,3 +1,8 @@
+# Yeah, this project is for me, and no where near ready for general consumption. This "readme" is
+# something I can cut-n-paste to get the dependencies debian doesn't provide.
+#
+# Nothing to see here, move along...
+#
 #!/bin/bash
 
 if [ ! -d /var/log/irc ];then mkdir -p /var/log/irc; fi

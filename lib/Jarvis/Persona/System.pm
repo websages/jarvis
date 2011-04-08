@@ -201,6 +201,7 @@ sub persona_states{
     my $self = $_[OBJECT]||shift;
     return { 
              'peer_check'            => 'peer_check',
+             'persona_check'         => 'persona_check',
              'peer_no_reply'         => 'peer_no_reply',
            };
 }
@@ -385,7 +386,23 @@ sub peer_check{
 }
 
 sub persona_check{
-
+    my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_ ];
+    foreach my $p (@{ $self->{'known_personas'} }){
+    
+    #    if($p->{'name'} eq $persona){
+    #        my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
+    #        return undef unless $poe;
+    #        $poe->object_session( $p->{'persona'}->{'class'}->new( $p->{'persona'}->{'init'} ) );
+    #        push( @{ $self->{'spawned'}->{$persona} }, $p->{'persona'}->{'init'}->{'alias'} );
+    #
+    #        foreach my $conn (@{ $p->{'connectors'} }){
+    #            push( @{ $self->{'spawned'}->{$persona} }, $conn->{'init'}->{'alias'} );
+    #            $poe->object_session( $conn->{'class'}->new( $conn->{'init'} ) );
+    #        }
+    #        return "$persona spawned."
+    #    }
+    }
+    return "I don't know how to become $persona." if(!$found);
 }
 
 sub peer_no_reply{

@@ -5,6 +5,15 @@ use parent Jarvis::Persona::Base;
 # Jarvis is Just A Really Vigilant Infrastructure Sysadmin.
 # most of what he does will be done with an alarm() or delay()
 ################################################################################
+sub may {
+    my $self=shift;
+    return { 
+             'ldap_domain'     => undef,
+             'ldap_binddn'     => undef,
+             'ldap_bindpw'     => undef,
+           };
+}
+
 
 sub input{
     my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
