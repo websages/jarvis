@@ -273,7 +273,7 @@ sub check_flickr{
             _start    => sub {
                                $_[HEAP]{ts_start} = time();
                                print STDERR "Session check_flickr start\n";
-                               $_[KERNEL]->yeild("run_check");
+                               $_[KERNEL]->yield("run_check");
                              },
             run_check => sub {
                                my ($map);
