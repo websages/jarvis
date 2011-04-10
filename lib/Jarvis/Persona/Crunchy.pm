@@ -269,8 +269,9 @@ sub input{
 sub check_flickr{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     POE::Session->create(
+                          options => { debug => 0, trace => 0},
                           object_states => [
-                                             $self-> { 
+                                             $self => { 
                                                        _start           => "check_flickr_start",
                                                        do_nonblock      => "do_nonblock",
                                                        got_child_stdout => "on_child_stdout",
@@ -278,7 +279,7 @@ sub check_flickr{
                                                        got_child_close  => "on_child_close",
                                                        got_child_signal => "on_child_signal",
                                                        _stop            => "check_flickr_stop",
-                                                     }
+                                                     },
                                            ],
                         );
 }
