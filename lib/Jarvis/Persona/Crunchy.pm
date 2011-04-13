@@ -35,7 +35,7 @@ sub may {
 }
 
 sub persona_states{
-    my $self = $_[OBJECT]||shift;
+    my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     return {
              'authen_reply'                    => 'authen_reply',
              'channel_join'                    => 'channel_join',
@@ -53,9 +53,8 @@ sub persona_states{
 
 
 sub persona_start{
-    my $self = $_[OBJECT]||shift;
-    my $kernel = $_[KERNEL];
-    my $heap = $_[HEAP];
+    my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    $kernel->delay('delay_flickr', 300);
     if(! -d "/dev/shm/brain"){ mkdir("/dev/shm/brain"); }
     if(! -d "/dev/shm/brain/crunchy"){ mkdir("/dev/shm/brain/crunchy"); }
     if(! -f "/dev/shm/brain/crunchy/megahal.trn"){
@@ -93,8 +92,6 @@ sub persona_start{
 #    $self->{'twitter'}->yield('register');
 #    $kernel->delay('delay_friend_timeline', 5);
 #    $kernel->delay('enable_twitter', 20) if($self->{'start_twitter_enabled'} == 1);
-    $kernel->alias_set($self);
-    $kernel->delay('delay_flickr', 300);
     return $self;
 }
 
