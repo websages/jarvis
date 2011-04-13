@@ -47,7 +47,6 @@ sub persona_states{
 #             'twitter.friend_timeline_success' => 'twitter_timeline_success',
 #             'twitter.response_error'          => 'twitter_error',
              'check_flickr'                    => 'check_flickr',
-             'delay_flickr'                    => 'delay_flickr',
            };
 }
 
@@ -94,13 +93,8 @@ sub persona_start{
 #    $kernel->delay('delay_friend_timeline', 5);
 #    $kernel->delay('enable_twitter', 20) if($self->{'start_twitter_enabled'} == 1);
     $kernel->alias_set($self);
-    $kernel->yield('delay_flickr');
+    $kernel->delay('check_flickr', 30);
     return $self;
-}
-
-sub delay_flickr{
-    my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
-    $kernel->delay('check_flickr', 300);
 }
 
 ################################################################################
@@ -302,7 +296,6 @@ sub check_flickr_stop{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     my $elapsed = time() - $_[HEAP]{ts_start};
     print STDERR "Session check_flickr [", $_[SESSION]->ID, "] elapsed seconds: $elapsed\n";
-    $kernel->post($self,'delay_flickr');
 }
 
 sub check_flickr_blocking{
@@ -406,6 +399,7 @@ sub on_child_close {
 sub on_child_signal {
     my ($self, $kernel, $heap, $sender, $wheel_id, $pid, $status) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     print "pid $pid exited with status $status.\n";
+    $kernel->delay('check_flickr',30);
     exit if($status ne 0);
     my $child = delete $heap->{children_by_pid}{$status};
     # May have been reaped by on_child_close().
