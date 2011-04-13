@@ -47,6 +47,7 @@ sub persona_states{
 #             'twitter.friend_timeline_success' => 'twitter_timeline_success',
 #             'twitter.response_error'          => 'twitter_error',
              'check_flickr'                    => 'check_flickr',
+             'delay_flickr'                    => 'delay_flickr',
            };
 }
 
@@ -92,8 +93,14 @@ sub persona_start{
 #    $self->{'twitter'}->yield('register');
 #    $kernel->delay('delay_friend_timeline', 5);
 #    $kernel->delay('enable_twitter', 20) if($self->{'start_twitter_enabled'} == 1);
-    $kernel->delay('check_flickr', 300);
+    $kernel->alias_set($self);
+    $kernel->yield('delay_flickr');
     return $self;
+}
+
+sub delay_flickr{
+    my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
+    $kernel->delay('check_flickr', 300);
 }
 
 ################################################################################
@@ -295,7 +302,7 @@ sub check_flickr_stop{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     my $elapsed = time() - $_[HEAP]{ts_start};
     print STDERR "Session check_flickr [", $_[SESSION]->ID, "] elapsed seconds: $elapsed\n";
-    $kernel->delay('check_flickr', 300);
+    $kernel->post($self,'delay_flickr');
 }
 
 sub check_flickr_blocking{
@@ -411,14 +418,8 @@ sub on_child_signal {
 # End check_flickr
 ################################################################################
 
-
 ################################################################################
-# 
-################################################################################
-
-
-################################################################################
-# 
+#  begin LDAP stuff
 ################################################################################
 sub ldap_srv_records{
     my $self=shift;
