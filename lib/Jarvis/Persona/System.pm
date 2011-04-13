@@ -318,7 +318,7 @@ sub spawn{
     }
     foreach my $p (@{ $self->{'known_personas'} }){
         if($p->{'name'} eq $persona){
-            my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
+            my $poe = new POE::Builder({ 'debug' => '0','trace' => '1' });
             return undef unless $poe;
             $poe->object_session( $p->{'persona'}->{'class'}->new( $p->{'persona'}->{'init'} ) );
             push( @{ $self->{'spawned'}->{$persona} }, $p->{'persona'}->{'init'}->{'alias'} );

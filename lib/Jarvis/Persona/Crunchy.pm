@@ -377,7 +377,6 @@ sub do_nonblock{
     # Wheel event, including the wheel's ID.
 sub on_child_stdout {
     my ($self, $kernel, $heap, $sender, $stdout_line, $wheel_id) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-    my ($stdout_line, $wheel_id) = @_[ARG0, ARG1];
     my $child = $heap->{children_by_wid}{$wheel_id};
     $heap->{'child_output'}.="$stdout_line\n";
     print "pid ", $child->PID, " STDOUT: $stdout_line\n";
