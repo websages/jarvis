@@ -54,7 +54,7 @@ sub persona_states{
 
 sub persona_start{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-    $kernel->delay('delay_flickr', 300);
+    $_[KERNEL]->yield('delay_flickr');
     if(! -d "/dev/shm/brain"){ mkdir("/dev/shm/brain"); }
     if(! -d "/dev/shm/brain/crunchy"){ mkdir("/dev/shm/brain/crunchy"); }
     if(! -f "/dev/shm/brain/crunchy/megahal.trn"){
