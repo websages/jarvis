@@ -98,7 +98,7 @@ sub persona_start{
 sub delay_flickr{
     my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
     $kernel->yield('check_flickr');
-    $_[KERNEL]->delay('delay_flickr',30);
+    $_[KERNEL]->delay('delay_flickr',300);
 }
 ################################################################################
 # Here is what you must provide: 
