@@ -47,6 +47,7 @@ sub persona_states{
 #             'twitter.friend_timeline_success' => 'twitter_timeline_success',
 #             'twitter.response_error'          => 'twitter_error',
              'check_flickr'                    => 'check_flickr',
+             'delay_flickr'                    => 'delay_flickr',
            };
 }
 
@@ -93,10 +94,15 @@ sub persona_start{
 #    $kernel->delay('delay_friend_timeline', 5);
 #    $kernel->delay('enable_twitter', 20) if($self->{'start_twitter_enabled'} == 1);
     $kernel->alias_set($self);
-    $kernel->delay('check_flickr', 30);
+    $kernel->delay('delay_flickr', 300);
     return $self;
 }
 
+sub delay_flickr{
+    my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
+    $kernel->yield('check_flickr');
+    $kernel->delay('delay_flickr',300);
+}
 ################################################################################
 # Here is what you must provide: 
 #   A function named "input" that takes $what and $directly_addressed
@@ -399,7 +405,6 @@ sub on_child_close {
 sub on_child_signal {
     my ($self, $kernel, $heap, $sender, $wheel_id, $pid, $status) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     print "pid $pid exited with status $status.\n";
-    $kernel->delay('check_flickr',30);
     exit if($status ne 0);
     my $child = delete $heap->{children_by_pid}{$status};
     # May have been reaped by on_child_close().
