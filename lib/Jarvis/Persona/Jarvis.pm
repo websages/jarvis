@@ -8,7 +8,7 @@ use parent Jarvis::Persona::Base;
 sub may {
     my $self=shift;
     return { 
-             'ldap_domain'     => undef,
+             'ldap_uri'        => undef,
              'ldap_binddn'     => undef,
              'ldap_bindpw'     => undef,
            };

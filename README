@@ -1,5 +1,43 @@
-# Yeah, this project is for me, and no where near ready for general consumption. This "readme" is
-# something I can cut-n-paste to get the dependencies debian doesn't provide.
+jarvis:
+   uses POE::Builder to create 3 sessions:
+       Jarvis::Persona::System (alias: system)
+       Jarvis::IRC             (alias: ${hostname}_irc)  & passed 'system alias'
+       Jarvis::Jabber          (alias: ${hostname}_xmpp) & passed 'system alias'
+
+POE::Builder:
+    new            => checks must, may for POE::Builder
+    must           => [ loads list of mandatory args to module  ]
+    may            => { hash of optional_args => defaults }
+    indented_yaml  => un-indents yaml
+    yaml_sess      => takes (indented) yaml, passes it to indented_yaml,
+                      instantiates the class, passes to object_session
+    object_session => creates a POE::Session around the object
+                      adding the object_states from the method of the
+                      same name from the object, sets aliases
+
+
+
+Jarvis::Persona::System:
+   has 3 "known_personas" [ "crunchy", "berry", "jarvis" ] it can spawn
+   when requested
+
+   crunchy: Jarvis::Persona::Crunchy
+            connects to irc @127.0.0.1 joins #soggies
+
+   berry: Jarvis::Persona::Crunchy
+          connects to irc @127.0.0.1 joins #soggies
+
+   jarvis: Jarvis::Persona::Jarvis
+          connects to irc @127.0.0.1 joins #heathsmom
+
+
+
+
+
+################################################################################
+# Yeah, this project is for me, and no where near ready for general consumption. 
+# This "readme" is something I can cut-n-paste to get the dependencies debian 
+# doesn't provide.
 #
 # Nothing to see here, move along...
 #
