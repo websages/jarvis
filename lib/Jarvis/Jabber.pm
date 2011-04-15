@@ -96,7 +96,7 @@ sub start{
                                                            Hostname       => $self->{'hostname'},
                                                            Username       => $self->{'username'},
                                                            Password       => $self->{'password'},
-                                                           Alias          => $self->alias().'component',
+                                                           Alias          => $self->alias().'_component',
                                                            ConnectionType => +XMPP,
                                                            Debug => '1',
                                                          );
@@ -128,9 +128,9 @@ sub start{
 #  * PCJ_SHUTDOWN_FINISH
 #  * PCJ_SOCKETFAIL
 #  * PCJ_SOCKETDISCONNECT
-    $kernel->post($self->alias().'component', 'subscribe', +PCJ_READY, 'MyReadyEvent');
-    $kernel->post($self->alias().'component', 'subscribe', +PCJ_NODERECEIVED, 'MyReceivedEvent');
-    $kernel->post($self->alias().'component','connect');
+    $kernel->post($self->alias().'_component', 'subscribe', +PCJ_READY, 'MyReadyEvent');
+    $kernel->post($self->alias().'_component', 'subscribe', +PCJ_NODERECEIVED, 'MyReceivedEvent');
+    $kernel->post($self->alias().'_component','connect');
     return $self;
 }
 
@@ -163,10 +163,10 @@ sub MyReadyEvent{
     # The stored POE::Component::Jabber object has a number of 
     # useful methods we can use outside of POE event posting, 
     # including jid()
-    $presence->setAttribute('from', $_[HEAP]->{'component'}->jid());
+    $presence->setAttribute('from', $_[HEAP]->{$self->alias()}->jid());
     # Some of the event names have changed since the 2.x series.
     # 'output_handler' was replaced by plain old 'output'
-    $_[KERNEL]->post('COMPONENT', 'output', $presence);
+    $_[KERNEL]->post($self->alias()."_component", 'output', $presence);
     # Now let's send ourselves some messages
     $_[KERNEL]->yield('MyMessageSendEvent');
 }
@@ -183,11 +183,11 @@ sub MyMessageSendEvent{
     (
         'message',
         [
-            'to', $_[HEAP]->{'component'}->jid()
+            'to', $_[HEAP]->{$self->alias()}->jid()
         ]
     );
 
-    $_[KERNEL]->post('COMPONENT', 'output', $message);
+    $_[KERNEL]->post($self->alias()."_component", 'output', $message);
     $_[KERNEL]->delay_set('MyMessageSendEvent', int(rand(6)));
 }
 
