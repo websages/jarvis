@@ -100,34 +100,15 @@ sub start{
                                                            ConnectionType => +XMPP,
                                                            Debug => '1',
                                                          );
-#  * PCJ_CONNECT
-#  * PCJ_CONNECTING
-#  * PCJ_CONNECTED
-#    PCJ_CONNECTFAIL
-#  * PCJ_STREAMSTART
-#  * PCJ_STREAMEND
-#  * PCJ_NODESENT
-#    PCJ_NODERECEIVED
-#    PCJ_NODEQUEUED
-#    PCJ_SSLNEGOTIATE
-#    PCJ_SSLSUCCESS
-#    PCJ_SSLFAIL
-#    PCJ_AUTHNEGOTIATE
-#    PCJ_AUTHSUCCESS
-#  * PCJ_AUTHFAIL
-#    PCJ_BINDNEGOTIATE
-#    PCJ_BINDSUCCESS
-#    PCJ_BINDFAIL
-#    PCJ_SESSIONNEGOTIATE
-#    PCJ_SESSIONSUCCESS
-#    PCJ_SESSIONFAIL
-#    PCJ_RTS_START
-#    PCJ_RTS_FINISH
-#    PCJ_READY
-#  * PCJ_SHUTDOWN_START
-#  * PCJ_SHUTDOWN_FINISH
-#  * PCJ_SOCKETFAIL
-#  * PCJ_SOCKETDISCONNECT
+    foreach my $event ( "PCJ_CONNECT", "PCJ_CONNECTING", "PCJ_CONNECTED", "PCJ_CONNECTFAIL", "PCJ_STREAMSTART",
+                        "PCJ_STREAMEND", "PCJ_NODESENT", "PCJ_NODEQUEUED", "PCJ_SSLNEGOTIATE", "PCJ_SSLSUCCESS",
+                        "PCJ_SSLFAIL", "PCJ_AUTHNEGOTIATE", "PCJ_AUTHSUCCESS", "PCJ_AUTHFAIL", "PCJ_BINDNEGOTIATE",
+                        "PCJ_BINDSUCCESS", "PCJ_BINDFAIL", "PCJ_SESSIONNEGOTIATE", "PCJ_SESSIONSUCCESS",
+                        "PCJ_SESSIONFAIL", "PCJ_RTS_START", "PCJ_RTS_FINISH", "PCJ_SHUTDOWN_START",
+                        "PCJ_SHUTDOWN_FINISH", "PCJ_SOCKETFAIL", "PCJ_SOCKETDISCONNECT"){
+        
+        $kernel->post($self->alias().'_component', 'subscribe', +$event, '_default');
+    }
     $kernel->post($self->alias().'_component', 'subscribe', +PCJ_READY, 'MyReadyEvent');
     $kernel->post($self->alias().'_component', 'subscribe', +PCJ_NODERECEIVED, 'MyReceivedEvent');
     $kernel->post($self->alias().'_component','connect');
