@@ -1,0 +1,5 @@
+loki:
+  domain: "root@loki.websages.com"
+  deploy_to: "/var/tmp/jarvis"
+  repository: "gitosis@freyr.websages.com:jarvis.git"
+  branch: "master"

@@ -30,7 +30,7 @@ sub known_personas{
        connectors:
          - class: Jarvis::IRC
            init:
-             alias: irc_client
+             alias: crunchy_irc
              nickname: crunchy
              ircname: "Cap'n Crunchbot"
              server: 127.0.0.1
@@ -72,7 +72,7 @@ sub known_personas{
        connectors:
          - class: Jarvis::IRC
            init:
-             alias: irc_client
+             alias: jarvis_irc
              nickname: jarvis
              ircname: "Just another really vigilant infrastructure sysadmin"
              server: 127.0.0.1
