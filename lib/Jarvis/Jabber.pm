@@ -111,17 +111,17 @@ sub new{
 #     my $self = $_[OBJECT]||shift;
 #     return $self;
 #}
-#
-#sub alias{
-#     my $self = $_[OBJECT]||shift;
-#     return $self->{'alias'};
-#}
-#
+
+sub alias{
+     my $self = $_[OBJECT]||shift;
+     return $self->{'alias'};
+}
+
 sub states{
      my $self = $_[OBJECT]||shift;
      return $self->{'states'};
 }
-#
+
 #sub authen {
 #    my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
 #    if(defined( $heap->{'presence'}->{ $msg->{'conversation'}->{'room'}.'/'.$msg->{'conversation'}->{'nick'} })){
