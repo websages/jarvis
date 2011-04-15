@@ -62,6 +62,7 @@ sub new{
                           MyReadyEvent         => 'MyReadyEvent',
                           MyMessageSendEvent   => 'MyMessageSendEvent',
                           MyReceivedEvent      => 'MyReceivedEvent',
+                          _default             => '_default',
 #                          authen               => 'authen',
 #
 #                          input_event          => 'input_event',
@@ -86,7 +87,6 @@ sub new{
     return $self;
 }
 
-
 sub start{
     my ($self, $kernel, $sender, $heap, @args) = @_[OBJECT, KERNEL, SENDER, HEAP, ARG0 .. $#_];
     $kernel->alias_set('Tester');
@@ -100,12 +100,46 @@ sub start{
                                                            ConnectionType => +XMPP,
                                                            Debug => '1',
                                                          );
+#    PCJ_CONNECT
+#    PCJ_CONNECTING
+#    PCJ_CONNECTED
+#    PCJ_CONNECTFAIL
+#    PCJ_STREAMSTART
+#    PCJ_STREAMEND
+#    PCJ_NODESENT
+#    PCJ_NODERECEIVED
+#    PCJ_NODEQUEUED
+#    PCJ_SSLNEGOTIATE
+#    PCJ_SSLSUCCESS
+#    PCJ_SSLFAIL
+#    PCJ_AUTHNEGOTIATE
+#    PCJ_AUTHSUCCESS
+#    PCJ_AUTHFAIL
+#    PCJ_BINDNEGOTIATE
+#    PCJ_BINDSUCCESS
+#    PCJ_BINDFAIL
+#    PCJ_SESSIONNEGOTIATE
+#    PCJ_SESSIONSUCCESS
+#    PCJ_SESSIONFAIL
+#    PCJ_RTS_START
+#    PCJ_RTS_FINISH
+#    PCJ_READY
+#    PCJ_SHUTDOWN_START
+#    PCJ_SHUTDOWN_FINISH
+#    PCJ_SOCKETFAIL
+#    PCJ_SOCKETDISCONNECT
     $kernel->post($self->alias().'component', 'subscribe', +PCJ_READY, 'MyReadyEvent');
     $kernel->post($self->alias().'component', 'subscribe', +PCJ_NODERECEIVED, 'MyReceivedEvent');
     $kernel->post($self->alias().'component','connect');
     return $self;
 }
-#
+
+sub _default{
+    my ($self, $kernel, $sender, $heap, @args) = @_[OBJECT, KERNEL, SENDER, HEAP, ARG0 .. $#_];
+    print Data::Dumper->Dump([@args]);
+    return $self;
+}
+
 sub stop{
     my ($self, $kernel, $sender, $heap, @args) = @_[OBJECT, KERNEL, SENDER, HEAP, ARG0 .. $#_];
     $kernel->alias_remove('Tester');
