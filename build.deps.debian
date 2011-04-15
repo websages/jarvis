@@ -41,3 +41,18 @@ tar xvzf POE-Component-Logger-1.00.tar.gz
 (cd POE-Component-Logger-1.00; dh-make-perl ; debian/rules binary)
 dpkg -i libpoe-component-logger-perl_1.00-1_all.deb
 
+
+#libai-megahal-perl
+wget http://search.cpan.org/CPAN/authors/id/C/CH/CHORNY/AI-MegaHAL-0.07.tar.gz
+[ -d AI-MegaHAL-0.07 ] && rm -fr AI-MegaHAL-0.07
+tar xvzf AI-MegaHAL-0.07.tar.gz
+(cd AI-MegaHAL-0.07; dh-make-perl ; debian/rules binary)
+dpkg -i libai-megahal-perl_0.07-1_i386.deb
+
+################################################################################
+# These the pirate module should be added to this source tree, the twitter one
+# needs to be ripped out and replaced with one that still functions
+#
+#libpoe-component-client-twitter-perl
+#libircbot-chatbot-pirate
+

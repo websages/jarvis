@@ -7,7 +7,7 @@ use strict;
 use Data::Dumper;
 use POE;
 use POE::Component::Jabber;
-use POE::Component::Jabber::Error;
+#use POE::Component::Jabber::Error;
 use POE::Component::Jabber::Status;
 use POE::Component::Jabber::ProtocolFactory;
 use POE::Filter::XML::Node;
