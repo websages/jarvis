@@ -136,7 +136,7 @@ sub start{
 
 sub _default{
     my ($self, $kernel, $sender, $heap, @args) = @_[OBJECT, KERNEL, SENDER, HEAP, ARG0 .. $#_];
-    print Data::Dumper->Dump([@args]);
+    #print Data::Dumper->Dump([@args]);
     return $self;
 }
 
@@ -179,6 +179,7 @@ sub MyReceivedEvent {
 }
 
 sub MyMessageSendEvent{
+    my ($self, $kernel, $sender, $heap, @args) = @_[OBJECT, KERNEL, SENDER, HEAP, ARG0 .. $#_];
     my $message = POE::Filter::XML::Node->new
     (
         'message',
