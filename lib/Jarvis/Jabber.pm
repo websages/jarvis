@@ -59,7 +59,7 @@ sub new{
     $self->{'states'} = {
                           start                => 'start',
                           stop                 => 'stop',
-                          authen               => 'authen',
+#                          authen               => 'authen',
 #
 #                          input_event          => 'input_event',
 #                          error_event          => 'error_event',
@@ -79,7 +79,7 @@ sub new{
 #                          say_public           => 'say_public',
 #                          reconnect_all        => 'reconnect_all',
                         };
-#
+
     return $self;
 }
 #
