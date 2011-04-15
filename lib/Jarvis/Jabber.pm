@@ -520,4 +520,4 @@ sub new{
 #    $node->attr('type',$type) if $type;
 #    $kernel->post($self->alias(),'output_event',$node,$heap->{'sid'});
 #} # send_presence
-#1;
+1;
