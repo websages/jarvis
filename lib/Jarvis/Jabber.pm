@@ -107,7 +107,7 @@ print "
                                                            Username       => $self->{'username'},
                                                            Password       => $self->{'password'},
                                                            Alias          => $self->alias().'_component',
-                                                           ConnectionType => +XMPP,
+                                                           ConnectionType => +JABBERD20_COMPONENT,
                                                            Debug => '1',
                                                          );
     foreach my $event ( "PCJ_CONNECT", "PCJ_CONNECTING", "PCJ_CONNECTED", "PCJ_CONNECTFAIL", "PCJ_STREAMSTART",
