@@ -117,10 +117,10 @@ sub new{
 #     return $self->{'alias'};
 #}
 #
-#sub states{
-#     my $self = $_[OBJECT]||shift;
-#     return $self->{'states'};
-#}
+sub states{
+     my $self = $_[OBJECT]||shift;
+     return $self->{'states'};
+}
 #
 #sub authen {
 #    my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
