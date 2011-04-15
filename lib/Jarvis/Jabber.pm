@@ -84,11 +84,11 @@ sub new{
 }
 #
 #
-#sub start{
-#    my $self = $_[OBJECT]||shift;
-#    my $heap = $_[HEAP];
-#    my $kernel = $_[KERNEL];
-#    my $session = $_[SESSION];
+sub start{
+    my $self = $_[OBJECT]||shift;
+    my $heap = $_[HEAP];
+    my $kernel = $_[KERNEL];
+    my $session = $_[SESSION];
 #    $heap->{$self->alias()} = POE::Component::Jabber->new(
 #                                                           IP             => $self->{'ip'},
 #                                                           Port           => $self->{'port'},
@@ -104,13 +104,13 @@ sub new{
 #                                                                             },
 #                                                         );
 #    $kernel->post($self->alias().'component','connect');
-#    return $self;
-#}
+    return $self;
+}
 #
-#sub stop{
-#     my $self = $_[OBJECT]||shift;
-#     return $self;
-#}
+sub stop{
+     my $self = $_[OBJECT]||shift;
+     return $self;
+}
 
 sub alias{
      my $self = $_[OBJECT]||shift;
