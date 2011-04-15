@@ -100,13 +100,13 @@ sub start{
                                                            ConnectionType => +XMPP,
                                                            Debug => '1',
                                                          );
-#    PCJ_CONNECT
-#    PCJ_CONNECTING
-#    PCJ_CONNECTED
+#  * PCJ_CONNECT
+#  * PCJ_CONNECTING
+#  * PCJ_CONNECTED
 #    PCJ_CONNECTFAIL
-#    PCJ_STREAMSTART
-#    PCJ_STREAMEND
-#    PCJ_NODESENT
+#  * PCJ_STREAMSTART
+#  * PCJ_STREAMEND
+#  * PCJ_NODESENT
 #    PCJ_NODERECEIVED
 #    PCJ_NODEQUEUED
 #    PCJ_SSLNEGOTIATE
@@ -114,7 +114,7 @@ sub start{
 #    PCJ_SSLFAIL
 #    PCJ_AUTHNEGOTIATE
 #    PCJ_AUTHSUCCESS
-#    PCJ_AUTHFAIL
+#  * PCJ_AUTHFAIL
 #    PCJ_BINDNEGOTIATE
 #    PCJ_BINDSUCCESS
 #    PCJ_BINDFAIL
@@ -124,10 +124,10 @@ sub start{
 #    PCJ_RTS_START
 #    PCJ_RTS_FINISH
 #    PCJ_READY
-#    PCJ_SHUTDOWN_START
-#    PCJ_SHUTDOWN_FINISH
-#    PCJ_SOCKETFAIL
-#    PCJ_SOCKETDISCONNECT
+#  * PCJ_SHUTDOWN_START
+#  * PCJ_SHUTDOWN_FINISH
+#  * PCJ_SOCKETFAIL
+#  * PCJ_SOCKETDISCONNECT
     $kernel->post($self->alias().'component', 'subscribe', +PCJ_READY, 'MyReadyEvent');
     $kernel->post($self->alias().'component', 'subscribe', +PCJ_NODERECEIVED, 'MyReceivedEvent');
     $kernel->post($self->alias().'component','connect');
