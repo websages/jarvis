@@ -22,40 +22,40 @@ sub new{
     my $class = shift;
     my $self = {}; 
     bless($self, $class);
-#    my $construct = shift if @_;
-#    $self->{'DEBUG'} = 0 unless defined $construct->{'debug'}; 
-#    # list of required constructor elements
-#    $self->{'must'} = [ "alias", "ip", "hostname", "username", "password" ];
-#
-#    # hash of optional constructor elements (key), and their default (value) if not specified
-#    $self->{'may'} = { 
-#                       "channel_list" => undef,
-#                       "port"         => 5222,
-#                     };
-#
-#    # set our required values fron the constructor or the defaults
-#    foreach my $attr (@{ $self->{'must'} }){
-#         if(defined($construct->{$attr})){
-#             $self->{$attr} = $construct->{$attr};
-#         }else{
-#             print STDERR "Required session constructor attribute [$attr] not defined. ";                                                     
-#             print STDERR "unable to define ". __PACKAGE__ ." object\n";
-#             return undef;
-#         }
-#    }
-#
-#    # set our optional values fron the constructor or the defaults
-#    foreach my $attr (keys(%{ $self->{'may'} })){
-#         if(defined($construct->{$attr})){
-#             $self->{$attr} = $construct->{$attr};
-#         }else{
-#             $self->{$attr} = $self->{'may'}->{$attr};
-#         }
-#    }
-#
-#    foreach my $key (%{ $construct }){
-#        $self->{$key} = $construct->{$key};
-#    }
+    my $construct = shift if @_;
+    $self->{'DEBUG'} = 0 unless defined $construct->{'debug'}; 
+    # list of required constructor elements
+    $self->{'must'} = [ "alias", "ip", "hostname", "username", "password" ];
+
+    # hash of optional constructor elements (key), and their default (value) if not specified
+    $self->{'may'} = { 
+                       "channel_list" => undef,
+                       "port"         => 5222,
+                     };
+
+    # set our required values fron the constructor or the defaults
+    foreach my $attr (@{ $self->{'must'} }){
+         if(defined($construct->{$attr})){
+             $self->{$attr} = $construct->{$attr};
+         }else{
+             print STDERR "Required session constructor attribute [$attr] not defined. ";                                                     
+             print STDERR "unable to define ". __PACKAGE__ ." object\n";
+             return undef;
+         }
+    }
+
+    # set our optional values fron the constructor or the defaults
+    foreach my $attr (keys(%{ $self->{'may'} })){
+         if(defined($construct->{$attr})){
+             $self->{$attr} = $construct->{$attr};
+         }else{
+             $self->{$attr} = $self->{'may'}->{$attr};
+         }
+    }
+
+    foreach my $key (%{ $construct }){
+        $self->{$key} = $construct->{$key};
+    }
     $self->{'states'} = {
                           start                => 'start',
                           stop                 => 'stop',
@@ -85,8 +85,8 @@ sub new{
 
     return $self;
 }
-#
-#
+
+
 sub start{
     my ($self, $kernel, $sender, $heap, @args) = @_[OBJECT, KERNEL, SENDER, HEAP, ARG0 .. $#_];
     $kernel->alias_set('Tester');
