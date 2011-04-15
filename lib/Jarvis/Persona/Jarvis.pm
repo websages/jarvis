@@ -15,7 +15,7 @@ sub may {
            };
 }
 
-sub persona_start
+sub persona_start{
     my $self = $_[OBJECT]||shift;
     my $kernel = $_[KERNEL];
     return $self;
