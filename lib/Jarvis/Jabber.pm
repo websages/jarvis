@@ -59,6 +59,9 @@ sub new{
     $self->{'states'} = {
                           start                => 'start',
                           stop                 => 'stop',
+                          MyReadyEvent         => 'MyReadyEvent',
+                          MyMessageSendEvent   => 'MyMessageSendEvent',
+                          MyReceivedEvent      => 'MyReceivedEvent',
 #                          authen               => 'authen',
 #
 #                          input_event          => 'input_event',
@@ -85,31 +88,28 @@ sub new{
 #
 #
 sub start{
-    my $self = $_[OBJECT]||shift;
-    my $heap = $_[HEAP];
-    my $kernel = $_[KERNEL];
-    my $session = $_[SESSION];
-#    $heap->{$self->alias()} = POE::Component::Jabber->new(
-#                                                           IP             => $self->{'ip'},
-#                                                           Port           => $self->{'port'},
-#                                                           Hostname       => $self->{'hostname'},
-#                                                           Username       => $self->{'username'},
-#                                                           Password       => $self->{'password'},
-#                                                           Alias          => $self->alias().'component',
-#                                                           ConnectionType => +XMPP,
-#                                                           States         => {
-#                                                                               StatusEvent => 'status_event',
-#                                                                               InputEvent  => 'input_event',
-#                                                                               ErrorEvent  => 'error_event',
-#                                                                             },
-#                                                         );
-#    $kernel->post($self->alias().'component','connect');
+    my ($self, $kernel, $sender, $heap, @args) = @_[OBJECT, KERNEL, SENDER, HEAP, ARG0 .. $#_];
+    $kernel->alias_set('Tester');
+    $heap->{$self->alias()} = POE::Component::Jabber->new(
+                                                           IP             => $self->{'ip'},
+                                                           Port           => $self->{'port'},
+                                                           Hostname       => $self->{'hostname'},
+                                                           Username       => $self->{'username'},
+                                                           Password       => $self->{'password'},
+                                                           Alias          => $self->alias().'component',
+                                                           ConnectionType => +XMPP,
+                                                           Debug => '1',
+                                                         );
+    $kernel->post($self->alias().'component', 'subscribe', +PCJ_READY, 'MyReadyEvent');
+    $kernel->post($self->alias().'component', 'subscribe', +PCJ_NODERECEIVED, 'MyReceivedEvent');
+    $kernel->post($self->alias().'component','connect');
     return $self;
 }
 #
 sub stop{
-     my $self = $_[OBJECT]||shift;
-     return $self;
+    my ($self, $kernel, $sender, $heap, @args) = @_[OBJECT, KERNEL, SENDER, HEAP, ARG0 .. $#_];
+    $kernel->alias_remove('Tester');
+    return $self;
 }
 
 sub alias{
@@ -121,6 +121,42 @@ sub states{
      my $self = $_[OBJECT]||shift;
      return $self->{'states'};
 }
+
+sub MyReadyEvent{
+    my ($self, $kernel, $sender, $heap, @args) = @_[OBJECT, KERNEL, SENDER, HEAP, ARG0 .. $#_];
+    say '--- Connection is ready for use! ---';
+    my $presence = POE::Filter::XML::Node->new('presence');
+    # The stored POE::Component::Jabber object has a number of 
+    # useful methods we can use outside of POE event posting, 
+    # including jid()
+    $presence->setAttribute('from', $_[HEAP]->{'component'}->jid());
+    # Some of the event names have changed since the 2.x series.
+    # 'output_handler' was replaced by plain old 'output'
+    $_[KERNEL]->post('COMPONENT', 'output', $presence);
+    # Now let's send ourselves some messages
+    $_[KERNEL]->yield('MyMessageSendEvent');
+}
+
+sub MyReceivedEvent {
+    my ($self, $kernel, $sender, $heap, @args) = @_[OBJECT, KERNEL, SENDER, HEAP, ARG0 .. $#_];
+    say '--- Node received! ---';
+    say $_[ARG0]->toString();
+    say '----------------------';
+}
+
+sub MyMessageSendEvent{
+    my $message = POE::Filter::XML::Node->new
+    (
+        'message',
+        [
+            'to', $_[HEAP]->{'component'}->jid()
+        ]
+    );
+
+    $_[KERNEL]->post('COMPONENT', 'output', $message);
+    $_[KERNEL]->delay_set('MyMessageSendEvent', int(rand(6)));
+}
+
 
 #sub authen {
 #    my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
