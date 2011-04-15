@@ -109,7 +109,6 @@ sub start{
         
         $kernel->post($self->alias().'_component', 'subscribe', +$event, '_default');
     }
-    $kernel->post($self->alias().'_component', 'subscribe', +PCJ_STEAMSTART, '_default');
     $kernel->post($self->alias().'_component', 'subscribe', +PCJ_READY, 'MyReadyEvent');
     $kernel->post($self->alias().'_component', 'subscribe', +PCJ_NODERECEIVED, 'MyReceivedEvent');
     $kernel->post($self->alias().'_component','connect');
