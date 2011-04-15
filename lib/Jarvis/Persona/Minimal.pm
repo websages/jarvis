@@ -21,6 +21,7 @@ sub input{
          $msg->{'conversation'}->{'id'},
        );
     my $direct=$msg->{'conversation'}->{'direct'}||0;
+
     if(defined($what)){
         if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
             foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){

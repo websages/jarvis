@@ -14,7 +14,6 @@ sub may {
            };
 }
 
-
 sub input{
     my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
     # un-wrap the $msg

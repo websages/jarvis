@@ -1,0 +1,23 @@
+name: berry
+persona:
+  class: Jarvis::Persona::Crunchy
+  init:
+    alias: berry
+    ldap_domain: '[% domainname %]'
+    ldap_binddn: 'cn=[% hostname %],ou=Hosts,[% basedn %]'
+    ldap_bindpw: '[% secret %]'
+    twitter_name: capncrunchbot
+    password: '[% twitter_password %]'
+    retry: 150
+    start_twitter_enabled: 1
+connectors:
+  - class: Jarvis::IRC
+    init:
+      alias: berry_irc
+      nickname: berry
+      ircname: "beta Cap'n Crunchbot"
+      server: 127.0.0.1
+      domain: '[% domainname %]'
+      channel_list:
+        - '#twoggies'
+      persona: berry

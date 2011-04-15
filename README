@@ -43,3 +43,9 @@ far from normalized, as there are some things that irc can do that xmpp doesn't
 and vice-versa. I'm still working on a permanent API for connector-persona
 communication.
 
+Most of the communication is done in Jarvis::Persona::Base which is the parent
+class for the bots themselves. The bots need only have a POE method named
+"input" as that is what the connectors send input to, and resulting output 
+should be sent back to the @_[SENDER]'s alias.
+
+See: lib/Jarvis/Persona/Minimal.pm for a skeleton.
