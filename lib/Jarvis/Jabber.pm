@@ -90,6 +90,16 @@ sub new{
 sub start{
     my ($self, $kernel, $sender, $heap, @args) = @_[OBJECT, KERNEL, SENDER, HEAP, ARG0 .. $#_];
     $kernel->alias_set('Tester');
+print<<EOF
+                                                           IP             => $self->{'ip'},
+                                                           Port           => $self->{'port'},
+                                                           Hostname       => $self->{'hostname'},
+                                                           Username       => $self->{'username'},
+                                                           Password       => $self->{'password'},
+                                                           Alias          => $self->alias().'_component',
+                                                           ConnectionType => +XMPP,
+                                                           Debug => '1',
+EOF
     $heap->{$self->alias()} = POE::Component::Jabber->new(
                                                            IP             => $self->{'ip'},
                                                            Port           => $self->{'port'},
