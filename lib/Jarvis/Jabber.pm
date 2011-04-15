@@ -56,10 +56,10 @@ sub new{
 #    foreach my $key (%{ $construct }){
 #        $self->{$key} = $construct->{$key};
 #    }
-#    $self->{'states'} = {
-#                          start                => 'start',
-#                          stop                 => 'stop',
-#                          authen               => 'authen',
+    $self->{'states'} = {
+                          start                => 'start',
+                          stop                 => 'stop',
+                          authen               => 'authen',
 #
 #                          input_event          => 'input_event',
 #                          error_event          => 'error_event',
@@ -78,7 +78,7 @@ sub new{
 #                          xmpp_reply           => 'xmpp_reply',
 #                          say_public           => 'say_public',
 #                          reconnect_all        => 'reconnect_all',
-#                        };
+                        };
 #
     return $self;
 }
