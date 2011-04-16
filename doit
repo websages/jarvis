@@ -1,0 +1,4 @@
+#!/bin/bash
+git commit -a -m "adding things back until it runs"; 
+git push ; 
+ssh -t root@thor.websages.com "(cd /var/cache/git/jarvis; clear; git pull; . /etc/default/jarvis;  ./universal.pl)"
