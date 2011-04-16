@@ -1,8 +1,8 @@
 #!/bin/bash
 if [ ! -d /var/cache/git ];then mkdir -p /var/cache/git; fi
 (cd /var/cache/git ; git clone gitosis@freyr.websages.com:jarvis.git)
-if [ $(sed -e 's/\..*//' /etc/debian_version) eq 6 ];then 
-    (cd /var/cache/git ; git checkout squeeze )
+if [ "$(sed -e 's/\..*//' /etc/debian_version)" == "6" ];then 
+    (cd /var/cache/git/jarvis ; git checkout squeeze; git pull origin squeeze )
 fi
 (cd /var/cache/git/jarvis; ./get_dependencies)
 install -m 0755 /var/cache/git/jarvis/bin/init-script /etc/init.d/jarvis
@@ -15,8 +15,8 @@ SECRET="\$(/usr/local/sbin/secret)"
 LDAP_DOMAIN="\$(dnsdomainname)"
 LDAP_BASEDN="dc=\$(echo \${LDAP_DOMAIN}|sed -e 's/\./,dc=/g')"
 LDAP_BINDDN="cn=\$(hostname -s),ou=Hosts,\${LDAP_BASEDN}"
-LDAP_PASSWD="\${SECRET}"
-LDAP_PASSWORD="\${LDAP_PASSWD}"
+LDAP_PASSWD="\$(SECRET)"
+LDAP_PASSWORD="\$(SECRET)"
 
 XMPP_USERNAME="\$(hostname -s)@\$(dnsdomainname)"
 XMPP_PASSWORD="\${SECRET}"

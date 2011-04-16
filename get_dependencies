@@ -1,4 +1,5 @@
 #!/bin/bash
+apt-get update
 apt-get install -y libpoe-perl libappconfig-perl liblog-dispatch-config-perl   \
                    libpoe-component-irc-perl libpoe-component-client-ldap-perl \
                    libpoe-wheel-null-perl libpoe-component-logger-perl         \
