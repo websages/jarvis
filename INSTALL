@@ -1,9 +1,9 @@
 #!/bin/bash
 if [ ! -d /var/cache/git ];then mkdir -p /var/cache/git; fi
 (cd /var/cache/git ; git clone gitosis@freyr.websages.com:jarvis.git)
-if [ "$(sed -e 's/\..*//' /etc/debian_version)" == "6" ];then 
-    (cd /var/cache/git/jarvis ; git checkout squeeze; git pull origin squeeze )
-fi
+#if [ "$(sed -e 's/\..*//' /etc/debian_version)" == "6" ];then 
+#    (cd /var/cache/git/jarvis ; git checkout squeeze; git pull origin squeeze )
+#fi
 (cd /var/cache/git/jarvis; ./get_dependencies)
 install -m 0755 /var/cache/git/jarvis/bin/init-script /etc/init.d/jarvis
 cat<<EOF> /etc/default/jarvis
