@@ -1,4 +1,4 @@
-use Test::More tests => 8;
+use Test::More tests => 15;
 BEGIN { 
         unshift(@INC,"../lib") if -d "../lib"; 
         unshift(@INC,"lib") if -d "lib"; 
@@ -53,6 +53,7 @@ for(my $x=0; $x<=$#{ $style }; $x++){
     my $cmdb = CMDB::LDAP->new($style->[$x]);
     is_deeply($cmdb->bind_data, $results, "constructor style_$x") ||
       print Data::Dumper->Dump([$style->[$x],$cmdb->bind_data, $results]);
+    ok($cmdb->ldap_bind);
 }
 
 my $anonbind = {
@@ -65,4 +66,5 @@ my $anonbind = {
 my $cmdb = CMDB::LDAP->new({});
 is_deeply($cmdb->bind_data, $anonbind, "bind_anonymously") ||
       print Data::Dumper->Dump([{},$cmdb->bind_data, $anonbind]);
+    # ok($cmdb->ldap_bind); # should fail, we don't allow anon_binds
 

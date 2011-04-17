@@ -42,9 +42,11 @@ use YAML;
 #    creds =>'whitejs:MyP@ssw0rd123!'     <- split /:/, then as above
 # }
 # 
-# undef <- $ENV {'URI', 'BINDDN', 'BINDPW', 'BASEDN'} (env should override ldap.conf)  FIXME
-#          or (failing that) populated from ldaprc/.ldaprc/ldap.conf ( ldap.conf(5) )  FIXME
-#          or (failing those) `dnsdomain`, SRV records, anon_bind                      FIXME
+# {}  <-- bind anonymously using `domainname` and SRV records
+#
+# undef <- $ENV {'URI', 'BINDDN', 'BINDPW', 'BASEDN'} (env should override ldap.conf)  FIXME TODO
+#          or (failing that) populated from ldaprc/.ldaprc/ldap.conf ( ldap.conf(5) )  FIXME TODO
+#          or (failing those) `dnsdomain`, SRV records, anon_bind                      FIXME TODO
 #
 # basically the only way it's not going to bind is if you're just not trying...
 ################################################################################
@@ -274,39 +276,58 @@ sub error{
 # Begin actual LDAP work
 # 
 
-sub get_ldap_entry {
+sub ldap_bind{
     my $self = shift;
-    my $filter = shift if @_;
-    $filter = "(objectclass=*)" unless $filter;
-    my $servers;
+    # change self->uri if you need to change servers
     if($self->{'uri'}){
         @{ $servers }= split(/\,\s+/,$self->{'uri'})
     }
     my $mesg;
+    # loop through the servers in
     while( my $server = shift(@{ $servers })){
         if($server=~m/(.*)/){
             $server=$1 if ($server=~m/(^[A-Za-z0-9\-\.\/:]+$)/);
         }
-        my $ldap = Net::LDAP->new($server) || warn "could not connect to $server $@";
-        $mesg = $ldap->bind( $self->{'binddn'}, password => $self->{'bindpw'});
-        if($mesg->code != 0){ $self->error($mesg->error); }
-        next if $mesg->code;
-        my $records = $ldap->search(
-                                     'base'   => "$self->{'basedn'}",
-                                     'scope'  => 'sub',
-                                     'filter' => $filter
-                                   );
-        unless($records->{'resultCode'}){
-            undef $servers;
-            $self->error($records->{'resultCode'}) if $records->{'resultCode'};
+        $self->{'ldap'} = Net::LDAP->new($server) || warn "could not connect to $server $@";
+        if(defined($self->binddn) && defined($self->bindpw)){
+            $mesg = $self->{'ldap'}->bind( $self->binddn, password => $self->bindpw );
+        }else{
+            $mesg = $self->{'ldap'}->bind( );
         }
-        my $recs;
-        my @entries = $records->entries;
-        $ldap->unbind();
-        return @entries;
+        if($mesg->code != 0){ $self->error($server." : ".$mesg->error); }
+        last unless $mesg->code; # move to the next uri if there was an error
     }
-    return undef;
+    return undef unless $self->{'ldap'};
+    return $self;
 }
+
+sub ldap_unbind{
+    my $self = shift;
+    $self->{'ldap'}->unbind();
+    return $self;
+}
+
+#sub get_ldap_entry {
+#    my $self = shift;
+#    my $filter = shift if @_;
+#    $self->ldap unless $self->{'ldap'};
+#    $filter = "(objectclass=*)" unless $filter;
+#    my $servers;
+#        my $records = $self->{'ldap'}->search(
+#                                               'base'   => "$self->{'basedn'}",
+#                                               'scope'  => 'sub',
+#                                               'filter' => $filter
+#                                             );
+#        unless($records->{'resultCode'}){
+#            $self->error($records->{'resultCode'}) if $records->{'resultCode'};
+#        }
+#        my $recs;
+#        my @entries = $records->entries;
+#        $ldap->unbind();
+#        return @entries;
+#    }
+#    return undef;
+#}
 
 sub update{
     my $self = shift;
@@ -347,8 +368,9 @@ sub update{
     return $self;
 }
 
-1;
-
+################################################################################
+# abstractions for LDAP below here
+#
 sub unique_members{
     my $self = shift;
     my $groupofuniquenames = shift if @_;
@@ -383,3 +405,4 @@ sub entry_attr{
    return @values;
 }
 
+1;
