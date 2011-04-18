@@ -303,9 +303,11 @@ sub pending {
         }
     }
 }
+
 sub connector_error{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     # un-wrap the $msg
     print STDERR "Persona error: ".join("\n",@args);
+}
 
 1;
