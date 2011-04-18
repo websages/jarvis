@@ -61,7 +61,7 @@ sub input{
          $msg->{'conversation'}->{'body'},
          $msg->{'conversation'}->{'id'},
        );
-    $kernel->post('log', "$where <$who> $what");
+    $_[KERNEL]->post('log', "$where <$who> $what");
     my $direct=$msg->{'conversation'}->{'direct'}||0;
     if(defined($what)){
         if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
