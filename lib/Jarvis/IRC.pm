@@ -25,7 +25,9 @@ sub new {
     $self->{'must'} = ["channel_list","nickname","alias","persona","domain"];
 
     # hash of optional constructor elements (key), and their default (value) if not specified
-    $self->{'may'} = { };
+    $self->{'may'} = { 
+                       'persona' => undef, # the persona alias tied to this connector
+                     };
 
     # set our required values fron the constructor or the defaults
     foreach my $attr (@{ $self->{'must'} }){
@@ -399,6 +401,7 @@ sub irc_error{
     my ($self, $kernel, $heap, $sender, @args)=@_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     print STDERR "irc_error:\n";
     print STDERR Data::Dumper->Dump([@args]);
+    $kernel->post($self->{'persona'},'connector_error',@args);
     return;
 }
 

@@ -66,6 +66,7 @@ sub known_personas{
          class: Jarvis::Persona::Jarvis
          init:
            alias: jarvis
+           connector: jarvis_irc
            ldap_domain: websages.com
            ldap_binddn: cn=$host,ou=Hosts,dc=websages,dc=com
            ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
@@ -73,6 +74,7 @@ sub known_personas{
          - class: Jarvis::IRC
            init:
              alias: jarvis_irc
+             persona: jarvis
              nickname: jarvis
              ircname: "Just another really vigilant infrastructure sysadmin"
              server: 127.0.0.1
@@ -194,7 +196,6 @@ sub persona_start{
                                         );
     $self->known_personas();
     $self->peers();
-    $self->spawn("jarvis");
     return $self;
 }
 

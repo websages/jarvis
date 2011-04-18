@@ -50,14 +50,15 @@ sub new {
 
     # collect our states for POE
     $self->{'states'} = { 
-                          'start'         => 'start',
-                          'persona_start' => 'persona_start',
-                          'stop'          => 'stop',
-                          'input'         => 'input',
-                          'channel_add'   => 'channel_add',
-                          'channel_del'   => 'channel_del',
-                          'pending'       => 'pending',
-                          'queue'         => 'queue',
+                          'start'           => 'start',
+                          'persona_start'   => 'persona_start',
+                          'stop'            => 'stop',
+                          'input'           => 'input',
+                          'channel_add'     => 'channel_add',
+                          'channel_del'     => 'channel_del',
+                          'connector_error' => 'connector_error',
+                          'pending'         => 'pending',
+                          'queue'           => 'queue',
                         };
     my $pstates = $self->persona_states(); 
     if(ref($pstates) eq 'HASH'){
@@ -302,5 +303,9 @@ sub pending {
         }
     }
 }
+sub connector_error{
+    my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    # un-wrap the $msg
+    print STDERR "Persona error: ".join("\n",@args);
 
 1;

@@ -8,6 +8,7 @@ use parent Jarvis::Persona::Base;
 sub may {
     my $self = shift;
     return { 
+             'connector'       => undef,  # the connector alias
              'ldap_uri'        => undef,
              'ldap_binddn'     => undef,
              'ldap_bindpw'     => undef,
