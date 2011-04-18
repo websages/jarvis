@@ -39,7 +39,7 @@ sub persona_start{
                                                    'format'   => '%m',
                                                 }
                                    }
-                                   )), 'jarvis_log') or warn "Cannot start Logging $!";
+                                   )), 'log') or warn "Cannot start Logging $!";
     }
     return $self;
 }
@@ -61,7 +61,7 @@ sub input{
          $msg->{'conversation'}->{'body'},
          $msg->{'conversation'}->{'id'},
        );
-    $kernel->post('jarvis_log', 'log', "$where <$who> $what");
+    $kernel->post('log', "$where <$who> $what");
     my $direct=$msg->{'conversation'}->{'direct'}||0;
     if(defined($what)){
         if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
