@@ -41,6 +41,7 @@ sub persona_start{
                                           }
                                      )), 'log') or warn "Cannot start Logging $!";
     }
+    print STDERR Data::Dumper->Dump([ $self->{'logger'} ]);
     return $self;
 }
 
