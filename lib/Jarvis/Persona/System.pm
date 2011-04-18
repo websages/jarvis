@@ -78,7 +78,7 @@ sub known_personas{
              server: 127.0.0.1
              domain: websages.com
              channel_list:
-               - #heathsmom
+               - #puppies
              persona: jarvis
     ...
 }

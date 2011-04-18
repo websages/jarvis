@@ -16,8 +16,38 @@ sub may {
 }
 
 sub persona_start{
-    my $self = $_[OBJECT]||shift;
-    my $kernel = $_[KERNEL];
+    my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    if(-d "/var/log/irclog"){ $self->{'logdir'} = "/var/log/irclog" unless $self->{'logdir'}; }
+    if(-d "/var/log/irc"){ $self->{'logdir'} = "/var/log/irc" unless $self->{'logdir'}; }
+    if($self->{'logdir'}){
+        $log = POE::Component::Logger->spawn(
+            ConfigFile => Log::Dispatch::Config->configure(
+                              Log::Dispatch::Configurator::Hardwired->new(
+                                  # convert me to yaml and put me in the main config
+                                  {
+                                    'file'   => {
+                                                  'class'    => 'Log::Dispatch::File',
+                                                  'min_level'=> 'debug',
+                                                  'filename' => "$self->{'logdir'}/channel.log",
+                                                  'mode'     => 'append',
+                                                  'format'   => '%d{%Y%m%d %H:%M:%S} %m %n',
+                                                },
+                                    'screen' => {
+                                                   'class'    => 'Log::Dispatch::Screen',
+                                                   'min_level'=> 'info',
+                                                   'stderr'   => 0,
+                                                   'format'   => '%m',
+                                                }
+                                   }
+                                   )), 'log') or warn "Cannot start Logging $!";
+    }
+    $kernel->alias_set('jarvis_log')
+    return $self;
+}
+
+sub stop{
+    my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    $kernel->alias_remove('jarvis_log')
     return $self;
 }
 
@@ -33,6 +63,7 @@ sub input{
          $msg->{'conversation'}->{'body'},
          $msg->{'conversation'}->{'id'},
        );
+    $kernel->post('jarvis_log', 'log', "$where <$who> $what");
     my $direct=$msg->{'conversation'}->{'direct'}||0;
     if(defined($what)){
         if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
