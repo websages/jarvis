@@ -61,8 +61,7 @@ sub input{
          $msg->{'conversation'}->{'body'},
          $msg->{'conversation'}->{'id'},
        );
-    print STDERR Data::Dumper->Dump([ $self->{'logger'} ]);
-    $heap->{ $self->alias() }->{'logger'}->yield("$where <$who> $what");
+    $self->{'logger'}->yield("$where <$who> $what");
     my $direct=$msg->{'conversation'}->{'direct'}||0;
     if(defined($what)){
         if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
