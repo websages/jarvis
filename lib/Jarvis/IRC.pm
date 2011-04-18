@@ -25,9 +25,7 @@ sub new {
     $self->{'must'} = ["channel_list","nickname","alias","persona","domain"];
 
     # hash of optional constructor elements (key), and their default (value) if not specified
-    $self->{'may'} = { 
-                       'persona' => undef, # the persona alias tied to this connector
-                     };
+    $self->{'may'} = { };
 
     # set our required values fron the constructor or the defaults
     foreach my $attr (@{ $self->{'must'} }){

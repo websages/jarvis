@@ -81,7 +81,6 @@ sub known_personas{
              domain: websages.com
              channel_list:
                - #puppies
-             persona: jarvis
     ...
 }
     

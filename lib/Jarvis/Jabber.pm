@@ -16,7 +16,7 @@ use POE::Filter::XML::Utils;
 use Carp;
 use XML::Twig;
 
-sub new{
+sub new {
     my $class = shift;
     my $self = {}; 
     my $construct = shift if @_;
