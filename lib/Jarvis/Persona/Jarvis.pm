@@ -47,7 +47,7 @@ sub persona_start{
 
 sub stop{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-    $kernel->alias_remove('jarvis_log')
+    $kernel->alias_remove('jarvis_log');
     return $self;
 }
 
