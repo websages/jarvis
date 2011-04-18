@@ -41,7 +41,7 @@ sub persona_start{
                                    }
                                    )), 'log') or warn "Cannot start Logging $!";
     }
-    $kernel->alias_set('jarvis_log');
+    $_[KERNEL]->alias_set('jarvis_log');
     return $self;
 }
 
