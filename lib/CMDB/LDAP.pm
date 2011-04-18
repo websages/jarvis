@@ -206,6 +206,7 @@ sub bindpw{
 sub setou{
     my $self = shift;
     $self->{'setou'} = shift if @_;
+    $self->{'setbase'} = "ou=".$self->{'setou'}.",".$self->basedn;
     return $self->{'setou'} if $self->{'setou'};
     return undef;
 }
@@ -332,13 +333,9 @@ sub ldap_search {
                                            'scope'  => 'sub',
                                            'filter' => $filter
                                          );
-    unless($records->{'resultCode'}){
-       $self->error($records->{'resultCode'}) if $records->{'resultCode'};
-    }
+    print STDERR $records->error."\n" if $records->code;
     my $recs;
     my @entries = $records->entries;
-    $self->{'ldap'}->unbind();
-    print STDERR "$#entries\n";
     return @entries if @entries;
     return undef;
 }
@@ -373,7 +370,6 @@ sub ldap_update{
     }
     my $errors=$self->error();
     print STDERR "$errors\n" if($errors ne "");
-    $self->ldap_unbind if $self->{'ldap'};
     return $self;
 }
 
@@ -388,6 +384,111 @@ sub ldap_delete{
 ################################################################################
 # abstractions for LDAP below here
 #
+
+sub all_sets{
+    my $self = shift;
+    $old_basedn=$self->basedn;
+    $self->basedn("ou=".$self->{'setou'}.",".$old_basedn);
+    my @entries = $self->ldap_search("(objectclass=groupOfUniqueNames)");
+    my $sets;
+    foreach my $entry (@entries){
+        my $entry_dn = $entry->dn;
+        # strip the top-level sets ou
+        $entry_dn=~s/,ou=$self->{'setou'}.*//;
+
+        $entry_dn = join( ',',( reverse( split(/,/,$entry_dn))));
+        $entry_dn=~s/^(cn|ou)=//;
+        $entry_dn=~s/,\s*(cn|ou)=/::/g;
+        push(@{ $sets }, $entry_dn);
+    }
+    $self->basedn($old_basedn);
+    return $sets;
+}
+
+sub top_sets{
+    my $self = shift;
+    my @tops;
+
+    foreach my $set (@{ $self->all_sets() }){
+        my @tmp = split(/::/, $set );
+        my $top = shift( @tmp );
+        push(@tops,$top) unless grep(/$top/,@tops);
+    }
+    return @tops;
+}
+
+sub sub_sets{
+    my $self = shift;
+    my $parent = shift if @_;
+    my @children;
+    foreach my $set (@{ $self->all_sets() }){
+        if($set=~m/^$parent/){
+            $set=~s/^$parent\:\://;
+            $set=~s/\:\:.*//;
+            push(@children,$set);
+        }
+    }
+    return @children; 
+}
+
+sub set2dn{
+    my $self=shift;
+    my $set = shift;
+    my @set_tree = split(/::/,$set);
+    my $cn = pop(@set_tree);
+    my $ou_tree;
+    if(@set_tree){
+        $ou_tree = "ou=".join(",ou=",reverse(@set_tree)).",".$self->{'setbase'};
+    }else{
+        $ou_tree = $self->{'setbase'};
+    }
+    return "cn=$cn,$ou_tree";
+}
+
+sub dn2set{
+    my $self=shift;
+    my $dn=shift if @_;
+    $dn=~s/,$self->{'setbase'}$//;
+    my @tree=split(/,/,$dn);
+    my $cn = shift(@tree);
+    $cn=~s/^cn=//;
+    map { $_=~s/^ou=// } @tree;
+    $set_tree = join('::',reverse(@tree))."::" if(@tree);
+    return  $set_tree.$cn;
+}
+
+sub entry{
+    my $self=shift;
+    my $dn = shift if(@_);
+    my @dn_parts=split(/,/,$dn);
+    my $filter=shift(@dn_parts);
+    my $sub_base=join(',',@dn_parts);
+    my $old_basedn  = $self->basedn;
+    $self->basedn($sub_base);
+    my @entry = $self->ldap_search($filter);
+    $self->basedn($old_dn);
+    return @entry;
+}
+
+sub members{
+    my $self = shift;
+    my $set_name = shift if @_;
+    my @memberitems;
+    foreach my $set (@{ $self->all_sets() }){
+        if($set=~m/$set_name$/){  # will match "Cfengine::workstations" or "workstations"
+            my @entry = $self->entry( $self->set2dn($set) );
+            my @members = $entry[0]->get_value('uniqueMember');
+            foreach my $member (@members){
+                $member=~s/,$old_basedn$//;
+                my @heiarchy=split(/,/,$member);
+                my $item = shift(@heiarchy);
+                push(@memberitems,$item);
+            }
+            $self->basedn($old_basedn);
+        }
+    }
+    return @memberitems;
+}
 
 sub unique_members{
     my $self = shift;
@@ -422,5 +523,4 @@ sub entry_attr{
     }
    return @values;
 }
-
 1;

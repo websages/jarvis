@@ -6,12 +6,12 @@ BEGIN {
       }
 
 ################################################################################
-# construtcor tests 
+# construtcor tests (26)
 my $results =  {
                  'uri'    => 'ldaps://odin.websages.com:636, ldaps://freyr.websages.com:636',
                  'basedn' => 'dc=websages,dc=com',
                  'binddn' => 'uid=whitejs,ou=People,dc=websages,dc=com',
-                 'bindpw' => $ENV{'BINDDN'},
+                 'bindpw' => $ENV{'BINDPW'},
                };
 
 my $style = [
@@ -19,33 +19,33 @@ my $style = [
                 'uri'    => 'ldaps://odin.websages.com:636, ldaps://freyr.websages.com:636',
                 'basedn' => 'dc=websages,dc=com',
                 'binddn' => 'uid=whitejs,ou=People,dc=websages,dc=com',
-                'bindpw' => $ENV{'BINDDN'},
+                'bindpw' => $ENV{'BINDPW'},
               },
 
               {
                 'domain'   => 'websages.com',
                 'uid'      => 'whitejs',
                 'bindou'   => 'People',
-                'password' => $ENV{'BINDDN'},
+                'password' => $ENV{'BINDPW'},
               },
 
               {
                 'domain'   => 'websages.com',
                 'uid'      => 'whitejs',
-                'password' => $ENV{'BINDDN'},
+                'password' => $ENV{'BINDPW'},
               },
 
               {
                 'uid'      => 'whitejs@websages.com',
-                'password' => $ENV{'BINDDN'},
+                'password' => $ENV{'BINDPW'},
               },
 
               {
-                'creds'    => "whitejs\@websages.com:$ENV{'BINDDN'}",
+                'creds'    => "whitejs\@websages.com:$ENV{'BINDPW'}",
               },
 
               {
-                'creds'    => "whitejs:$ENV{'BINDDN'}",
+                'creds'    => "whitejs:$ENV{'BINDPW'}",
               },
 
             ];
@@ -71,5 +71,15 @@ is_deeply($cmdb->bind_data, $anonbind, "bind_anonymously") ||
     # ok($cmdb->ldap_bind); # should fail, we don't allow anon_binds
 
 
-
+################################################################################
+# add/remove/update group tests (N)
+my $creds =  {
+               'uri'    => 'ldaps://odin.websages.com:636, ldaps://freyr.websages.com:636',
+               'basedn' => 'dc=websages,dc=com',
+               'binddn' => 'uid=whitejs,ou=People,dc=websages,dc=com',
+               'bindpw' => $ENV{'BINDPW'},
+               'setou'  => 'Sets',
+             };
+my $groups = CMDB::LDAP->new({$creds});
+print Data::Dumper->Dump([$groups->all_sets()]);
 
