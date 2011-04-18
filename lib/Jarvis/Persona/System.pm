@@ -196,6 +196,7 @@ sub persona_start{
                                         );
     $self->known_personas();
     $self->peers();
+    $self->spawn("jarvis");
     return $self;
 }
 
