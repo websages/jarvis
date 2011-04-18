@@ -39,15 +39,13 @@ sub persona_start{
                                                    'format'   => '%m',
                                                 }
                                    }
-                                   )), 'log') or warn "Cannot start Logging $!";
+                                   )), 'jarvis_log') or warn "Cannot start Logging $!";
     }
-    $_[KERNEL]->alias_set('jarvis_log');
     return $self;
 }
 
 sub stop{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-    $kernel->alias_remove('jarvis_log');
     return $self;
 }
 
