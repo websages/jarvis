@@ -11,10 +11,11 @@ use YAML;
 # subsequent or redundant data will be ignored
 #
 # { 
-#   'uri'    => 'ldaps://ldap.example.org:636',
-#   'basedn' => 'dc=example,dc=org',
-#   'binddn' => 'uid=whitejs,ou=People,dc=example,dc=org',
-#   'bindpw' => 'MyP@ssw0rd123!',
+#   'uri'     => 'ldaps://ldap.example.org:636',
+#   'basedn'  => 'dc=example,dc=org',
+#   'binddn'  => 'uid=whitejs,ou=People,dc=example,dc=org',
+#   'bindpw'  => 'MyP@ssw0rd123!',
+#   'setsou' => 'Sets', <- ou=Sets,${basedn} (defaults to 'Sets' if not specified)
 # }
 #
 # { 
@@ -63,6 +64,7 @@ sub new{
     $self->binddn($cnstr->{'binddn'}) if $cnstr->{'binddn'};
     $self->bindpw($cnstr->{'bindpw'}) if $cnstr->{'bindpw'};
     $self->domain($cnstr->{'domain'}) if $cnstr->{'domain'};
+    $self->setou($cnstr->{'setou'})   if $cnstr->{'setou'};
     ############################################################################
     # determine the domain any way possible
     my $domain;
@@ -162,8 +164,13 @@ sub new{
 }
 
 sub domain{
+    # # should changing the domain changes the basedn, binddn, and uri?
     my $self = shift;
+    #my $previous = $self->{'domain'};
     $self->{'domain'} = shift if @_;
+    #if($previous ne $self->{'domain'} ){
+    #    $self->basedn($self->domain2basedn($self->{'domain'});
+    #}
     return $self->{'domain'} if $self->{'domain'};
     return undef;
 }
@@ -193,6 +200,13 @@ sub bindpw{
     my $self = shift;
     $self->{'bindpw'} = shift if @_;
     return $self->{'bindpw'} if $self->{'bindpw'};
+    return undef;
+}
+
+sub setou{
+    my $self = shift;
+    $self->{'setou'} = shift if @_;
+    return $self->{'setou'} if $self->{'setou'};
     return undef;
 }
 
@@ -307,70 +321,74 @@ sub ldap_unbind{
     return $self;
 }
 
-#sub get_ldap_entry {
-#    my $self = shift;
-#    my $filter = shift if @_;
-#    $self->ldap unless $self->{'ldap'};
-#    $filter = "(objectclass=*)" unless $filter;
-#    my $servers;
-#        my $records = $self->{'ldap'}->search(
-#                                               'base'   => "$self->{'basedn'}",
-#                                               'scope'  => 'sub',
-#                                               'filter' => $filter
-#                                             );
-#        unless($records->{'resultCode'}){
-#            $self->error($records->{'resultCode'}) if $records->{'resultCode'};
-#        }
-#        my $recs;
-#        my @entries = $records->entries;
-#        $ldap->unbind();
-#        return @entries;
-#    }
-#    return undef;
-#}
-
-sub update{
+sub ldap_search {
     my $self = shift;
-    my $construct = shift if @_;
-    my $entry = $construct->{'entry'} if $construct->{'entry'};
-    return undef unless $entry;
-    my ($servers,$mesg);
-    $servers = [ $construct->{'server'} ] if $construct->{'server'};
-    unless($servers){
-        @{ $servers } = split(/,/,$self->{'uri'}) if $self->{'uri'};
+    my $filter = shift if @_;
+    $self->ldap_bind unless $self->{'ldap'};
+    $filter = "(objectclass=*)" unless $filter;
+    my $servers;
+    my $records = $self->{'ldap'}->search(
+                                           'base'   => "$self->{'basedn'}",
+                                           'scope'  => 'sub',
+                                           'filter' => $filter
+                                         );
+    unless($records->{'resultCode'}){
+       $self->error($records->{'resultCode'}) if $records->{'resultCode'};
     }
-    my @what_to_change;
-    while(my $server=shift(@{$servers})){
-        $self->error("Updating: ".$entry->dn." at ".$server);
-        if($server=~m/(.*)/){ $server=$1 if ($server=~m/(^[A-Za-z0-9\-\.\/:]+$)/); }
-        my $ldap = Net::LDAP->new($server) || warn "could not connect to $server $@";
-        $mesg = $ldap->bind( $self->{'binddn'}, password => $self->{'bindpw'});
-        undef $servers unless $mesg->{'resultCode'};
-        $mesg->code && $self->error($mesg->code." ".$mesg->error);
-        foreach my $change (@{ $entry->{'changes'} }){
-            push(@what_to_change, $change);
+    my $recs;
+    my @entries = $records->entries;
+    $self->{'ldap'}->unbind();
+    print STDERR "$#entries\n";
+    return @entries if @entries;
+    return undef;
+}
 
-        }
-        $mesg =  $ldap->modify ( $entry->dn, changes => [ @what_to_change ] );
-        if(($mesg->code == 10) && ($mesg->error eq "Referral received")){
-            $self->error("Received referral");
-            foreach my $ref (@{ $mesg->{'referral'} }){
-                 if($ref=~m/(ldap.*:.*)\/.*/){
-                     $self->update({ 'server'=> $ref, 'entry'=> $entry });
-                 }
+sub ldap_add{
+    my $self = shift;
+    my $entry = shift if @_;
+    return undef unless $entry;
+    $self->ldap_update($entry->add);
+    return $self;
+}
+
+sub ldap_update{
+    my $self = shift;
+    my $entry = $shift if@_;
+    return undef unless $entry;
+    $self->ldap_bind unless $self->{'ldap'};
+    my $mesg = $entry->update( $self->{'ldap'} );
+    if(($mesg->code == 10) && ($mesg->error eq "Referral received")){
+        $self->error("Received referral");
+        foreach my $ref (@{ $mesg->{'referral'} }){
+            if($ref=~m/(ldap.*:.*)\/.*/){
+                 my $old_uri = $self->uri;
+                 $self->unbind;                   # remove the old binding
+                 $self->uri($ref);                # update the uri to the referral
+                 $self->ldap_update( $entry );    # fire this routine off again, (should unbind on return)
+                 $self->uri( $old_uri );          # restore the old (read-only) uri for future binds
              }
-         }else{
-             $mesg->code && $self->error($mesg->code." ".$mesg->error);
          }
+    }else{
+        $mesg->code && $self->error($mesg->code." ".$mesg->error);
     }
     my $errors=$self->error();
     print STDERR "$errors\n" if($errors ne "");
+    $self->ldap_unbind if $self->{'ldap'};
+    return $self;
+}
+
+sub ldap_delete{
+    my $self = shift;
+    my $entry = shift if @_;
+    return undef unless $entry;
+    $self->ldap_update($entry->delete);
     return $self;
 }
 
 ################################################################################
 # abstractions for LDAP below here
 #
+
 sub unique_members{
     my $self = shift;
     my $groupofuniquenames = shift if @_;
