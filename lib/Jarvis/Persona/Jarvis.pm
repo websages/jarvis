@@ -41,7 +41,6 @@ sub persona_start{
                                           }
                                      )), 'log') or warn "Cannot start Logging $!";
     }
-    print STDERR Data::Dumper->Dump([ $self->{'logger'} ]);
     return $self;
 }
 
@@ -62,6 +61,7 @@ sub input{
          $msg->{'conversation'}->{'body'},
          $msg->{'conversation'}->{'id'},
        );
+    print STDERR Data::Dumper->Dump([ $self->{'logger'} ]);
     $heap->{ $self->alias() }->{'logger'}->yield("$where <$who> $what");
     my $direct=$msg->{'conversation'}->{'direct'}||0;
     if(defined($what)){
