@@ -21,7 +21,7 @@ sub new {
     # hash of optional constructor elements (key), and their default (value) if not specified
     $self->{'may'} = {
                        "debug" => 0, 
-                       "trace" => 0,
+                       "trace" => 1,
                      };
 
 
