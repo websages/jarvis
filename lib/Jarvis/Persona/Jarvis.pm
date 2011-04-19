@@ -61,10 +61,10 @@ sub input{
     if(defined($what)){
         if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
             foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
+                $nick = $chan_nick;
                 if($what=~m/^\s*$chan_nick\s*:*\s*/){
                     $what=~s/^\s*$chan_nick\s*:*\s*//;
                     $direct=1;
-                    $nick = $chan_nick;
                 }
             }
         }
@@ -74,6 +74,7 @@ sub input{
         ########################################################################
         for ( $what ) {
             /^\s*!*help\s*/ && do { $replies = [ "i need a help routine" ] if($direct); last; };
+            /^\s*good morning $nick\s*/ && do { $replies = [ "good morning $who" ] last; };
             /.*/            && do { $replies = [ "i don't understand"    ] if($direct); last; };
             /.*/            && do { last; }
         }
