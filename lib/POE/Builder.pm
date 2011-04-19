@@ -132,5 +132,6 @@ sub object_session(){
                                             },
                           heap           => { $object->alias() => $object }
                     ));
+    print STDERR "Created: ".$self->{'sessions'}->[$#{ $self->{'sessions'} }]->ID."\n";
 }
 1;
