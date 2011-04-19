@@ -313,17 +313,14 @@ sub connector{
                                   });
         my $new_session_id = $poe->object_session( $conn->{'class'}->new( $conn->{'init'}) );
         $self->{'connectors'}->{ $new_session_id } = $conn;
-        print STDERR "\$self->{'connectors'}->{ $new_session_id } = $conn\n";
     }
 }
 
 sub connector_error{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-        print STDERR "\$self->{'connectors'}->{ ".$sender->ID." } = ".$self->{'connectors'}->{ $sender->ID }."\n";
     if($args[0]=~m/Trying to reconnect too fast./){ # back off and try in 10
         $kernel->post($sender,'_stop');
-        my $conn = $self->{'connectors'}->{$sender};
-print STDERR Data::Dumper->Dump([$conn]);
+        my $conn = $self->{'connectors'}->{$sender->ID};
         delete $self->{'connectors'}->{$sender};
         $kernel->delay('connector', 10 ,$conn);
     }
