@@ -8,31 +8,6 @@ use POSIX qw( setsid );
 use POE::Builder;
 
 ################################################################################
-# standard functions each persona needs to communicate with the connectors
-################################################################################
-sub start{
-    my $self = $_[OBJECT]||shift;
-    my $kernel = $_[KERNEL];
-    $kernel->post($self->alias(),'persona_start');
-    return $self;
-}
-
-sub stop{
-     my $self = $_[OBJECT]||shift;
-     return $self;
-}
-
-sub states{
-     my $self = $_[OBJECT]||shift;
-     return $self->{'states'};
-}
-
-sub alias{
-     my $self = $_[OBJECT]||shift;
-     return $self->{'alias'};
-}
-
-################################################################################
 # the messages get routed here from the connectors, a reply is formed, and 
 # posted back to the sender_alias,reply event (this function will need to be
 # overloaded...
