@@ -397,7 +397,6 @@ sub invite{
 
 sub irc_error{
     my ($self, $kernel, $heap, $sender, @args)=@_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-    print STDERR "irc_error:\n";
     $kernel->post($self->{'persona'},'connector_error',@args);
     return;
 }
