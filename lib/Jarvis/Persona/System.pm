@@ -315,6 +315,7 @@ sub spawn{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     my $persona = shift @args if @args;
     $persona=~s/^\s+//;
+print STDERR ":::: $persona :::::\n";
     my $found=0;
     if(defined( $self->{'spawned'}->{$persona} )){
         return "Please terminate existing $persona sessons before attempting to spawn another.";
@@ -334,7 +335,7 @@ sub spawn{
             #    push( @{ $self->{'spawned'}->{$persona} }, $conn->{'init'}->{'alias'} );
             #    $poe->object_session( $conn->{'class'}->new( $conn->{'init'} ) );
 
-            return "$persona spawned."
+            return;
         }
     }
     return "I don't know how to become $persona." if(!$found);
