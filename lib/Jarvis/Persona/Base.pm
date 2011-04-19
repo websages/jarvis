@@ -306,7 +306,7 @@ sub pending {
 
 sub connector_error{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-    print STDERR __PACKAGE__." Persona error: ".join("\n",@args)."\n";
+    print STDERR $self->alias()." Persona error: ".join("\n",@args)."\n";
 }
 
 1;
