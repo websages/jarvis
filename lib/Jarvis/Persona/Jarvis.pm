@@ -54,9 +54,6 @@ sub input{
     my $direct=$msg->{'conversation'}->{'direct'}||0;
 
     my $nick = undef;
-
-print STDERR "direct => $direct\n";
-
     if(defined($what)){
         if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
             foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
@@ -82,9 +79,9 @@ print STDERR "direct => $direct\n";
         if($direct==1){ 
             foreach my $line (@{ $replies }){
                 if( defined($line) && ($line ne "") ){ 
-                   $kernel->post($sender, $respond_event, $msg, $who.': '.$line); 
                    if(ref($where) eq 'ARRAY'){ $where = $where->[0]; }
                    $kernel->post($self->{'logger'}, 'log', "#privmsg[$where] <$who> $what");
+                   $kernel->post($sender, $respond_event, $msg, $line); 
                    $kernel->post($self->{'logger'}, 'log', "#privmsg[$who] <$where> $line");
                }else{
                    $kernel->post($self->{'logger'}, 'log', "$where <$nick> $who: $line");
