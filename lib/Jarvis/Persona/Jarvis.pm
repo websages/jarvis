@@ -74,6 +74,7 @@ sub input{
         #                                                                      #
         ########################################################################
         if($direct==1){ 
+            $msg->{'conversation'}->{'direct'}= 0) unless $msg->{'conversation'}->{'direct'};
             foreach my $line (@{ $replies }){
                 if($msg->{'conversation'}->{'direct'} == 0){
                     if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $who.': '.$line); }
