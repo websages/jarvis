@@ -3,6 +3,9 @@ use parent Jarvis::Persona::Base;
 use strict;
 use warnings;
 use POE; # this is needed even though it's in the parent or we don't send events
+use Time::Local;
+use Data::Dumper;
+use YAML;
 
 sub may {
     my $self=shift;
@@ -135,7 +138,58 @@ sub input{
 
 sub gist{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-    print STDERR Data::Dumper->Dump([@args]); 
+    my @gistlist;
+    my ($from, $now,$type,$unixlogtime);
+    my ($second, $minute, $hour, $dayOfMonth, $month,
+        $yearOffset, $dayOfWeek, $dayOfYear, $daylightSavings) = localtime(time);
+   $now=timelocal($second,$minute,$hour,$dayOfMonth,$month,$yearOffset);
+   my $huh=1;
+   if($args[1]=~m/:/){
+       my @timespec=split(/:/,$args[1]);
+       my $s=pop(@timespec)||0;
+       my $m=pop(@timespec)||0;
+       my $h=pop(@timespec)||0;
+       my $deltat=(3600*$h+60*$m+$s);
+       $from=$now-$deltat;
+       $type='time';
+       print STDERR "gisting from $from to $now\n";
+       $huh=0;
+    }elsif($args[1]=~m/^\d+$/){
+        $huh=0;
+        $type='lines';
+        print STDERR "gisting last $args[1] lines\n";
+    }
+#    if(!$huh){
+#        my $fh = FileHandle->new("$cfg->{'logdir'}/channel.log", "r");
+#        if (defined $fh){
+#            while(my $logline=<$fh>){
+#                if($logline){
+#                    chomp($logline);
+#                    my @parts=split(" ",$logline);
+#                    #skipped blank and bitched lines
+#                    if($#parts>2){
+#                        my $logdate=shift @parts;
+#                        my $logtime=shift @parts;
+#                        my $logevent=shift @parts;
+#                        my $logtext=join(" ",@parts);
+#                        my $logthen=$logdate." ".$logtime;
+#                        if ($logthen=~m/(\d\d\d\d)(\d\d)(\d\d) (\d\d):(\d\d):(\d\d)/){
+#                            # and it better.
+#                            $unixlogtime=timelocal($6,$5,$4,$3,$2-1,$1-1900);
+#                        }
+#                        if($logevent eq $channel){
+#                            if($type eq 'lines'){
+#                                push(@gistlist, join(" ",($logdate,$logtime,$logevent,$logtext)));
+#                            }elsif(($from<=$unixlogtime)&&($unixlogtime<=$now)){
+#                                push(@gistlist, join(" ",($logdate,$logtime,$logevent,$logtext)));
+#                            }
+#                        }
+#                    }
+#                }
+#            }
+#            $fh->close;
+#        }
+#    }
 }
 
 1;
