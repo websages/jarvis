@@ -165,7 +165,7 @@ sub states{
 }
 
 sub persona_start{
-    my $self=shift;
+    my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     my @brainpath = split('/',$self->{'brainpath'}); 
     shift(@brainpath); # remove the null in [0]
     # mkdir -p
@@ -195,7 +195,9 @@ sub persona_start{
                                         );
     $self->known_personas();
     $self->peers();
-    $self->spawn("jarvis");
+    print STDERR "################################################################################\n";
+    $self->yield('spawn','jarvis');
+    print STDERR "################################################################################\n";
     return $self;
 }
 
@@ -205,6 +207,7 @@ sub persona_states{
              'peer_check'            => 'peer_check',
              'persona_check'         => 'persona_check',
              'peer_no_reply'         => 'peer_no_reply',
+             'spawn'                 => 'spawn',
            };
 }
 
@@ -315,7 +318,7 @@ sub spawn{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     my $persona = shift @args if @args;
     $persona=~s/^\s+//;
-print STDERR Data::Dumper->Dump([@args]);
+print STDERR "\n--------------------------------\n".Data::Dumper->Dump([@args])"\n--------------------------------\n".;
     my $found=0;
     if(defined( $self->{'spawned'}->{$persona} )){
         return "Please terminate existing $persona sessons before attempting to spawn another.";
