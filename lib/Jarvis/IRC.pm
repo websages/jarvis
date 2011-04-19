@@ -207,7 +207,7 @@ sub irc_public {
     $what=~s/[^a-zA-Z0-9:?!\@#\%^&*\[\]_+=\-"'<>\/\. ~]//g;
     $what=~s/[\$\`\(]//g;
     $what=~s/[)]//g;
-    print STDERR "[$channel] $nick : $what\n";
+    #print STDERR "[$channel] $nick : $what\n";
     my $msg = { 
                 'sender_alias' => $self->alias(),
                 'reply_event'  => 'irc_public_reply',
@@ -403,8 +403,8 @@ sub irc_error{
 
 sub irc_quit{
     my ($self, $kernel, $heap, $sender, @args)=@_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-    print STDERR "irc_quit:\n";
-    print STDERR Data::Dumper->Dump([@args]);
+    #print STDERR "irc_quit:\n";
+    #print STDERR Data::Dumper->Dump([@args]);
     return;
 }
 

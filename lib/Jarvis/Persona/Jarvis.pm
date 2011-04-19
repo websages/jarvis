@@ -77,6 +77,7 @@ sub input{
         ########################################################################
         #                                                                      #
         ########################################################################
+print STDERR "direct => $direct, addressed => $addressed\n";
         if($direct==1){ 
             if($addressed == 1){
                 foreach my $line (@{ $replies }){
