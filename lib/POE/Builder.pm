@@ -110,28 +110,27 @@ sub object_session(){
     my $object_states = $object->states();
     push( @{ $self->{'sessions'} }, 
           POE::Session->create(
-                                options => { 
-                                             debug => $self->{'debug'}, 
-                                             trace => $self->{'trace'} 
-                                           },
-                          object_states =>  [ $object => $object_states ],
-                          inline_states =>  {
-                                              _start   => sub { 
-                                                                my ($kernel, $heap) = @_[KERNEL, HEAP];
-                                                                $kernel->post($_[SESSION], "start");
-                                                                # set the session_alias
-                                                                $kernel->alias_set( $object->alias() );
-                                                              },
-                                              _stop    => sub {
-                                                                my ($kernel, $heap) = @_[KERNEL, HEAP];
-                                                                $kernel->post($_[SESSION],"stop");
-                                                                # remove the session_alias
-                                                                $kernel->alias_remove();
-                                                              }
-    
-                                            },
-                          heap           => { $object->alias() => $object }
-                    ));
+                                options       => { 
+                                                   debug => $self->{'debug'}, 
+                                                   trace => $self->{'trace'} 
+                                                 },
+                                object_states => [ $object => $object_states ],
+                                inline_states => {
+                                                   _start   => sub { 
+                                                                     my ($kernel, $heap) = @_[KERNEL, HEAP];
+                                                                     $kernel->post($_[SESSION], "start");
+                                                                     # set the session_alias
+                                                                     $kernel->alias_set( $object->alias() );
+                                                                   },
+                                                   _stop    => sub {
+                                                                     my ($kernel, $heap) = @_[KERNEL, HEAP];
+                                                                     $kernel->post($_[SESSION],"stop");
+                                                                     # remove the session_alias
+                                                                     $kernel->alias_remove();
+                                                                   }
+                                                 },
+                                heap          => { $object->alias() => $object }
+                          ));
     return $self->{'sessions'}->[$#{ $self->{'sessions'} }]->ID;
 }
 1;
