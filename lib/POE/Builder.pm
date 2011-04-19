@@ -105,7 +105,7 @@ sub connector{
 }
 
 sub object_session(){
-    my $self=shift;
+    my $self = shift;
     my $object = shift if @_;
     my $object_states = $object->states();
     push( @{ $self->{'sessions'} }, POE::Session->create(

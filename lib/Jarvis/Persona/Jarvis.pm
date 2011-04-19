@@ -12,6 +12,7 @@ sub may {
              'ldap_uri'        => undef,
              'ldap_binddn'     => undef,
              'ldap_bindpw'     => undef,
+             'trace'           => 1,
              'log_dir'         => '/var/log/irc',
            };
 }
