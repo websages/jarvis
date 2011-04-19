@@ -78,7 +78,7 @@ sub input{
         #                                                                      #
         ########################################################################
         if($direct==1){ 
-            if($addressed == 1;){
+            if($addressed == 1){
                 foreach my $line (@{ $replies }){
                     if( defined($line) && ($line ne "") ){ 
                         $kernel->post($sender, $respond_event, $msg, $who.': '.$line); 
