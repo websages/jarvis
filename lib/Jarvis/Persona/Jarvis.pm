@@ -138,7 +138,7 @@ sub input{
 
 sub gist{
     my ($self, $kernel, $heap, $sender, $gist, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-    $kernel->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, 'no.');
+    $_[KERNEL]->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, 'no.');
     my @gistlist;
     my ($from, $now,$type,$unixlogtime);
     my ($second, $minute, $hour, $dayOfMonth, $month,
