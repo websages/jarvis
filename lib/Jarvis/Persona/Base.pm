@@ -117,7 +117,10 @@ sub start{
 }
 
 sub stop{
-     my $self = $_[OBJECT]||shift;
+     my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
+     foreach my $conn (keys(%{ $self->{'connectors'} })){
+        $kernel->post($conn,'stop');
+     }
      return $self;
 }
 
