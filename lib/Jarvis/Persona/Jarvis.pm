@@ -62,6 +62,7 @@ print STDERR "direct => $direct\n";
             foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
                 if($what=~m/^\s*$chan_nick\s*:*\s*/){
                     $what=~s/^\s*$chan_nick\s*:*\s*//;
+                    $direct=1;
                     $nick = $chan_nick;
                 }
             }
