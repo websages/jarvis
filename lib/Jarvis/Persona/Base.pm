@@ -307,6 +307,7 @@ sub pending {
 sub connector{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     foreach my $conn (@args){
+        my $poe = new POE::Builder({ 'debug' => $self->debug ,'trace' => $self->{'trace'} });
         $poe->object_session( $conn->{'class'}->new( $conn->{'init'} ) );
     }
 }
