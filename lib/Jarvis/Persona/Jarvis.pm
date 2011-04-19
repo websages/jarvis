@@ -1,4 +1,4 @@
-package Jarvis::Persona::Base;
+package Jarvis::Persona::Jarvis;
 use strict;
 use warnings;
 use AI::MegaHAL;
