@@ -3,7 +3,12 @@ use parent Jarvis::Persona::Base;
 use strict;
 use warnings;
 use POE; # this is needed even though it's in the parent or we don't send events
+
+# gists
+use File::Temp qw/ :mktemp  /;
 use Time::Local;
+# gists
+
 use Data::Dumper;
 use YAML;
 
