@@ -53,12 +53,14 @@ sub input{
        );
     my $direct=$msg->{'conversation'}->{'direct'}||0;
 
+    my $chan_nick = undef;
     if(defined($what)){
         if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
-            foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
+            foreach $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
                 if($what=~m/^\s*$chan_nick\s*:*\s*/){
                     $what=~s/^\s*$chan_nick\s*:*\s*//;
                     $direct=1;
+                    last;
                 }
             }
         }
