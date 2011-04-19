@@ -319,11 +319,11 @@ sub connector{
 
 sub connector_error{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-    if($args[0]=~m/Trying to reconnect too fast./){ # back off and try in 10
+    if($args[0]=~m/Trying to reconnect too fast./){ # back off and try in 5
         $kernel->post($sender,'_stop');
         my $conn = $self->{'connectors'}->{$sender->ID};
         delete $self->{'connectors'}->{$sender};
-        $kernel->delay('connector', 10 ,$conn);
+        $kernel->delay('connector', 5 ,$conn);
     }
     print STDERR $$.": ".$sender->ID." -> ".$self->alias()." Persona error: ".join("\n",@args)."\n";
     
