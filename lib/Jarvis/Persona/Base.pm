@@ -56,6 +56,7 @@ sub new {
                           'input'           => 'input',
                           'channel_add'     => 'channel_add',
                           'channel_del'     => 'channel_del',
+                          'connector'       => 'connector',
                           'connector_error' => 'connector_error',
                           'pending'         => 'pending',
                           'queue'           => 'queue',
@@ -302,6 +303,10 @@ sub pending {
             }
         }
     }
+}
+sub connector_error{
+    my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    print STDERR Data::Dumper->Dump([@args]);
 }
 
 sub connector_error{
