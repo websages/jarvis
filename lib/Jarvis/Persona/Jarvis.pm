@@ -197,11 +197,16 @@ sub gist{
     if($type eq 'lines'){
         my @trash=splice(@gistlist,0,$#gistlist-($gist-1));
     }
+    my ($fh, $file) = mkstemp( "/dev/shm/gisttmp-XXXXX" );
+    open(GISTTMP,">$file");
     foreach my $gistline (@gistlist){
-        print STDERR "$gistline\n";
+        print GISTTMP "$gistline\n";
     }
-    print Data::Dumper->Dump([$msg]);
-    $kernel->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, 'no.');
+    close(GISTTMP);
+    open(GIST, "/usr/local/bin/gist -p < $file |");
+    chomp(my $url=<GIST>);
+    close(GIST);
+    unlink($file);
+    $kernel->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, $url);
 }
-
 1;
