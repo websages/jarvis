@@ -80,14 +80,14 @@ sub input{
             foreach my $line (@{ $replies }){
                 if( defined($line) && ($line ne "") ){ 
                     $kernel->post($sender, $respond_event, $msg, $who.': '.$line); 
-                    $kernel->post($self->{'logger'}, 'log', "$where <$chan_nick> $who: $line");
+                    $kernel->post($self->{'logger'}, 'log', "$where <$nick> $who: $line");
                 }
             }
         }else{
             foreach my $line (@{ $replies }){
                 if( defined($line) && ($line ne "") ){ 
                     $kernel->post($sender, $respond_event, $msg, $line); 
-                    $kernel->post($self->{'logger'}, 'log', "$where <$chan_nick> $line");
+                    $kernel->post($self->{'logger'}, 'log', "$where <$nick> $line");
                 }
             }
         }
