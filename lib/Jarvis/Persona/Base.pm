@@ -320,10 +320,11 @@ sub connector{
 
 sub connector_error{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-    if($args[0]=~m/Trying to reconnect too fast./){ # back off and try in 3n
+    # keep trying with an increasing delay.
+    if($args[0]=~m/Trying to reconnect too fast./){ # back off and try in 5n
         $kernel->post($sender,'_stop');
         my $conn = $self->{'connectors'}->{$sender->ID};
-        $conn->{'init'}->{'delay'}+=3; # delay 3 more each time we try...
+        $conn->{'init'}->{'delay'}+=5; # delay 5 more each time we try...
         delete $self->{'connectors'}->{$sender};
         $kernel->delay('connector', $conn->{'init'}->{'delay'} ,$conn);
     }
