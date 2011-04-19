@@ -79,7 +79,6 @@ sub input{
         if($direct==1){ 
             foreach my $line (@{ $replies }){
                 if( defined($line) && ($line ne "") ){ 
-                   $kernel->post($sender, $respond_event, $msg, $who.': '.$line); 
                    if(ref($where) eq 'ARRAY'){  # this was an irc privmsg
                        $where = $where->[0];
                        $kernel->post($sender, $respond_event, $msg, $line); 
