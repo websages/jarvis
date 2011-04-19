@@ -314,9 +314,9 @@ sub input{
 
 sub spawn{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+print STDERR Data::Dumper->Dump([@args]);
     my $persona = shift @args if @args;
     $persona=~s/^\s+//;
-print STDERR Data::Dumper->Dump([$sender,@args]);
     my $found=0;
     if(defined( $self->{'spawned'}->{$persona} )){
         return "Please terminate existing $persona sessons before attempting to spawn another.";
