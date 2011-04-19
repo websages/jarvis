@@ -307,16 +307,25 @@ sub pending {
 sub connector{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     foreach my $conn (@args){
-        my $poe = new POE::Builder({ 'debug' => $self->{'debug'} ,'trace' => $self->{'trace'} });
-        my $new_session_id = $poe->object_session( $conn->{'class'}->new( $conn->{'init'} ) );
-        print STDERR "::> $new_session_id\n";
-        push(@{ $self->{'connectors'} }, $new_session_id);
+        my $poe = new POE::Builder({ 
+                                     'debug' => $self->{'debug'},
+                                     'trace' => $self->{'trace'},
+                                  });
+        my $new_session_id = $poe->object_session( $conn->{'class'}->new( $conn->{'init'}) );
+        $self->{'connectors'}->{ $new_session_id } = $conn;
     }
 }
 
 sub connector_error{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    if($args[0]=~m/Trying to reconnect too fast./){ # back off and try in 15
+        $kernel->post->($sender,'_stop');
+        my $conn = $self->{'connectors'}->{$ssender};
+        delete $self->{'connectors'}->{$ssender};
+        $kernel->delay->('connector',15,$conn);
+    }
     print STDERR $$.": ".$sender->ID." -> ".$self->alias()." Persona error: ".join("\n",@args)."\n";
+    
 }
 
 1;
