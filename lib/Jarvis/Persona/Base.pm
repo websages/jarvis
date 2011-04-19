@@ -321,7 +321,7 @@ sub connector_error{
     if($args[0]=~m/Trying to reconnect too fast./){ # back off and try in 15
         $kernel->post->($sender,'_stop');
         my $conn = $self->{'connectors'}->{$ssender};
-        delete $self->{'connectors'}->{$ssender};
+        delete $self->{'connectors'}->{$sender};
         $kernel->delay->('connector',15,$conn);
     }
     print STDERR $$.": ".$sender->ID." -> ".$self->alias()." Persona error: ".join("\n",@args)."\n";
