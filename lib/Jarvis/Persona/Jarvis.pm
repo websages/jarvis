@@ -8,6 +8,60 @@ use POSIX qw( setsid );
 use POE::Builder;
 
 ################################################################################
+# Functions typically overloaded in the personas that inherit the base one
+################################################################################
+# a handler for mandatory constructor variables (overload me)
+sub must {
+    my $self=shift;
+    return [];
+}
+
+# a handler for optional constructor variables (overload me)
+sub may {
+    my $self=shift;
+    return {};
+}
+
+# a handler for persona init routines (overload me)
+sub persona_start{
+    my $self = $_[OBJECT]||shift;
+    my $kernel = $_[KERNEL];
+    return $self;
+}
+
+# a handler for persona POE event states, return a list or hash 
+# to be added to $self->{'states'} (overload me)
+sub persona_states{
+    my $self = $_[OBJECT]||shift;
+    return undef;
+}
+
+################################################################################
+# standard functions each persona needs to communicate with the connectors
+################################################################################
+sub start{
+    my $self = $_[OBJECT]||shift;
+    my $kernel = $_[KERNEL];
+    $kernel->post($self->alias(),'persona_start');
+    return $self;
+}
+
+sub stop{
+     my $self = $_[OBJECT]||shift;
+     return $self;
+}
+
+sub states{
+     my $self = $_[OBJECT]||shift;
+     return $self->{'states'};
+}
+
+sub alias{
+     my $self = $_[OBJECT]||shift;
+     return $self->{'alias'};
+}
+
+################################################################################
 # let the personality know that the connector is now watching a channel
 ################################################################################
 sub channel_add{
