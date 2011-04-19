@@ -195,9 +195,7 @@ sub persona_start{
                                         );
     $self->known_personas();
     $self->peers();
-    print STDERR "################################################################################\n";
     $kernel->yield('spawn','jarvis');
-    print STDERR "################################################################################\n";
     return $self;
 }
 
@@ -318,7 +316,7 @@ sub spawn{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     my $persona = shift @args if @args;
     $persona=~s/^\s+//;
-print STDERR "\n--------------------------------\n".Data::Dumper->Dump([@args])."\n--------------------------------\n";
+print STDERR Data::Dumper->Dump([$sender,@args]);
     my $found=0;
     if(defined( $self->{'spawned'}->{$persona} )){
         return "Please terminate existing $persona sessons before attempting to spawn another.";
