@@ -56,13 +56,11 @@ sub input{
 
     my ($addressed, $nick) = (0,undef);
     if(defined($what)){
-        if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
-            foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
-                if($what=~m/^\s*$chan_nick\s*:*\s*/){
-                    $what=~s/^\s*$chan_nick\s*:*\s*//;
-                    $addressed = 1;
-                    $nick = $chan_nick;
-                }
+        foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
+            if($what=~m/^\s*$chan_nick\s*:*\s*/){
+                $what=~s/^\s*$chan_nick\s*:*\s*//;
+                $addressed = 1;
+                $nick = $chan_nick;
             }
         }
         my $replies=[];
