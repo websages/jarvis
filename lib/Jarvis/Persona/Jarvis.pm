@@ -177,7 +177,7 @@ sub gist{
                             # and it better.
                             $unixlogtime=timelocal($6,$5,$4,$3,$2-1,$1-1900);
                         }
-                        if($logevent eq $channel){
+                        if($logevent eq $argv[1]->{'conversation'}->{'room'}){
                             if($type eq 'lines'){
                                 push(@gistlist, join(" ",($logdate,$logtime,$logevent,$logtext)));
                             }elsif(($from<=$unixlogtime)&&($unixlogtime<=$now)){
