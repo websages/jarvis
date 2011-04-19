@@ -78,14 +78,13 @@ sub input{
         if($direct==1){ 
             foreach my $line (@{ $replies }){
                 if( defined($line) && ($line ne "") ){ 
-                       $kernel->post($sender, $respond_event, $msg, $who.': '.$line); 
-                       if(ref($where) eq 'ARRAY'){ $where = $where->[0]; }
-                       $kernel->post($self->{'logger'}, 'log', "#privmsg[$where] <$who> $what");
-                       $kernel->post($self->{'logger'}, 'log', "#privmsg[$who] <$where> $line");
-                   }else{
-                       $kernel->post($self->{'logger'}, 'log', "$where <$nick> $who: $line");
-                   }
-                }
+                   $kernel->post($sender, $respond_event, $msg, $who.': '.$line); 
+                   if(ref($where) eq 'ARRAY'){ $where = $where->[0]; }
+                   $kernel->post($self->{'logger'}, 'log', "#privmsg[$where] <$who> $what");
+                   $kernel->post($self->{'logger'}, 'log', "#privmsg[$who] <$where> $line");
+               }else{
+                   $kernel->post($self->{'logger'}, 'log', "$where <$nick> $who: $line");
+               }
             }
         }else{
             foreach my $line (@{ $replies }){
