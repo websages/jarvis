@@ -3,9 +3,9 @@ use parent Jarvis::Persona::Base;
 use strict;
 use warnings;
 #use AI::MegaHAL;
-use POE;
+use POE; # this is needed even though it's in the parent?
 #use POSIX qw( setsid );
-use POE::Builder;
+#use POE::Builder;
 
 ################################################################################
 # the messages get routed here from the connectors, a reply is formed, and 
