@@ -74,7 +74,7 @@ sub input{
         ########################################################################
         for ( $what ) {
             /^\s*!*help\s*/ && do { $replies = [ "i need a help routine" ] if($direct); last; };
-            /^\s+good morning $nick.*/i  && do { $replies = [ "good morning $who." ]; last; };
+            #/^\s+good morning $nick.*/i  && do { $replies = [ "good morning $who." ]; last; };
             /.*/            && do { last; }
         }
         ########################################################################
