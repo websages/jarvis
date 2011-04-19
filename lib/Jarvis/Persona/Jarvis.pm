@@ -7,7 +7,11 @@ use POE; # this is needed even though it's in the parent or we don't send events
 sub may {
     my $self=shift;
     return {
-             'log_dir' => '/var/log/irc',
+             'log_dir'     => '/var/log/irc',
+             'ldap_uri'    => 'ldaps:127.0.0.1:636',
+             'ldap_basedn' => "dc=".join(",dc=",split(/\./,`dnsdomainname`));
+             'ldap_binddn' => undef, # anonymous bind by default
+             'ldap_bindpw' => undef, # anonymous bind be default
            };
 }
 
@@ -70,7 +74,7 @@ sub input{
         ########################################################################
         for ( $what ) {
             /^\s*!*help\s*/ && do { $replies = [ "i need a help routine" ] if($direct); last; };
-            /.*/            && do { $replies = [ "i don't understand"    ] if($direct); last; };
+            /^\s+good morning $nick.*/i  && do { $replies = [ "good morning $who." ]; last; };
             /.*/            && do { last; }
         }
         ########################################################################
@@ -102,4 +106,5 @@ sub input{
     }
     return $self->{'alias'};
 }
+
 1;
