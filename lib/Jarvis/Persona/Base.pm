@@ -313,6 +313,7 @@ sub connector{
                                   });
         my $new_session_id = $poe->object_session( $conn->{'class'}->new( $conn->{'init'}) );
         $self->{'connectors'}->{ $new_session_id } = $conn;
+        print STDERR "\$self->{'connectors'}->{ $new_session_id } = $conn\n";
     }
 }
 
