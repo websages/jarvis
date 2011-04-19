@@ -304,7 +304,7 @@ sub pending {
         }
     }
 }
-sub connector_error{
+sub connector{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     print STDERR Data::Dumper->Dump([@args]);
 }
