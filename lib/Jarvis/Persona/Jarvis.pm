@@ -82,10 +82,9 @@ print Data::Dumper->Dump([$msg]);
                 if( defined($line) && ($line ne "") ){ 
                     $kernel->post($sender, $respond_event, $msg, $who.': '.$line); 
                     if(ref($where) eq 'ARRAY'){ $where = $where->[0]; }
-                        $kernel->post($self->{'logger'}, 'log', "#privmsg <$where> $who: $line");
-                    }else{
-                        $kernel->post($self->{'logger'}, 'log', "$where <$nick> $who: $line");
-                    }
+                    $kernel->post($self->{'logger'}, 'log', "#privmsg <$where> $who: $line");
+                }else{
+                    $kernel->post($self->{'logger'}, 'log', "$where <$nick> $who: $line");
                 }
             }
         }else{
