@@ -62,7 +62,7 @@ sub input{
          $msg->{'conversation'}->{'body'},
          $msg->{'conversation'}->{'id'},
        );
-print Data::Dumper->Dump([$kernel]);
+print Data::Dumper->Dump([ ref($kernel )]);
     $kernel->post( $self->{'logger'}, 'log', "$where <$who> $what");
     my $direct=$msg->{'conversation'}->{'direct'}||0;
     if(defined($what)){
