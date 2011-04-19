@@ -74,22 +74,25 @@ sub input{
         ########################################################################
         for ( $what ) {
         ########################################################################
-            /^\s*!*help\s*/ && do { $replies = [ "i need a help routine" ] if($direct); last; };
-            /^\s*good\s+(morning|day|evening|night)\s+$nick\s*/i && do { 
+            /^\s*!*help\s*/ && 
+                do { $replies = [ "i need a help routine" ] if($direct); last; };
         ########################################################################
-                                                                 $replies = [ "Good $1 $who" ]; 
-                                                                 last; 
-                                                               };
+        #                                                                      #
         ########################################################################
-            /^\s*good\s+(morning|day|evening|night)/i && do { 
-                                                                 $replies = [ "Good $1 $who" ]
-                                                                 if $direct; 
-                                                                 last; 
-                                                               };
+            /^\s*good\s+(morning|day|evening|night)\s+$nick\s*/i && 
+                do { $replies = [ "good $1 $who" ]; last; };
         ########################################################################
-            /.*/            && do { $replies = [ "i don't understand"    ] if($direct); last; };
+            /^\s*good\s+(morning|day|evening|night)/i && 
+                do { $replies = [ "good $1 $who" ] if $direct; last; };
         ########################################################################
-            /.*/            && do { last; }
+            /^\s*(thanks|thank you|thx|ty)\s+$nick\s*/i && 
+                do { $replies = [ "np" ] if $direct; last; };
+        ########################################################################
+            /.*/ && 
+                 do { $replies = [ "i don't understand"    ] if($direct); last; };
+        ########################################################################
+            /.*/ 
+                 && do { last; }
         ########################################################################
         }
         ########################################################################
