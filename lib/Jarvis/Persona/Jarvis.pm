@@ -137,8 +137,7 @@ sub input{
 }
 
 sub gist{
-    my ($self, $kernel, $heap, $sender, $gist, $msg, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-# gistarg msg
+    my ($self, $kernel, $heap, $sender, $gist, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     my @gistlist;
     my ($from, $now,$type,$unixlogtime);
     my ($second, $minute, $hour, $dayOfMonth, $month,
@@ -197,8 +196,8 @@ sub gist{
     foreach my $gistline (@gistlist){
         print STDERR "$gistline\n";
     }
-    $kernel->post( $msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, "no.");
     print Data::Dumper->Dump([$msg]);
+    $kernel->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, 'no.');
 }
 
 1;
