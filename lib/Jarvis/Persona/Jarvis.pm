@@ -21,7 +21,7 @@ sub persona_start{
                                 'file'   => {
                                               'class'    => 'Log::Dispatch::File',
                                               'min_level'=> 'debug',
-                                              'filename' => "$cfg->{'log_dir'}/channel.log",
+                                              'filename' => "$self->{'log_dir'}/channel.log",
                                               'mode'     => 'append',
                                               'format'   => '%d{%Y%m%d %H:%M:%S} %m %n',
                                             },
