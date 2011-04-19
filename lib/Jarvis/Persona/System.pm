@@ -196,7 +196,7 @@ sub persona_start{
     $self->known_personas();
     $self->peers();
     print STDERR "################################################################################\n";
-    $self->yield('spawn','jarvis');
+    $kernel->yield('spawn','jarvis');
     print STDERR "################################################################################\n";
     return $self;
 }
