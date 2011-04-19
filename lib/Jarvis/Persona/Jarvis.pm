@@ -1,5 +1,11 @@
 package Jarvis::Persona::Jarvis;
 use parent Jarvis::Persona::Base;
+use strict;
+use warnings;
+use AI::MegaHAL;
+use POE;
+use POSIX qw( setsid );
+use POE::Builder;
 
 ################################################################################
 # the messages get routed here from the connectors, a reply is formed, and 
