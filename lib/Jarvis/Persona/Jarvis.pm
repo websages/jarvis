@@ -146,7 +146,7 @@ sub gist{
    $now=timelocal($second,$minute,$hour,$dayOfMonth,$month,$yearOffset);
    my $huh=1;
    if($gist=~m/:/){
-       my @timespec=split(/:/,$gist]);
+       my @timespec=split(/:/,$gist);
        my $s=pop(@timespec)||0;
        my $m=pop(@timespec)||0;
        my $h=pop(@timespec)||0;
