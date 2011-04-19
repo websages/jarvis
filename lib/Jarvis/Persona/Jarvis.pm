@@ -138,6 +138,7 @@ sub input{
 
 sub gist{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+# gistarg msg
     my @gistlist;
     my ($from, $now,$type,$unixlogtime);
     my ($second, $minute, $hour, $dayOfMonth, $month,
@@ -160,7 +161,7 @@ sub gist{
         print STDERR "gisting last $args[0] lines\n";
     }
     if(!$huh){
-        my $fh = FileHandle->new("$self->{'logdir'}/channel.log", "r");
+        my $fh = FileHandle->new("$self->{'log_dir'}/channel.log", "r");
         if (defined $fh){
             while(my $logline=<$fh>){
                 if($logline){
