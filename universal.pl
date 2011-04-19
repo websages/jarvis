@@ -39,6 +39,7 @@ my $persona = << "...";
 class: Jarvis::Persona::System
 init: 
   alias: system
+  trace: 1
   peer_group: cn=bot_managed
   ldap_bindpw: ${ENV{'SECRET'}}
 ...
