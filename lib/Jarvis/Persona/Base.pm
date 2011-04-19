@@ -315,7 +315,7 @@ sub connector{
 
 sub connector_error{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-    print STDERR $PID.": "$sender->ID." -> ".$self->alias()." Persona error: ".join("\n",@args)."\n";
+    print STDERR $PID.": ".$sender->ID." -> ".$self->alias()." Persona error: ".join("\n",@args)."\n";
 }
 
 1;
