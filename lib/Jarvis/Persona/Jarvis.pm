@@ -52,6 +52,8 @@ sub input{
          $msg->{'conversation'}->{'id'},
        );
     my $direct=$msg->{'conversation'}->{'direct'}||0;
+    $kernel->post($self->{'logger'}, 'log', "$channel <$nick> $what");
+
     if(defined($what)){
         if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
             foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
@@ -74,9 +76,8 @@ sub input{
         #                                                                      #
         ########################################################################
         if($direct==1){ 
-            $msg->{'conversation'}->{'direct'}=0 unless $msg->{'conversation'}->{'direct'};
             foreach my $line (@{ $replies }){
-                if($msg->{'conversation'}->{'direct'} == 0){
+                if($direct == 0){
                     if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $who.': '.$line); }
                 }else{
                     if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $line); } 
