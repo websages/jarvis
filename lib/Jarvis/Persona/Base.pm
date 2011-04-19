@@ -319,6 +319,7 @@ sub connector{
 
 sub connector_error{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+        print STDERR "\$self->{'connectors'}->{ $new_session_id } = $conn\n";
     if($args[0]=~m/Trying to reconnect too fast./){ # back off and try in 10
         $kernel->post($sender,'_stop');
         my $conn = $self->{'connectors'}->{$sender};
