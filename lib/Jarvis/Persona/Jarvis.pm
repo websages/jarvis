@@ -51,6 +51,7 @@ sub input{
          $msg->{'conversation'}->{'body'},
          $msg->{'conversation'}->{'id'},
        );
+print Data::Dumper->Dump([$msg]);
     my $direct=$msg->{'conversation'}->{'direct'}||0;
 
     my $nick = undef;
