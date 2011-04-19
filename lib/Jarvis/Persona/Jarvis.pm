@@ -53,8 +53,8 @@ sub stop{
 sub input{
     my $self   = $_[OBJECT];
     my $kernel = $_[KERNEL];
-    my $heap   = $_[HEAP];, 
-    my $sender = $_[ENDER];, 
+    my $heap   = $_[HEAP]; 
+    my $sender = $_[SENDER]; 
     my $msg)   = $_[ARG0];
     # un-wrap the $msg
     my ( $sender_alias, $respond_event, $who, $where, $what, $id ) =
