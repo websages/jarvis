@@ -307,15 +307,15 @@ sub pending {
 sub connector{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     foreach my $conn (@args){
-        #push($self->{'connections'}, $conn);
         my $poe = new POE::Builder({ 'debug' => $self->{'debug'} ,'trace' => $self->{'trace'} });
-        $poe->object_session( $conn->{'class'}->new( $conn->{'init'} ) );
+        my $new_session_id = $poe->object_session( $conn->{'class'}->new( $conn->{'init'} ) );
+        push($self->{'connectors'}, $new_session_id);
     }
 }
 
 sub connector_error{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-    print STDERR $self->alias()." Persona error: ".join("\n",@args)."\n";
+    print STDERR $sender->ID." -> ".$self->alias()." Persona error: ".join("\n",@args)."\n";
 }
 
 1;
