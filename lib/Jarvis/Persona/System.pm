@@ -237,7 +237,7 @@ sub input{
         ########################################################################
         for ( $what ) {
             /^\s*!*help\s*/          && do { $replies = [ "i need a help routine" ] if($direct); last; };
-            /^\s*!*spawn\s*(.*)/     && do { $replies = [ $self->spawn($1) ] if($direct); last;};
+            /^\s*!*spawn\s*(.*)/     && do { $kernel->yield('spawn',$1); last;};
             /^\s*!*terminate\s*(.*)/ && do { 
                                              my $persona=$1; $persona=~s/^\s+//;
                                              if($direct){
@@ -315,7 +315,7 @@ sub spawn{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     my $persona = shift @args if @args;
     $persona=~s/^\s+//;
-print STDERR ":::: $persona :::::\n";
+print STDERR Data::Dumper->Dump([@args]);
     my $found=0;
     if(defined( $self->{'spawned'}->{$persona} )){
         return "Please terminate existing $persona sessons before attempting to spawn another.";
