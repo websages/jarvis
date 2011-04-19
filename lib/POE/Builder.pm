@@ -11,7 +11,9 @@ sub new {
     my $class = shift; 
     my $self = {}; 
     my $construct = shift if @_;
-    $self->{'session_struct'}={};
+    $self->{'session_struct'}={
+                              'connector' => 'connector',
+                              };
 
     # list of required constructor elements
     $self->{'must'} = [];
@@ -94,6 +96,13 @@ sub yaml_sess(){
    my $ctor=$self->indented_yaml($yaml);
    $self->object_session( $ctor->{'class'}->new( $ctor->{'init'} ) );
    return $self;
+}
+
+sub connector{
+    my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    my $connections = shift @args if @args;
+    print Data::Dumper->Dump([$connection]);
+
 }
 
 sub object_session(){

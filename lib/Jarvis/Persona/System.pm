@@ -209,8 +209,9 @@ sub persona_states{
 }
 
 sub input{
-    my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
+    my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     # un-wrap the $msg
+    my $msg = $args[0]; 
     my ( $sender_alias, $respond_event, $who, $where, $what, $id ) =
        ( 
          $msg->{'sender_alias'},
@@ -311,8 +312,8 @@ sub input{
 }
 
 sub spawn{
-    my $self=shift;
-    my $persona = shift if @_;
+    my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    my $persona = shift @args if @args;
     $persona=~s/^\s+//;
     my $found=0;
     if(defined( $self->{'spawned'}->{$persona} )){
@@ -324,11 +325,15 @@ sub spawn{
             return undef unless $poe;
             $poe->object_session( $p->{'persona'}->{'class'}->new( $p->{'persona'}->{'init'} ) );
             push( @{ $self->{'spawned'}->{$persona} }, $p->{'persona'}->{'init'}->{'alias'} );
-
+            
+            # post the connector to the persona session
             foreach my $conn (@{ $p->{'connectors'} }){
-                push( @{ $self->{'spawned'}->{$persona} }, $conn->{'init'}->{'alias'} );
-                $poe->object_session( $conn->{'class'}->new( $conn->{'init'} ) );
+                $kernel->post($p->{'persona'}->{'init'}->{'alias'}, 'connector', $conn);
             }
+
+            #    push( @{ $self->{'spawned'}->{$persona} }, $conn->{'init'}->{'alias'} );
+            #    $poe->object_session( $conn->{'class'}->new( $conn->{'init'} ) );
+
             return "$persona spawned."
         }
     }
