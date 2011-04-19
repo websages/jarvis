@@ -88,6 +88,7 @@ sub input{
                     }else{
                         $kernel->post($self->{'logger'}, 'log', "$where <$nick> $who: $line");
                     }
+                }
             }else{
                 foreach my $line (@{ $replies }){
                     if( defined($line) && ($line ne "") ){ 
@@ -98,6 +99,7 @@ sub input{
                     }else{
                         $kernel->post($self->{'logger'}, 'log', "$where <$nick> $line");
                     }
+                }
             }
         }else{
             foreach my $line (@{ $replies }){
