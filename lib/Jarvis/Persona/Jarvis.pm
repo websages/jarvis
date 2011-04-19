@@ -1,4 +1,5 @@
 package Jarvis::Persona::Jarvis;
+use parent Jarvis::Persona::Base;
 use strict;
 use warnings;
 use AI::MegaHAL;
