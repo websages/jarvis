@@ -81,6 +81,7 @@ print Data::Dumper->Dump([$msg]);
             foreach my $line (@{ $replies }){
                 if( defined($line) && ($line ne "") ){ 
                     $kernel->post($sender, $respond_event, $msg, $who.': '.$line); 
+                    $where = $where->[0] if $#{ $where };
                     $kernel->post($self->{'logger'}, 'log', "$where <$nick> $who: $line");
                 }
             }
