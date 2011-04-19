@@ -193,8 +193,9 @@ sub gist{
     if($type eq 'lines'){
         my @trash=splice(@gistlist,0,$#gistlist-($args[1]-1));
     }
-    print STDERR $gistline."\n";
-
+    foreach my $gistline (@gistlist){
+        print STDERR "$gistline\n";
+    }
 }
 
 1;
