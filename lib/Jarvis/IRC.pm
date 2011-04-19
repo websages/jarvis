@@ -117,8 +117,8 @@ sub stop  {
     $self->{'irc_client'}->yield( 'unregister' => 'all' );
 }
 
-sub states { my $self = $_[OBJECT]; return $self->{'states'};           }
-sub alias { my $self = $_[OBJECT]; return $self->{'alias'};           }
+sub states { my $self = $_[OBJECT]; return $self->{'states'}; }
+sub alias { my $self = $_[OBJECT]; return $self->{'alias'};   }
 
 # A formatting function so we can use "here" statements and still have readable code
 sub indented_yaml{

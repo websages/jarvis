@@ -52,7 +52,6 @@ sub input{
          $msg->{'conversation'}->{'id'},
        );
     my $direct=$msg->{'conversation'}->{'direct'}||0;
-    #$kernel->post($self->{'logger'}, 'log', "$where <$who> $what");
 
     if(defined($what)){
         if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
@@ -78,14 +77,23 @@ sub input{
         if($direct==1){ 
             foreach my $line (@{ $replies }){
                 if($direct == 0){
-                    if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $who.': '.$line); }
+                    if( defined($line) && ($line ne "") ){ 
+                        $kernel->post($sender, $respond_event, $msg, $who.': '.$line); 
+                        $kernel->post($self->{'logger'}, 'log', "$where <$who> $line");
+                    }
                 }else{
-                    if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $line); } 
+                    if( defined($line) && ($line ne "") ){ 
+                        $kernel->post($sender, $respond_event, $msg, $line); 
+                        $kernel->post($self->{'logger'}, 'log', "$where <$who> $line");
+                    } 
                 }
             }
         }else{
             foreach my $line (@{ $replies }){
-                    if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $line); } 
+                if( defined($line) && ($line ne "") ){ 
+                    $kernel->post($sender, $respond_event, $msg, $line); 
+                    $kernel->post($self->{'logger'}, 'log', "$where <$who> $line");
+                }
             }
         }
     }
