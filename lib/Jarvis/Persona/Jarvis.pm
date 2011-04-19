@@ -138,14 +138,15 @@ sub input{
 
 sub gist{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+print STDERR Data::Dumper->Dump([@args]);
     my @gistlist;
     my ($from, $now,$type,$unixlogtime);
     my ($second, $minute, $hour, $dayOfMonth, $month,
         $yearOffset, $dayOfWeek, $dayOfYear, $daylightSavings) = localtime(time);
    $now=timelocal($second,$minute,$hour,$dayOfMonth,$month,$yearOffset);
    my $huh=1;
-   if($args[1]=~m/:/){
-       my @timespec=split(/:/,$args[1]);
+   if($args[0]=~m/:/){
+       my @timespec=split(/:/,$args[0]);
        my $s=pop(@timespec)||0;
        my $m=pop(@timespec)||0;
        my $h=pop(@timespec)||0;
@@ -154,10 +155,10 @@ sub gist{
        $type='time';
        print STDERR "gisting from $from to $now\n";
        $huh=0;
-    }elsif($args[1]=~m/^\d+$/){
+    }elsif($args[0]=~m/^\d+$/){
         $huh=0;
         $type='lines';
-        print STDERR "gisting last $args[1] lines\n";
+        print STDERR "gisting last $args[0] lines\n";
     }
 #    if(!$huh){
 #        my $fh = FileHandle->new("$cfg->{'logdir'}/channel.log", "r");
