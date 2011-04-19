@@ -1,5 +1,9 @@
 package Jarvis::Persona::Minimal;
 use parent Jarvis::Persona::Base;
+use strict;
+use warnings;
+use POE;
+use POE::Builder;
 
 ################################################################################
 # Here is what you must provide: 
