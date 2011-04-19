@@ -314,7 +314,6 @@ sub input{
 
 sub spawn{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-print STDERR Data::Dumper->Dump([@args]);
     my $persona = shift @args if @args;
     $persona=~s/^\s+//;
     my $found=0;
@@ -323,6 +322,7 @@ print STDERR Data::Dumper->Dump([@args]);
     }
     foreach my $p (@{ $self->{'known_personas'} }){
         if($p->{'name'} eq $persona){
+print STDERR "[ spawning => $persona ]\n";
             my $poe = new POE::Builder({ 'debug' => '0','trace' => '1' });
             return undef unless $poe;
             $poe->object_session( $p->{'persona'}->{'class'}->new( $p->{'persona'}->{'init'} ) );
