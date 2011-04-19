@@ -79,13 +79,16 @@ sub input{
         ########################################################################
         #                                                                      #
         ########################################################################
-            /^\s*good\s+(morning|day|evening|night)\s+$nick\s*/i && 
+        # Greetings
+            /^\s*good\s+(morning|day|afternoon|evening|night)\s+$nick\s*/i && 
                 do { $replies = [ "good $1 $who" ]; last; };
-        ########################################################################
-            /^\s*good\s+(morning|day|evening|night)/i && 
+            /^\s*good\s+(morning|day|evening"afternoon||night)/i && 
                 do { $replies = [ "good $1 $who" ] if $direct; last; };
         ########################################################################
+        # Thanks
             /^\s*(thanks|thank you|thx|ty)\s+$nick\s*/i && 
+                do { $replies = [ "np" ]; last; };
+            /^\s*(thanks|thank you|thx|ty)/i && 
                 do { $replies = [ "np" ] if $direct; last; };
         ########################################################################
             /.*/ && 
