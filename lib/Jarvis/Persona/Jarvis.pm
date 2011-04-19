@@ -52,7 +52,7 @@ sub input{
          $msg->{'conversation'}->{'id'},
        );
     my $direct=$msg->{'conversation'}->{'direct'}||0;
-    $kernel->post($self->{'logger'}, 'log', "$channel <$nick> $what");
+    $kernel->post($self->{'logger'}, 'log', "$where <$who> $what");
 
     if(defined($what)){
         if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
