@@ -15,6 +15,11 @@ sub may {
            };
 }
 
+sub persona_states{
+    my $self = shift;
+    return { 'gist' => 'gist', }
+}
+
 sub persona_start{
     my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
     $self->{'logger'} = POE::Component::Logger->spawn(
@@ -69,15 +74,16 @@ sub input{
             }
         }
         my $replies=[];
-        ########################################################################
-        #                                                                      #
-        ########################################################################
         for ( $what ) {
+        ########################################################################
+        # begin input pattern matching                                         #  
         ########################################################################
             /^\s*!*help\s*/ && 
                 do { $replies = [ "i need a help routine" ] if($direct); last; };
         ########################################################################
-        #                                                                      #
+        # this is how th
+            /^\s*!*gist\s*(.*)/ && 
+                do { $kernel->yield('gist',$1,$msg); last; };
         ########################################################################
         # Greetings
             /^\s*good\s+(morning|day|afternoon|evening|night)\s+$nick\s*/i && 
@@ -97,10 +103,9 @@ sub input{
             /.*/ 
                  && do { last; }
         ########################################################################
+        # end input pattern matching                                           #
+        ########################################################################
         }
-        ########################################################################
-        #                                                                      #
-        ########################################################################
         if($direct==1){ 
             foreach my $line (@{ $replies }){
                 if( defined($line) && ($line ne "") ){ 
@@ -126,6 +131,11 @@ sub input{
         }
     }
     return $self->{'alias'};
+}
+
+sub gist{
+    my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    print STDERR Data::Dumper->Dump([@args]); 
 }
 
 1;
