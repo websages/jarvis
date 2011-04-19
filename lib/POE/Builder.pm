@@ -100,7 +100,7 @@ sub yaml_sess(){
 
 sub connector{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-    my $connections = shift @args if @args;
+    my $connection = shift @args if @args;
     print Data::Dumper->Dump([$connection]);
 
 }
