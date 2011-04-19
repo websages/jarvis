@@ -309,7 +309,7 @@ sub connector{
     foreach my $conn (@args){
         my $poe = new POE::Builder({ 'debug' => $self->{'debug'} ,'trace' => $self->{'trace'} });
         my $new_session_id = $poe->object_session( $conn->{'class'}->new( $conn->{'init'} ) );
-        push($self->{'connectors'}, $new_session_id);
+        push(@{ $self->{'connectors'} }, $new_session_id);
     }
 }
 
