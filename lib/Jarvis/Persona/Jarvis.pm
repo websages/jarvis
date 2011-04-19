@@ -2,10 +2,7 @@ package Jarvis::Persona::Jarvis;
 use parent Jarvis::Persona::Base;
 use strict;
 use warnings;
-#use AI::MegaHAL;
-use POE; # this is needed even though it's in the parent?
-#use POSIX qw( setsid );
-#use POE::Builder;
+use POE; # this is needed even though it's in the parent or we don't send events
 
 ################################################################################
 # the messages get routed here from the connectors, a reply is formed, and 
