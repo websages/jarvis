@@ -52,15 +52,16 @@ sub input{
          $msg->{'conversation'}->{'id'},
        );
     my $direct=$msg->{'conversation'}->{'direct'}||0;
-    print STDERR Data::Dumper->Dump([$msg]);
 
-    my ($addressed, $nick) = (0,undef);
+    my $nick = undef;
     if(defined($what)){
-        foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
-            if($what=~m/^\s*$chan_nick\s*:*\s*/){
-                $what=~s/^\s*$chan_nick\s*:*\s*//;
-                $addressed = 1;
-                $nick = $chan_nick;
+        if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
+            foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
+                if($what=~m/^\s*$chan_nick\s*:*\s*/){
+                    $what=~s/^\s*$chan_nick\s*:*\s*//;
+                    $addressed = 1;
+                    $nick = $chan_nick;
+                }
             }
         }
         my $replies=[];
@@ -75,29 +76,16 @@ sub input{
         ########################################################################
         #                                                                      #
         ########################################################################
-print STDERR "direct => $direct, addressed => $addressed\n";
         if($direct==1){ 
-            if($addressed == 1){
-                foreach my $line (@{ $replies }){
-                    if( defined($line) && ($line ne "") ){ 
-                        $kernel->post($sender, $respond_event, $msg, $who.': '.$line); 
-                        if(ref($where) eq 'ARRAY'){ $where = $where->[0]; }
-                        $kernel->post($self->{'logger'}, 'log', "#privmsg[$where] <$who> $what");
-                        $kernel->post($self->{'logger'}, 'log', "#privmsg[$who] <$where> $who: $line");
-                    }else{
-                        $kernel->post($self->{'logger'}, 'log', "$where <$nick> $who: $line");
-                    }
-                }
-            }else{
-                foreach my $line (@{ $replies }){
-                    if( defined($line) && ($line ne "") ){ 
-                        $kernel->post($sender, $respond_event, $msg, $line); 
-                        if(ref($where) eq 'ARRAY'){ $where = $where->[0]; }
-                        $kernel->post($self->{'logger'}, 'log', "#privmsg[$where] <$who> $what");
-                        $kernel->post($self->{'logger'}, 'log', "#privmsg[$who] <$where> $line");
-                    }else{
-                        $kernel->post($self->{'logger'}, 'log', "$where <$nick> $line");
-                    }
+            foreach my $line (@{ $replies }){
+                if( defined($line) && ($line ne "") ){ 
+                       $kernel->post($sender, $respond_event, $msg, $who.': '.$line); 
+                       if(ref($where) eq 'ARRAY'){ $where = $where->[0]; }
+                       $kernel->post($self->{'logger'}, 'log', "#privmsg[$where] <$who> $what");
+                       $kernel->post($self->{'logger'}, 'log', "#privmsg[$who] <$where> $line");
+                   }else{
+                       $kernel->post($self->{'logger'}, 'log', "$where <$nick> $who: $line");
+                   }
                 }
             }
         }else{
@@ -109,6 +97,14 @@ print STDERR "direct => $direct, addressed => $addressed\n";
             }
         }
     }
+
+
+################################################################################
+################################################################################
+################################################################################
+################################################################################
+
+
     return $self->{'alias'};
 }
 1;
