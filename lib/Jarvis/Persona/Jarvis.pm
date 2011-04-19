@@ -138,7 +138,6 @@ sub input{
 
 sub gist{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-print STDERR Data::Dumper->Dump([@args]);
     my @gistlist;
     my ($from, $now,$type,$unixlogtime);
     my ($second, $minute, $hour, $dayOfMonth, $month,
@@ -160,37 +159,42 @@ print STDERR Data::Dumper->Dump([@args]);
         $type='lines';
         print STDERR "gisting last $args[0] lines\n";
     }
-#    if(!$huh){
-#        my $fh = FileHandle->new("$cfg->{'logdir'}/channel.log", "r");
-#        if (defined $fh){
-#            while(my $logline=<$fh>){
-#                if($logline){
-#                    chomp($logline);
-#                    my @parts=split(" ",$logline);
-#                    #skipped blank and bitched lines
-#                    if($#parts>2){
-#                        my $logdate=shift @parts;
-#                        my $logtime=shift @parts;
-#                        my $logevent=shift @parts;
-#                        my $logtext=join(" ",@parts);
-#                        my $logthen=$logdate." ".$logtime;
-#                        if ($logthen=~m/(\d\d\d\d)(\d\d)(\d\d) (\d\d):(\d\d):(\d\d)/){
-#                            # and it better.
-#                            $unixlogtime=timelocal($6,$5,$4,$3,$2-1,$1-1900);
-#                        }
-#                        if($logevent eq $channel){
-#                            if($type eq 'lines'){
-#                                push(@gistlist, join(" ",($logdate,$logtime,$logevent,$logtext)));
-#                            }elsif(($from<=$unixlogtime)&&($unixlogtime<=$now)){
-#                                push(@gistlist, join(" ",($logdate,$logtime,$logevent,$logtext)));
-#                            }
-#                        }
-#                    }
-#                }
-#            }
-#            $fh->close;
-#        }
-#    }
+    if(!$huh){
+        my $fh = FileHandle->new("$self->{'logdir'}/channel.log", "r");
+        if (defined $fh){
+            while(my $logline=<$fh>){
+                if($logline){
+                    chomp($logline);
+                    my @parts=split(" ",$logline);
+                    #skipped blank and bitched lines
+                    if($#parts>2){
+                        my $logdate=shift @parts;
+                        my $logtime=shift @parts;
+                        my $logevent=shift @parts;
+                        my $logtext=join(" ",@parts);
+                        my $logthen=$logdate." ".$logtime;
+                        if ($logthen=~m/(\d\d\d\d)(\d\d)(\d\d) (\d\d):(\d\d):(\d\d)/){
+                            # and it better.
+                            $unixlogtime=timelocal($6,$5,$4,$3,$2-1,$1-1900);
+                        }
+                        if($logevent eq $channel){
+                            if($type eq 'lines'){
+                                push(@gistlist, join(" ",($logdate,$logtime,$logevent,$logtext)));
+                            }elsif(($from<=$unixlogtime)&&($unixlogtime<=$now)){
+                                push(@gistlist, join(" ",($logdate,$logtime,$logevent,$logtext)));
+                            }
+                        }
+                    }
+                }
+            }
+            $fh->close;
+        }
+    }
+    if($type eq 'lines'){
+        my @trash=splice(@gistlist,0,$#gistlist-($args[1]-1));
+    }
+    print STDERR $gistline."\n";
+
 }
 
 1;
