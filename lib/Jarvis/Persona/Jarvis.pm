@@ -67,7 +67,7 @@ sub input{
          $msg->{'conversation'}->{'id'},
        );
 print "\n".Data::Dumper->Dump([ ref($kernel )])."\n";
-    $kernel->post( $self->{'logger'}, 'log', "$where <$who> $what");
+    $_[KERNEL]->post( $self->{'logger'}, 'log', "$where <$who> $what");
     my $direct=$msg->{'conversation'}->{'direct'}||0;
     if(defined($what)){
         if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
