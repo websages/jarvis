@@ -86,7 +86,11 @@ sub input{
         ########################################################################
         # this is how th
             /^\s*!*gist\s*(.*)/ && 
-                do { $kernel->yield('gist',$1,$msg); last; };
+                do { 
+                      $msg->{'sender_alias'} = $sender->ID;
+                      $kernel->yield('gist',$1,$msg); 
+                      last; 
+                   };
         ########################################################################
         # Greetings
             /^\s*good\s+(morning|day|afternoon|evening|night)\s+$nick\s*/i && 
@@ -138,7 +142,7 @@ sub input{
 
 sub gist{
     my ($self, $kernel, $heap, $sender, $gist, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-    print STDERR $_[KERNEL]->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, 'no.');
+    $_[KERNEL]->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, 'no.');
     my @gistlist;
     my ($from, $now,$type,$unixlogtime);
     my ($second, $minute, $hour, $dayOfMonth, $month,
