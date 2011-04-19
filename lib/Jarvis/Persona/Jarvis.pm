@@ -137,7 +137,7 @@ sub input{
 }
 
 sub gist{
-    my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    my ($self, $kernel, $heap, $sender, $gist, $msg, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
 # gistarg msg
     my @gistlist;
     my ($from, $now,$type,$unixlogtime);
@@ -145,8 +145,8 @@ sub gist{
         $yearOffset, $dayOfWeek, $dayOfYear, $daylightSavings) = localtime(time);
    $now=timelocal($second,$minute,$hour,$dayOfMonth,$month,$yearOffset);
    my $huh=1;
-   if($args[0]=~m/:/){
-       my @timespec=split(/:/,$args[0]);
+   if($gist=~m/:/){
+       my @timespec=split(/:/,$gist]);
        my $s=pop(@timespec)||0;
        my $m=pop(@timespec)||0;
        my $h=pop(@timespec)||0;
@@ -155,10 +155,10 @@ sub gist{
        $type='time';
        print STDERR "gisting from $from to $now\n";
        $huh=0;
-    }elsif($args[0]=~m/^\d+$/){
+    }elsif($gist=~m/^\d+$/){
         $huh=0;
         $type='lines';
-        print STDERR "gisting last $args[0] lines\n";
+        print STDERR "gisting last $gist lines\n";
     }
     if(!$huh){
         my $fh = FileHandle->new("$self->{'log_dir'}/channel.log", "r");
@@ -178,7 +178,7 @@ sub gist{
                             # and it better.
                             $unixlogtime=timelocal($6,$5,$4,$3,$2-1,$1-1900);
                         }
-                        if($logevent eq $args[1]->{'conversation'}->{'room'}){
+                        if($logevent eq $msg->{'conversation'}->{'room'}){
                             if($type eq 'lines'){
                                 push(@gistlist, join(" ",($logdate,$logtime,$logevent,$logtext)));
                             }elsif(($from<=$unixlogtime)&&($unixlogtime<=$now)){
@@ -192,11 +192,12 @@ sub gist{
         }
     }
     if($type eq 'lines'){
-        my @trash=splice(@gistlist,0,$#gistlist-($args[0]-1));
+        my @trash=splice(@gistlist,0,$#gistlist-($gist-1));
     }
     foreach my $gistline (@gistlist){
         print STDERR "$gistline\n";
     }
+    print Data::Dumper->Dump([$msg]);
 }
 
 1;
