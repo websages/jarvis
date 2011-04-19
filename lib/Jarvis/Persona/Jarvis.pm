@@ -197,6 +197,7 @@ sub gist{
     foreach my $gistline (@gistlist){
         print STDERR "$gistline\n";
     }
+    $kernel->post( $msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, "no.");
     print Data::Dumper->Dump([$msg]);
 }
 
