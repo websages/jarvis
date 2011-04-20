@@ -2,6 +2,7 @@ package Jarvis::Persona::Jarvis;
 use parent Jarvis::Persona::Base;
 use strict;
 use warnings;
+use CMDB::LDAP;
 use POE; # this is needed even though it's in the parent or we don't send events
 
 # gists
@@ -25,7 +26,10 @@ sub may {
 
 sub persona_states{
     my $self = shift;
-    return { 'gist' => 'gist', }
+    return { 
+             'gist'    => 'gist',
+             'sets'    => 'sets',
+           };
 }
 
 sub persona_start{
@@ -89,11 +93,19 @@ sub input{
             /^\s*!*help\s*/ && 
                 do { $replies = [ "i need a help routine" ] if($direct); last; };
         ########################################################################
-        # this is how th
+        # this is how the commands should be modeled
             /^\s*!*gist\s*(.*)/ && 
                 do { 
                       $msg->{'sender_alias'} = $sender->ID;
                       $kernel->yield('gist',$1,$msg); 
+                      last; 
+                   };
+        ########################################################################
+        # this is how the commands should be modeled
+            /^\s*!*sets\s+(.*)/ && 
+                do { 
+                      $msg->{'sender_alias'} = $sender->ID; # sending the alias doesn't work
+                      $kernel->yield('sets',$1,$msg); 
                       last; 
                    };
         ########################################################################
@@ -105,8 +117,7 @@ sub input{
             /^\s*good\s+(morning|day|afternoon|evening|night)\s+$nick\s*/i && 
                 do { $replies = [ "good $1 $who" ]; last; };
             /^\s*good\s+(morning|day|evening"afternoon||night)/i && 
-                do { $replies = [ "good $1" ] if $direct; last; };
-        ########################################################################
+                do { $replies = [ "good $1 $who" ] if $direct; last; };
         # Thanks
             /^\s*(thanks|thank you|thx|ty)\s+$nick\s*/i && 
                 do { $replies = [ "np" ]; last; };
