@@ -406,6 +406,7 @@ sub all_sets{
     return $sets;
 }
 
+
 sub sets_in{
     my $self = shift;
     my $parent = shift if @_;
@@ -454,6 +455,11 @@ sub set2dn{
     }else{
         $ou_tree = $self->{'setbase'};
     }
+    $old_base = $self->basedn;
+    $self->basedn($ou_tree);
+    my @entries = $self->ldap_search("objectclass=*");
+    print STDERR Data::Dumper->Dump([@entries]);
+    $self->basedn($oldbase);
     return "cn=$cn,$ou_tree";
 }
 
