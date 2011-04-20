@@ -166,6 +166,10 @@ sub input{
     return $self->{'alias'};
 }
 
+sub sets{
+    my ($self, $kernel, $heap, $sender, $gist, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+}
+
 sub gist{
     my ($self, $kernel, $heap, $sender, $gist, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     my @gistlist;
