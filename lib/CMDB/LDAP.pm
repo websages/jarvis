@@ -328,8 +328,8 @@ sub ldap_search {
     $self->ldap_bind unless $self->{'ldap'};
     $filter = "(objectclass=*)" unless $filter;
     my $servers;
-print "
-                                           'base'   => "$self->{'basedn'}",
+print STDERR "
+                                           'base'   => $self->{'basedn'},
                                            'scope'  => 'sub',
                                            'filter' => $filter
 ";
