@@ -461,6 +461,7 @@ sub set2dn{
         $ou_tree = $self->{'setbase'};
     }
     chomp(my $old_base = $self->basedn);
+    chomp($ou_tree);
     print STDERR "\n[ $ou_tree ]\n";
     $self->basedn($ou_tree);
     my @entries = $self->ldap_search("objectclass=*");
