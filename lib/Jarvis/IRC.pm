@@ -385,7 +385,8 @@ sub irc_353{
 # where the irc_server responds to our 'names' request
 sub irc_invite{
     my ($self, $kernel, $heap, $sender, @args)=@_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-    $self->{'irc_client'}->yield( join => $args[1] );
+    $kernel->post( $self->{'persona'}, 'invite', @args );
+    #$self->{'irc_client'}->yield( join => $args[1] );
     return;
 }
 

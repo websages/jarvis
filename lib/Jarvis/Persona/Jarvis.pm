@@ -29,6 +29,7 @@ sub persona_states{
     return { 
              'gist'    => 'gist',
              'sets'    => 'sets',
+             'invite'  => 'invite',
            };
 }
 
@@ -86,7 +87,6 @@ sub input{
             }
         }
         my $replies=[];
-print STDERR "[ $nick  ]\n";
         for ( $what ) {
         ########################################################################
         # begin input pattern matching                                         #  
@@ -250,5 +250,10 @@ sub gist{
     close(GIST);
     unlink($file);
     $kernel->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, $url);
+}
+
+sub invite{
+    my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    print Data::Dumper->Dump([@args]);
 }
 1;
