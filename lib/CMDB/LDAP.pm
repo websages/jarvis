@@ -507,12 +507,10 @@ sub members{
             my @entry = $self->entry( $self->set2dn($set) );
             my @members = $entry[0]->get_value('uniqueMember');
             foreach my $member (@members){
-                $member=~s/,$old_basedn$//;
                 my @heiarchy=split(/,/,$member);
                 my $item = shift(@heiarchy);
                 push(@memberitems,$item);
             }
-            $self->basedn($old_basedn);
         }
     }
     return @memberitems;
