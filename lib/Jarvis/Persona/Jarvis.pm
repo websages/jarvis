@@ -175,7 +175,8 @@ sub sets{
                                           'binddn' => $self->{'ldap_binddn'},
                                           'bindpw' => $self->{'ldap_bindpw'},
                                         });
-    my @sets = @{ $self->{'groups'}->sets_in($top) };
+print STDERR "[ $top ]\n";
+    my @sets = @{ $self->{'groups'}->sets_in() };
     foreach my $set (@sets){
         $kernel->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, $set);
     }
