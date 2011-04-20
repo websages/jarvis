@@ -467,12 +467,15 @@ sub set2dn{
     foreach my $entry (@entries){
         my $dn = $entry->dn."\n";
         chomp($dn);
+        print STDERR ":: $dn\n";
         if($dn=~m/([^=]+=[^=]+\s*,\s*$ou_tree)$/){
-            print STDERR "[ $1 ]\n";
+            my $dn_actual = $1;
+            print STDERR "[ $dn_actual ]\n";
+            $self->basedn($old_base);
+            return $dn_actual;
         }
     }
-    $self->basedn($old_base);
-    return "cn=$cn,$ou_tree";
+    return undef;
 }
 
 sub dn2set{
