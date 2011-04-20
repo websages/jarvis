@@ -102,9 +102,9 @@ sub input{
                    };
         ########################################################################
         # this is how the commands should be modeled
-            /^\s*!*sets|members\s*(.*)/ && 
+            /^\s*!*(sets|members)\s*(.*)/ && 
                 do { 
-                      my $set = $1;
+                      my $set = $2;
                       print STDERR "\n$what\n";
                       print STDERR "\nsets seen $set\n";
                       $msg->{'sender_alias'} = $sender->ID; # sending the alias doesn't work
