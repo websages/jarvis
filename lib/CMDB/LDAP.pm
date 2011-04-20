@@ -414,9 +414,9 @@ sub sets_in{
     my $parent = shift if @_;
     my @tops;
     if($parent){
-print STDERR "\n--\n";
-print STDERR $self->set2dn($parent)."\n";
-print STDERR "\n--\n";
+        if($self->set2dn($parent)=~m/^cn/){
+            return $self->members($parent);
+        }
         foreach my $set (@{ $self->all_sets() }){
             if($set=~m/^${parent}::/){
                 $set=~s/^${parent}:://;
@@ -470,7 +470,6 @@ sub set2dn{
         chomp($dn);
         if($dn=~m/^([^=]+=$cn+\s*,\s*$ou_tree)$/i){
             my $dn_actual = $1;
-            print STDERR "[ $dn_actual ]\n";
             $self->basedn($old_base);
             return $dn_actual;
         }
