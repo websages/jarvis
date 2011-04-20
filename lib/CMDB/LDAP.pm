@@ -413,7 +413,9 @@ sub sets_in{
     if($parent){
         foreach my $set (@{ $self->all_sets() }){
             if($set=~m/^${parent}::/){
+print STDERR "                      ----------------> $set\n";
                 $set=~s/^${parent}:://;
+print STDERR "                      ----------------> $set\n";
                 my @tmp = split(/::/, $set );
                 my $top = shift( @tmp );
                 push(@tops,$top) unless grep(/$top/,@tops);
