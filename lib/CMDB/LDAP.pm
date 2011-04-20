@@ -329,11 +329,6 @@ sub ldap_search {
     $self->ldap_bind unless $self->{'ldap'};
     $filter = "(objectclass=*)" unless $filter;
     my $servers;
-print STDERR "
-                                           'base'   => $self->{'basedn'},
-                                           'scope'  => 'sub',
-                                           'filter' => $filter
-";
     my $records = $self->{'ldap'}->search(
                                            'base'   => "$self->{'basedn'}",
                                            'scope'  => 'sub',
@@ -411,14 +406,25 @@ sub all_sets{
     return $sets;
 }
 
-sub top_sets{
+sub sets_in{
     my $self = shift;
+    my $parent = shift if @_;
     my @tops;
-
-    foreach my $set (@{ $self->all_sets() }){
-        my @tmp = split(/::/, $set );
-        my $top = shift( @tmp );
-        push(@tops,$top) unless grep(/$top/,@tops);
+    if($parent){
+        foreach my $set (@{ $self->all_sets() }){
+            if($set=~m/^$parent/){
+                $set=~s/^$parent:://;
+                my @tmp = split(/::/, $set );
+                my $top = shift( @tmp );
+                push(@tops,$top) unless grep(/$top/,@tops);
+            }
+        }
+    }else{
+        foreach my $set (@{ $self->all_sets() }){
+            my @tmp = split(/::/, $set );
+            my $top = shift( @tmp );
+            push(@tops,$top) unless grep(/$top/,@tops);
+        }
     }
     return @tops;
 }
