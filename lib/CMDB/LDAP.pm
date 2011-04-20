@@ -411,8 +411,9 @@ sub sets_in{
     my $parent = shift if @_;
     my @tops;
     if($parent){
-print STDERR "[[ $parent ]]\n";
+print STDERR "--------------------------------------> $parent\n";
         foreach my $set (@{ $self->all_sets() }){
+print STDERR "                      ----------------> $set\n";
             if($set=~m/^$parent/){
                 $set=~s/^$parent:://;
                 my @tmp = split(/::/, $set );
