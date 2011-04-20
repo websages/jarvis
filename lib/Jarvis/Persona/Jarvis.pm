@@ -102,7 +102,7 @@ sub input{
                    };
         ########################################################################
         # this is how the commands should be modeled
-            /^\s*!*sets\s*(.*)/ && 
+            /^\s*!*sets|members\s*(.*)/ && 
                 do { 
                       print STDERR "\nsets seen\n";
                       $msg->{'sender_alias'} = $sender->ID; # sending the alias doesn't work
@@ -178,9 +178,7 @@ sub sets{
 print STDERR "[ $top ]\n";
     my @sets = ( $self->{'groups'}->sets_in($top) );
     print STDERR Data::Dumper->Dump([ $self->{'groups'}->sets_in($top) ]);
-    foreach my $set (@sets){
-        $kernel->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, $set);
-    }
+    $kernel->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, join(", ",@sets));
 }
 
 sub gist{
