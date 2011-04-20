@@ -177,7 +177,7 @@ sub sets{
                                         });
     my @sets = @{ $self->{'groups'}->all_sets() };
     foreach my $set (@sets){
-        $kernel->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, join(',',$set));
+        $kernel->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, $set);
     }
 }
 
