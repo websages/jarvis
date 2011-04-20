@@ -167,7 +167,15 @@ sub input{
 }
 
 sub sets{
-    my ($self, $kernel, $heap, $sender, $gist, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    my ($self, $kernel, $heap, $sender, $top, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+   $self->{'groups'} = CMDB::LDAP->new({
+                                         'uri'    => $self->{'ldap_uri'},
+                                         'basedn' => $self->{'ldap_basedn'},
+                                         'binddn' => $self->{'ldap_binddn'},
+                                         'bindpw' => $self->{'ldap_bindpw'},
+                                       });
+   my @sets = @{ $self->{'groups'}->all_sets() };
+   $kernel->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, join(',',@sets);
 }
 
 sub gist{
