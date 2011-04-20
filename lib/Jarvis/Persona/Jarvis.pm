@@ -177,9 +177,9 @@ sub sets{
                                         });
 print STDERR "[ $top ]\n";
     print STDERR Data::Dumper->Dump([ $self->{'groups'}->sets_in($top) ];
-    foreach my $set (@sets){
-        $kernel->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, $set);
-    }
+    #foreach my $set (@sets){
+    #    $kernel->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, $set);
+    #}
 }
 
 sub gist{
