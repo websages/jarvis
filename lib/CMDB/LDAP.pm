@@ -65,6 +65,7 @@ sub new{
     $self->bindpw($cnstr->{'bindpw'}) if $cnstr->{'bindpw'};
     $self->domain($cnstr->{'domain'}) if $cnstr->{'domain'};
     $self->setou($cnstr->{'setou'})   if $cnstr->{'setou'};
+    $self->setou("sets") unless $self->{'setou'};
     ############################################################################
     # determine the domain any way possible
     my $domain;
