@@ -295,9 +295,10 @@ sub error{
 
 sub ldap_bind{
     my $self = shift;
+    my $servers;
     # change self->uri if you need to change servers
     if($self->{'uri'}){
-        @{ my $servers }= split(/\,\s+/,$self->{'uri'})
+        @{ $servers }= split(/\,\s+/,$self->{'uri'})
     }
     my $mesg;
     # loop through the servers in
@@ -480,7 +481,7 @@ sub dn2set{
     my $cn = shift(@tree);
     $cn=~s/^cn=//;
     map { $_=~s/^ou=// } @tree;
-    $set_tree = join('::',reverse(@tree))."::" if(@tree);
+    my $set_tree = join('::',reverse(@tree))."::" if(@tree);
     return  $set_tree.$cn;
 }
 
@@ -493,7 +494,7 @@ sub entry{
     my $old_basedn  = $self->basedn;
     $self->basedn($sub_base);
     my @entry = $self->ldap_search($filter);
-    $self->basedn($old_dn);
+    $self->basedn($old_basedn);
     return @entry;
 }
 
