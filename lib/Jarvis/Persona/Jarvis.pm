@@ -104,10 +104,11 @@ sub input{
         # this is how the commands should be modeled
             /^\s*!*sets|members\s*(.*)/ && 
                 do { 
+                      my $set = $1;
                       print STDERR "\n$what\n";
-                      print STDERR "\nsets seen $1\n";
+                      print STDERR "\nsets seen $set\n";
                       $msg->{'sender_alias'} = $sender->ID; # sending the alias doesn't work
-                      $kernel->yield('sets',$1,$msg); 
+                      $kernel->yield('sets',$set,$msg); 
                       last; 
                    };
         ########################################################################
