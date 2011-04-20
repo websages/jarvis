@@ -297,7 +297,7 @@ sub ldap_bind{
     my $self = shift;
     # change self->uri if you need to change servers
     if($self->{'uri'}){
-        @{ $servers }= split(/\,\s+/,$self->{'uri'})
+        @{ my $servers }= split(/\,\s+/,$self->{'uri'})
     }
     my $mesg;
     # loop through the servers in
@@ -352,7 +352,7 @@ sub ldap_add{
 
 sub ldap_update{
     my $self = shift;
-    my $entry = $shift if@_;
+    my $entry = shift if @_;
     return undef unless $entry;
     $self->ldap_bind unless $self->{'ldap'};
     my $mesg = $entry->update( $self->{'ldap'} );
@@ -389,7 +389,7 @@ sub ldap_delete{
 
 sub all_sets{
     my $self = shift;
-    $old_basedn=$self->basedn;
+    my $old_basedn=$self->basedn;
     $self->basedn("ou=".$self->{'setou'}.",".$old_basedn);
     my @entries = $self->ldap_search("(objectclass=groupOfUniqueNames)");
     my $sets;
