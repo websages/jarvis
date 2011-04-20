@@ -449,6 +449,7 @@ sub sub_sets{
     return @children; 
 }
 
+# we lose information converting a dn to a set, so we have to recover it here.
 sub set2dn{
     my $self=shift;
     my $set = shift;
@@ -462,13 +463,11 @@ sub set2dn{
     }
     chomp(my $old_base = $self->basedn);
     chomp($ou_tree);
-    print STDERR "\n[ $ou_tree ]\n";
     $self->basedn($ou_tree);
     my @entries = $self->ldap_search("objectclass=*");
     foreach my $entry (@entries){
         my $dn = $entry->dn."\n";
         chomp($dn);
-        print STDERR ":: $dn\n";
         if($dn=~m/^([^=]+=$cn+\s*,\s*$ou_tree)$/i){
             my $dn_actual = $1;
             print STDERR "[ $dn_actual ]\n";
