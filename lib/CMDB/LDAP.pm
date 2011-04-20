@@ -412,9 +412,9 @@ sub sets_in{
     my @tops;
     if($parent){
         foreach my $set (@{ $self->all_sets() }){
-            if($set=~m/^$parent/){
+            if($set=~m/^${parent}::/){
 print STDERR "                      ----------------> $set\n";
-                $set=~s/^$parent:://;
+                $set=~s/^${parent}:://;
 print STDERR "                      ----------------> $set\n";
                 my @tmp = split(/::/, $set );
                 my $top = shift( @tmp );
