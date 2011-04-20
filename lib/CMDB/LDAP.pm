@@ -468,7 +468,7 @@ sub set2dn{
         my $dn = $entry->dn."\n";
         chomp($dn);
         if($dn=~m/([^=]+=[^=]+\s*,\s*$ou_tree)$/){
-            print STDERR "[ $dn ]\n";
+            print STDERR "[ $1 ]\n";
         }
     }
     $self->basedn($old_base);
