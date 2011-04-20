@@ -86,6 +86,7 @@ sub input{
             }
         }
         my $replies=[];
+print STDERR "[ $nick  ]\n";
         for ( $what ) {
         ########################################################################
         # begin input pattern matching                                         #  
