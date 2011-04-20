@@ -414,8 +414,10 @@ sub sets_in{
     my $parent = shift if @_;
     my @tops;
     if($parent){
+        my $dn = $self->set2dn($parent);
+        return undef unless $dn;
         #return the members if it's a cn
-        if($self->set2dn($parent)=~m/^cn/){
+        if($dn=~m/^cn/){
             return $self->members($parent);
         }
 
