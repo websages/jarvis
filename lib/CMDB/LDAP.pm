@@ -3,6 +3,7 @@ use Net::DNS::Resolver;
 use Net::LDAP;
 use Data::Dumper;
 use YAML;
+use strict;
 
 ################################################################################
 # any of the following constructors should work:
@@ -458,7 +459,7 @@ sub set2dn{
     }else{
         $ou_tree = $self->{'setbase'};
     }
-    my $old_base = $self->basedn;
+    chomp(my $old_base = $self->basedn);
     print STDERR "\n[ $ou_tree ]\n";
     $self->basedn($ou_tree);
     my @entries = $self->ldap_search("objectclass=*");
