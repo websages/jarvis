@@ -104,6 +104,7 @@ sub input{
         # this is how the commands should be modeled
             /^\s*!*sets\s+(.*)/ && 
                 do { 
+                      print STDERR "\nsets seen\n";
                       $msg->{'sender_alias'} = $sender->ID; # sending the alias doesn't work
                       $kernel->yield('sets',$1,$msg); 
                       last; 
@@ -194,12 +195,12 @@ sub gist{
        my $deltat=(3600*$h+60*$m+$s);
        $from=$now-$deltat;
        $type='time';
-       print STDERR "gisting from $from to $now\n";
+       #print STDERR "gisting from $from to $now\n";
        $huh=0;
     }elsif($gist=~m/^\d+$/){
         $huh=0;
         $type='lines';
-        print STDERR "gisting last $gist lines\n";
+        #print STDERR "gisting last $gist lines\n";
     }
     if(!$huh){
         my $fh = FileHandle->new("$self->{'log_dir'}/channel.log", "r");
