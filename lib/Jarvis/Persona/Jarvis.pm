@@ -169,6 +169,12 @@ sub input{
 
 sub sets{
     my ($self, $kernel, $heap, $sender, $top, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+print STDERR<<EOF
+                                          'uri'    => $self->{'ldap_uri'},
+                                          'basedn' => $self->{'ldap_basedn'},
+                                          'binddn' => $self->{'ldap_binddn'},
+                                          'bindpw' => $self->{'ldap_bindpw'},
+EOF
     $self->{'groups'} = CMDB::LDAP->new({
                                           'uri'    => $self->{'ldap_uri'},
                                           'basedn' => $self->{'ldap_basedn'},
