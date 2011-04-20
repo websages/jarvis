@@ -408,6 +408,7 @@ sub all_sets{
 
 sub sets_in{
     my $self = shift;
+print Data::Dumper->Dump([@_]);
     my $parent = shift if @_;
     my @tops;
     if($parent){
