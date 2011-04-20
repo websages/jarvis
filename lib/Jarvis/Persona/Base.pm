@@ -330,6 +330,11 @@ sub connector_error{
         delete $self->{'connectors'}->{$sender};
         $kernel->delay('connector', $conn->{'init'}->{'delay'} ,$conn);
     }
+    if($args[0]=~m/Closing Link: localhost \(Registration timed out\)/){ # someone else may have the nick, abort
+        print STDERR "aborting conection\n";
+        $kernel->post($sender,'_stop');
+        delete $self->{'connectors'}->{$sender};
+    }
     print STDERR $$.": ".$sender->ID." -> ".$self->alias()." Persona error: ".join("\n",@args)."\n";
     
 }
