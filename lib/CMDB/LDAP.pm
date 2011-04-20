@@ -65,7 +65,7 @@ sub new{
     $self->bindpw($cnstr->{'bindpw'}) if $cnstr->{'bindpw'};
     $self->domain($cnstr->{'domain'}) if $cnstr->{'domain'};
     $self->setou($cnstr->{'setou'})   if $cnstr->{'setou'};
-    $self->setou("sets") unless $self->{'setou'};
+    $self->setou("setou") unless $self->{'setou'};
     ############################################################################
     # determine the domain any way possible
     my $domain;
@@ -329,11 +329,6 @@ sub ldap_search {
     $self->ldap_bind unless $self->{'ldap'};
     $filter = "(objectclass=*)" unless $filter;
     my $servers;
-print STDERR "
-                                           'base'   => $self->{'basedn'},
-                                           'scope'  => 'sub',
-                                           'filter' => $filter
-";
     my $records = $self->{'ldap'}->search(
                                            'base'   => "$self->{'basedn'}",
                                            'scope'  => 'sub',
