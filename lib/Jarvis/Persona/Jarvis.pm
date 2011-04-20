@@ -176,7 +176,9 @@ sub sets{
                                           'bindpw' => $self->{'ldap_bindpw'},
                                         });
     my @sets = @{ $self->{'groups'}->all_sets() };
-    $kernel->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, join(',',@sets));
+    foreach my $set (@sets){
+        $kernel->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, join(',',$set));
+    }
 }
 
 sub gist{

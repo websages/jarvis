@@ -397,9 +397,7 @@ sub all_sets{
     $self->basedn("ou=".$self->{'setou'}.",".$old_basedn);
     my @entries = $self->ldap_search("(objectclass=groupOfUniqueNames)");
     my $sets;
-print STDERR Data::Dumper->Dump([@entries]);
     foreach my $entry (@entries){
-print STDERR "...\n";
         my $entry_dn = $entry->dn;
         # strip the top-level sets ou
         $entry_dn=~s/,ou=$self->{'setou'}.*//;
