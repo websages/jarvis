@@ -411,7 +411,6 @@ sub sets_in{
     my $parent = shift if @_;
     my @tops;
     if($parent){
-print STDERR "\n\n".$self->set2dn($parent)."\n\n";
         foreach my $set (@{ $self->all_sets() }){
             if($set=~m/^${parent}::/){
                 $set=~s/^${parent}:://;
