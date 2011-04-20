@@ -414,9 +414,12 @@ sub sets_in{
     my $parent = shift if @_;
     my @tops;
     if($parent){
+        #return the members if it's a cn
         if($self->set2dn($parent)=~m/^cn/){
             return $self->members($parent);
         }
+
+        # return the sub ou's if not a cn
         foreach my $set (@{ $self->all_sets() }){
             if($set=~m/^${parent}::/){
                 $set=~s/^${parent}:://;
