@@ -458,13 +458,16 @@ sub set2dn{
     }else{
         $ou_tree = $self->{'setbase'};
     }
-    $old_base = $self->basedn;
+    my $old_base = $self->basedn;
+    print STDERR "\n[ $ou_tree ]\n";
     $self->basedn($ou_tree);
     my @entries = $self->ldap_search("objectclass=*");
     foreach my $entry (@entries){
-        print STDERR $entry->dn."\n";
+        my $dn = $entry->dn."\n";
+        $dn=~s/$ou_tree$//;
+        print STDERR $dn."\n";
     }
-    $self->basedn($oldbase);
+    $self->basedn($old_base);
     return "cn=$cn,$ou_tree";
 }
 
