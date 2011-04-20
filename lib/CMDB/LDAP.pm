@@ -469,7 +469,7 @@ sub set2dn{
         my $dn = $entry->dn."\n";
         chomp($dn);
         print STDERR ":: $dn\n";
-        if($dn=~m/([^=]+=[^=]+\s*,\s*$ou_tree)$/){
+        if($dn=~m/^([^=]+=$cn+\s*,\s*$ou_tree)$/i){
             my $dn_actual = $1;
             print STDERR "[ $dn_actual ]\n";
             $self->basedn($old_base);
