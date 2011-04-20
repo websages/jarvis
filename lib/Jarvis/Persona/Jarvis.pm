@@ -254,6 +254,6 @@ sub gist{
 
 sub invite{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-    print Data::Dumper->Dump([@args]);
+    print STDERR "invited to $args[1] by $args[0]\n";
 }
 1;
