@@ -176,7 +176,7 @@ sub sets{
                                           'bindpw' => $self->{'ldap_bindpw'},
                                         });
 print STDERR "[ $top ]\n";
-    my @sets = @{ $self->{'groups'}->sets_in() };
+    print STDERR Data::Dumper->Dump([ $self->{'groups'}->sets_in($top) ];
     foreach my $set (@sets){
         $kernel->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, $set);
     }
