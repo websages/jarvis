@@ -310,16 +310,26 @@ sub authen_reply{
                                                        'binddn' => $self->{'ldap_binddn'},
                                                        'bindpw' => $self->{'ldap_bindpw'},
                                                        'setou'  => 'Special',
-                                                     });
-              print STDERR Data::Dumper->Dump([$self->{'authorize'}->members('Set Administrators')]);
-              my $user_dn =  "uid=$userid,ou=People,dc=".join(",dc=",split(/\./,$domain))."\n";
-              print STDERR "$user_dn\n";
-              $kernel->post(
-                             $msg->{'sender_alias'},
-                             $msg->{'reply_event'}, 
-                             $msg, 
-                             "adding $member to $set"
-                           );
+                                                     }) unless $self->{'authorize'};
+              my $authorized = 0;
+              foreach my $admin ( $self->{'authorize'}->members('Set Administrators') ){
+                  if($admin eq "cn=$userid"){ $authorized =1; }
+              }
+              if($authorized){
+                  $kernel->post(
+                                 $msg->{'sender_alias'},
+                                 $msg->{'reply_event'}, 
+                                 $msg, 
+                                 "adding $member to $set"
+                               );
+              }else{
+                  $kernel->post(
+                                 $msg->{'sender_alias'},
+                                 $msg->{'reply_event'}, 
+                                 $msg, 
+                                 "You are not authorized to add $member to $set"
+                               );
+              }
               last;
             };
     ############################################################################
