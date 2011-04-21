@@ -313,8 +313,8 @@ sub authen_reply{
                                                      }) unless $self->{'authorize'};
               my $authorized = 0;
               foreach my $admin ( $self->{'authorize'}->members('Set Administrators') ){
-                  if($admin eq "cn=$userid"){ $authorized =1; }
-                  print STDERR "$admin == cn=$userid\n";
+                  if($admin eq "uid=$userid"){ $authorized =1; }
+                  print STDERR "$admin == uid=$userid\n";
               }
                   print STDERR "authorized == $authorized \n";
               if($authorized == 1){
