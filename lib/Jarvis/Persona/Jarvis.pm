@@ -303,6 +303,8 @@ sub authen_reply{
                         "adding $1 to $2"
                       );
          last;
+    ############################################################################
+         /.*/ && print STDERR "not sure what to do with /$what/\n"; last;
     }
 }
 1;
