@@ -119,8 +119,11 @@ sub input{
                        last;
                    };
         ########################################################################
-            ( /^\s*!*add\s+(\S+)\s+to\s+(\S+)/  ||
-              /^\s*!*del\s+(\S+)\s+from\s+(\S+)/ ) && 
+            ( 
+              /^\s*!*(add)\s+(\S+)\s+to\s+(\S+)/   ||
+              /^\s*!*(del)\s+(\S+)\s+from\s+(\S+)/ ||
+              /^\s*!*(own)\s+(.*)/ 
+            ) && 
                 do {   # we hand of this command to the authenticated handler
                        $msg->{'sender_alias'} = $sender->ID;
                        $kernel->post($sender,'authen',$msg);
@@ -296,44 +299,56 @@ sub authen_reply{
               last;
             };
     ############################################################################
-    # adding members to sets (only "owners" of a set may alter it)
-            ( /^\s*!*add\s+(\S+)\s+to\s+(\S+)/  ||
-              /^\s*!*del\s+(\S+)\s+from\s+(\S+)/ ) && 
+    # Commands that require Authentication & Authorization
+            ( 
+              /^\s*!*(add)\s+(\S+)\s+to\s+(\S+)/   ||
+              /^\s*!*(del)\s+(\S+)\s+from\s+(\S+)/ ||
+              /^\s*!*(disown|own|pwn|owners|who\s*o*wns)\s+(.*)/ 
+            ) && 
          do {
-              my ($member,$set) = ($1,$2);
-              my ($userid,$domain);
-              if($actual=~m/(.*)@(.*)/){
-                  ($userid,$domain) = ($1,$2);
+              my @rxargs = ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);
+              my ($action,$member,$set,$userid,$domain);
+              $action = $rxargs[0];
+              if($action =~m /add|del/){
+                  $member = $rxargs[1];
+                  $set    = $rxargs[2];
+              }elsif($action =~m /disown|own|pwn/){
+                  $set    = $rxargs[1];
               }
-              $domain=~s/^(znc|irc)\.//; # something more elegant than this please...
-              $self->{'authorize'} = CMDB::LDAP->new({
-                                                       'uri'    => $self->{'ldap_uri'},
-                                                       'basedn' => $self->{'ldap_basedn'},
-                                                       'binddn' => $self->{'ldap_binddn'},
-                                                       'bindpw' => $self->{'ldap_bindpw'},
-                                                       'setou'  => 'Sets',
-                                                     }) unless $self->{'authorize'};
-              my $authorized = 0;
-              foreach my $owner ( $self->{'authorize'}->owners($set) ){
-                  if($owner eq "uid=$userid"){ $authorized =1; }
-                  print STDERR "$owner == uid=$userid\n";
-              }
-                  print STDERR "authorized == $authorized \n";
-              if($authorized == 1){
-                  $kernel->post(
-                                 $msg->{'sender_alias'},
-                                 $msg->{'reply_event'}, 
-                                 $msg, 
-                                 "adding $member to $set"
-                               );
-              }else{
-                  $kernel->post(
-                                 $msg->{'sender_alias'},
-                                 $msg->{'reply_event'}, 
-                                 $msg, 
-                                 "You don't own $set"
-                               );
-              }
+              print STDERR "[ $action ] [ $set ] [ $member ]\n";
+              ##################################################################
+#              if($actual=~m/(.*)@(.*)/){
+#                  ($userid,$domain) = ($1,$2);
+#              }
+#              $domain=~s/^(znc|irc)\.//; # something more elegant than this please...
+#              $self->{'authorize'} = CMDB::LDAP->new({
+#                                                       'uri'    => $self->{'ldap_uri'},
+#                                                       'basedn' => $self->{'ldap_basedn'},
+#                                                       'binddn' => $self->{'ldap_binddn'},
+#                                                       'bindpw' => $self->{'ldap_bindpw'},
+#                                                       'setou'  => 'Sets',
+#                                                     }) unless $self->{'authorize'};
+#              my $authorized = 0;
+#              foreach my $owner ( $self->{'authorize'}->owners($set) ){
+#                  if($owner eq "uid=$userid"){ $authorized =1; }
+#                  print STDERR "$owner == uid=$userid\n";
+#              }
+#                  print STDERR "authorized == $authorized \n";
+#              if($authorized == 1){
+#                  $kernel->post(
+#                                 $msg->{'sender_alias'},
+#                                 $msg->{'reply_event'}, 
+#                                 $msg, 
+#                                 "adding $member to $set"
+#                               );
+#              }else{
+#                  $kernel->post(
+#                                 $msg->{'sender_alias'},
+#                                 $msg->{'reply_event'}, 
+#                                 $msg, 
+#                                 "You don't own $set"
+#                               );
+#              }
               last;
             };
     ############################################################################
