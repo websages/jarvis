@@ -314,8 +314,10 @@ sub authen_reply{
               my $authorized = 0;
               foreach my $admin ( $self->{'authorize'}->members('Set Administrators') ){
                   if($admin eq "cn=$userid"){ $authorized =1; }
+                  print STDERR "$admin == cn=$userid\n";
               }
-              if($authorized){
+                  print STDERR "authorized == $authorized \n";
+              if($authorized == 1){
                   $kernel->post(
                                  $msg->{'sender_alias'},
                                  $msg->{'reply_event'}, 
