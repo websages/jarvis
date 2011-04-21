@@ -295,7 +295,7 @@ sub authen_reply{
                       );
          last;
     ############################################################################
-         /^\s*!*add\s+(\S+)\s+to\s+(\S+)/ && 
+         /^\s*!*add\s+(\S+)\s+to\s+(\S+)\s*/ && 
          $kernel->post(
                         $msg->{'sender_alias'},
                         $msg->{'reply_event'}, 
@@ -304,7 +304,7 @@ sub authen_reply{
                       );
          last;
     ############################################################################
-         /.*/ && print STDERR "not sure what to do with /$what/\n"; last;
+         /.*/ && print STDERR "not sure what to do with /$what/ (no match)\n"; last;
     }
 }
 1;
