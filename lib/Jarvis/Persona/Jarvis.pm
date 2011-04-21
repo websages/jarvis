@@ -63,7 +63,15 @@ sub persona_start{
                                #             }
                                }
                                )), 'log') or warn "Cannot start Logging $!";
+    $kernel->post($self->{'logger'}->ID, 'log', "Logging started.");
 }
+
+sub persona_stop{
+    my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
+    $kernel->post($self->{'logger'}->ID, 'log', "Logging stopped.");
+    $self->{'cmdb'}->unbind();
+}
+
 ################################################################################
 # the messages get routed here from the connectors, a reply is formed, and 
 # posted back to the sender_alias,reply event (this function will need to be
