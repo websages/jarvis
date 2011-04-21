@@ -27,9 +27,10 @@ sub may {
 sub persona_states{
     my $self = shift;
     return { 
-             'gist'    => 'gist',
-             'sets'    => 'sets',
-             'invite'  => 'invite',
+             'gist'          => 'gist',
+             'sets'          => 'sets',
+             'invite'        => 'invite',
+             'authen_reply'  => 'authen_reply',
            };
 }
 
@@ -47,12 +48,12 @@ sub persona_start{
                                               'mode'     => 'append',
                                               'format'   => '%d{%Y%m%d %H:%M:%S} %m %n',
                                             },
-                                'screen' => {
-                                               'class'    => 'Log::Dispatch::Screen',
-                                               'min_level'=> 'info',
-                                               'stderr'   => 0,
-                                               'format'   => '%m',
-                                            }
+                               # 'screen' => {
+                               #                'class'    => 'Log::Dispatch::Screen',
+                               #                'min_level'=> 'info',
+                               #                'stderr'   => 0,
+                               #                'format'   => '%m',
+                               #             }
                                }
                                )), 'log') or warn "Cannot start Logging $!";
 }
@@ -260,5 +261,10 @@ sub invite{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     my ($nick,$ident) = split(/!/,$args[0]) if $args[0];
     print STDERR "invited to $args[1] by $ident ($nick)\n";
+}
+
+sub authen_reply{
+    my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    print STDERR Data::Dumper->Dump([@args]);
 }
 1;
