@@ -166,7 +166,7 @@ sub input{
         # end input pattern matching                                           #
         ########################################################################
         }
-        $kernel->yeild('speak', $msg, $replies);
+        $kernel->yield('speak', $msg, $replies);
     }
     return $self->{'alias'};
 }
