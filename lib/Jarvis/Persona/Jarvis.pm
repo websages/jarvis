@@ -70,7 +70,7 @@ print STDERR "$self->{'log_dir'}/channel.log\n";
 
 sub persona_stop{
     my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
-    $kernel->post($self->{'logger'}->ID, 'log', "Logging stopped.");
+    $kernel->post($self->{'logger'}, 'log', "Logging stopped.");
     $self->{'cmdb'}->unbind();
 }
 
@@ -129,13 +129,8 @@ sub input{
                       last; 
                    };
         ########################################################################
-            /^\s*!*who\s*am\s*i\s*/ && 
-                do {   # we hand of this command to the authenticated handler
-                       $kernel->post($sender,'authen',$msg);
-                       last;
-                   };
-        ########################################################################
             ( 
+              /^\s*!*who\s*am\s*i\s*/              ||
               /^\s*!*(add)\s+(\S+)\s+to\s+(\S+)/   ||
               /^\s*!*(del)\s+(\S+)\s+from\s+(\S+)/ ||
               /^\s*!*(disown|own|pwn|owners|who\s*o*wns)\s+(.*)/ 
@@ -204,24 +199,23 @@ sub speak{
             }
         }
     }
-print STDERR $self->{'logger'}->ID."\n";
     if($direct==1){ 
         foreach my $line (@{ $replies }){
             if( defined($line) && ($line ne "") ){ 
                if(ref($where) eq 'ARRAY'){  # this was an irc privmsg
                    $where = $where->[0];
                    $kernel->post($sender_id, $respond_event, $msg, $line); 
-                   $kernel->post($self->{'logger'}->ID, 'log', "$where <$who> $what");
+                   $kernel->post($self->{'logger'}, 'log', "$where <$who> $what");
                }else{
                    $kernel->post($sender_id, $respond_event, $msg, $who.': '.$line); 
-                   $kernel->post($self->{'logger'}->ID, 'log', "$where <$nick> $who: $line");
+                   $kernel->post($self->{'logger'}, 'log', "$where <$nick> $who: $line");
                }
            }
         }
     }else{
         foreach my $line (@{ $replies }){
             if( defined($line) && ($line ne "") ){ 
-                $kernel->post($self->{'logger'}->ID, 'log', "$where <$nick> $line");
+                $kernel->post($self->{'logger'}, 'log', "$where <$nick> $line");
                 $kernel->post($sender_id, $respond_event, $msg, $line); 
             }
         }
