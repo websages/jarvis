@@ -354,9 +354,9 @@ sub authen_reply{
               print STDERR Data::Dumper->Dump([@owners]);
               if($action=~m/owners*|who\s*o*wns/){
                   if(@owners){
-                      $kernel->yield('speak',$msg,"no owners");
-                  }else{
                       $kernel->yield('speak',$msg,join(", ",@owners));
+                  }else{
+                      $kernel->yield('speak',$msg,"no owners");
                   }
               }
               ##################################################################
