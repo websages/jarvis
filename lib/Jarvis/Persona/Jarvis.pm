@@ -295,7 +295,7 @@ sub authen_reply{
               last;
             };
     ############################################################################
-    # adding members to sets (should only allow members of cn=Set Administrators,ou=Special)
+    # adding members to sets (only "owners" of a set may alter it)
          /^\s*!*add\s+(\S+)\s+to\s+(\S+)\s*/ && 
          do {
               my ($member,$set) = ($1,$2);
@@ -312,7 +312,7 @@ sub authen_reply{
                                                        'setou'  => 'Special',
                                                      }) unless $self->{'authorize'};
               my $authorized = 0;
-              foreach my $admin ( $self->{'authorize'}->members('Set Administrators') ){
+              foreach my $owner ( $self->{'authorize'}->owners($set) ){
                   if($admin eq "uid=$userid"){ $authorized =1; }
                   print STDERR "$admin == uid=$userid\n";
               }
@@ -329,7 +329,7 @@ sub authen_reply{
                                  $msg->{'sender_alias'},
                                  $msg->{'reply_event'}, 
                                  $msg, 
-                                 "You are not authorized to add $member to $set"
+                                 "You don't own $set"
                                );
               }
               last;

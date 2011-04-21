@@ -525,6 +525,24 @@ sub members{
     return @memberitems;
 }
 
+sub owners{
+    my $self = shift;
+    my $set_name = shift if @_;
+    my @memberitems;
+    foreach my $set (@{ $self->all_sets() }){
+        if($set=~m/$set_name$/){  # will match "Cfengine::workstations" or "workstations"
+            my @entry = $self->entry( $self->set2dn($set) );
+            my @members = $entry[0]->get_value('owners');
+            foreach my $member (@members){
+                my @heiarchy=split(/,/,$member);
+                my $item = shift(@heiarchy);
+                push(@memberitems,$item);
+            }
+        }
+    }
+    return @memberitems;
+}
+
 sub unique_members{
     my $self = shift;
     my $groupofuniquenames = shift if @_;
