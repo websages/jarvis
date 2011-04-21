@@ -200,9 +200,11 @@ sub speak{
             if( defined($line) && ($line ne "") ){ 
                if(ref($where) eq 'ARRAY'){  # this was an irc privmsg
                    $where = $where->[0];
-                   $kernel->post($sender, $respond_event, $msg, $line); 
+    print STDERR Data::Dumper->Dump([ $sender_alias, $respond_event, $msg, $line ]);
+                   $kernel->post($sender_alias, $respond_event, $msg, $line); 
                }else{
-                   $kernel->post($sender, $respond_event, $msg, $who.': '.$line); 
+    print STDERR Data::Dumper->Dump([ $sender_alias, $respond_event, $msg, $line ]);
+                   $kernel->post($sender_alias, $respond_event, $msg, $who.': '.$line); 
                }
                $kernel->post($self->{'logger'}, 'log', "$where <$who> $what");
            }else{
@@ -212,18 +214,11 @@ sub speak{
     }else{
         foreach my $line (@{ $replies }){
             if( defined($line) && ($line ne "") ){ 
-                $kernel->post($sender, $respond_event, $msg, $line); 
+                $kernel->post($sender_alias, $respond_event, $msg, $line); 
                 $kernel->post($self->{'logger'}, 'log', "$where <$nick> $line");
             }
         }
     }
-    $kernel->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, $replies);
-    print STDERR Data::Dumper->Dump([
-                                      $msg->{'sender_alias'},
-                                      $msg->{'reply_event'}, 
-                                      $msg, 
-                                      $replies
-                                   ]);
 }
 
 sub sets{
