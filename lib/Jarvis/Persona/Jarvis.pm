@@ -309,12 +309,12 @@ sub authen_reply{
                                                        'basedn' => $self->{'ldap_basedn'},
                                                        'binddn' => $self->{'ldap_binddn'},
                                                        'bindpw' => $self->{'ldap_bindpw'},
-                                                       'setou'  => 'Special',
+                                                       'setou'  => 'Sets',
                                                      }) unless $self->{'authorize'};
               my $authorized = 0;
               foreach my $owner ( $self->{'authorize'}->owners($set) ){
-                  if($admin eq "uid=$userid"){ $authorized =1; }
-                  print STDERR "$admin == uid=$userid\n";
+                  if($owner eq "uid=$userid"){ $authorized =1; }
+                  print STDERR "$owner == uid=$userid\n";
               }
                   print STDERR "authorized == $authorized \n";
               if($authorized == 1){
