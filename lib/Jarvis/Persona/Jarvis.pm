@@ -286,25 +286,33 @@ sub authen_reply{
     for ( $what ) {
     ############################################################################
          /^\s*!*who\s*am\s*i\s*/ && 
-         $kernel->post(
-                        $msg->{'sender_alias'},
-                        $msg->{'reply_event'}, 
-                        $msg, 
-                        "I see you as $actual."
-                      );
-         last;
+         do {
+              $kernel->post(
+                             $msg->{'sender_alias'},
+                             $msg->{'reply_event'}, 
+                             $msg, 
+                             "I see you as $actual."
+                           );
+              last;
+            };
     ############################################################################
          /^\s*!*add\s+(\S+)\s+to\s+(\S+)\s*/ && 
-         print STDERR "wtf?\n";
-         $kernel->post(
-                        $msg->{'sender_alias'},
-                        $msg->{'reply_event'}, 
-                        $msg, 
-                        "adding $1 to $2"
-                      );
-         last;
+         do {
+              print STDERR "wtf?\n";
+              $kernel->post(
+                             $msg->{'sender_alias'},
+                             $msg->{'reply_event'}, 
+                             $msg, 
+                             "adding $1 to $2"
+                           );
+              last;
+            };
     ############################################################################
-         /.*/ && print STDERR "not sure what to do with /$what/ (no match)\n"; last;
+         /.*/ && 
+         do {
+              print STDERR "not sure what to do with /$what/ (no match)\n"; 
+              last;
+            };
     }
     print STDERR "/????/\n";
 }
