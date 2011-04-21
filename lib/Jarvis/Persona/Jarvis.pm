@@ -185,7 +185,8 @@ print STDERR "one.\n";
          $msg->{'conversation'}->{'body'},
          $msg->{'conversation'}->{'id'},
        );
-    my ($nick,$direct);
+    my $direct=$msg->{'conversation'}->{'direct'}||0;
+    my $nick;
     if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
         foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
             $nick = $chan_nick;
