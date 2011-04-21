@@ -349,6 +349,8 @@ sub authen_reply{
                   $set    = $rxargs[1];
                   print STDERR "[ $action ] [ $set ]\n";
               }
+              my @owners = $self->{'cmdb'}->owners($set);
+              print Data::Dumper->Dump([@owners]);
               ##################################################################
 #              if($actual=~m/(.*)@(.*)/){
 #                  ($userid,$domain) = ($1,$2);
