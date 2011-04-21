@@ -81,7 +81,6 @@ sub input{
          $msg->{'conversation'}->{'body'},
          $msg->{'conversation'}->{'id'},
        );
-    $msg->{'sender_id'} = $sender->ID; # the kernel is dropping non-numeric aliases...
     my $direct=$msg->{'conversation'}->{'direct'}||0;
 
     my $nick = undef;
@@ -106,7 +105,6 @@ sub input{
         # this is how the commands should be modeled
             /^\s*!*gist\s*(.*)/ && 
                 do { 
-                      $msg->{'sender_alias'} = $sender->ID;
                       $kernel->yield('gist',$1,$msg); 
                       last; 
                    };
@@ -115,14 +113,12 @@ sub input{
             /^\s*!*(sets|members)\s*(.*)/ && 
                 do { 
                       my $set = $2;
-                      $msg->{'sender_alias'} = $sender->ID; # sending the alias doesn't work
                       $kernel->yield('sets',$set,$msg); 
                       last; 
                    };
         ########################################################################
             /^\s*!*who\s*am\s*i\s*/ && 
                 do {   # we hand of this command to the authenticated handler
-                       $msg->{'sender_alias'} = $sender->ID;
                        $kernel->post($sender,'authen',$msg);
                        last;
                    };
@@ -133,7 +129,6 @@ sub input{
               /^\s*!*(disown|own|pwn|owners|who\s*o*wns)\s+(.*)/ 
             ) && 
                 do {   # we hand of this command to the authenticated handler
-                       $msg->{'sender_alias'} = $sender->ID;
                        $kernel->post($sender,'authen',$msg);
                        last;
                    };
