@@ -299,7 +299,7 @@ sub authen_reply{
          do {
               my ($userid,$domain);
               if($actual=~m/(.*)@(.*)/){
-                  ($user,$domain) = ($1,$2);
+                  ($userid,$domain) = ($1,$2);
               }
               $domain=~/^(znc|irc)\.//; # something more elegant than this please...
               my $user_dn =  "uid=$user,ou=People,dc=".join(",dc=",split(/\./,$domain))."\n";
