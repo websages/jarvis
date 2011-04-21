@@ -185,10 +185,6 @@ sub speak{
        );
     my $direct=$msg->{'conversation'}->{'direct'}||0;
     my $nick;
-
-print STDERR Data::Dumper->Dump([$heap->{'locations'} ]);
-print STDERR "$sender_alias : $where\n";
-
     if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
         foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
             $nick = $chan_nick;
@@ -203,22 +199,19 @@ print STDERR "$sender_alias : $where\n";
             if( defined($line) && ($line ne "") ){ 
                if(ref($where) eq 'ARRAY'){  # this was an irc privmsg
                    $where = $where->[0];
-    print STDERR Data::Dumper->Dump([ "one", $sender_alias, $respond_event, $msg, $line ]);
                    $kernel->post($sender_id, $respond_event, $msg, $line); 
+                   $kernel->post($self->{'logger'}, 'log', "$where <$who> $what");
                }else{
-    print STDERR Data::Dumper->Dump([ "two", $sender_alias, $respond_event, $msg, $line ]);
                    $kernel->post($sender_id, $respond_event, $msg, $who.': '.$line); 
+                   $kernel->post($self->{'logger'}, 'log', "$where <$nick> $who: $line");
                }
-               $kernel->post($self->{'logger'}, 'log', "$where <$who> $what");
-           }else{
-               $kernel->post($self->{'logger'}, 'log', "$where <$nick> $who: $line");
            }
         }
     }else{
         foreach my $line (@{ $replies }){
             if( defined($line) && ($line ne "") ){ 
-                $kernel->post($sender_id, $respond_event, $msg, $line); 
                 $kernel->post($self->{'logger'}, 'log', "$where <$nick> $line");
+                $kernel->post($sender_id, $respond_event, $msg, $line); 
             }
         }
     }
