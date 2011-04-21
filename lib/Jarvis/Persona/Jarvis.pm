@@ -350,10 +350,14 @@ sub authen_reply{
                   print STDERR "[ $action ] [ $set ]\n";
               }
               my @owners = $self->{'cmdb'}->owners($set);
-              $kernel->yield('speak',$msg,"no owners") unless @owners;
-              print STDERR "--------------------------------\n";
-              print STDERR Data::Dumper->Dump([@owners]);
-              print STDERR "--------------------------------\n";
+ 
+              if($action=~m/owners*|who\s*o*wns/){
+                  if(@owners){
+                      $kernel->yield('speak',$msg,"no owners");
+                  }else{
+                      $kernel->yield('speak',$msg,join(", ",@owners));
+                  }
+              }
               ##################################################################
 #              if($actual=~m/(.*)@(.*)/){
 #                  ($userid,$domain) = ($1,$2);
