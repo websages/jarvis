@@ -72,7 +72,6 @@ sub persona_start{
 sub input{
     my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
     # un-wrap the $msg
-    $msg->{'sender_alias'}=$sender->ID; # the kernel is dropping non-numeric aliases...
     my ( $sender_alias, $respond_event, $who, $where, $what, $id ) =
        ( 
          $msg->{'sender_alias'},
@@ -82,6 +81,7 @@ sub input{
          $msg->{'conversation'}->{'body'},
          $msg->{'conversation'}->{'id'},
        );
+    $msg->{'sender_alias'}=$sender->ID; # the kernel is dropping non-numeric aliases...
     my $direct=$msg->{'conversation'}->{'direct'}||0;
 
     my $nick = undef;
