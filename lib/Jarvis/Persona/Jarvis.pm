@@ -344,7 +344,7 @@ sub authen_reply{
               if($action =~m /add|del/){
                   $member = $rxargs[1];
                   $set    = $rxargs[2];
-              }elsif($action =~m /disown|own|pwn/){
+              }elsif($action =~m /disown|own|pwn|owners|who\s*o*wns/){
                   $set    = $rxargs[1];
               }
               print STDERR "[ $action ] [ $set ] [ $member ]\n";
