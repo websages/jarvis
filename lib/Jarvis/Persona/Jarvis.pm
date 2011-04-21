@@ -119,7 +119,8 @@ sub input{
                        last;
                    };
         ########################################################################
-            /^\s*!*add\s+(\S+)\s+to\s+(\S+)/ && 
+            ( /^\s*!*add\s+(\S+)\s+to\s+(\S+)/  ||
+              /^\s*!*del\s+(\S+)\s+from\s+(\S+)/ ) && 
                 do {   # we hand of this command to the authenticated handler
                        $msg->{'sender_alias'} = $sender->ID;
                        $kernel->post($sender,'authen',$msg);
@@ -296,7 +297,8 @@ sub authen_reply{
             };
     ############################################################################
     # adding members to sets (only "owners" of a set may alter it)
-         /^\s*!*add\s+(\S+)\s+to\s+(\S+)\s*/ && 
+            ( /^\s*!*add\s+(\S+)\s+to\s+(\S+)/  ||
+              /^\s*!*del\s+(\S+)\s+from\s+(\S+)/ ) && 
          do {
               my ($member,$set) = ($1,$2);
               my ($userid,$domain);
