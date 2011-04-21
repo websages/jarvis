@@ -533,7 +533,7 @@ sub owners{
 print STDERR "$set $set_name\n";
         if($set=~m/$set_name$/){  # will match "Cfengine::workstations" or "workstations"
             my @entry = $self->entry( $self->set2dn($set) );
-            my @members = $entry[0]->get_value('owners');
+            my @members = $entry[0]->get_value('owner');
             foreach my $member (@members){
                 my @heiarchy=split(/,/,$member);
                 my $item = shift(@heiarchy);
