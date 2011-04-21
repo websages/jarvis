@@ -182,39 +182,39 @@ sub speak{
          $msg->{'conversation'}->{'body'},
          $msg->{'conversation'}->{'id'},
        );
-        my ($nick,$direct);
-        if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
-            foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
-                $nick = $chan_nick;
-                if($what=~m/^\s*$chan_nick\s*:*\s*/){
-                    $what=~s/^\s*$chan_nick\s*:*\s*//;
-                    $direct=1;
-                }
+    my ($nick,$direct);
+    if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
+        foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
+            $nick = $chan_nick;
+            if($what=~m/^\s*$chan_nick\s*:*\s*/){
+                $what=~s/^\s*$chan_nick\s*:*\s*//;
+                $direct=1;
             }
         }
-        if($direct==1){ 
-            foreach my $line (@{ $replies }){
-                if( defined($line) && ($line ne "") ){ 
-                   if(ref($where) eq 'ARRAY'){  # this was an irc privmsg
-                       $where = $where->[0];
-                       $kernel->post($sender, $respond_event, $msg, $line); 
-                   }else{
-                       $kernel->post($sender, $respond_event, $msg, $who.': '.$line); 
-                   }
-                   $kernel->post($self->{'logger'}, 'log', "$where <$who> $what");
+    }
+    if($direct==1){ 
+        foreach my $line (@{ $replies }){
+            if( defined($line) && ($line ne "") ){ 
+               if(ref($where) eq 'ARRAY'){  # this was an irc privmsg
+                   $where = $where->[0];
+                   $kernel->post($sender, $respond_event, $msg, $line); 
                }else{
-                   $kernel->post($self->{'logger'}, 'log', "$where <$nick> $who: $line");
+                   $kernel->post($sender, $respond_event, $msg, $who.': '.$line); 
                }
-            }
-        }else{
-            foreach my $line (@{ $replies }){
-                if( defined($line) && ($line ne "") ){ 
-                    $kernel->post($sender, $respond_event, $msg, $line); 
-                    $kernel->post($self->{'logger'}, 'log', "$where <$nick> $line");
-                }
+               $kernel->post($self->{'logger'}, 'log', "$where <$who> $what");
+           }else{
+               $kernel->post($self->{'logger'}, 'log', "$where <$nick> $who: $line");
+           }
+        }
+    }else{
+        foreach my $line (@{ $replies }){
+            if( defined($line) && ($line ne "") ){ 
+                $kernel->post($sender, $respond_event, $msg, $line); 
+                $kernel->post($self->{'logger'}, 'log', "$where <$nick> $line");
             }
         }
-    #$kernel->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, $y);
+    }
+    $kernel->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, $replies);
 }
 
 sub sets{
