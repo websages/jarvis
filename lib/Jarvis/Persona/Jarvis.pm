@@ -296,7 +296,7 @@ sub gist{
     chomp(my $url=<GIST>);
     close(GIST);
     unlink($file);
-    $kernel->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, $url);
+    $kernel->yield('speak', $msg, $url);
 }
 
 sub invite{
