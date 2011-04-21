@@ -174,9 +174,8 @@ sub input{
 
 sub speak{
     my ($self, $kernel, $heap, $sender, $msg, $replies)=@_[OBJECT,KERNEL,HEAP,SENDER,ARG0 .. $#_];
-    my ( $sender_alias, $respond_event, $who, $where, $what, $id ) =
-print STDERR "one.\n";
     $replies = [ $replies ] unless ref($replies);
+    my ( $sender_alias, $respond_event, $who, $where, $what, $id ) =
        (
          $msg->{'sender_alias'},
          $msg->{'reply_event'},
