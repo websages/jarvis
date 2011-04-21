@@ -174,6 +174,7 @@ sub input{
 sub speak{
     my ($self, $kernel, $heap, $sender, $msg, $replies)=@_[OBJECT,KERNEL,HEAP,SENDER,ARG0 .. $#_];
     my ( $sender_alias, $respond_event, $who, $where, $what, $id ) =
+print STDERR "one.\n";
     $replies = [ $replies ] unless ref($replies);
        (
          $msg->{'sender_alias'},
@@ -193,6 +194,7 @@ sub speak{
             }
         }
     }
+print STDERR "two.\n";
     if($direct==1){ 
         foreach my $line (@{ $replies }){
             if( defined($line) && ($line ne "") ){ 
@@ -215,6 +217,7 @@ sub speak{
             }
         }
     }
+print STDERR "three.\n";
     $kernel->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, $replies);
 }
 
