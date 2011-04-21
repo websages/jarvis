@@ -81,7 +81,7 @@ sub input{
          $msg->{'conversation'}->{'body'},
          $msg->{'conversation'}->{'id'},
        );
-    $msg->{'sender_alias'}=$sender->ID; # the kernel is dropping non-numeric aliases...
+    $msg->{'sender_id'} = $sender->ID; # the kernel is dropping non-numeric aliases...
     my $direct=$msg->{'conversation'}->{'direct'}||0;
 
     my $nick = undef;
@@ -176,9 +176,10 @@ sub input{
 sub speak{
     my ($self, $kernel, $heap, $sender, $msg, $replies)=@_[OBJECT,KERNEL,HEAP,SENDER,ARG0 .. $#_];
     $replies = [ $replies ] unless ref($replies);
-    my ( $sender_alias, $respond_event, $who, $where, $what, $id ) =
+    my ( $sender_alias, $sender_id, $respond_event, $who, $where, $what, $id ) =
        (
          $msg->{'sender_alias'},
+         $msg->{'sender_id'},
          $msg->{'reply_event'},
          $msg->{'conversation'}->{'nick'},
          $msg->{'conversation'}->{'room'},
@@ -202,10 +203,10 @@ sub speak{
                if(ref($where) eq 'ARRAY'){  # this was an irc privmsg
                    $where = $where->[0];
     print STDERR Data::Dumper->Dump([ $sender_alias, $respond_event, $msg, $line ]);
-                   $kernel->post($sender_alias, $respond_event, $msg, $line); 
+                   $kernel->post($sender_id, $respond_event, $msg, $line); 
                }else{
     print STDERR Data::Dumper->Dump([ $sender_alias, $respond_event, $msg, $line ]);
-                   $kernel->post($sender_alias, $respond_event, $msg, $who.': '.$line); 
+                   $kernel->post($sender_id, $respond_event, $msg, $who.': '.$line); 
                }
                $kernel->post($self->{'logger'}, 'log', "$where <$who> $what");
            }else{
@@ -215,7 +216,7 @@ sub speak{
     }else{
         foreach my $line (@{ $replies }){
             if( defined($line) && ($line ne "") ){ 
-                $kernel->post($sender_alias, $respond_event, $msg, $line); 
+                $kernel->post($sender_id, $respond_event, $msg, $line); 
                 $kernel->post($self->{'logger'}, 'log', "$where <$nick> $line");
             }
         }
