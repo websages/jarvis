@@ -302,7 +302,7 @@ sub authen_reply{
                   ($userid,$domain) = ($1,$2);
               }
               $domain=~/^(znc|irc)\.//; # something more elegant than this please...
-              my $user_dn =  "uid=$user,ou=People,dc=".join(",dc=",split(/\./,$domain))."\n";
+              my $user_dn =  "uid=$userid,ou=People,dc=".join(",dc=",split(/\./,$domain))."\n";
               print STDERR "$user_dn\n";
               $kernel->post(
                              $msg->{'sender_alias'},
