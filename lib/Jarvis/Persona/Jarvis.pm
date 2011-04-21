@@ -55,15 +55,15 @@ sub persona_start{
                                               'mode'     => 'append',
                                               'format'   => '%d{%Y%m%d %H:%M:%S} %m %n',
                                             },
-                               # 'screen' => {
-                               #                'class'    => 'Log::Dispatch::Screen',
-                               #                'min_level'=> 'info',
-                               #                'stderr'   => 0,
-                               #                'format'   => '%m',
-                               #             }
+                                'screen' => {
+                                               'class'    => 'Log::Dispatch::Screen',
+                                               'min_level'=> 'info',
+                                               'stderr'   => 0,
+                                               'format'   => '%m',
+                                            }
                                }
                                )), 'log') or warn "Cannot start Logging $!";
-    $kernel->post($self->{'logger'}->ID, 'log', "Logging started.");
+    $kernel->post($self->{'logger'}, 'log', "Logging started.");
 }
 
 sub persona_stop{
