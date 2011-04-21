@@ -201,17 +201,17 @@ print STDERR $self->{'logger'}->ID."\n";
                if(ref($where) eq 'ARRAY'){  # this was an irc privmsg
                    $where = $where->[0];
                    $kernel->post($sender_id, $respond_event, $msg, $line); 
-                   $kernel->post($self->{'logger'}, 'log', "$where <$who> $what");
+                   $kernel->post($self->{'logger'}->ID, 'log', "$where <$who> $what");
                }else{
                    $kernel->post($sender_id, $respond_event, $msg, $who.': '.$line); 
-                   $kernel->post($self->{'logger'}, 'log', "$where <$nick> $who: $line");
+                   $kernel->post($self->{'logger'}->ID, 'log', "$where <$nick> $who: $line");
                }
            }
         }
     }else{
         foreach my $line (@{ $replies }){
             if( defined($line) && ($line ne "") ){ 
-                $kernel->post($self->{'logger'}, 'log', "$where <$nick> $line");
+                $kernel->post($self->{'logger'}->ID, 'log', "$where <$nick> $line");
                 $kernel->post($sender_id, $respond_event, $msg, $line); 
             }
         }
