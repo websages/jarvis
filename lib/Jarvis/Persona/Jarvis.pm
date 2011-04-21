@@ -188,10 +188,10 @@ sub speak{
        );
     my $direct=$msg->{'conversation'}->{'direct'}||0;
     my $nick;
-print STDERR "$sender_alias : $where : $chan_nick\n";
 print STDERR Data::Dumper->Dump([$heap->{'locations'} ]);
     if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
         foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
+print STDERR "$sender_alias : $where : $chan_nick\n";
             $nick = $chan_nick;
             if($what=~m/^\s*$chan_nick\s*:*\s*/){
                 $what=~s/^\s*$chan_nick\s*:*\s*//;
