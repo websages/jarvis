@@ -152,8 +152,7 @@ sub input{
                    }else{
                        $kernel->post($sender, $respond_event, $msg, $who.': '.$line); 
                    }
-                   $kernel->post($self->{'logger'}, 'log', "#privmsg[$where] <$who> $what");
-                   $kernel->post($self->{'logger'}, 'log', "#privmsg[$who] <$where> $line");
+                   $kernel->post($self->{'logger'}, 'log', "$where <$who> $what");
                }else{
                    $kernel->post($self->{'logger'}, 'log', "$where <$nick> $who: $line");
                }
