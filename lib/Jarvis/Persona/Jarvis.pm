@@ -121,7 +121,6 @@ sub input{
         ########################################################################
             /^\s*!*add\s+(\S+)\s+to\s+(\S+)/ && 
                 do {   # we hand of this command to the authenticated handler
-                       print STDERR "authenticating $who\n";      
                        $msg->{'sender_alias'} = $sender->ID;
                        $kernel->post($sender,'authen',$msg);
                        last;
@@ -296,6 +295,7 @@ sub authen_reply{
          last;
     ############################################################################
          /^\s*!*add\s+(\S+)\s+to\s+(\S+)\s*/ && 
+         print STDERR "wtf?\n";
          $kernel->post(
                         $msg->{'sender_alias'},
                         $msg->{'reply_event'}, 
