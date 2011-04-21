@@ -115,6 +115,7 @@ sub input{
             /^\s*!*who\s*am\s*i\s*/ && 
                 do {   # we hand of this command to the authenticated handler
                        print STDERR "authenticating $who\n";      
+                       $msg->{'sender_alias'} = $sender->ID;
                        $kernel->post($sender,'authen',$msg);
                        last;
                    };
