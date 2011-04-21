@@ -57,12 +57,12 @@ print STDERR "$self->{'log_dir'}/channel.log\n";
                                               'mode'     => 'append',
                                               'format'   => '%d{%Y%m%d %H:%M:%S} %m %n',
                                             },
-                                'screen' => {
-                                               'class'    => 'Log::Dispatch::Screen',
-                                               'min_level'=> 'info',
-                                               'stderr'   => 0,
-                                               'format'   => "%m\n",
-                                            }
+                                #'screen' => {
+                                #               'class'    => 'Log::Dispatch::Screen',
+                                #               'min_level'=> 'info',
+                                #               'stderr'   => 0,
+                                #               'format'   => "%m\n",
+                                #            }
                                }
                                )), 'log') or warn "Cannot start Logging $!";
     $kernel->post($self->{'logger'}, 'log', "Logging started.");
@@ -133,7 +133,7 @@ sub input{
               /^\s*!*who\s*am\s*i\s*/              ||
               /^\s*!*(add)\s+(\S+)\s+to\s+(\S+)/   ||
               /^\s*!*(del)\s+(\S+)\s+from\s+(\S+)/ ||
-              /^\s*!*(disown|own|pwn|owners|who\s*o*wns)\s+(.*)/ 
+              /^\s*!*(disown|own|pwn|owners*|who\s*o*wns)\s+(.*)/ 
             ) && 
                 do {   # we hand of this command to the authenticated handler
                        $kernel->post($sender,'authen',$msg);
@@ -335,7 +335,7 @@ sub authen_reply{
             ( 
               /^\s*!*(add)\s+(\S+)\s+to\s+(\S+)/   ||
               /^\s*!*(del)\s+(\S+)\s+from\s+(\S+)/ ||
-              /^\s*!*(disown|own|pwn|owners|who\s*o*wns)\s+(.*)/ 
+              /^\s*!*(disown|own|pwn|owners*|who\s*o*wns)\s+(.*)/ 
             ) && 
          do {
               my @rxargs = ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);
@@ -344,10 +344,11 @@ sub authen_reply{
               if($action =~m /add|del/){
                   $member = $rxargs[1];
                   $set    = $rxargs[2];
+                  print STDERR "[ $action ] [ $set ] [ $member ]\n";
               }elsif($action =~m /disown|own|pwn|owners|who\s*o*wns/){
                   $set    = $rxargs[1];
+                  print STDERR "[ $action ] [ $set ]\n";
               }
-              print STDERR "[ $action ] [ $set ] [ $member ]\n";
               ##################################################################
 #              if($actual=~m/(.*)@(.*)/){
 #                  ($userid,$domain) = ($1,$2);
