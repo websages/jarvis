@@ -283,7 +283,6 @@ sub authen_reply{
          $msg->{'conversation'}->{'id'},
        );
     print STDERR "/$what/\n";
-    for ( $what ) {
     ############################################################################
          /^\s*!*who\s*am\s*i\s*/ && 
          do {
@@ -298,7 +297,7 @@ sub authen_reply{
     ############################################################################
          /^\s*!*add\s+(\S+)\s+to\s+(\S+)\s*/ && 
          do {
-              print STDERR "wtf?\n";
+              print STDERR "$actual\n";  
               $kernel->post(
                              $msg->{'sender_alias'},
                              $msg->{'reply_event'}, 
@@ -314,6 +313,5 @@ sub authen_reply{
               last;
             };
     }
-    print STDERR "/????/\n";
 }
 1;
