@@ -282,7 +282,7 @@ sub authen_reply{
          $msg->{'conversation'}->{'body'},
          $msg->{'conversation'}->{'id'},
        );
-    print STDERR "/$what/\n";
+    for ( $what ) {
     ############################################################################
          /^\s*!*who\s*am\s*i\s*/ && 
          do {
@@ -297,7 +297,13 @@ sub authen_reply{
     ############################################################################
          /^\s*!*add\s+(\S+)\s+to\s+(\S+)\s*/ && 
          do {
-              print STDERR "$actual\n";  
+              my ($userid,$domain);
+              if($actual=~m/(.*)@(.*)/){
+                  ($user,$domain) = ($1,$2);
+              }
+              $domain=~/^(znc|irc)\.//; # something more elegant than this please...
+              my $user_dn =  "uid=$user,ou=People,dc=".join(",dc=",split(/\./,$domain))."\n";
+              print STDERR "$user_dn\n";
               $kernel->post(
                              $msg->{'sender_alias'},
                              $msg->{'reply_event'}, 
