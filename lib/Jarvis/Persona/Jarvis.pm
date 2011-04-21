@@ -195,7 +195,6 @@ sub speak{
             }
         }
     }
-print STDERR "two.\n";
     if($direct==1){ 
         foreach my $line (@{ $replies }){
             if( defined($line) && ($line ne "") ){ 
@@ -218,8 +217,13 @@ print STDERR "two.\n";
             }
         }
     }
-print STDERR "three.\n";
     $kernel->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, $replies);
+    print STDERR Data::Dumper->Dump([
+                                      $msg->{'sender_alias'},
+                                      $msg->{'reply_event'}, 
+                                      $msg, 
+                                      $replies
+                                   ]);
 }
 
 sub sets{
