@@ -194,6 +194,7 @@ sub speak{
             }
         }
     }
+print STDERR $self->{'logger'}."\n";
     if($direct==1){ 
         foreach my $line (@{ $replies }){
             if( defined($line) && ($line ne "") ){ 
