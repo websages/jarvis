@@ -190,6 +190,7 @@ sub speak{
     my $nick;
     if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
         foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
+print STDERR "$sender_alias : $where : $chan_nick\n";
             $nick = $chan_nick;
             if($what=~m/^\s*$chan_nick\s*:*\s*/){
                 $what=~s/^\s*$chan_nick\s*:*\s*//;
