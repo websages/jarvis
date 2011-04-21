@@ -31,6 +31,7 @@ sub persona_states{
              'sets'          => 'sets',
              'invite'        => 'invite',
              'authen_reply'  => 'authen_reply',
+             'speak'         => 'speak',
            };
 }
 
