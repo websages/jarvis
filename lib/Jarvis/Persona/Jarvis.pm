@@ -111,7 +111,7 @@ sub input{
                       last; 
                    };
         ########################################################################
-            /^\s*!*(who\s*am\s*i\s*(.*)/ && 
+            /^\s*!*who\s*am\s*i\s*/ && 
                 do { 
                        print STDERR "authenticating $who\n";      
                        $kernel->post($sender,'authen',$msg);
