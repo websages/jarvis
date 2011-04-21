@@ -116,7 +116,7 @@ sub input{
                        print STDERR "authenticating $who\n";      
                        $kernel->post($sender,'authen',$msg);
                        last;
-                   }
+                   };
         ########################################################################
         # Greetings
             /^\s*hello\s+$nick\s*/i && 
