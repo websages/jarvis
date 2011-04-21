@@ -120,6 +120,14 @@ sub input{
                        last;
                    };
         ########################################################################
+            /^\s*!*add\s+(\S+)\s+to\s+(\S+)/ && 
+                do {   # we hand of this command to the authenticated handler
+                       print STDERR "authenticating $who\n";      
+                       $msg->{'sender_alias'} = $sender->ID;
+                       $kernel->post($sender,'authen',$msg);
+                       last;
+                   };
+        ########################################################################
         # Greetings
             /^\s*hello\s+$nick\s*/i && 
                 do { $replies = [ "hello $who" ]; last; };
@@ -263,7 +271,8 @@ sub invite{
     my ($nick,$ident) = split(/!/,$args[0]) if $args[0];
     print STDERR "invited to $args[1] by $ident ($nick)\n";
 }
-
+################################################################################
+# these will match the regexes from input() but will be associated with a whois reply argument
 sub authen_reply{
     my ($self, $kernel, $heap, $sender, $msg, $actual)=@_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     my ( $sender_alias, $respond_event, $who, $where, $what, $id ) =
@@ -286,6 +295,14 @@ sub authen_reply{
                       );
          last;
     ############################################################################
+         /^\s*!*add\s+(\S+)\s+to\s+(\S+)/ && 
+         $kernel->post(
+                        $msg->{'sender_alias'},
+                        $msg->{'reply_event'}, 
+                        $msg, 
+                        "adding $1 to $2";
+                      );
+         last;
     }
 }
 1;
