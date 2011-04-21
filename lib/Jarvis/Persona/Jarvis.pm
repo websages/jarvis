@@ -295,8 +295,10 @@ sub authen_reply{
               last;
             };
     ############################################################################
+    # adding members to sets
          /^\s*!*add\s+(\S+)\s+to\s+(\S+)\s*/ && 
          do {
+              my ($member,$set) = ($1,$2);
               my ($userid,$domain);
               if($actual=~m/(.*)@(.*)/){
                   ($userid,$domain) = ($1,$2);
@@ -308,7 +310,7 @@ sub authen_reply{
                              $msg->{'sender_alias'},
                              $msg->{'reply_event'}, 
                              $msg, 
-                             "adding $1 to $2"
+                             "adding $member to $set"
                            );
               last;
             };
