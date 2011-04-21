@@ -72,9 +72,11 @@ sub persona_start{
 sub input{
     my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
     # un-wrap the $msg
-    my ( $sender_alias, $respond_event, $who, $where, $what, $id ) =
+    $msg->{'sender_id'} = $_[SENDER]->ID; # the kernel is dropping non-numeric aliases...
+    my ( $sender_alias, $sender_id, $respond_event, $who, $where, $what, $id ) =
        ( 
          $msg->{'sender_alias'},
+         $msg->{'sender_id'},
          $msg->{'reply_event'},
          $msg->{'conversation'}->{'nick'},
          $msg->{'conversation'}->{'room'},
@@ -201,10 +203,10 @@ print STDERR "$sender_alias : $where\n";
             if( defined($line) && ($line ne "") ){ 
                if(ref($where) eq 'ARRAY'){  # this was an irc privmsg
                    $where = $where->[0];
-    print STDERR Data::Dumper->Dump([ $sender_alias, $respond_event, $msg, $line ]);
+    print STDERR Data::Dumper->Dump([ "one", $sender_alias, $respond_event, $msg, $line ]);
                    $kernel->post($sender_id, $respond_event, $msg, $line); 
                }else{
-    print STDERR Data::Dumper->Dump([ $sender_alias, $respond_event, $msg, $line ]);
+    print STDERR Data::Dumper->Dump([ "two", $sender_alias, $respond_event, $msg, $line ]);
                    $kernel->post($sender_id, $respond_event, $msg, $who.': '.$line); 
                }
                $kernel->post($self->{'logger'}, 'log', "$where <$who> $what");
