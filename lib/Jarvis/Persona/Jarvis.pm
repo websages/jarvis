@@ -113,7 +113,7 @@ sub input{
                    };
         ########################################################################
             /^\s*!*who\s*am\s*i\s*/ && 
-                do { 
+                do {   # we hand of this command to the authenticated handler
                        print STDERR "authenticating $who\n";      
                        $kernel->post($sender,'authen',$msg);
                        last;
@@ -264,7 +264,28 @@ sub invite{
 }
 
 sub authen_reply{
-    my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    my ($self, $kernel, $heap, $sender, $msg, $actual)=@_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    my ( $sender_alias, $respond_event, $who, $where, $what, $id ) =
+       (
+         $msg->{'sender_alias'},
+         $msg->{'reply_event'},
+         $msg->{'conversation'}->{'nick'},
+         $msg->{'conversation'}->{'room'},
+         $msg->{'conversation'}->{'body'},
+         $msg->{'conversation'}->{'id'},
+       );
+    for ( $what ) {
+    ############################################################################
+         /^\s*!*who\s*am\s*i\s*/ && 
+         $kernel->post(
+                        $msg->{'sender_alias'},
+                        $msg->{'reply_event'}, 
+                        $msg, 
+                        "I see you as $actual."
+                      );
+         last;
+    ############################################################################
+    }
     print STDERR Data::Dumper->Dump([@args]);
 }
 1;
