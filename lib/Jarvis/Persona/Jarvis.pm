@@ -182,6 +182,7 @@ sub speak{
          $msg->{'conversation'}->{'body'},
          $msg->{'conversation'}->{'id'},
        );
+        my ($nick,$direct);
         if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
             foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
                 $nick = $chan_nick;
@@ -213,8 +214,7 @@ sub speak{
                 }
             }
         }
-
-    $kernel->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, $say);
+    #$kernel->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, $y);
 }
 
 sub sets{
