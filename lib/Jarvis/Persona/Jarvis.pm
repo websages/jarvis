@@ -43,6 +43,8 @@ sub persona_start{
                                          'binddn' => $self->{'ldap_binddn'},
                                          'bindpw' => $self->{'ldap_bindpw'},
                                        });
+
+print STDERR "$self->{'log_dir'}/channel.log\n";
     $self->{'logger'} = POE::Component::Logger->spawn(
         ConfigFile => Log::Dispatch::Config->configure(
                           Log::Dispatch::Configurator::Hardwired->new(
@@ -59,7 +61,7 @@ sub persona_start{
                                                'class'    => 'Log::Dispatch::Screen',
                                                'min_level'=> 'info',
                                                'stderr'   => 0,
-                                               'format'   => "\n%m\n",
+                                               'format'   => "%m\n",
                                             }
                                }
                                )), 'log') or warn "Cannot start Logging $!";
