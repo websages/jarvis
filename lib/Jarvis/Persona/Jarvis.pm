@@ -351,6 +351,7 @@ sub authen_reply{
               }
               my @owners = $self->{'cmdb'}->owners($set);
  
+              print STDERR Data::Dumper->Dump([@owners]);
               if($action=~m/owners*|who\s*o*wns/){
                   if(@owners){
                       $kernel->yield('speak',$msg,"no owners");
