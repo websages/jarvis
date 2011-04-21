@@ -114,7 +114,6 @@ sub input{
         ########################################################################
             /^\s*!*who\s*am\s*i\s*/ && 
                 do {   # we hand of this command to the authenticated handler
-                       print STDERR "authenticating $who\n";      
                        $msg->{'sender_alias'} = $sender->ID;
                        $kernel->post($sender,'authen',$msg);
                        last;
@@ -300,7 +299,7 @@ sub authen_reply{
                         $msg->{'sender_alias'},
                         $msg->{'reply_event'}, 
                         $msg, 
-                        "adding $1 to $2";
+                        "adding $1 to $2"
                       );
          last;
     }
