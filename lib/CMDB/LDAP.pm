@@ -530,6 +530,7 @@ sub owners{
     my $set_name = shift if @_;
     my @memberitems;
     foreach my $set (@{ $self->all_sets() }){
+print STDERR "$set $set_name\n";
         if($set=~m/$set_name$/){  # will match "Cfengine::workstations" or "workstations"
             my @entry = $self->entry( $self->set2dn($set) );
             my @members = $entry[0]->get_value('owners');
