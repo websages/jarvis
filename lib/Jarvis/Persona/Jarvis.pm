@@ -106,12 +106,17 @@ sub input{
             /^\s*!*(sets|members)\s*(.*)/ && 
                 do { 
                       my $set = $2;
-                      print STDERR "\n$what\n";
-                      print STDERR "\nsets seen $set\n";
                       $msg->{'sender_alias'} = $sender->ID; # sending the alias doesn't work
                       $kernel->yield('sets',$set,$msg); 
                       last; 
                    };
+        ########################################################################
+            /^\s*!*(who\s*am\s*i\s*(.*)/ && 
+                do { 
+                       print STDERR "authenticating $who\n";      
+                       $kernel->post($sender,'authen',$msg);
+                       last;
+                   }
         ########################################################################
         # Greetings
             /^\s*hello\s+$nick\s*/i && 
