@@ -122,7 +122,7 @@ sub input{
             ( 
               /^\s*!*(add)\s+(\S+)\s+to\s+(\S+)/   ||
               /^\s*!*(del)\s+(\S+)\s+from\s+(\S+)/ ||
-              /^\s*!*(own)\s+(.*)/ 
+              /^\s*!*(disown|own|pwn|owners|who\s*o*wns)\s+(.*)/ 
             ) && 
                 do {   # we hand of this command to the authenticated handler
                        $msg->{'sender_alias'} = $sender->ID;
