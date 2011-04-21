@@ -36,6 +36,12 @@ sub persona_states{
 
 sub persona_start{
     my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
+    $self->{'cmdb'} = CMDB::LDAP->new({
+                                         'uri'    => $self->{'ldap_uri'},
+                                         'basedn' => $self->{'ldap_basedn'},
+                                         'binddn' => $self->{'ldap_binddn'},
+                                         'bindpw' => $self->{'ldap_bindpw'},
+                                       });
     $self->{'logger'} = POE::Component::Logger->spawn(
         ConfigFile => Log::Dispatch::Config->configure(
                           Log::Dispatch::Configurator::Hardwired->new(
@@ -188,13 +194,7 @@ sub input{
 
 sub sets{
     my ($self, $kernel, $heap, $sender, $top, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-    $self->{'groups'} = CMDB::LDAP->new({
-                                          'uri'    => $self->{'ldap_uri'},
-                                          'basedn' => $self->{'ldap_basedn'},
-                                          'binddn' => $self->{'ldap_binddn'},
-                                          'bindpw' => $self->{'ldap_bindpw'},
-                                        });
-    my @sets = ( $self->{'groups'}->sets_in($top) );
+    my @sets = ( $self->{'cmdb'}->sets_in($top) );
     $kernel->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, join(", ",@sets));
 }
 
