@@ -306,5 +306,6 @@ sub authen_reply{
     ############################################################################
          /.*/ && print STDERR "not sure what to do with /$what/ (no match)\n"; last;
     }
+    print STDERR "/????/\n";
 }
 1;
