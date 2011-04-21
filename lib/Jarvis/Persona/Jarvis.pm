@@ -295,7 +295,7 @@ sub authen_reply{
               last;
             };
     ############################################################################
-    # adding members to sets
+    # adding members to sets (should only allow members of cn=Set Administrators,ou=Special)
          /^\s*!*add\s+(\S+)\s+to\s+(\S+)\s*/ && 
          do {
               my ($member,$set) = ($1,$2);
@@ -304,6 +304,14 @@ sub authen_reply{
                   ($userid,$domain) = ($1,$2);
               }
               $domain=~s/^(znc|irc)\.//; # something more elegant than this please...
+              $self->{'authorize'} = CMDB::LDAP->new({
+                                                       'uri'    => $self->{'ldap_uri'},
+                                                       'basedn' => $self->{'ldap_basedn'},
+                                                       'binddn' => $self->{'ldap_binddn'},
+                                                       'bindpw' => $self->{'ldap_bindpw'},
+                                                       'setou'  => 'Special',
+                                                     });
+              print STDERR Data::Dumper->Dump([$self->{'authorize'}->members('Set Administrators')]);
               my $user_dn =  "uid=$userid,ou=People,dc=".join(",dc=",split(/\./,$domain))."\n";
               print STDERR "$user_dn\n";
               $kernel->post(
