@@ -301,7 +301,7 @@ sub authen_reply{
               if($actual=~m/(.*)@(.*)/){
                   ($userid,$domain) = ($1,$2);
               }
-              $domain=~/^(znc|irc)\.//; # something more elegant than this please...
+              $domain=~s/^(znc|irc)\.//; # something more elegant than this please...
               my $user_dn =  "uid=$userid,ou=People,dc=".join(",dc=",split(/\./,$domain))."\n";
               print STDERR "$user_dn\n";
               $kernel->post(
