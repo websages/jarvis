@@ -166,6 +166,31 @@ sub input{
         # end input pattern matching                                           #
         ########################################################################
         }
+        $kernel->yeild('speak', $msg, $replies);
+    }
+    return $self->{'alias'};
+}
+
+sub speak{
+    my ($self, $kernel, $heap, $sender, $msg, $replies)=@_[OBJECT,KERNEL,HEAP,SENDER,ARG0 .. $#_];
+    my ( $sender_alias, $respond_event, $who, $where, $what, $id ) =
+       (
+         $msg->{'sender_alias'},
+         $msg->{'reply_event'},
+         $msg->{'conversation'}->{'nick'},
+         $msg->{'conversation'}->{'room'},
+         $msg->{'conversation'}->{'body'},
+         $msg->{'conversation'}->{'id'},
+       );
+        if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
+            foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
+                $nick = $chan_nick;
+                if($what=~m/^\s*$chan_nick\s*:*\s*/){
+                    $what=~s/^\s*$chan_nick\s*:*\s*//;
+                    $direct=1;
+                }
+            }
+        }
         if($direct==1){ 
             foreach my $line (@{ $replies }){
                 if( defined($line) && ($line ne "") ){ 
@@ -188,15 +213,16 @@ sub input{
                 }
             }
         }
-    }
-    return $self->{'alias'};
+
+    $kernel->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, $say);
 }
 
 sub sets{
     my ($self, $kernel, $heap, $sender, $top, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     my @sets = ( $self->{'cmdb'}->sets_in($top) );
-    $kernel->post($msg->{'sender_alias'},$msg->{'reply_event'}, $msg, join(", ",@sets));
+    $kernel->yield('speak', $msg, join(", ",@sets));
 }
+
 
 sub gist{
     my ($self, $kernel, $heap, $sender, $gist, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
@@ -273,6 +299,7 @@ sub invite{
     my ($nick,$ident) = split(/!/,$args[0]) if $args[0];
     print STDERR "invited to $args[1] by $ident ($nick)\n";
 }
+
 ################################################################################
 # these will match the regexes from input() but will be associated with a whois reply argument
 sub authen_reply{
