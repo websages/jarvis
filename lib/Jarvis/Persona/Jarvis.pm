@@ -283,6 +283,7 @@ sub authen_reply{
          $msg->{'conversation'}->{'body'},
          $msg->{'conversation'}->{'id'},
        );
+    print STDERR "/$what/\n";
     for ( $what ) {
     ############################################################################
          /^\s*!*who\s*am\s*i\s*/ && 
