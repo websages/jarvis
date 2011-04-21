@@ -59,7 +59,7 @@ sub persona_start{
                                                'class'    => 'Log::Dispatch::Screen',
                                                'min_level'=> 'info',
                                                'stderr'   => 0,
-                                               'format'   => '%m',
+                                               'format'   => '%m\n',
                                             }
                                }
                                )), 'log') or warn "Cannot start Logging $!";
