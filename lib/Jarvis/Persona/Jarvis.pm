@@ -97,6 +97,7 @@ sub input{
     my $addressed=0;
 
     ############################################################################
+    # determine if we were priv msged (direct) or addressed as in "jarvis: foo"
     my $nick = undef;
     if(defined($what)){
         if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
@@ -182,7 +183,7 @@ sub input{
 sub speak{
     my ($self, $kernel, $heap, $sender, $msg, $replies)=@_[OBJECT,KERNEL,HEAP,SENDER,ARG0 .. $#_];
     $replies = [ $replies ] unless ref($replies);
-    my ( $sender_alias, $sender_id, $respond_event, $who, $where, $what, $id ) =
+    my ( $sender_alias, $sender_id, $respond_event, $who, $where, $what, $id) =
        (
          $msg->{'sender_alias'},
          $msg->{'sender_id'},
@@ -192,7 +193,8 @@ sub speak{
          $msg->{'conversation'}->{'body'},
          $msg->{'conversation'}->{'id'},
        );
-    my $direct=$msg->{'conversation'}->{'direct'}||0;
+    my $direct = $msg->{'conversation'}->{'direct'}||0;
+    my $addressed = $msg->{'conversation'}->{'addressed'}||0;
     my $nick;
     if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
         foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
