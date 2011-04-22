@@ -556,7 +556,7 @@ sub own{
         if($set=~m/$set_name$/){  # will match "Cfengine::workstations" or "workstations"
             my @entry = $self->entry( $self->set2dn($set) );
             my @owners = $entry[0]->get_value('owner');
-            push(@owners,$dn)
+            push(@owners,$dn);
             $entry[0]->replace( 'owner' => \@owners );
             $self->ldap_update($entry[0]);
        }
