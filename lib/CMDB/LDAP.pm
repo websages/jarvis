@@ -557,7 +557,7 @@ sub disown{
             my @entry = $self->entry( $self->set2dn($set) );
             my @owners = $entry[0]->get_value('owner');
             my @newowners=();
-            while my $owner=shift(@owners){
+            while(my $owner = shift(@owners)){
                 push(@newowners,$owner) unless($owner eq $user);
             }
             $entry[0]->replace( 'owner' => \@newowners );
