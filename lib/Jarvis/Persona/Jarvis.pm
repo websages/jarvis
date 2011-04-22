@@ -334,7 +334,7 @@ sub authen_reply{
     ############################################################################
          /^\s*!*who\s*am\s*i\s*/ && 
          do {
-              $kernel->yield('speak' $msg, "I see you as $actual.");
+              $kernel->yield('speak', $msg, "I see you as $actual.");
               last;
             };
     ############################################################################
