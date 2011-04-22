@@ -340,7 +340,7 @@ sub authen_reply{
     ############################################################################
          /^\s*!*who\s*am\s*i\s*/ && 
          do {
-              $kernel->yield('speak', $msg, "I see you as $actual ($uid).");
+              $kernel->yield('speak', $msg, "I see you as $userid\@$domain ($uid).");
               last;
             };
     ############################################################################
@@ -384,6 +384,7 @@ sub authen_reply{
               }else{
                   $kernel->yield('speak',$msg,"huh?");
               }
+    ############################################################################
               ##################################################################
 #              $self->{'authorize'} = CMDB::LDAP->new({
 #                                                       'uri'    => $self->{'ldap_uri'},
