@@ -347,7 +347,7 @@ sub authen_reply{
             ( 
               /^\s*!*(add)\s+(\S+)\s+to\s+(\S+)/   ||
               /^\s*!*(del)\s+(\S+)\s+from\s+(\S+)/ ||
-              /^\s*!*(disown|+*own|pwn|owners*|who\s*o*wns)\s+(.*)/ 
+              /^\s*!*(disown|own|pwn|owners*|who\s*o*wns)\s+(.*)/ 
             ) && 
          do {
               my @rxargs = ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);
