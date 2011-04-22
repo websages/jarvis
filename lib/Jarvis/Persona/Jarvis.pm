@@ -364,8 +364,6 @@ sub authen_reply{
               my @owners = $self->{'cmdb'}->owners($set);
            
               # for almost any authenticated action you'll need to see who owns it.
- 
-              print STDERR Data::Dumper->Dump([@owners]);
               if($action=~m/owners*|who\s*o*wns/){
                   if(@owners){
                       $kernel->yield('speak',$msg, join(", ",@owners));
@@ -373,8 +371,9 @@ sub authen_reply{
                       $kernel->yield('speak',$msg,"no owners");
                   }
               }elsif($action=~m/disown/){
+                  $kernel->yield('speak',$msg,"icanhaz disown routine?");
               }elsif($action=~m/own|pwn/){
-                  $kernel->yield('speak',$msg,"no owners");
+                  $kernel->yield('speak',$msg,"icanhaz own/pwn routine?");
               }elsif($action=~m/add/){
                   $kernel->yield('speak',$msg,"icanhaz add routine?");
               }elsif($action=~m/del/){
@@ -421,7 +420,6 @@ sub authen_reply{
          /.*/ && 
          do {
               print STDERR "not sure what to do with /$what/ (no match)\n"; 
-              $kernel->yield('speak',$msg,"huh?");
               last;
             };
     }
