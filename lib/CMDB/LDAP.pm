@@ -551,8 +551,11 @@ sub disown{
     my $target_set = shift if @_;
     return undef unless $user;
     return undef unless $target_set;
+print STDERR "$user\n";
     my ($uid,$domain) = split('@',$user);
+print STDERR "$uid $domain\n";
     my $dn = "uid=$uid,ou=People,dc=".join(',dc=',split('.',$domain));
+print STDERR "$dn\n";
     print STDERR "removing $dn from owners of ". $self->set2dn($target_set)."\n";
     foreach my $set (@{ $self->all_sets() }){
         if($set=~m/^$target_set$/){
