@@ -374,7 +374,7 @@ sub authen_reply{
                   $kernel->yield('speak',$msg,"icanhaz disown routine?");
               }elsif($action=~m/^\s*!*(own|pwn)/){
                   $kernel->yield('speak',$msg,"icanhaz own/pwn routine?");
-              }elsif($action=~m/^\s*!*(add/){
+              }elsif($action=~m/^\s*!*(add)/){
                   $kernel->yield('speak',$msg,"icanhaz add routine?");
               }elsif($action=~m/^\s*!*(del)/){
                   $kernel->yield('speak',$msg,"icanhas del routine?");
