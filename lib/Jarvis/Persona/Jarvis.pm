@@ -330,11 +330,16 @@ sub authen_reply{
          $msg->{'conversation'}->{'body'},
          $msg->{'conversation'}->{'id'},
        );
+    if($actual=~m/(.*)@(.*)/){
+        ($userid,$domain) = ($1,$2);
+    }
+    $domain=~s/^(znc|irc)\.//; # something more elegant than this please...
+    my $uid="uid=$userid";
     for ( $what ) {
     ############################################################################
          /^\s*!*who\s*am\s*i\s*/ && 
          do {
-              $kernel->yield('speak', $msg, "I see you as $actual.");
+              $kernel->yield('speak', $msg, "I see you as $actual ($uid).");
               last;
             };
     ############################################################################
@@ -380,10 +385,6 @@ sub authen_reply{
                   $kernel->yield('speak',$msg,"huh?");
               }
               ##################################################################
-#              if($actual=~m/(.*)@(.*)/){
-#                  ($userid,$domain) = ($1,$2);
-#              }
-#              $domain=~s/^(znc|irc)\.//; # something more elegant than this please...
 #              $self->{'authorize'} = CMDB::LDAP->new({
 #                                                       'uri'    => $self->{'ldap_uri'},
 #                                                       'basedn' => $self->{'ldap_basedn'},
