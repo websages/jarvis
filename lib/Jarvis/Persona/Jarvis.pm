@@ -29,6 +29,7 @@ sub persona_states{
     return { 
              'gist'          => 'gist',
              'sets'          => 'sets',
+             'admins'        => 'admins',
              'invite'        => 'invite',
              'authen_reply'  => 'authen_reply',
              'speak'         => 'speak',
@@ -147,6 +148,13 @@ sub input{
                       last; 
                    };
         ########################################################################
+        # this is how the commands should be modeled
+            /^\s*!*(admins|administrators)/ && 
+                do { 
+                      $kernel->yield('admins',$msg); 
+                      last; 
+                   };
+        ########################################################################
             ( 
               /^\s*!*who\s*am\s*i\s*/              ||
               /^\s*!*(add)\s+(\S+)\s+to\s+(\S+)/   ||
@@ -240,6 +248,11 @@ sub sets{
     $kernel->yield('speak', $msg, join(", ",@sets));
 }
 
+sub admins{
+    my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    my @admins = ( $self->{'cmdb'}->admins() );
+    $kernel->yield('speak', $msg, join(", ",@admins));
+}
 
 sub gist{
     my ($self, $kernel, $heap, $sender, $gist, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];

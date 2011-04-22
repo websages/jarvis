@@ -588,6 +588,17 @@ sub own{
     }
 }
 
+sub admins{
+    my $self = shift;
+    my @entry = $self->entry('cn=LDAP Administrators,ou=Special,dc='.join(',dc=',split(/\./,$domain)));
+    my @admins;
+    foreach my $um ($entry[0]->get_value('uniqueMember')){
+        my @dn_parts=split(/,/,$um);
+        push(@admins,shift(@dn_parts));
+    }
+    return @admins;
+}
+
 sub is_admin{
     my $self = shift;
     my $user = shift if @_;
@@ -596,9 +607,11 @@ sub is_admin{
     my $dn = "uid=$uid,ou=People,dc=".join(',dc=',split(/\./,$domain));
     my @entry = $self->entry('cn=LDAP Administrators,ou=Special,dc='.join(',dc=',split(/\./,$domain)));
     foreach my $um ($entry[0]->get_value('uniqueMember')){
-        print STDERR "$um\n";
+        if($dn=~m/$um/i){
+            return 1;
+        }
     }
-    return 1;
+    return 0;
 }
 
 sub unique_members{
