@@ -562,7 +562,9 @@ sub disown{
             while(my $owner = shift(@owners)){
                 push(@newowners,$owner) unless($owner eq $dn);
             }
+            print STDERR "--------------------\n";
             print STDERR Data::Dumper->Dump([@newowners]);
+            print STDERR "--------------------\n";
             $entry[0]->replace( 'owner' => \@newowners );
             $self->ldap_update($entry[0]);
        }
