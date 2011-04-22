@@ -614,6 +614,38 @@ sub is_admin{
     return 0;
 }
 
+sub add_members{
+    my $self=shift;
+    my $groupofuniquenames = shift if @_;
+    return undef unless $groupofuniquenames;
+    my @values;
+    my $entries;
+    @{ $entries } = $self->get_ldap_entry($groupofuniquenames);
+    foreach my $entry (@{ $entries }){
+        my $attribute;
+        foreach $attribute ( $entry->get_value('uniqueMember') ){
+            #push(@values, $attribute);
+        }
+    }
+   return @values;
+}
+
+sub del_members{
+    my $self=shift;
+    my $groupofuniquenames = shift if @_;
+    return undef unless $groupofuniquenames;
+    my @values;
+    my $entries;
+    @{ $entries } = $self->get_ldap_entry($groupofuniquenames);
+    foreach my $entry (@{ $entries }){
+        my $attribute;
+        foreach $attribute ( $entry->get_value('uniqueMember') ){
+            #push(@values, $attribute);
+        }
+    }
+   return @values;
+}
+
 sub unique_members{
     my $self = shift;
     my $groupofuniquenames = shift if @_;
