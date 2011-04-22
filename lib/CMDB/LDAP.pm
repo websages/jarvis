@@ -560,6 +560,7 @@ sub disown{
             while(my $owner = shift(@owners)){
                 push(@newowners,$owner) unless($owner eq $dn);
             }
+print Data::Dumper->Dump([@newowners]);
             $entry[0]->replace( 'owner' => \@newowners );
             $self->ldap_update($entry[0]);
        }
