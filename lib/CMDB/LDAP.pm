@@ -581,7 +581,7 @@ sub own{
         if($set=~m/$set$/){  # will match "Cfengine::workstations" or "workstations"
             my @entry = $self->entry( $self->set2dn($set) );
             my @owners = $entry[0]->get_value('owner');
-            push(@owners,$dn);
+            push(@owners,$dn) unless grep(/^$dn/,@owners);
             $entry[0]->replace( 'owner' => \@owners );
             $self->ldap_update($entry[0]);
        }
@@ -595,7 +595,7 @@ sub is_admin{
     my ($uid,$domain) = split('@',$user);
     my $dn = "uid=$uid,ou=People,dc=".join(',dc=',split(/\./,$domain));
     my @entry = $self->entry('cn=LDAP Administrators,ou=Special,dc='.join(',dc=',split(/\./,$domain)));
-    foreach my $um ($entry[0]->->get_value('uniqueMember')){
+    foreach my $um ($entry[0]->get_value('uniqueMember')){
         print STDERR "$um\n";
     }
     return 1;
