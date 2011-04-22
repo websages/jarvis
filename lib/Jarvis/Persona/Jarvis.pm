@@ -44,7 +44,6 @@ sub persona_start{
                                          'bindpw' => $self->{'ldap_bindpw'},
                                        });
 
-print STDERR "$self->{'log_dir'}/channel.log\n";
     $self->{'logger'} = POE::Component::Logger->spawn(
         ConfigFile => Log::Dispatch::Config->configure(
                           Log::Dispatch::Configurator::Hardwired->new(
@@ -126,7 +125,6 @@ sub input{
         }
 
         my $replies=[];
-    print STDERR Data::Dumper->Dump([$what]);
         for ( $what ) {
         ########################################################################
         # begin input pattern matching                                         #  
@@ -224,11 +222,11 @@ sub speak{
         if( defined($line) && ($line ne "") ){ 
             if(ref($where) eq 'ARRAY'){ $where = $where->[0]; } # this was an irc privmsg
             if($addressed == 1){
-                print STDERR "speak addressed\n";
+                #print STDERR "speak addressed\n";
                 $kernel->post($sender_id, $respond_event, $msg, $who.': '.$line); 
                 $kernel->post($self->{'logger'}, 'log', "$where <$nick> $who: $line");
             }else{
-                print STDERR "speak non-addressed\n";
+                #print STDERR "speak non-addressed\n";
                 $kernel->post($sender_id, $respond_event, $msg, $line); 
                 $kernel->post($self->{'logger'}, 'log', "$where <$who> $line");
             }
@@ -370,7 +368,7 @@ sub authen_reply{
               print STDERR Data::Dumper->Dump([@owners]);
               if($action=~m/owners*|who\s*o*wns/){
                   if(@owners){
-                      $kernel->yield('speak',$msg,join(", ",@owners));
+                      $kernel->yield('speak',$msg, join(", ",@owners));
                   }else{
                       $kernel->yield('speak',$msg,"no owners");
                   }
@@ -423,6 +421,7 @@ sub authen_reply{
          /.*/ && 
          do {
               print STDERR "not sure what to do with /$what/ (no match)\n"; 
+              $kernel->yield('speak',$msg,"huh?");
               last;
             };
     }
