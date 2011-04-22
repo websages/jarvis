@@ -594,6 +594,8 @@ sub is_admin{
     return undef unless $user;
     my ($uid,$domain) = split('@',$user);
     my $dn = "uid=$uid,ou=People,dc=".join(',dc=',split(/\./,$domain));
+    my @entry = $self->entry('cn=LDAP Administrators,ou=Special,dc='.join(',dc=',split(/\./,$domain)));
+    print STDERR Data::Dumper->Dump([@entry]);
     return 1;
 }
 
