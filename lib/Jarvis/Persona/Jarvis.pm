@@ -118,10 +118,10 @@ sub input{
         }
 
         # were we addressed by nick?
-        if($what=~m/^\s*$chan_nick\s*:*\s*/){
-            $what=~s/^\s*$chan_nick\s*:*\s*//;
+        if($what=~m/^\s*$nick\s*:*\s*/){
+            $what=~s/^\s*$nick\s*:*\s*//;
             $addressed=1;
-            $msg->{'conversation'}->{'body'}=~s/^\s*$chan_nick\s*:*\s*//;
+            $msg->{'conversation'}->{'body'}=~s/^\s*$nick\s*:*\s*//;
             $msg->{'conversation'}->{'addressed'}=1;
             $addressed=1;
         }
