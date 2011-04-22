@@ -383,7 +383,7 @@ sub authen_reply{
                       if($#owners == -1){
                           $self->{'cmdb'}->own("$userid\@$domain",$set);
                       }else{
-                          $kernel->yield('speak',$msg,"$set is owned by: [ ".." ]. New owners must be added by current owners (no stealing!).");
+                          $kernel->yield('speak',$msg,"$set is owned by: [ ".join(', ',@owners)." ]. New owners must be added by current owners (no stealing!).");
                       }
                   }
               }elsif($action=~m/^\s*!*(add)$/){
