@@ -376,6 +376,7 @@ sub authen_reply{
               }
               my @owners = $self->{'cmdb'}->owners($set);
            
+              ##################################################################
               # for almost any authenticated action you'll need to see who owns it.
               if($action=~m/^\s*!*(owners*|who\s*o*wns)$/){
                   if(@owners){
@@ -414,10 +415,19 @@ sub authen_reply{
                           $kernel->yield('speak',$msg,"$set is owned by: [ ".join(', ',@owners)." ]. New owners must be added by current owners (no stealing!).");
                       }
                   }
+              ##################################################################
               }elsif($action=~m/^\s*!*(add)$/){
-                  $kernel->yield('speak',$msg,"icanhaz add routine?");
+                  if( grep(/^$uid$/, @owners) ){
+                      $kernel->yield('speak',$msg,"icanhaz add routine?");
+                  }else{
+                      $kernel->yield('speak',$msg,"you don't own $set");
+                  }
               }elsif($action=~m/^\s*!*(del)$/){
-                  $kernel->yield('speak',$msg,"icanhas del routine?");
+                  if( grep(/^$uid$/, @owners) ){
+                      $kernel->yield('speak',$msg,"icanhas del routine?");
+                  }else{
+                      $kernel->yield('speak',$msg,"you don't own $set");
+                  }
               }else{
                   $kernel->yield('speak',$msg,"huh?");
               }
