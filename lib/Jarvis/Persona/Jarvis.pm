@@ -164,11 +164,11 @@ sub input{
             /^\s*hello\s+$nick\s*/i && 
                 do { $replies = [ "hello $who" ]; last; };
             /^\s*hello\s*$/i && 
-                do { $replies = [ "hello" ] if $direct; last; };
+                do { $replies = [ "hello" ]; last; };
             /^\s*good\s+(morning|day|afternoon|evening|night)\s+$nick\s*/i && 
                 do { $replies = [ "good $1 $who" ]; last; };
             /^\s*good\s+(morning|day|evening"afternoon||night)/i && 
-                do { $replies = [ "good $1 $who" ] if $direct; last; };
+                do { $replies = [ "good $1 $who" ]; last; };
         # Thanks
             /^\s*(thanks|thank you|thx|ty)\s+$nick\s*/i && 
                 do { $replies = [ "np" ]; last; };
