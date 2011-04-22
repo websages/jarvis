@@ -334,12 +334,7 @@ sub authen_reply{
     ############################################################################
          /^\s*!*who\s*am\s*i\s*/ && 
          do {
-              $kernel->post(
-                             $msg->{'sender_alias'},
-                             $msg->{'reply_event'}, 
-                             $msg, 
-                             "I see you as $actual."
-                           );
+              $kernel->yield('speak' $msg, "I see you as $actual.");
               last;
             };
     ############################################################################
@@ -374,6 +369,7 @@ sub authen_reply{
                   $kernel->yield('speak',$msg,"icanhaz disown routine?");
               }elsif($action=~m/^\s*!*(own|pwn)/){
                   if($#owners == -1){
+                      $self->{'cmdb'}->own($set);
                   }
                   $kernel->yield('speak',$msg,"icanhaz own/pwn routine?");
               }elsif($action=~m/^\s*!*(add)/){
