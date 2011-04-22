@@ -166,23 +166,23 @@ sub input{
             /^\s*hello\s*$/i && 
                 do { $replies = [ "hello" ]; last; };
             /^\s*good\s+(morning|day|afternoon|evening|night)\s+$nick\s*/i && 
-                do { $replies = [ "good $1 $who" ] if $addressed; last; };
+                do { $replies = [ "good $1 $who" ] if $addressed|$direct; last; };
             /^\s*good\s+(morning|day|evening"afternoon||night)/i && 
-                do { $replies = [ "good $1 $who" ] if $addressed; last; };
+                do { $replies = [ "good $1 $who" ] if $addressed|$direct; last; };
         # Thanks
             /^\s*(thanks|thank you|thx|ty)\s+$nick\s*/i && 
                 do { $replies = [ "np" ]; last; };
             /^\s*(thanks|thank you|thx|ty)/i && 
-                do { $replies = [ "np" ] if $direct; last; };
+                do { $replies = [ "np" ] if $addressed|$direct; last; };
         ########################################################################
         # Thanks
             /^\s*(thanks|thank you|thx|ty)\s+$nick\s*/i && 
                 do { $replies = [ "np" ]; last; };
             /^\s*(thanks|thank you|thx|ty)/i && 
-                do { $replies = [ "np" ] if $direct; last; };
+                do { $replies = [ "np" ] if $addressed|$direct; last; };
         ########################################################################
             /.*/ && 
-                 do { $replies = [ "i don't understand"    ] if($direct); last; };
+                 do { $replies = [ "i don't understand"    ] if($addressed|$direct); last; };
         ########################################################################
             /.*/ 
                  && do { last; }
