@@ -397,17 +397,10 @@ sub all_sets{
     foreach my $entry (@entries){
         my $entry_dn = $entry->dn;
         # strip the top-level sets ou
-print STDERR "1 [$entry_dn]\n";
         $entry_dn=~s/,ou=$self->{'setou'}.*//;
-print STDERR "2 [$entry_dn]\n";
         $entry_dn = join( ',',( reverse( split(/,/,$entry_dn))));
-print STDERR "3 [$entry_dn]\n";
-        $entry_dn=~s/^ou=(.*)/\1::/; # the ou's should end in :: 
-print STDERR "4 [$entry_dn]\n";
-        $entry_dn=~s/^cn=//;         # cns have no identifiers
-print STDERR "5 [$entry_dn]\n";
+        $entry_dn=~s/^(ou|cn)=//;         # cns have no identifiers
         $entry_dn=~s/,\s*(cn|ou)=/::/g;
-print STDERR "6 [$entry_dn]\n";
         push(@{ $sets }, $entry_dn);
     }
     $self->basedn($old_basedn);
@@ -420,6 +413,7 @@ sub sets_in{
     my $parent = shift if @_;
     my @tops;
     if($parent){
+        $parent=~s/::$//;
         my $dn = $self->set2dn($parent);
         return undef unless $dn;
         #return the members if it's a cn
@@ -433,6 +427,7 @@ sub sets_in{
                 $set=~s/^${parent}:://;
                 my @tmp = split(/::/, $set );
                 my $top = shift( @tmp );
+                $top.="::" if $tmp[0];
                 push(@tops,$top) unless grep(/$top/,@tops);
             }
         }
