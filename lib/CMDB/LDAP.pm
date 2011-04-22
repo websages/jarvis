@@ -595,7 +595,9 @@ sub is_admin{
     my ($uid,$domain) = split('@',$user);
     my $dn = "uid=$uid,ou=People,dc=".join(',dc=',split(/\./,$domain));
     my @entry = $self->entry('cn=LDAP Administrators,ou=Special,dc='.join(',dc=',split(/\./,$domain)));
-    print STDERR Data::Dumper->Dump([@entry]);
+    foreach my $um ($entry[0]->->get_value('uniqueMember')){
+        print STDERR "$um\n";
+    }
     return 1;
 }
 
