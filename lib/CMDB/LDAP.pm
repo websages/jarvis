@@ -531,7 +531,6 @@ sub owners{
     my @memberitems;
     foreach my $set (@{ $self->all_sets() }){
         if($set=~m/$set_name$/){  # will match "Cfengine::workstations" or "workstations"
-print STDERR $self->set2dn($set)."\n";
             my @entry = $self->entry( $self->set2dn($set) );
             my @members = $entry[0]->get_value('owner');
             foreach my $member (@members){
@@ -542,6 +541,25 @@ print STDERR $self->set2dn($set)."\n";
         }
     }
     return @memberitems;
+}
+
+sub own{
+    my $self = shift;
+    my $user = shift if @_;
+    my $set = shift if @_;
+    return undef unless $user;
+    return undef unless $set;
+    my ($uid,$domain) = split('@',$user);
+    my $dn = "uid=$uid,ou=People,dc=".join(',dc=',split('.',$domain));
+    print STDERR "making $dn an owner of ". $self->set2dn($set)."\n";
+
+#    my @memberitems;
+#    foreach my $set (@{ $self->all_sets() }){
+#        if($set=~m/$set_name$/){  # will match "Cfengine::workstations" or "workstations"
+#            my @entry = $self->entry( $self->set2dn($set) );
+#            my @members = $entry[0]->get_value('owner');
+#            $entry[0]->replace
+#       }
 }
 
 sub unique_members{

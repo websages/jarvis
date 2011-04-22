@@ -374,7 +374,7 @@ sub authen_reply{
                   $kernel->yield('speak',$msg,"icanhaz disown routine?");
               }elsif($action=~m/^\s*!*(own|pwn)/){
                   if($#owners == -1){
-                      $self->{'cmdb'}->own($set);
+                      $self->{'cmdb'}->own("$user\@$domain",$set);
                   }
                   $kernel->yield('speak',$msg,"icanhaz own/pwn routine?");
               }elsif($action=~m/^\s*!*(add)/){
