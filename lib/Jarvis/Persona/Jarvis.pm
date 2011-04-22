@@ -93,8 +93,8 @@ sub input{
          $msg->{'conversation'}->{'body'},
          $msg->{'conversation'}->{'id'},
        );
-    my $direct=$msg->{'conversation'}->{'direct'}||0;
-    my $addressed=0;
+    my $direct = $msg->{'conversation'}->{'direct'}||0;
+    my $addressed = $msg->{'conversation'}->{'addressed'}||0;
 
     print STDERR Data::Dumper->Dump([$heap->{'locations'},$msg]);
     ############################################################################
@@ -102,19 +102,30 @@ sub input{
     # strip our nic off if we were, but set addressed so we can address the 
     # requestor in our response
     #
+
     my $nick = undef;
     if(defined($what)){
+        
+        # determine our nick from the message type
         if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
             foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
-                $nick = $chan_nick;
-                if($what=~m/^\s*$chan_nick\s*:*\s*/){
-                    $what=~s/^\s*$chan_nick\s*:*\s*//;
-                    $direct=1; $addressed=1;
-                    $msg->{'conversation'}->{'body'}=~s/^\s*$chan_nick\s*:*\s*//;
-                    $msg->{'conversation'}->{'addressed'}=1;
-                }
+                $nick = $chan_nick; # this will get the last nick?
             }
         }
+        if(ref($where) eq 'ARRAY')){ #This was a direct message (privmsg)
+            $direct = 1;
+            $nick = $where->[0];
+        }
+
+        # were we addressed by nick?
+        if($what=~m/^\s*$chan_nick\s*:*\s*/){
+            $what=~s/^\s*$chan_nick\s*:*\s*//;
+            $addressed=1;
+            $msg->{'conversation'}->{'body'}=~s/^\s*$chan_nick\s*:*\s*//;
+            $msg->{'conversation'}->{'addressed'}=1;
+            $addressed=1;
+        }
+
         my $replies=[];
         for ( $what ) {
         ########################################################################
