@@ -94,7 +94,9 @@ sub input{
          $msg->{'conversation'}->{'id'},
        );
     my $direct=$msg->{'conversation'}->{'direct'}||0;
+    my $addressed=0;
 
+    ############################################################################
     my $nick = undef;
     if(defined($what)){
         if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
@@ -102,7 +104,9 @@ sub input{
                 $nick = $chan_nick;
                 if($what=~m/^\s*$chan_nick\s*:*\s*/){
                     $what=~s/^\s*$chan_nick\s*:*\s*//;
-                    $direct=1;
+                    $direct=1; $addressed=1;
+                    $msg->{'conversation'}->{'body'}=~s/^\s*$chan_nick\s*:*\s*//;
+                    $msg->{'conversation'}->{'addressed'}=1;
                 }
             }
         }
