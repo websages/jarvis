@@ -543,6 +543,29 @@ sub owners{
     return @memberitems;
 }
 
+sub disown{
+    my $self = shift;
+    my $user = shift if @_;
+    my $set = shift if @_;
+    return undef unless $user;
+    return undef unless $set;
+    my ($uid,$domain) = split('@',$user);
+    my $dn = "uid=$uid,ou=People,dc=".join(',dc=',split('.',$domain));
+    print STDERR "making $dn an owner of ". $self->set2dn($set)."\n";
+    foreach my $set (@{ $self->all_sets() }){
+        if($set=~m/$set$/){  # will match "Cfengine::workstations" or "workstations"
+            my @entry = $self->entry( $self->set2dn($set) );
+            my @owners = $entry[0]->get_value('owner');
+            my @newowners=();
+            while my $owner=shift(@owners){
+                push(@newowners,$owner) unless($owner eq $user);
+            }
+            $entry[0]->replace( 'owner' => \@newowners );
+            $self->ldap_update($entry[0]);
+       }
+    }
+}
+
 sub own{
     my $self = shift;
     my $user = shift if @_;

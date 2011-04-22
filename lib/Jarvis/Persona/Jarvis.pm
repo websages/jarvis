@@ -371,7 +371,11 @@ sub authen_reply{
                       $kernel->yield('speak',$msg,"no owners");
                   }
               }elsif($action=~m/^\s*!*(disown)/){
-                  $kernel->yield('speak',$msg,"icanhaz disown routine?");
+                  if(grep /^$uid$/ @owners){
+                      $self->{'cmdb'}->disown("$userid\@$domain",$set);
+                  }else{
+                      $kernel->yield('speak',$msg,"$uid isn't an owner of $set");
+                  }
               }elsif($action=~m/^\s*!*(own|pwn)/){
                   if($#owners == -1){
                       $self->{'cmdb'}->own("$userid\@$domain",$set);
