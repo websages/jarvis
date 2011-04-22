@@ -364,19 +364,19 @@ sub authen_reply{
               my @owners = $self->{'cmdb'}->owners($set);
            
               # for almost any authenticated action you'll need to see who owns it.
-              if($action=~m/^\s*!*(owners*|who\s*o*wns)/){
+              if($action=~m/^\s*!*(owners*|who\s*o*wns)$/){
                   if(@owners){
                       $kernel->yield('speak',$msg, join(", ",@owners));
                   }else{
                       $kernel->yield('speak',$msg,"no owners");
                   }
-              }elsif($action=~m/^\s*!*(disown)/){
+              }elsif($action=~m/^\s*!*(disown)$/){
                   if( grep(/^$uid$/, @owners) ){
                       $self->{'cmdb'}->disown("$userid\@$domain",$set);
                   }else{
                       $kernel->yield('speak',$msg,"$uid isn't an owner of $set");
                   }
-              }elsif($action=~m/^\s*!*(own|pwn)/){
+              }elsif($action=~m/^\s*!*(own|pwn)$/){
                   if( grep(/^$uid$/, @owners) ){
                       $kernel->yield('speak',$msg,"$uid is already an owner of $set");
                   }else{
@@ -386,9 +386,9 @@ sub authen_reply{
                           $kernel->yield('speak',$msg,"$set is owned by: [ ".." ]. New owners must be added by current owners (no stealing!).");
                       }
                   }
-              }elsif($action=~m/^\s*!*(add)/){
+              }elsif($action=~m/^\s*!*(add)$/){
                   $kernel->yield('speak',$msg,"icanhaz add routine?");
-              }elsif($action=~m/^\s*!*(del)/){
+              }elsif($action=~m/^\s*!*(del)$/){
                   $kernel->yield('speak',$msg,"icanhas del routine?");
               }else{
                   $kernel->yield('speak',$msg,"huh?");
