@@ -590,7 +590,7 @@ sub own{
 
 sub admins{
     my $self = shift;
-    my @entry = $self->entry('cn=LDAP Administrators,ou=Special,dc='.join(',dc=',split(/\./,$domain)));
+    my @entry = $self->entry('cn=LDAP Administrators,ou=Special,'.$self->{'basedn'})));
     my @admins;
     foreach my $um ($entry[0]->get_value('uniqueMember')){
         my @dn_parts=split(/,/,$um);
