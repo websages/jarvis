@@ -552,14 +552,14 @@ sub own{
     my ($uid,$domain) = split('@',$user);
     my $dn = "uid=$uid,ou=People,dc=".join(',dc=',split('.',$domain));
     print STDERR "making $dn an owner of ". $self->set2dn($set)."\n";
-
-#    my @memberitems;
-#    foreach my $set (@{ $self->all_sets() }){
-#        if($set=~m/$set_name$/){  # will match "Cfengine::workstations" or "workstations"
-#            my @entry = $self->entry( $self->set2dn($set) );
-#            my @members = $entry[0]->get_value('owner');
-#            $entry[0]->replace
-#       }
+    foreach my $set (@{ $self->all_sets() }){
+        if($set=~m/$set_name$/){  # will match "Cfengine::workstations" or "workstations"
+            my @entry = $self->entry( $self->set2dn($set) );
+            my @owners = $entry[0]->get_value('owner');
+            push(@owners,$dn)
+            $entry[0]->replace( 'owner' => \@owners );
+            $self->ldap_update($entry[0]);
+       }
 }
 
 sub unique_members{
