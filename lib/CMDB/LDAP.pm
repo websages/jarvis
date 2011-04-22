@@ -435,6 +435,7 @@ sub sets_in{
         foreach my $set (@{ $self->all_sets() }){
             my @tmp = split(/::/, $set );
             my $top = shift( @tmp );
+            $top.="::" if $tmp[0];
             push(@tops,$top) unless grep(/$top/,@tops);
         }
     }
