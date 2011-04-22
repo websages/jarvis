@@ -385,7 +385,7 @@ sub authen_reply{
                       }else{
                           print Data::Dumper->Dump([$self->{'cmdb'}->is_admin("$userid\@$domain")]);
                           if($self->{'cmdb'}->is_admin("$userid\@$domain")){
-                              $self->{'cmdb'}->pwn("$userid\@$domain",$set);
+                              $self->{'cmdb'}->own("$userid\@$domain",$set);
                               $kernel->yield('speak',$msg,"PWN3D!");
                           }else{
                               $kernel->yield('speak',$msg,"you have to be an ldap admin to pwn.");
