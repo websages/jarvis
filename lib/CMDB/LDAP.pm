@@ -553,7 +553,7 @@ sub own{
     my $dn = "uid=$uid,ou=People,dc=".join(',dc=',split('.',$domain));
     print STDERR "making $dn an owner of ". $self->set2dn($set)."\n";
     foreach my $set (@{ $self->all_sets() }){
-        if($set=~m/$set_name$/){  # will match "Cfengine::workstations" or "workstations"
+        if($set=~m/$set$/){  # will match "Cfengine::workstations" or "workstations"
             my @entry = $self->entry( $self->set2dn($set) );
             my @owners = $entry[0]->get_value('owner');
             push(@owners,$dn);

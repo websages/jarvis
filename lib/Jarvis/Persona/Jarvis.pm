@@ -376,7 +376,6 @@ sub authen_reply{
                   if($#owners == -1){
                       $self->{'cmdb'}->own("$userid\@$domain",$set);
                   }
-                  $kernel->yield('speak',$msg,"icanhaz own/pwn routine?");
               }elsif($action=~m/^\s*!*(add)/){
                   $kernel->yield('speak',$msg,"icanhaz add routine?");
               }elsif($action=~m/^\s*!*(del)/){
