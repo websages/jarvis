@@ -554,8 +554,8 @@ sub disown{
 print STDERR "$user\n";
     my ($uid,$domain) = split('@',$user);
 print STDERR "$uid $domain\n";
-print STDERR "$domain => ". join(',dc=',split('.',$domain))."\n";
-    my $dn = "uid=$uid,ou=People,dc=".join(',dc=',split('.',$domain));
+print STDERR "$domain => ". join(',dc=',split(/\./,$domain))."\n";
+    my $dn = "uid=$uid,ou=People,dc=".join(',dc=',split(/\./,$domain));
 print STDERR "$dn\n";
     print STDERR "removing $dn from owners of ". $self->set2dn($target_set)."\n";
     foreach my $set (@{ $self->all_sets() }){
