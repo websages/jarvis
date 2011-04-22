@@ -591,9 +591,7 @@ sub own{
 sub is_admin{
     my $self = shift;
     my $user = shift if @_;
-    my $set = shift if @_;
     return undef unless $user;
-    return undef unless $set;
     my ($uid,$domain) = split('@',$user);
     my $dn = "uid=$uid,ou=People,dc=".join(',dc=',split(/\./,$domain));
     return 1;
