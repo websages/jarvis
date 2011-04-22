@@ -377,8 +377,14 @@ sub authen_reply{
                       $kernel->yield('speak',$msg,"$uid isn't an owner of $set");
                   }
               }elsif($action=~m/^\s*!*(own|pwn)/){
-                  if($#owners == -1){
-                      $self->{'cmdb'}->own("$userid\@$domain",$set);
+                  if( grep(/^$uid$/, @owners) ){
+                      $kernel->yield('speak',$msg,"$uid is already an owner of $set");
+                  }else{
+                      if($#owners == -1){
+                          $self->{'cmdb'}->own("$userid\@$domain",$set);
+                      }else{
+                          $kernel->yield('speak',$msg,"$set is owned by: [ ".." ]. New owners must be added by current owners (no stealing!).");
+                      }
                   }
               }elsif($action=~m/^\s*!*(add)/){
                   $kernel->yield('speak',$msg,"icanhaz add routine?");
