@@ -330,6 +330,7 @@ sub authen_reply{
          $msg->{'conversation'}->{'body'},
          $msg->{'conversation'}->{'id'},
        );
+    my ($action,$member,$set,$userid,$domain);
     if($actual=~m/(.*)@(.*)/){
         ($userid,$domain) = ($1,$2);
     }
@@ -351,7 +352,6 @@ sub authen_reply{
             ) && 
          do {
               my @rxargs = ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);
-              my ($action,$member,$set,$userid,$domain);
               $action = $rxargs[0];
               if($action =~m /add|del/){
                   $member = $rxargs[1];
