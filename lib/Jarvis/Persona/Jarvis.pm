@@ -376,7 +376,21 @@ sub authen_reply{
                   }else{
                       $kernel->yield('speak',$msg,"$uid isn't an owner of $set");
                   }
-              }elsif($action=~m/^\s*!*(own|pwn)$/){
+              }elsif($action=~m/^\s*!*pwn$/){
+                  if( grep(/^$uid$/, @owners) ){
+                      $kernel->yield('speak',$msg,"$uid is already an owner of $set");
+                  }else{
+                      if($#owners == -1){
+                          $self->{'cmdb'}->own("$userid\@$domain",$set);
+                      }else{
+                          if($self->{'cmdb'}->is_admin("$userid\@$domain")){
+                              $self->{'cmdb'}->pwn("$userid\@$domain",$set);
+                          }else{
+                              $kernel->yield('speak',$msg,"you have to be an ldap admin to pwn.");
+                          }
+                      }
+                  }
+              }elsif($action=~m/^\s*!*own$/){
                   if( grep(/^$uid$/, @owners) ){
                       $kernel->yield('speak',$msg,"$uid is already an owner of $set");
                   }else{

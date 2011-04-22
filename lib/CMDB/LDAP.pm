@@ -551,12 +551,8 @@ sub disown{
     my $target_set = shift if @_;
     return undef unless $user;
     return undef unless $target_set;
-print STDERR "$user\n";
     my ($uid,$domain) = split('@',$user);
-print STDERR "$uid $domain\n";
-print STDERR "$domain => ". join(',dc=',split(/\./,$domain))."\n";
     my $dn = "uid=$uid,ou=People,dc=".join(',dc=',split(/\./,$domain));
-print STDERR "$dn\n";
     print STDERR "removing $dn from owners of ". $self->set2dn($target_set)."\n";
     foreach my $set (@{ $self->all_sets() }){
         if($set=~m/^$target_set$/){
@@ -566,9 +562,6 @@ print STDERR "$dn\n";
             while(my $owner = shift(@owners)){
                 push(@newowners,$owner) unless($owner eq $dn);
             }
-            print STDERR "--------------------\n";
-            print STDERR Data::Dumper->Dump([@newowners]);
-            print STDERR "--------------------\n";
             $entry[0]->replace( 'owner' => \@newowners );
             $self->ldap_update($entry[0]);
        }
@@ -582,7 +575,7 @@ sub own{
     return undef unless $user;
     return undef unless $set;
     my ($uid,$domain) = split('@',$user);
-    my $dn = "uid=$uid,ou=People,dc=".join(',dc=',split('.',$domain));
+    my $dn = "uid=$uid,ou=People,dc=".join(',dc=',split(/\./,$domain));
     print STDERR "making $dn an owner of ". $self->set2dn($set)."\n";
     foreach my $set (@{ $self->all_sets() }){
         if($set=~m/$set$/){  # will match "Cfengine::workstations" or "workstations"
@@ -593,6 +586,17 @@ sub own{
             $self->ldap_update($entry[0]);
        }
     }
+}
+
+sub is_admin{
+    my $self = shift;
+    my $user = shift if @_;
+    my $set = shift if @_;
+    return undef unless $user;
+    return undef unless $set;
+    my ($uid,$domain) = split('@',$user);
+    my $dn = "uid=$uid,ou=People,dc=".join(',dc=',split(/\./,$domain));
+    return 1;
 }
 
 sub unique_members{
