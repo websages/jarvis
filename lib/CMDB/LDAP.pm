@@ -560,6 +560,7 @@ sub own{
             $entry[0]->replace( 'owner' => \@owners );
             $self->ldap_update($entry[0]);
        }
+    }
 }
 
 sub unique_members{
