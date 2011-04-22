@@ -400,7 +400,8 @@ sub all_sets{
         $entry_dn=~s/,ou=$self->{'setou'}.*//;
 
         $entry_dn = join( ',',( reverse( split(/,/,$entry_dn))));
-        $entry_dn=~s/^(cn|ou)=//;
+        $entry_dn=~s/^ou=/:/;
+        $entry_dn=~s/^cn=//;
         $entry_dn=~s/,\s*(cn|ou)=/::/g;
         push(@{ $sets }, $entry_dn);
     }
