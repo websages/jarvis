@@ -383,6 +383,7 @@ sub authen_reply{
                       if($#owners == -1){
                           $self->{'cmdb'}->own("$userid\@$domain",$set);
                       }else{
+                          print Data::Dumper->Dump([$self->{'cmdb'}->is_admin("$userid\@$domain")]);
                           if($self->{'cmdb'}->is_admin("$userid\@$domain") == 1){
                               $self->{'cmdb'}->pwn("$userid\@$domain",$set);
                               $kernel->yield('speak',$msg,"PWN3D!");
