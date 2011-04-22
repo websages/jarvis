@@ -96,6 +96,7 @@ sub input{
     my $direct=$msg->{'conversation'}->{'direct'}||0;
     my $addressed=0;
 
+    print STDERR Data::Dumper->Dump([$heap->{'locations'},$msg]);
     ############################################################################
     # determine if we were priv msged (direct) or addressed as in "jarvis: foo"
     # strip our nic off if we were, but set addressed so we can address the 
@@ -103,7 +104,6 @@ sub input{
     #
     my $nick = undef;
     if(defined($what)){
-        print STDERR Data::Dumper->Dump([$heap->{'locations'}]);
         if(defined($heap->{'locations'}->{$sender_alias}->{$where})){
             foreach my $chan_nick (@{ $heap->{'locations'}->{$sender_alias}->{$where} }){
                 $nick = $chan_nick;
