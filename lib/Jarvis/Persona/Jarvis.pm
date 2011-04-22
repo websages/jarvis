@@ -112,7 +112,7 @@ sub input{
                 $nick = $chan_nick; # this will get the last nick?
             }
         }
-        if(ref($where) eq 'ARRAY')){ #This was a direct message (privmsg)
+        if(ref($where) eq 'ARRAY'){ #This was a direct message (privmsg)
             $direct = 1;
             $nick = $where->[0];
         }
