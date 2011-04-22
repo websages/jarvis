@@ -347,7 +347,7 @@ sub authen_reply{
             ( 
               /^\s*!*(add)\s+(\S+)\s+to\s+(\S+)/   ||
               /^\s*!*(del)\s+(\S+)\s+from\s+(\S+)/ ||
-              /^\s*!*(disown|own|pwn|owners*|who\s*o*wns)\s+(.*)/ 
+              /^\s*!*(disown|+*own|pwn|owners*|who\s*o*wns)\s+(.*)/ 
             ) && 
          do {
               my @rxargs = ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);
@@ -373,6 +373,8 @@ sub authen_reply{
               }elsif($action=~m/^\s*!*(disown)/){
                   $kernel->yield('speak',$msg,"icanhaz disown routine?");
               }elsif($action=~m/^\s*!*(own|pwn)/){
+                  if($#owners == -1){
+                  }
                   $kernel->yield('speak',$msg,"icanhaz own/pwn routine?");
               }elsif($action=~m/^\s*!*(add)/){
                   $kernel->yield('speak',$msg,"icanhaz add routine?");
