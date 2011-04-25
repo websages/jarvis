@@ -1,0 +1,16 @@
+# this is a bourne shell fragment.
+
+RUN_AS='opt'
+SECRET="$(/usr/local/sbin/secret)"
+
+LDAP_DOMAIN="$(dnsdomainname)"
+LDAP_BASEDN="dc=$(echo ${LDAP_DOMAIN}|sed -e 's/\./,dc=/g')"
+LDAP_BINDDN="cn=$(hostname -s),ou=Hosts,${LDAP_BASEDN}"
+LDAP_PASSWD="${SECRET}"
+LDAP_PASSWORD="${SECRET}"
+
+GIT_ENABLED=0
+
+LOG_FILE="/var/log/jarvis.log"
+
+export LDAP_DOMAIN LDAP_BASEDN LDAP_BINDDN LDAP_PASSWD LDAP_PASSWORD GIT_ENABLED SECRET

@@ -1,0 +1,10 @@
+#!/bin/bash
+if [ -f "/etc/debian_version" ]; then
+    export DEFAULT_FILE="/etc/default/jarvis";
+fi
+if [ -f "/etc/redhat-release" ]; then
+    export DEFAULT_FILE="/etc/sysconfig/jarvis";
+fi
+
+install -m 0755 bin/init-script /etc/init.d/jarvis
+install -m 0755 bin/defaults ${DEFAULT_FILE}
