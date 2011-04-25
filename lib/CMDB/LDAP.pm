@@ -392,7 +392,7 @@ sub ldap_delete{
 sub all_sets{
     my $self = shift;
     my $old_basedn=$self->basedn;
-    $self->basedn("ou=".$self->{'setou'}.",".$old_basedn);
+    $self->basedn($self->{'setbase'});
     my @entries = $self->ldap_search("(objectclass=groupOfUniqueNames)");
     my $sets;
     foreach my $entry (@entries){
