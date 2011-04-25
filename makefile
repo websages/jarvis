@@ -5,8 +5,8 @@ install-ws:
 	ping -w1 -c1 loki.websages.com && /var/lib/gems/1.8/bin/wd deploy --to=loki
 
 install-eft:
-	ping -w1 -c1 irc.eftdomain.net && /var/lib/gems/1.8/bin/wd setup --to=eft
-	ping -w1 -c1 irc.eftdomain.net && /var/lib/gems/1.8/bin/wd deploy --to=eft
+	ping -w1 -c1 redwood.lab.eftdomain.net && /var/lib/gems/1.8/bin/wd setup --to=eft
+	ping -w1 -c1 redwood.lab.eftdomain.net && /var/lib/gems/1.8/bin/wd deploy --to=eft
 
 echo:
 	echo "This makefile is to create the png from the dia file"
