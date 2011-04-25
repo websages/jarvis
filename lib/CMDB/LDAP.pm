@@ -336,7 +336,7 @@ sub ldap_search {
                                            'scope'  => 'sub',
                                            'filter' => $filter
                                          );
-    print STDERR $records->error."\n" if $records->code;
+    print STDERR __LINE__ ." ".$records->error."\n" if $records->code;
     my $recs;
     my @entries = $records->entries;
     return @entries if @entries;
@@ -372,7 +372,7 @@ sub ldap_update{
         $mesg->code && $self->error($mesg->code." ".$mesg->error);
     }
     my $errors=$self->error();
-    print STDERR "$errors\n" if($errors ne "");
+    print STDERR __LINE__ ." "."$errors\n" if($errors ne "");
     return $self;
 }
 
