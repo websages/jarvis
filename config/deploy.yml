@@ -4,6 +4,7 @@ loki:
   repository: "gitosis@freyr.websages.com:jarvis.git"
   branch: "master"
   post_setup_script: "bin/install"
+  post_deploy_script: "bin/install"
 eft:
   domain: "root@irc.eftdomain.net"
   deploy_to: "/opt/local/jarvis"
