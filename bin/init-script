@@ -25,8 +25,12 @@ protect_default_file(){
     fi
 }
 
-
-export DEFAULT_FILE="/etc/default/jarvis";
+if [ -f "/etc/debian_version" ]; then
+    export DEFAULT_FILE="/etc/default/jarvis";
+fi
+if [ -f "/etc/redhat-release" ]; then
+    export DEFAULT_FILE="/etc/sysconfig/jarvis";
+fi
 protect_default_file
 
 if test -f ${DEFAULT_FILE}; then
@@ -110,7 +114,8 @@ case "$1" in
   start)
 	log_daemon_msg "Starting ${LOG_NAME}" "${DAEMON_NAME}"
         protect_default_file
-        git_update
+        # we're deploying with whiskey_disk now...
+        #git_update
         export GIT_REVISION=$(git_revision)
         if [ ! -f "${PID_FILE}" ]; then 
             PID_DIR=$(dirname $PID_FILE)

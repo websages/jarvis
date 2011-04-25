@@ -1,5 +1,10 @@
 loki:
   domain: "root@loki.websages.com"
-  deploy_to: "/var/tmp/jarvis"
+  deploy_to: "/opt/local/jarvis"
+  repository: "gitosis@freyr.websages.com:jarvis.git"
+  branch: "master"
+eft:
+  domain: "root@irc.eftdomain.net"
+  deploy_to: "/opt/local/jarvis"
   repository: "gitosis@freyr.websages.com:jarvis.git"
   branch: "master"

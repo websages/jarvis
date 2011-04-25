@@ -1,3 +1,11 @@
+install-ws:
+	/var/lib/gems/1.8/bin/wd setup --to=loki
+	/var/lib/gems/1.8/bin/wd deploy --to=loki
+
+install-eft:
+	/var/lib/gems/1.8/bin/wd setup --to=eft
+	/var/lib/gems/1.8/bin/wd deploy --to=eft
+
 echo:
 	echo "This makefile is to create the png from the dia file"
 jarvis.png: jarvis.dia
