@@ -397,7 +397,6 @@ sub all_sets{
     my $sets;
     foreach my $entry (@entries){
         if(defined($entry)){
-            print Data::Dumper->Dump([$entry]);
             my $entry_dn = $entry->dn;
             # strip the top-level sets ou
             $entry_dn=~s/,ou=$self->{'setou'}.*//;
@@ -419,6 +418,7 @@ sub sets_in{
     my @tops;
     if($parent){
         $parent=~s/::$//;
+        $parent=~s/^(cn|ou)=//;
         my $dn = $self->set2dn($parent);
         return [] unless $dn;
         #return the members if it's a cn
