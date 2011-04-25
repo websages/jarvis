@@ -45,6 +45,10 @@ log_end_msg () {
 
 log_daemon_msg_pre () { :; }
 log_daemon_msg_post () { :; }
+log_end_msg_pre () { :; }
+log_end_msg_post () { :; }
+log_action_end_msg_pre () { :; }
+log_action_end_msg_post () { :; }
 
 RUN_AS='opt'
 SECRET="$(/usr/local/sbin/secret)"
