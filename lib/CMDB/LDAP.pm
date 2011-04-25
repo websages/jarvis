@@ -395,6 +395,7 @@ sub all_sets{
     my @entries = $self->ldap_search("(objectclass=groupOfUniqueNames)");
     my $sets;
     foreach my $entry (@entries){
+        print Data::Dumper->Dump([$entry]);
         my $entry_dn = $entry->dn;
         # strip the top-level sets ou
         $entry_dn=~s/,ou=$self->{'setou'}.*//;
