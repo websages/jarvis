@@ -508,6 +508,7 @@ sub entry{
     my $sub_base=join(',',@dn_parts);
     my $old_basedn  = $self->basedn;
     $self->basedn($sub_base);
+    print STDERR "searching base ".$self->basedn()."\n";
     my @entry = $self->ldap_search($filter);
     $self->basedn($old_basedn);
     return @entry;
