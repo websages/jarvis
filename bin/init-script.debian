@@ -25,12 +25,7 @@ protect_default_file(){
     fi
 }
 
-if [ -f "/etc/debian_version" ]; then
-    export DEFAULT_FILE="/etc/default/jarvis";
-fi
-if [ -f "/etc/redhat-release" ]; then
-    export DEFAULT_FILE="/etc/sysconfig/jarvis";
-fi
+export DEFAULT_FILE="/etc/default/jarvis";
 protect_default_file
 
 if test -f ${DEFAULT_FILE}; then

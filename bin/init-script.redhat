@@ -1,0 +1,169 @@
+#!/bin/bash
+#
+# Init file for Jarvis IRC bot
+#
+# chkconfig: 2345 55 25
+# description: Jarvis IRC Bot
+#
+# processname: universal.pl
+
+# source function library
+. /etc/rc.d/init.d/functions
+
+# pull in sysconfig settings
+[ -f /etc/sysconfig/jarvis ] && . /etc/sysconfig/jarvis
+
+RETVAL=0
+prog="universal.pl"
+
+export DEFAULT_FILE="/etc/sysconfig/jarvis";
+
+protect_default_fil(e){
+    if [ ! -z "${DEFAULT_FILE}" ]; then
+        if [ -f "${DEFAULT_FILE}" ]; then
+            if [ "$(stat -c '%U:%G' ${DEFAULT_FILE})" != "root:root" ]; then
+                chown root:root "${DEFAULT_FILE}"
+            fi
+            if [ "$(stat -c '%A' ${DEFAULT_FILE})" != "-r--------" ]; then
+                chmod 0400 "${DEFAULT_FILE}"
+            fi
+        fi
+    fi
+}
+
+git_revision(){
+    if [ -z ${GIT_ENABLED} ]; then
+        echo 0
+        return -1
+    fi
+    if [ ${GIT_ENABLED} -ne 1 ]; then
+        echo 0
+        return -1
+    fi
+    if [ ! -z "${GIT_ROOT}" -a ! -z "${GIT_REPO}" ]; then
+        echo $(cd ${GIT_REPO}; git log| head -1|awk '{print $2}')
+    fi
+}
+
+git_update(){
+    if [ -z ${GIT_ENABLED} ]; then return -1; fi
+    if [ -z ${GIT_ROOT}    ]; then return -1 ;fi
+    if [ ! -d ${GIT_ROOT}  ]; then
+        mkdir -p "${GIT_ROOT}"
+    fi
+    if [ -z ${GIT_REPO}    ]; then return -1 ;fi
+    if [ ! -d ${GIT_REPO}  ]; then
+        echo "GIT_REPO DOES NOT EXIST"
+        if [ ! -z "${GIT_SOURCE}" ]; then
+            (cd "${GIT_ROOT}"; git clone "${GIT_SOURCE}")
+        else
+            echo "GIT_SOURCE NOT DEFINED CANNOT CREATE GIT_REPO"
+            return -1;
+        fi
+    else
+        (cd ${GIT_REPO}; git pull origin master)
+    fi
+    # This is a temporary hack until the init script is stable:
+    NOW=$(md5sum /etc/init.d/jarvis|awk '{print $2}')
+    NEW=$(md5sum ${GIT_REPO}/bin/init-script|awk '{print $2}')
+    if [ "${NOW}" != "${NEW}" ];then
+        install -m 0744 ${GIT_REPO}/bin/init-script /etc/init.d/jarvis
+    fi
+}
+git_rollback(){
+    if [ -z ${GIT_ENABLED}]; then
+        return -1
+    fi
+}
+
+export PATH="${PATH:+$PATH:}/usr/sbin:/sbin"
+if [ -z "${PID_FILE}" ]; then
+    export PID_FILE="/var/run/jarvis.pid"
+fi
+if [ -z "${RUN_AS}" ]; then
+    export RUN_AS='root'
+fi
+
+if [ -z "${LOG_NAME}" ]; then
+    export LOG_NAME='XMPP / IRC chatbot daemon'
+fi
+
+if [ -z "${DAEMON_NAME}" ]; then
+    export DAEMON_NAME='universal.pl'
+fi
+
+if [ -z "${LOG_FILE}" ]; then
+    export LOG_FILE='/dev/null'
+fi
+
+
+runlevel=$(set -- $(runlevel); eval "echo \$$#" )
+
+start()
+{
+        protect_default_file
+	
+	echo -n $"Starting $prog: "
+        (cd	
+	RETVAL=$?
+	echo
+}
+
+stop()
+{
+        protect_default_file
+	echo -n $"Stopping $prog: "
+	# so the TCP connections are closed cleanly
+	if [ "x$runlevel" = x0 -o "x$runlevel" = x6 ] ; then
+	    killall $prog 2>/dev/null
+	fi
+	[ "$RETVAL" = 0 ] && rm -f /var/lock/subsys/sshd
+	echo
+}
+
+reload()
+{
+	echo -n $"Reloading $prog: "
+	if [ -n "`pidfileofproc $SSHD`" ] ; then
+	    killproc $SSHD -HUP
+	else
+	    failure $"Reloading $prog"
+	fi
+	RETVAL=$?
+	echo
+}
+
+case "$1" in
+	start)
+		start
+		;;
+	stop)
+		stop
+		;;
+	restart)
+		stop
+		start
+		;;
+	reload)
+		reload
+		;;
+	condrestart)
+		if [ -f /var/lock/subsys/sshd ] ; then
+			do_restart_sanity_check
+			if [ "$RETVAL" = 0 ] ; then
+				stop
+				# avoid race
+				sleep 3
+				start
+			fi
+		fi
+		;;
+	status)
+		status -p $PID_FILE openssh-daemon
+		RETVAL=$?
+		;;
+	*)
+		echo $"Usage: $0 {start|stop|restart|reload|condrestart|status}"
+		RETVAL=1
+esac
+exit $RETVAL
