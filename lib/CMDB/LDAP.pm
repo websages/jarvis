@@ -407,7 +407,8 @@ sub all_sets{
         }
     }
     $self->basedn($old_basedn);
-    return $sets;
+    return $sets if $sets;
+    return [];
 }
 
 
@@ -418,7 +419,7 @@ sub sets_in{
     if($parent){
         $parent=~s/::$//;
         my $dn = $self->set2dn($parent);
-        return undef unless $dn;
+        return [] unless $dn;
         #return the members if it's a cn
         if($dn=~m/^cn/){
             return $self->members($parent);
