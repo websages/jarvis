@@ -14,6 +14,35 @@ log_daemon_msg () {
     log_daemon_msg_post "$@"
 }
 
+log_end_msg () {
+    # If no arguments were passed, return
+    if [ -z "${1:-}" ]; then
+        return 1
+    fi
+    retval=$1
+    log_end_msg_pre "$@"
+    # Only do the fancy stuff if we have an appropriate terminal
+    # and if /usr is already mounted
+    if log_use_fancy_output; then
+        RED=`$TPUT setaf 1`
+        YELLOW=`$TPUT setaf 3`
+        NORMAL=`$TPUT op`
+    else
+        RED=''
+        YELLOW=''
+        NORMAL=''
+    fi
+    if [ $1 -eq 0 ]; then
+        echo "."
+    elif [ $1 -eq 255 ]; then
+        /bin/echo -e " ${YELLOW}(warning).${NORMAL}"
+    else
+        /bin/echo -e " ${RED}failed!${NORMAL}"
+    fi
+    log_end_msg_post "$@"
+    return $retval
+}
+
 log_daemon_msg_pre () { :; }
 log_daemon_msg_post () { :; }
 
