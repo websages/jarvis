@@ -6,7 +6,7 @@ BEGIN {
                        "/tmp/lib/perl5/site_perl/5.8.8/i386-linux-thread-multi",
                        "/tmp/lib/perl5/5.8.8/i386-linux-thread-multi/",
                        "/tmp/lib/perl5/site_perl/5.8.8/",
-                       "/tmp/lib/perl5/5.8.8/"
+                       "/tmp/lib/perl5/5.8.8/",
                        "./lib",
                      ];
         foreach my $dir (@{$libdirs}){ unshift @INC, $dir if -d $dir; };
