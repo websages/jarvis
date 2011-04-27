@@ -6,11 +6,11 @@ commit:
 push: commit
 	git push
 
-install-ws: push
+install-ws: 
 	ping -w1 -c1 loki.websages.com && /var/lib/gems/1.8/bin/wd setup --to=loki
 	ping -w1 -c1 loki.websages.com && /var/lib/gems/1.8/bin/wd deploy --to=loki
 
-install-eft: push
+install-eft: 
 	ping -w1 -c1 redwood.lab.eftdomain.net && /var/lib/gems/1.8/bin/wd setup --to=eft
 	ping -w1 -c1 redwood.lab.eftdomain.net && /var/lib/gems/1.8/bin/wd deploy --to=eft
 
