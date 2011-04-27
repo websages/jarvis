@@ -1,7 +1,17 @@
 #!/usr/bin/perl
 $ENV{'PATH'}='/usr/local/bin:/usr/bin:/bin';
 $ENV{'IFS'}=' \t\n';
-BEGIN { unshift @INC, './lib' if -d './lib'; }
+BEGIN { 
+        my $libdirs= [
+                       "/tmp/lib/perl5/site_perl/5.8.8/i386-linux-thread-multi",
+                       "/tmp/lib/perl5/5.8.8/i386-linux-thread-multi/",
+                       "/tmp/lib/perl5/site_perl/5.8.8/",
+                       "/tmp/lib/perl5/5.8.8/"
+                       "./lib",
+                     ];
+        foreach my $dir (@{$libdirs}){ unshift @INC, $dir if -d $dir; };
+      }
+
 # abort if we have no xmpp creds
 if(!defined($ENV{'XMPP_PASSWORD'})){
     print "Please set XMPP_PASSWORD\n";
