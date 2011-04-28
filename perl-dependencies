@@ -4,6 +4,10 @@
 # perl modules provided by RPMs, thus breaking all package management principles
 # so I decided to install them locally as needed. This script will pull them down
 # from CPAN and install them in a local directory to which we can point jarvis' @INC
+# 
+# Why not just use CPAN? I needed something that didn't play 40 questions with me
+# every time I use it. I want to background this process and let jarvis just get
+# what he needs without the water-boarding interrogation that's provided by -MCPAN -eshell
 ################################################################################
 # Get some packages we need to build some of the modules
 rm -fr /tmp/cpan.* /tmp/try.log.*
