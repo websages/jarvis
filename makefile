@@ -14,6 +14,10 @@ install-eft:
 	ping -w1 -c1 redwood.lab.eftdomain.net && /var/lib/gems/1.8/bin/wd setup --to=eft
 	ping -w1 -c1 redwood.lab.eftdomain.net && /var/lib/gems/1.8/bin/wd deploy --to=eft
 
+install-badger: 
+	ping -w1 -c1 badger.lab.eftdomain.net && /var/lib/gems/1.8/bin/wd setup --to=badger
+	ping -w1 -c1 badger.lab.eftdomain.net && /var/lib/gems/1.8/bin/wd deploy --to=badger
+
 echo:
 	echo "This makefile is to create the png from the dia file"
 jarvis.png: jarvis.dia
