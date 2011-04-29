@@ -320,8 +320,8 @@ sub check_flickr_blocking{
                         )->parse( $content );
     };
     warn $@ if $@;
-    my $dbh = DBI->connect( @dbi) || print STDERR "$DBI::errstr\n";
-    return undef unless ($dbh);
+    my $dbh = DBI->connect(@dbi) || print STDERR "$DBI::errstr\n";
+    return undef unless (defined($dbh));
     my $parser = HTML::Parser->new(
         api_version => 3,
         start_h     => [ 
