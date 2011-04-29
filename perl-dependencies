@@ -73,9 +73,7 @@ try(){
     VERSION=$(echo "${MODULEANDVER}"|sed -e "s/^${MODULE}-//")  # strip everything but the version
     MODULE=$(echo ${MODULE} | sed -e 's/-/::/g')                # put :: where the dashes are
  
-    echo
-    echo "[ ${MODULE} ${VERSION} ]"
-    echo
+    if [ "$(perl ${INCLUDES} -M${MODULE} -le "print ${MODULE}::VERSION")" == "${VERSION}" ];then return 0; fi
 
     return 0
     if [ ! -f "${FILE}" ];then
