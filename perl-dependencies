@@ -139,6 +139,7 @@ try(){
             exit 7 # could we try somwe fetching here?
         else
            (cd "${DIR}";make && make test && make install) || exit 9 # maybe roll back the version if fails?
+        fi
     fi
     # clean up
     rm -fr "${DIR}" "${FILE}"
