@@ -37,7 +37,15 @@ if [ "$(stat -c %a /usr/local/share)" != "755" ] ;then
 fi
 ################################################################################
 # mysql bullshit:
+if [ ! -f /usr/bin/mysql ];then 
+    echo "mysql not installed?"
+    exit 2
+fi
+if [ ! -f /etc/init.d/mysql ];then 
+    echo "mysql-server not installed?"
+    exit 2
 ps -ef | grep -q my[Ss]ql
+
 if [ $? -ne 0 ]; then
     if [ "${UID}" == "0" ];then
         /etc/init.d/mysql start
