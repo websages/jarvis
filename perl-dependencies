@@ -69,9 +69,9 @@ try(){
     INCLUDES="${INCLUDES} -I ${PREFIX}/lib/perl5/site_perl/5.8.8/i386-linux-thread-multi"
 
     MODULEANDVER=$(echo "${FILE}"|sed -e 's/\.tar.gz//')
-    MODULE=$(echo "${MODULEANDVER}"|sed -e 's/-[^\-]*//')
-    VERSION=$(echo "${MODULEANDVER}"|sed -e "s/^${MODULE}-//")
-    MODULE=$(echo ${MODULE} | sed -e 's/-/::/g')
+    MODULE=$(echo "${MODULEANDVER}"|sed -e 's/-[^\-]*$//')      # strip the version
+    VERSION=$(echo "${MODULEANDVER}"|sed -e "s/^${MODULE}-//")  # strip everything but the version
+    MODULE=$(echo ${MODULE} | sed -e 's/-/::/g')                # put :: where the dashes are
  
     echo
     echo "[ ${MODULE} ${VERSION} ]"
