@@ -307,7 +307,7 @@ sub ldap_bind{
             $server=$1 if ($server=~m/(^[A-Za-z0-9\-\.\/:]+$)/);
         }
         $self->{'ldap'} = Net::LDAP->new($server) || warn "could not connect to $server $@";
-        return undef unless(ref($self->{'ldap'} eq "Ned::LDAP"));
+        return undef unless(ref($self->{'ldap'} eq "Net::LDAP"));
         print STDERR Data::Dumper->Dump([ref($self->{'ldap'})]);
         if(defined($self->binddn) && defined($self->bindpw)){
             $mesg = $self->{'ldap'}->bind( $self->binddn, password => $self->bindpw );
@@ -331,6 +331,7 @@ sub ldap_search {
     my $self = shift;
     my $filter = shift if @_;
     $self->ldap_bind unless $self->{'ldap'};
+    return undef unless(ref($self->{'ldap'} eq "Net::LDAP"));
     $filter = "(objectclass=*)" unless $filter;
     my $servers;
     print STDERR __LINE__.": searching base: ".$self->basedn()."\n";
