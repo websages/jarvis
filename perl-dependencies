@@ -96,6 +96,7 @@ try(){
     if [ -f "${DIR}/Build.PL" ]; then
        export PERL5LIB
        (cd "${DIR}" ; perl Build.PL --install_base "${PREFIX}" && ./Build && ./Build test && ./Build install) || exit 8
+       # maybe roll back the version if fails?
     fi
 
     # Make
@@ -107,15 +108,17 @@ try(){
             (cd "${DIR}";yes "y"|perl ${INCLUDES} Makefile.PL ${GAYOPTIONS} PREFIX="${PREFIX}" 2>&1)|grep prerequisite | while read line;do
                 echo "${line}" | sed -e 's/Warning: prerequisite //' -e 's/ .*$//'
             done
-            exit 7
+            exit 7 # could we try somwe fetching here?
         else
            export PERL5LIB
-           (cd "${DIR}";make && make test && make install) || exit 9
+           (cd "${DIR}";make && make test && make install) || exit 9 # maybe roll back the version if fails?
         fi
     fi
     # clean up
     rm -fr "${DIR}" "${FILE}"
 }
+################################################################################
+
 ################################################################################
 the_needful(){
     uri=$1;
@@ -272,4 +275,5 @@ try TIMB/DBI-1.616.tar.gz
         try ROBIN/PadWalker-1.92.tar.gz
     try PETDANCE/Test-Memory-Cycle-1.04.tar.gz
 try PETDANCE/WWW-Mechanize-1.66.tar.gz # (1.68 fails )
+try INGY/YAML-0.73.tar.gz
 EOF
