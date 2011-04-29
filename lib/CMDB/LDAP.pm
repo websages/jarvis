@@ -601,6 +601,7 @@ sub own{
 sub admins{
     my $self = shift;
     my @entry = $self->entry('cn=LDAP Administrators,ou=Special,'.$self->basedn);
+    return undef unless $entry[0];
     my @admins;
     foreach my $um ($entry[0]->get_value('uniqueMember')){
         my @dn_parts=split(/,/,$um);
