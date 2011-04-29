@@ -76,8 +76,12 @@ sub unique_members{
     @{ $entries } = $self->get_ldap_entry($groupofuniquenames);
     foreach my $entry (@{ $entries }){
         my $attribute;
-        foreach $attribute ( $entry->get_value('uniqueMember') ){
-            push(@values, $attribute);
+        if($entry){
+            foreach $attribute ( $entry->get_value('uniqueMember') ){
+                push(@values, $attribute);
+            }
+        }else{
+            return undef;
         }
     }
    return @values;
