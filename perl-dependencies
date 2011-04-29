@@ -271,7 +271,7 @@ try ABW/AppConfig-1.66.tar.gz
     try DROLSKY/Log-Dispatch-2.29.tar.gz 
 try MIYAGAWA/Log-Dispatch-Config-1.04.tar.gz
 #try HINRIK/POE-Component-IRC-6.61.tar.gz
-    try Try-Tiny-0.09.tar.gz
+    try DOY/Try-Tiny-0.09.tar.gz
     try FERREIRA/Exporter-5.63.tar.gz
     try RJBS/Test-Fatal-0.005.tar.gz
     try PEVANS/ExtUtils-CChecker-0.07.tar.gz
