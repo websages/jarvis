@@ -73,7 +73,7 @@ try(){
     VERSION=$(echo "${MODULEANDVER}"|sed -e "s/^${MODULE}-//")  # strip everything but the version
     MODULE=$(echo ${MODULE} | sed -e 's/-/::/g')                # put :: where the dashes are
 
-    ACTUAL_VERSION=$(perl ${INCLUDES} -M${MODULE} -le "print qq([ $MODULE \$${MODULE}::VERSION ]);")
+    ACTUAL_VERSION=$(perl ${INCLUDES} -M${MODULE} -le "print qq(\$${MODULE}::VERSION);")
     if [ "${ACTUAL_VERSION}" == "${VERSION}" ];then return 0; fi
 
     if [ ! -f "${FILE}" ];then
