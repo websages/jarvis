@@ -29,7 +29,7 @@ if [ ! -z "${NEED}" ]; then
 fi
 ################################################################################
 # mysql bullshit:
-ps -ef | grep my[Ss]ql
+ps -ef | grep -q my[Ss]ql
 if [ $? -ne 0 ]; then
     if [ "${PID}" == "0" ];then
         /etc/init.d/mysql start
@@ -38,7 +38,6 @@ if [ $? -ne 0 ]; then
     fi
 fi 
 
-echo "show grants FOR '${LOGNAME}'@'localhost';" | mysql
 echo "show tables;" | mysql -hlocalhost -u${LOGNAME} -ps3kr1t test
 if [ $? -ne 0 ]; then
     if [ "${PID}" == "0" ];then
@@ -130,6 +129,7 @@ try(){
     # Make
     # interactive by default options are gay
     if [ "$DIR" == "XML-Twig-3.38" ];then GAYOPTIONS='-y'; fi
+
     if [ -f "${DIR}/Makefile.PL" ]; then
         (cd "${DIR}";yes "y"|perl ${INCLUDES} Makefile.PL ${GAYOPTIONS} PREFIX="${PREFIX}" 2>&1)|grep prerequisite
         if [ $? == 0 ]; then
@@ -138,6 +138,7 @@ try(){
             done
             exit 7 # could we try somwe fetching here?
         else
+           export PERL5LIB
            (cd "${DIR}";make && make test && make install) || exit 9 # maybe roll back the version if fails?
         fi
     fi
