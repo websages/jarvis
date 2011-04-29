@@ -2,21 +2,30 @@
 $ENV{'PATH'}='/usr/local/bin:/usr/bin:/bin';
 $ENV{'IFS'}=' \t\n';
 BEGIN { 
+        use Cwd;
+        my $path=$0;
+        $path=~s/\/[^\/]*$//;
+        chdir($path);
+        my $libdir=cwd()."/lib";
+        my $cpanlib=cwd()."/cpanlib";
         my $libdirs= [
-                       "/tmp/lib/perl5/site_perl/5.8.8/i386-linux-thread-multi",
-                       "/tmp/lib/perl5/5.8.8/i386-linux-thread-multi/",
-                       "/tmp/lib/perl5/site_perl/5.8.8/",
-                       "/tmp/lib/perl5/5.8.8/",
-                       "./lib",
+                       "$cpanlib/perl5/site_perl/5.8.8/i386-linux-thread-multi",
+                       "$cpanlib/perl5/5.8.8/i386-linux-thread-multi/",
+                       "$cpanlib/perl5/site_perl/5.8.8/",
+                       "$cpanlib/perl5/5.8.8/",
+                       "$libdir",
                      ];
+        # add all of these to our library search path
         foreach my $dir (@{$libdirs}){ unshift @INC, $dir if -d $dir; };
       }
 
-# abort if we have no xmpp creds
+# disable jabber if we have no xmpp creds
+my $enable_jabber=1;
 if(!defined($ENV{'XMPP_PASSWORD'})){
-    print "Please set XMPP_PASSWORD\n";
-    exit 1;
+    $enable_jabber=0;
+    print STDERR "no XMPP_PASSWORD, disabling XMPP\n";
 }
+
 use Data::Dumper;
 use Jarvis::IRC;
 use Jarvis::Jabber;
@@ -74,6 +83,7 @@ init:
 ########################################
 # definition to connect to ejabberd
 ########################################
+if($jabber_enabled == 1){
 my $xmpp_connection = << "...";
 ---
 class: Jarvis::Jabber
@@ -88,6 +98,7 @@ init:
     - asgard\@conference.websages.com/${hostname}
   persona: system
 ...
+}
 
 ################################################################################
 # Do the work

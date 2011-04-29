@@ -10,8 +10,8 @@
 # what he needs without the water-boarding interrogation that's provided by -MCPAN -eshell
 ################################################################################
 # Get some packages we need to build some of the modules
-rm -fr /tmp/cpan.* /tmp/try.log.*
-PREFIX=$(mktemp -d /tmp/cpan.XXXX)
+CPANLIB="$(cd $(basename $0);pwd)/cpanlib";
+PREFIX="${CPANLIB}"
 CANHAS="gcc git openssl-devel expat-devel ircd-hybrid"
 NEED=''
 for pkg in $(echo "${CANHAS}"); do
@@ -30,7 +30,8 @@ fi
 ################################################################################
 alias go='( cd /opt/local/jarvis/; ./universal.pl)'
 ################################################################################
-LOGFILE=$(mktemp /tmp/try.log.XXXX)
+[ ! -d "$(cd $(basename $0);pwd)/tmp" ] &&  mkdir -p "$(cd $(basename $0);pwd)/tmp"
+LOGFILE=$(mktemp $(cd $(basename $0);pwd)/tmp/cpanlib.install.log.XXXX)
 ################################################################################
 spin(){
     while [ 1 ]; do 
