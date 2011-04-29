@@ -72,7 +72,7 @@ fi
 # gist bullshit:
 if [ ! -f /usr/local/bin/gist ];then 
     if [ "${UID}" == "0" ];then
-        wget -O /usr/local/bin/gist https://github.com/fapestniegd/gist/raw/3a4d20ef432beb8e7541bdc594e54ab132a4e59b/gist
+        wget --no-check-certificate -O /usr/local/bin/gist https://github.com/fapestniegd/gist/raw/3a4d20ef432beb8e7541bdc594e54ab132a4e59b/gist
         chmod 755 /usr/local/bin/gist
     else
          echo "you'll want to install gist in /usr/local/bin..."
@@ -204,7 +204,7 @@ the_needful(){
 }
 ################################################################################
 cat<<EOF |sed -e's/#.*//' -e 's/^ *try //' -e 's/^ *$//'| grep .|while read line;do the_needful $line||exit $?;done
-#try RCAPUTO/POE-1.310.tar.gz # fails with deps
+#try RCAPUTO/POE-1.310.tar.gz # fails with deps, indented below
     try GBARR/IO-1.25.tar.gz
     try TODDR/IO-Tty-1.10.tar.gz
     try RCAPUTO/POE-Test-Loops-1.050.tar.gz
