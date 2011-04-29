@@ -63,20 +63,30 @@ try(){
     first=$(echo ${URI}|cut -b 1)
     firsttwo=$(echo ${URI}|cut -b 1-2)
 
-    echo "Fetching ${FILE} from http://search.cpan.org/CPAN/authors/id/${first}/${firsttwo}/${URI}"
-    if [ -z "${FILE}" ]; then exit 2;fi
-
-    wget -qO "${FILE}" "http://search.cpan.org/CPAN/authors/id/${first}/${firsttwo}/${URI}"
-    if [ ! -f "${FILE}" ]; then exit 3;fi
-
-    DIR=$(tar tzf "${FILE}"|sed -e 's/\/.*//'|sort -u|head -1)
-    tar xzf "${FILE}"
-    if [ ! -d "${DIR}" ]; then exit 4;fi
-
     INCLUDES="${INCLUDES} -I ${PREFIX}/lib/perl5/5.8.8"
     INCLUDES="${INCLUDES} -I ${PREFIX}/lib/perl5/site_perl/5.8.8/"
     INCLUDES="${INCLUDES} -I ${PREFIX}/lib/perl5/5.8.8/i386-linux-thread-multi/"
     INCLUDES="${INCLUDES} -I ${PREFIX}/lib/perl5/site_perl/5.8.8/i386-linux-thread-multi"
+
+    MODULEANDVER=$(echo "${FILE}"|sed -e 's/\.tar.gz//')
+    MODULE=$(echo "${MODULEANDVER}"|sed -e 's/-[^\-]*//')
+    VERSION=$(echo "${MODULEANDVER}"|sed -e "s/^${MODULE}-//")
+    MODULE=$(echo ${MODULE} | sed -e 's/-/::/g')
+ 
+    echo
+    echo "[ ${MODULE} ${VERSION} ]"
+    echo
+
+    if [ ! -f "${FILE}" ];then
+        if [ -z "${FILE}" ]; then exit 2;fi
+        echo "Fetching ${FILE} from http://search.cpan.org/CPAN/authors/id/${first}/${firsttwo}/${URI}"
+        wget -qO "${FILE}" "http://search.cpan.org/CPAN/authors/id/${first}/${firsttwo}/${URI}"
+        if [ ! -f "${FILE}" ]; then exit 3;fi
+    fi
+
+    DIR=$(tar tzf "${FILE}"|sed -e 's/\/.*//'|sort -u|head -1)
+    tar xzf "${FILE}"
+    if [ ! -d "${DIR}" ]; then exit 4;fi
 
     PERL5LIB="${PERL5LIB}:${PREFIX}/lib/perl5/5.8.8"
     PERL5LIB="${PERL5LIB}:${PREFIX}/lib/perl5/site_perl/5.8.8/"
@@ -127,7 +137,7 @@ the_needful(){
 }
 ################################################################################
 cat<<EOF |sed -e's/#.*//' -e 's/^ *try //' -e 's/^ *$//'| grep .|while read line;do the_needful $line||exit $?;done
-# try RCAPUTO/POE-1.310.tar.gz # fails with deps
+#try RCAPUTO/POE-1.310.tar.gz # fails with deps
     try GBARR/IO-1.25.tar.gz
     try TODDR/IO-Tty-1.10.tar.gz
     try RCAPUTO/POE-Test-Loops-1.050.tar.gz
