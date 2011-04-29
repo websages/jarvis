@@ -276,4 +276,5 @@ try TIMB/DBI-1.616.tar.gz
     try PETDANCE/Test-Memory-Cycle-1.04.tar.gz
 try PETDANCE/WWW-Mechanize-1.66.tar.gz # (1.68 fails )
 try INGY/YAML-0.73.tar.gz
+try CAPTTOFU/DBD-mysql-4.018.tar.gz
 EOF
