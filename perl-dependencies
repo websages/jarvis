@@ -349,6 +349,7 @@ try INGY/YAML-0.73.tar.gz
 #try CAPTTOFU/DBD-mysql-4.018.tar.gz
     try TIMB/DBI-1.616.tar.gz
 try CAPTTOFU/DBD-mysql-4.018.tar.gz
+try ABW/Template-Toolkit-2.22.tar.gz
 EOF
 
 ################################################################################
