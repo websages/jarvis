@@ -127,6 +127,7 @@ try(){
     MODULE=$(echo ${MODULE} | sed -e 's/-/::/g')                # put :: where the dashes are
 
     ACTUAL_VERSION=$(perl ${INCLUDES} -M${MODULE} -le "print qq(\$${MODULE}::VERSION);")
+    ACTUAL_VERSION=$(echo "${ACTUAL_VERSION}"|sed -e 's/0*$//') # 0.3800 -> 0.38
     if [ -z ${ACTUAL_VERSION} ]; then
         echo "NO VERSION INFO FOR ${MODULE}"
         #If it won't return a version, go with any version
