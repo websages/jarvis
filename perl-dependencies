@@ -210,7 +210,7 @@ try MIYAGAWA/Log-Dispatch-Config-1.04.tar.gz
         try ADAMK/Task-Weaken-1.04.tar.gz
         try SAPER/constant-1.21.tar.gz
     try HINRIK/Object-Pluggable-1.29.tar.gz
-try HINRIK/POE-Component-IRC-6.60.tar.gz # 6.61 has a bad test plan
+try HINRIK/POE-Component-IRC-6.61.tar.gz
 #try HACHI/POE-Component-Client-LDAP-0.04.tar.gz
     try HACHI/POE-Wheel-Null-0.01.tar.gz
 try HACHI/POE-Component-Client-LDAP-0.04.tar.gz
