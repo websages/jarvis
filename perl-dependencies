@@ -20,7 +20,7 @@ done
 echo $NEED
 
 if [ ! -z "${NEED}" ]; then
-    if [ "${PID}" == "0" ];then
+    if [ "${UID}" == "0" ];then
         yum install -y ${NEED}
     else
         echo "please: yum install -y ${NEED}"
@@ -28,7 +28,7 @@ if [ ! -z "${NEED}" ]; then
     fi
 fi
 if [ "$(stat -c %a /usr/local/share)" != "755" ] ;then 
-    if [ "${PID}" == "0" ];then
+    if [ "${UID}" == "0" ];then
         chmod 755 /usr/local/share
     else
         echo "/usr/local/share needs to be 0755"
@@ -39,7 +39,7 @@ fi
 # mysql bullshit:
 ps -ef | grep -q my[Ss]ql
 if [ $? -ne 0 ]; then
-    if [ "${PID}" == "0" ];then
+    if [ "${UID}" == "0" ];then
         /etc/init.d/mysql start
     else
         echo "please start mysql: /etc/init.d/mysql start"
@@ -48,7 +48,7 @@ fi
 
 echo "show tables;" | mysql -hlocalhost -u${LOGNAME} -ps3kr1t test
 if [ $? -ne 0 ]; then
-    if [ "${PID}" == "0" ];then
+    if [ "${UID}" == "0" ];then
         echo "grant all privileges on test.* to '${LOGNAME}'@'localhost' identified by 's3kr1t';"|mysql
         echo "flush privileges;"| mysql
     else
@@ -325,7 +325,7 @@ EOF
 ################################################################################
 # un-do the crap we did just to make this stuff build/test/install
 if [ ! -z "${NEED}" ]; then
-    if [ "${PID}" == "0" ];then
+    if [ "${UID}" == "0" ];then
         rpm -e ${NEED}
     else
         echo "you may: rpm -e ${NEED} now."
