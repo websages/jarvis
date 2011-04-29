@@ -83,7 +83,6 @@ init:
 ########################################
 # definition to connect to ejabberd
 ########################################
-if($jabber_enabled == 1){
 my $xmpp_connection = << "...";
 ---
 class: Jarvis::Jabber
@@ -98,14 +97,13 @@ init:
     - asgard\@conference.websages.com/${hostname}
   persona: system
 ...
-}
 
 ################################################################################
 # Do the work
 ################################################################################
 $poe->yaml_sess($persona);
 $poe->yaml_sess($irc_connection);
-$poe->yaml_sess($xmpp_connection);
+$poe->yaml_sess($xmpp_connection) if($jabber_enabled == 1);
 # fire up the kernel
 POE::Kernel->run();
 
