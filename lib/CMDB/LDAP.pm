@@ -481,6 +481,7 @@ sub set2dn{
     $self->basedn($ou_tree);
     my @entries = $self->ldap_search("objectclass=*");
     foreach my $entry (@entries){
+        return undef unless $entry;
         my $dn = $entry->dn."\n";
         chomp($dn);
         if($dn=~m/^([^=]+=$cn+\s*,\s*$ou_tree)$/i){
