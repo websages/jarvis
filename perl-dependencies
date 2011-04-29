@@ -30,8 +30,8 @@ fi
 ################################################################################
 alias go='( cd /opt/local/jarvis/; ./universal.pl)'
 ################################################################################
-[ ! -d "$(cd $(basename $0);pwd)/tmp" ] &&  mkdir -p "$(cd $(basename $0);pwd)/tmp"
-LOGFILE=$(mktemp $(cd $(basename $0);pwd)/tmp/cpanlib.install.log.XXXX)
+[ ! -d "$(cd $(dirname $0);pwd)/tmp" ] &&  mkdir -p "$(cd $(dirname $0);pwd)/tmp"
+LOGFILE=$(mktemp $(cd $(dirname $0);pwd)/tmp/cpanlib.install.log.XXXX)
 ################################################################################
 spin(){
     while [ 1 ]; do 
