@@ -704,6 +704,7 @@ sub is_channel_operator{
     return undef unless $user;
     my @list;
     foreach my $entry ( $self->get_ldap_entry( "(cn=channel_operators)" ) ){
+        return undef unless($entry);
         my @opers=$entry->get_value('uniqueMember');
         foreach my $op (@opers){
             $op=~s/,.*//;
