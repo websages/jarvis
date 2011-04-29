@@ -27,6 +27,14 @@ if [ ! -z "${NEED}" ]; then
         exit;
     fi
 fi
+if [ "$(stat -c %a /usr/local/share)" != "755" ] ;then 
+    if [ "${PID}" == "0" ];then
+        chmod 755 /usr/local/share
+    else
+        echo "/usr/local/share needs to be 0755"
+        exit 2;
+    fi
+fi
 ################################################################################
 # mysql bullshit:
 ps -ef | grep -q my[Ss]ql
