@@ -12,7 +12,7 @@
 # Get some packages we need to build some of the modules
 CPANLIB="$(cd $(dirname $0);pwd)/cpan";
 PREFIX="${CPANLIB}"
-CANHAS="gcc git openssl-devel expat-devel ircd-hybrid"
+CANHAS="gcc git openssl-devel expat-devel ircd-hybrid mysql-server mysql-devel"
 NEED=''
 for pkg in $(echo "${CANHAS}"); do
     echo "$(rpm -q ${pkg})"|grep -q "not installed" && NEED="${NEED} ${pkg}"
@@ -25,6 +25,31 @@ if [ ! -z "${NEED}" ]; then
     else
         echo "please: yum install -y ${NEED}"
         exit;
+    fi
+fi
+################################################################################
+# mysql bullshit:
+ps -ef | grep my[Ss]ql
+if [ $? -ne 0 ]; then
+    if [ "${PID}" == "0" ];then
+        /etc/init.d/mysql start
+    else
+        echo "please start mysql: /etc/init.d/mysql start"
+    fi
+fi 
+
+echo "show grants FOR '${LOGNAME}'@'localhost';" | mysql
+echo "show tables;" | mysql -hlocalhost -u${LOGNAME} -ps3kr1t test
+if [ $? -ne 0 ]; then
+    if [ "${PID}" == "0" ];then
+        echo "grant all privileges on test.* to '${LOGNAME}'@'localhost' identified by 's3kr1t';"|mysql
+        echo "flush privileges;"| mysql
+    else
+        echo "MYSQL tests will fail: please run the following commands:";
+        echo "grant all privileges on test.* to '${LOGNAME}'@'localhost' identified by 's3kr1t';"|mysql
+        echo "flush privileges;"| mysql
+        echo "show grants FOR '${LOGNAME}'@'localhost'; (to confirm)" 
+    exit 3
     fi
 fi
 ################################################################################
@@ -67,10 +92,12 @@ try(){
     INCLUDES="${INCLUDES} -I ${PREFIX}/lib/perl5/site_perl/5.8.8/"
     INCLUDES="${INCLUDES} -I ${PREFIX}/lib/perl5/5.8.8/i386-linux-thread-multi/"
     INCLUDES="${INCLUDES} -I ${PREFIX}/lib/perl5/site_perl/5.8.8/i386-linux-thread-multi"
+    export INCLUDES
 
     MODULEANDVER=$(echo "${FILE}"|sed -e 's/\.tar.gz//')
     MODULE=$(echo "${MODULEANDVER}"|sed -e 's/-[^\-]*$//')      # strip the version
     VERSION=$(echo "${MODULEANDVER}"|sed -e "s/^${MODULE}-//")  # strip everything but the version
+    VERSION=$(echo "${VERSION}"|sed -e 's/0*$//')               # 0.3800 -> 0.38
     MODULE=$(echo ${MODULE} | sed -e 's/-/::/g')                # put :: where the dashes are
 
     ACTUAL_VERSION=$(perl ${INCLUDES} -M${MODULE} -le "print qq(\$${MODULE}::VERSION);")
@@ -91,6 +118,7 @@ try(){
     PERL5LIB="${PERL5LIB}:${PREFIX}/lib/perl5/site_perl/5.8.8/"
     PERL5LIB="${PERL5LIB}:${PREFIX}/lib/perl5/5.8.8/i386-linux-thread-multi"
     PERL5LIB="${PERL5LIB}:${PREFIX}/lib/perl5/site_perl/5.8.8/i386-linux-thread-multi"
+    export PERL5LIB
 
     # Build
     if [ -f "${DIR}/Build.PL" ]; then
@@ -110,9 +138,7 @@ try(){
             done
             exit 7 # could we try somwe fetching here?
         else
-           export PERL5LIB
            (cd "${DIR}";make && make test && make install) || exit 9 # maybe roll back the version if fails?
-        fi
     fi
     # clean up
     rm -fr "${DIR}" "${FILE}"
