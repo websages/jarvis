@@ -69,6 +69,16 @@ if [ $? -ne 0 ]; then
     fi
 fi
 ################################################################################
+# gist bullshit:
+if [ ! -f /usr/local/bin/gist ];then 
+    if [ "${UID}" == "0" ];then
+        wget -O /usr/local/bin/gist https://github.com/fapestniegd/gist/raw/3a4d20ef432beb8e7541bdc594e54ab132a4e59b/gist
+        chmod 755 /usr/local/bin/gist
+    else
+         echo "you'll want to install gist in /usr/local/bin..."
+    fi
+fi
+################################################################################
 alias go='( cd /opt/local/jarvis/; ./universal.pl)'
 ################################################################################
 [ ! -d "$(cd $(dirname $0);pwd)/tmp" ] &&  mkdir -p "$(cd $(dirname $0);pwd)/tmp"
