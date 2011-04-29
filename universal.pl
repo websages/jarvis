@@ -7,12 +7,12 @@ BEGIN {
         $path=~s/\/[^\/]*$//;
         chdir($path);
         my $libdir=cwd()."/lib";
-        my $cpanlib=cwd()."/cpanlib";
+        my $cpanlib=cwd()."/cpan";
         my $libdirs= [
-                       "$cpanlib/perl5/site_perl/5.8.8/i386-linux-thread-multi",
-                       "$cpanlib/perl5/5.8.8/i386-linux-thread-multi/",
-                       "$cpanlib/perl5/site_perl/5.8.8/",
-                       "$cpanlib/perl5/5.8.8/",
+                       "$cpanlib/lib/perl5/site_perl/5.8.8/i386-linux-thread-multi",
+                       "$cpanlib/lib/perl5/5.8.8/i386-linux-thread-multi/",
+                       "$cpanlib/lib/perl5/site_perl/5.8.8/",
+                       "$cpanlib/lib/perl5/5.8.8/",
                        "$libdir",
                      ];
         # add all of these to our library search path
