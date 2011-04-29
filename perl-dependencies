@@ -12,7 +12,7 @@
 # Get some packages we need to build some of the modules
 CPANLIB="$(cd $(dirname $0);pwd)/cpan";
 PREFIX="${CPANLIB}"
-CANHAS="gcc git openssl-devel expat-devel ircd-hybrid mysql-server mysql-devel"
+CANHAS="fortune-mod gcc git openssl-devel expat-devel ircd-hybrid mysql-server mysql-devel"
 NEED=''
 for pkg in $(echo "${CANHAS}"); do
     echo "$(rpm -q ${pkg})"|grep -q "not installed" && NEED="${NEED} ${pkg}"
@@ -100,8 +100,13 @@ try(){
     MODULE=$(echo ${MODULE} | sed -e 's/-/::/g')                # put :: where the dashes are
 
     ACTUAL_VERSION=$(perl ${INCLUDES} -M${MODULE} -le "print qq(\$${MODULE}::VERSION);")
-    if [ "${ACTUAL_VERSION}" == "${VERSION}" ];then return 0; fi
-
+    if [ -z ${ACTUAL_VERSION} ]; then
+        #If it won't return a version, go with any version
+        perl ${INCLUDES} -M${MODULE} -le 'print;'
+        if [ $? -eq 0 ]; then return 0; fi
+    else 
+        if [ "${ACTUAL_VERSION}" == "${VERSION}" ];then return 0; fi
+    fi
     if [ ! -f "${FILE}" ];then
         if [ -z "${FILE}" ]; then exit 2;fi
         echo "Fetching ${FILE} from http://search.cpan.org/CPAN/authors/id/${first}/${firsttwo}/${URI}"
@@ -308,3 +313,14 @@ try INGY/YAML-0.73.tar.gz
     try TIMB/DBI-1.616.tar.gz
 try CAPTTOFU/DBD-mysql-4.018.tar.gz
 EOF
+
+################################################################################
+# un-do the crap we did just to make this stuff build/test/install
+if [ ! -z "${NEED}" ]; then
+    if [ "${PID}" == "0" ];then
+        rpm -e ${NEED}
+    else
+        echo "you may: rpm -e ${NEED} now."
+        exit;
+    fi
+fi
