@@ -75,7 +75,6 @@ try(){
  
     if [ "$(perl ${INCLUDES} -M${MODULE} -le "print ${MODULE}::VERSION")" == "${VERSION}" ];then return 0; fi
 
-    return 0
     if [ ! -f "${FILE}" ];then
         if [ -z "${FILE}" ]; then exit 2;fi
         echo "Fetching ${FILE} from http://search.cpan.org/CPAN/authors/id/${first}/${firsttwo}/${URI}"
