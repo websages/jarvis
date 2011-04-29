@@ -15,7 +15,7 @@ PREFIX="${CPANLIB}"
 CANHAS="gcc git openssl-devel expat-devel ircd-hybrid"
 NEED=''
 for pkg in $(echo "${CANHAS}"); do
-    echo "$(rpm -q ${pkg})"|grep "not installed" && NEED="${NEED} ${pkg}"
+    echo "$(rpm -q ${pkg})"|grep -q "not installed" && NEED="${NEED} ${pkg}"
 done
 echo $NEED
 
