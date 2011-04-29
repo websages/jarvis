@@ -128,12 +128,16 @@ try(){
 
     ACTUAL_VERSION=$(perl ${INCLUDES} -M${MODULE} -le "print qq(\$${MODULE}::VERSION);")
     if [ -z ${ACTUAL_VERSION} ]; then
+        echo "NO VERSION INFO FOR ${MODULE}"
         #If it won't return a version, go with any version
         perl ${INCLUDES} -M${MODULE} -le 'print;'
         if [ $? -eq 0 ]; then return 0; fi
     else 
+        echo "Got: [ ${MODULE} ${ACTUAL_VERSION}/${VERSION} ]"
         if [ "${ACTUAL_VERSION}" == "${VERSION}" ];then return 0; fi
     fi
+
+    # fetch the file if we don't have it.
     if [ ! -f "${FILE}" ];then
         if [ -z "${FILE}" ]; then exit 2;fi
         echo "Fetching ${FILE} from http://search.cpan.org/CPAN/authors/id/${first}/${firsttwo}/${URI}"
