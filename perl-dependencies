@@ -41,7 +41,7 @@ if [ ! -f /usr/bin/mysql ];then
     echo "mysql not installed?"
     exit 2
 fi
-if [ ! -f /etc/init.d/mysql ];then 
+if [ ! -f /etc/init.d/mysqld ];then 
     echo "mysql-server not installed?"
     exit 2
 fi
@@ -49,9 +49,9 @@ fi
 ps -ef | grep -q my[Ss]ql
 if [ $? -ne 0 ]; then
     if [ "${UID}" == "0" ];then
-        /etc/init.d/mysql start
+        /etc/init.d/mysqld start
     else
-        echo "please start mysql: /etc/init.d/mysql start"
+        echo "please start mysql: /etc/init.d/mysqld start"
     fi
 fi 
 
