@@ -42,7 +42,7 @@ sub daemonize {
 }
 ################################################################################
 $|++;
-my $path=$0; $path=~s/\/[^\/]*$//; chdir($path); my $personas=cwd()."persona.d";
+my $path=$0; $path=~s/\/[^\/]*$//; chdir($path); my $personas=cwd()."/persona.d";
 # disable jabber if we have no xmpp creds
 my $enable_jabber=1;
 if(!defined($ENV{'XMPP_PASSWORD'})){
