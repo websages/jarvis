@@ -84,4 +84,3 @@ $template->process('system_xmpp', $vars, \$xmpp_connection); $poe->yaml_sess($xm
 ################################################################################
 # fire up the kernel
 POE::Kernel->run();
-
