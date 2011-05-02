@@ -14,15 +14,14 @@ sub known_personas{
     my $self=shift;
     my $host=hostname_long(); $host=~s/\..*//g;
     push(@{ $self->{'persona_dirs'} },"/etc/jarvis/personas.d");
-    my $path=$0; 
-    $path=~s/\/[^\/]*$//; 
-    chdir($path); 
+    my $path=$0; $path=~s/\/[^\/]*$//; chdir($path); 
     push(@{ $self->{'persona_dirs'} },cwd()."/persona.d");
     foreach my $dir (@{ $self->{'persona_dirs'} }){
-        opendir(my $dh, $dir);
+        print STDERR "[ $dir: ]\n";
+        opendir(my $dh, $dir)||warn $!;
         while(readdir $dh) {
            next if($_=~m/^\./);
-               print STDERR "[ $dir/$_ ]\n";
+           print STDERR "[ $dir/$_ ]\n";
         }
         closedir($dh);
     }
