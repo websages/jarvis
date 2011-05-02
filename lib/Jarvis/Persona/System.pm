@@ -20,7 +20,6 @@ sub known_personas{
     chdir($path); 
     push(@{ $self->{'persona_dirs'} },cwd()."/persona.d");
     foreach my $dir (@{ $self->{'persona_dirs'} }){
-        print STDERR ":: $dir ::\n";
         opendir(my $dh, $dir);
         my @files = grep { /^[^\.]/ } readdir($dh);
         foreach my $file (@files){
@@ -134,7 +133,7 @@ sub persona_start{
             }
         }
     }
-    my $oldpwd=Cwd(); # AI::Megahal changes our cwd
+    my $oldpwd = cwd(); # AI::Megahal changes our cwd
     $self->{'megahal'} = new AI::MegaHAL(
                                           'Path'     => $self->{'brainpath'},
                                           'Banner'   => 0,
