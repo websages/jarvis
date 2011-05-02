@@ -13,6 +13,7 @@ sub known_personas{
     my $self=shift;
     my $host=hostname_long();
     $host=~s/\..*//g;
+print STDERR "[ $0 ]";
     $self->{'known_personas'} = $self->indented_yaml(<<"    ...");
     ...
 }
