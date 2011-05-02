@@ -93,8 +93,8 @@ sub indented_yaml{
 sub yaml_sess(){
    my $self=shift;
    my $yaml=shift if @_;
+   print STDERR Data::Dumper->Dump([$yaml]);
    my $ctor=$self->indented_yaml($yaml);
-   print STDERR Data::Dumper->Dump([$ctor]);
    $self->object_session( $ctor->{'class'}->new( $ctor->{'init'} ) );
    return $self;
 }
