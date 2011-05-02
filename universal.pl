@@ -70,11 +70,12 @@ my $vars = {
                'DOMAIN'        => $domain,
                'XMPP_PASSWORD' => ${ENV{'XMPP_PASSWORD'}},
            };
-my $persona;
+my $yaml;
 # Set up our sessions 
-$template->process('system', $vars, \$persona) || die $template->error();
-$poe->yaml_sess(YAML::Dump( YAML::Load($persona)->{'persona'} );
-foreach my $connector (@{ YAML::Load($persona)->{'connectors'} }){
+$template->process('system', $vars, \$yaml) || die $template->error();
+my $persona = YAML::Load($yaml);
+$poe->yaml_sess(YAML::Dump( $persona->{'persona'} );
+foreach my $connector (@{ $persona->{'connectors'} }){
     $poe->yaml_sess(YAML::Dump($connector));
 }
 ################################################################################
