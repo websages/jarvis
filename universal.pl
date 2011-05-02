@@ -73,7 +73,7 @@ my $vars = {
 my $persona;
 # Set up our sessions 
 $template->process('system', $vars, \$persona) || die $template->error();
-    print Data::Dumper->Dump([$persona]);
+    print Data::Dumper->Dump([$persona->{'persona'}]);
 $poe->yaml_sess($persona->{'persona'});
 foreach my $connector (@{ $persona->{'connectors' }}){
     print Data::Dumper->Dump([$connector]);
