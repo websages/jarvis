@@ -31,12 +31,14 @@ sub known_personas{
                 my $template = Template->new($config);
                 my $vars;
                 my $vars = {  
-                               'SECRET'        => ${ENV{'SECRET'}},
-                               'HOSTNAME'      => $hostname,
-                               'FQDN'          => $fqdn,
-                               'IRC_SERVER'    => '127.0.0.1',
-                               'DOMAIN'        => $domain,
-                               'XMPP_PASSWORD' => ${ENV{'XMPP_PASSWORD'}},
+                               'FQDN'          => $self->{'fqdn'},
+                               'HOSTNAME'      => $self->{'hostname'},
+                               'IRC_SERVER'    => $self->{'irc_server'},
+                               'DOMAIN'        => $self->{'ldap_domain'},
+                               'BASEDN'        => $self->{'ldap_basedn'},
+                               'BINDDN'        => $self->{'ldap_binddn'},
+                               'SECRET'        => $self->{'secret'},
+                               'XMPP_PASSWORD' => $self->{'xmpp_password'},
                            };
                 foreach my $key (keys(%ENV)){
                     $var->{$key}=$ENV{$key};
@@ -55,6 +57,19 @@ sub must {
     my $self = shift;
     return  [ ];
 }
+
+sub may {
+    my $self = shift;
+    return  { 
+              'brainpath' => '/dev/shm/brain/system' ,
+              'ldap_domain'  => $self->dnsdomainname(),
+              'ldap_binddn'  => $self->binddn(),
+              'ldap_bindpw'  => $self->secret(),         #only works if run as root, supply instead
+              'peer_group'   => "cn=bot_managed",
+            };
+    
+}
+
 
 ################################################################################
 # These are conventions for the way we set up hosts...
@@ -94,18 +109,6 @@ sub binddn{
 ################################################################################
 # This depends on websages internal conventions if you don't define them...
 ################################################################################
-sub may {
-    my $self = shift;
-    return  { 
-              'brainpath' => '/dev/shm/brain/system' ,
-              'ldap_domain'  => $self->dnsdomainname(),
-              'ldap_binddn'  => $self->binddn(),
-              'ldap_bindpw'  => $self->secret(),         #only works if run as root, supply instead
-              'peer_group'   => "cn=bot_managed",
-            };
-    
-}
-
 sub peers{
     my $self = shift;
     return undef unless $self->{'ldap_domain'};
