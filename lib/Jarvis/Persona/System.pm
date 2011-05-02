@@ -19,7 +19,7 @@ sub known_personas{
     foreach my $dir (@{ $self->{'persona_dirs'} }){
         print STDERR ":: $dir ::\n";
         opendir(my $dh, $dir);
-        my @files = grep { /^[^\.]/ } readdir $dh);
+        my @files = grep { /^[^\.]/ } readdir($dh);
         foreach my $file (@files){
            print STDERR "[ $dir/$file ]\n";
         }
