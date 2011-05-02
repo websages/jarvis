@@ -1,11 +1,11 @@
 ---
 class: Jarvis::IRC
 init:
-  alias: ${hostname}_irc
-  nickname: ${hostname}
-  ircname: ${fqdn}
-  server: 127.0.0.1
-  domain: ${domain}
+  alias: [% HOSTNAME %]_irc
+  nickname: [% HOSTNAME %]
+  ircname: [% FQDN %]
+  server: [% IRC_SERVER %]
+  domain: [% DOMAIN %]
   channel_list:
     - #asgard
   persona: system

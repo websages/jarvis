@@ -4,4 +4,4 @@ init:
   alias: system
   trace: 1
   peer_group: cn=bot_managed
-  ldap_bindpw: ${ENV{'SECRET'}}
+  ldap_bindpw: [% SECRET %]
