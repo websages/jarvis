@@ -20,11 +20,10 @@ sub known_personas{
     push(@{ $self->{'persona_dirs'} },cwd()."/persona.d");
     foreach my $dir (@{ $self->{'persona_dirs'} }){
         opendir(my $dh, $dir);
-#        while(readdir $dh) {
-#           next if($_=~m/^\./){
-#               print STDERR "[ $dir/$_ ]\n";
-#           }
-#        }
+        while(readdir $dh) {
+           next if($_=~m/^\./){
+               print STDERR "[ $dir/$_ ]\n";
+        }
         closedir($dh);
     }
 #    $self->{'known_personas'} = $self->indented_yaml(<<"    ...");
