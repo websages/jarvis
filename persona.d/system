@@ -20,7 +20,7 @@
            persona: system
        - class: Jarvis::Jabber
          init: 
-           alias: [% HOSTNAME% ]_xmpp
+           alias: [% HOSTNAME %]_xmpp
            ip: [% FQDN %]
            port: 5222
            hostname: [% DOMAIN %]
