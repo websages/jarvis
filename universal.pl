@@ -57,7 +57,6 @@ exit unless $poe;
 # Template our YAML configs
 my $config = { INCLUDE_PATH => [ '/etc/jarvis/personas.d', $personas ], INTERPOLATE  => 1 };
 my $template = Template->new($config);
-print Data::Dumper->Dump([$config]);
 ################################################################################
 # get our fqd, hostname, and domain name
 my $fqdn     = hostname_long;
