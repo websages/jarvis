@@ -134,7 +134,7 @@ sub persona_start{
             }
         }
     }
-    $self->known_personas();
+    my $oldpwd=Cwd(); # AI::Megahal changes our cwd
     $self->{'megahal'} = new AI::MegaHAL(
                                           'Path'     => $self->{'brainpath'},
                                           'Banner'   => 0,
@@ -142,6 +142,8 @@ sub persona_start{
                                           'Wrap'     => 0,
                                           'AutoSave' => 1
                                         );
+    chdir($oldpwd);
+    $self->known_personas();
     $self->peers();
     $kernel->yield('spawn','jarvis');
     return $self;
