@@ -19,9 +19,9 @@ sub known_personas{
     foreach my $dir (@{ $self->{'persona_dirs'} }){
         print STDERR ":: $dir ::\n";
         opendir(my $dh, $dir);
-        while(readdir $dh) {
-           next if($_=~m/^\./);
-           print STDERR "[ $dir/$_ ]\n";
+        my @files = grep { /^[^\.]/ } readdir $dh);
+        foreach my $file (@files){
+           print STDERR "[ $dir/$file ]\n";
         }
         closedir($dh);
     }
