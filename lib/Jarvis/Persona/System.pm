@@ -20,7 +20,7 @@ sub known_personas{
     chdir($path); 
     push(@{ $self->{'persona_dirs'} },$personas=cwd()."/persona.d");
     foreach my $dir (@{ $self->{'persona_dirs'} }){
-        opendir(my $dh, $some_dir);
+        opendir(my $dh, $dir);
         while(readdir $dh) {
            next if($_=~m/^\./){
                print STDERR "[ $_ ]\n";
