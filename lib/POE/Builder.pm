@@ -95,7 +95,6 @@ sub yaml_sess(){
    my $yaml=shift if @_;
    my $ctor=$self->indented_yaml($yaml);
    $self->object_session( $ctor->{'class'}->new( $ctor->{'init'} ) );
-exit ;
    return $self;
 }
 

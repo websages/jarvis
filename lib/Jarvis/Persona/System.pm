@@ -24,26 +24,28 @@ sub known_personas{
         opendir(my $dh, $dir);
         my @files = grep { /^[^\.]/ } readdir($dh);
         foreach my $file (@files){
-           my $yaml;
-           my $config = { INCLUDE_PATH => $dir, INTERPOLATE  => 1 };
-           my $template = Template->new($config);
-           my $vars;
-           my $vars = {  
-                          'SECRET'        => ${ENV{'SECRET'}},
-                          'HOSTNAME'      => $hostname,
-                          'FQDN'          => $fqdn,
-                          'IRC_SERVER'    => '127.0.0.1',
-                          'DOMAIN'        => $domain,
-                          'XMPP_PASSWORD' => ${ENV{'XMPP_PASSWORD'}},
-                      };
-           foreach my $key (keys(%ENV)){
-               $var->{$key}=$ENV{$key};
-           }
-           $template->process($file,$vars,\$yaml);
-           print STDERR "$yaml\n";
+            next if($file eq 'system');
+            if(!defined($self->{'personas'}->{$file})){
+                my $yaml;
+                my $config = { INCLUDE_PATH => $dir, INTERPOLATE  => 1 };
+                my $template = Template->new($config);
+                my $vars;
+                my $vars = {  
+                               'SECRET'        => ${ENV{'SECRET'}},
+                               'HOSTNAME'      => $hostname,
+                               'FQDN'          => $fqdn,
+                               'IRC_SERVER'    => '127.0.0.1',
+                               'DOMAIN'        => $domain,
+                               'XMPP_PASSWORD' => ${ENV{'XMPP_PASSWORD'}},
+                           };
+                foreach my $key (keys(%ENV)){
+                    $var->{$key}=$ENV{$key};
+                }
+                $template->process($file,$vars,\$yaml);
+                print STDERR "$yaml\n";
+                closedir($dh);
+            }
         }
-        closedir($dh);
-    }
 #    $self->{'known_personas'} = $self->indented_yaml(<<"    ...");
 #    ...
 }
