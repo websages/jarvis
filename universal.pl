@@ -74,7 +74,6 @@ my $yaml;
 # Set up our sessions 
 $template->process('system', $vars, \$yaml) || die $template->error();
 my $persona = YAML::Load($yaml);
-print STDERR YAML::Dump( $persona->{'persona'} );
 $poe->yaml_sess(YAML::Dump( $persona->{'persona'} ));
 foreach my $connector (@{ $persona->{'connectors'} }){
     $poe->yaml_sess(YAML::Dump($connector));
