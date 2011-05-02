@@ -63,6 +63,7 @@ $ENV{'FQDN'}     = hostname_long;
 $ENV{'HOSTNAME'} = $ENV{'FQDN'}; $ENV{'HOSTNAME'}=~s/\..*$//;
 $ENV{'DOMAIN'}   = $ENV{'FQDN'}; $ENV{'DOMAIN'}=~s/^[^\.]*\.//;
 my $vars; foreach my $key (keys(%ENV)){ $vars->{$key}=$ENV{$key}; }
+print Data::Dumper->Dump([$vars]);
 my $yaml;
 # Set up our sessions 
 $template->process('system', $vars, \$yaml) || die $template->error();
