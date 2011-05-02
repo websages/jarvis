@@ -17,8 +17,8 @@ sub known_personas{
     my $path=$0; $path=~s/\/[^\/]*$//; chdir($path); 
     push(@{ $self->{'persona_dirs'} },cwd()."/persona.d");
     foreach my $dir (@{ $self->{'persona_dirs'} }){
-        print STDERR "[ $dir: ]\n";
-        opendir(my $dh, $dir)||warn $!;
+        print STDERR ":: $dir ::\n";
+        opendir(my $dh, $dir);
         while(readdir $dh) {
            next if($_=~m/^\./);
            print STDERR "[ $dir/$_ ]\n";
