@@ -28,6 +28,14 @@ sub known_personas{
            my $config = { INCLUDE_PATH => $dir, INTERPOLATE  => 1 };
            my $template = Template->new($config);
            my $vars;
+           my $vars = {  
+                          'SECRET'        => ${ENV{'SECRET'}},
+                          'HOSTNAME'      => $hostname,
+                          'FQDN'          => $fqdn,
+                          'IRC_SERVER'    => '127.0.0.1',
+                          'DOMAIN'        => $domain,
+                          'XMPP_PASSWORD' => ${ENV{'XMPP_PASSWORD'}},
+                      };
            foreach my $key (keys(%ENV)){
                $var->{$key}=$ENV{$key};
            }

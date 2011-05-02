@@ -3,11 +3,11 @@ persona:
   class: Jarvis::Persona::Crunchy
   init:
     alias: crunchy
-    ldap_domain: websages.com
-    ldap_binddn: cn=$host,ou=Hosts,dc=websages,dc=com
-    ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
+    ldap_domain: [% DOMAIN %]
+    ldap_binddn: cn=[% HOSTNAME %],ou=Hosts,[% BASEDN %]
+    ldap_bindpw: [% LDAP_PASSWORD %]
     twitter_name: capncrunchbot
-    password: ${ENV{'TWITTER_PASSWORD'}}
+    password: [% TWITTER_PASSWORD %]
     retry: 150
     start_twitter_enabled: 0
 connectors:
@@ -17,7 +17,7 @@ connectors:
       nickname: crunchy
       ircname: "Cap'n Crunchbot"
       server: 127.0.0.1
-      domain: websages.com
+      domain: [% DOMAIN %]
       channel_list:
         - #soggies
       persona: crunchy

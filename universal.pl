@@ -59,17 +59,24 @@ my $config = { INCLUDE_PATH => [ '/etc/jarvis/personas.d', $personas ], INTERPOL
 my $template = Template->new($config);
 ################################################################################
 # get our fqd, hostname, and domain name
-$ENV{'FQDN'}     = hostname_long;
-$ENV{'HOSTNAME'} = $ENV{'FQDN'}; $ENV{'HOSTNAME'}=~s/\..*$//;
-$ENV{'DOMAIN'}   = $ENV{'FQDN'}; $ENV{'DOMAIN'}=~s/^[^\.]*\.//;
-my $vars; foreach my $key (keys(%ENV)){ $vars->{$key}=$ENV{$key}; }
-print Data::Dumper->Dump([$vars]);
+my $fqdn     = hostname_long;
+my $hostname = $fqdn;         $hostname=~s/\..*$//;
+my $domain   = $fqdn;         $domain=~s/^[^\.]*\.//;
+my $vars = {
+               'SECRET'        => ${ENV{'SECRET'}},
+               'HOSTNAME'      => $hostname,
+               'FQDN'          => $fqdn,
+               'IRC_SERVER'    => '127.0.0.1',
+               'DOMAIN'        => $domain,
+               'XMPP_PASSWORD' => ${ENV{'XMPP_PASSWORD'}},
+           };
 my $yaml;
 # Set up our sessions 
 $template->process('system', $vars, \$yaml) || die $template->error();
 my $persona = YAML::Load($yaml);
 $poe->yaml_sess(YAML::Dump( $persona->{'persona'} ));
 foreach my $connector (@{ $persona->{'persona'}->{'connectors'} }){
+print STDERR YAML::Dump($connector);
     $poe->yaml_sess(YAML::Dump($connector));
 }
 ################################################################################

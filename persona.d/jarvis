@@ -4,9 +4,9 @@ persona:
   init:
     alias: jarvis
     connector: jarvis_irc
-    ldap_domain: websages.com
-    ldap_binddn: cn=$host,ou=Hosts,dc=websages,dc=com
-    ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
+    ldap_domain: [% DOMAIN %]
+    ldap_binddn: cn=[% HOSTNAME %],ou=Hosts,[% BASEDN %]
+    ldap_bindpw: [% LDAP_PASSWORD %]
 connectors:
   - class: Jarvis::IRC
     init:
@@ -14,8 +14,8 @@ connectors:
       persona: jarvis
       nickname: jarvis
       ircname: "Just another really vigilant infrastructure sysadmin"
-      server: 127.0.0.1
-      domain: websages.com
+      server: [% IRC_SERVER %]
+      domain: [% DOMAIN %]
       channel_list:
         - #puppies
 
