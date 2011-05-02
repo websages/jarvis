@@ -78,7 +78,7 @@ my $vars = {
                'XMPP_PASSWORD' => ${ENV{'XMPP_PASSWORD'}},
            };
 # Set up our sessions 
-$template->process('system', $vars, \$persona);              
+$template->process('system', $vars, \$persona) || die $template->error();
 print Data::Dumper->Dump([$vars,$persona]);
 $poe->yaml_sess($persona);
 
