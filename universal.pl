@@ -78,9 +78,15 @@ my $vars = {
                'XMPP_PASSWORD' => ${ENV{'XMPP_PASSWORD'}},
            };
 # Set up our sessions 
-$template->process('system', $vars, \$persona);              $poe->yaml_sess($persona);
-$template->process('system_irc', $vars, \$irc_connection);   $poe->yaml_sess($irc_connection);
-$template->process('system_xmpp', $vars, \$xmpp_connection); $poe->yaml_sess($xmpp_connection) if($jabber_enabled == 1);
+$template->process('system', $vars, \$persona);              
+print Data::Dumper([$vars,$persona]);
+$poe->yaml_sess($persona);
+
+$template->process('system_irc', $vars, \$irc_connection);   
+$poe->yaml_sess($irc_connection);
+
+$template->process('system_xmpp', $vars, \$xmpp_connection); 
+$poe->yaml_sess($xmpp_connection) if($jabber_enabled == 1);
 ################################################################################
 # fire up the kernel
 POE::Kernel->run();
