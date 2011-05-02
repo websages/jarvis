@@ -21,7 +21,7 @@ sub known_personas{
     foreach my $dir (@{ $self->{'persona_dirs'} }){
         opendir(my $dh, $dir);
         while(readdir $dh) {
-           next if($_=~m/^\./){
+           next if($_=~m/^\./);
                print STDERR "[ $dir/$_ ]\n";
         }
         closedir($dh);
