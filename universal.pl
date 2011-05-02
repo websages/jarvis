@@ -75,9 +75,7 @@ my $persona;
 # Set up our sessions 
 $template->process('system', $vars, \$persona) || die $template->error();
 $poe->yaml_sess($persona->{'persona'});
-foreach my $connector (@{ $persona->{'connectors' }){
-    $poe->yaml_sess($connector);
-}
+foreach my $connector (@{ $persona->{'connectors' }}){ $poe->yaml_sess($connector); }
 ################################################################################
 # fire up the kernel
 POE::Kernel->run();
