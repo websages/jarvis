@@ -9,6 +9,7 @@ use LDAP::Simple;
 use YAML;
 use Sys::Hostname::Long;
 use Cwd;
+use Template;
 
 sub known_personas{
     my $self=shift;
@@ -23,7 +24,15 @@ sub known_personas{
         opendir(my $dh, $dir);
         my @files = grep { /^[^\.]/ } readdir($dh);
         foreach my $file (@files){
-           print STDERR "[ $dir/$file ]\n";
+           my $yaml;
+           my $config = { INCLUDE_PATH => $dir, INTERPOLATE  => 1 };
+           my $template = Template->new($config);
+           my $vars;
+           foreach my $key (keys(%ENV)){
+               $var->{$key}=$ENV{$key};
+           }
+           $template->process('$file',$vars,\$yaml);
+           print STDERR "$yaml\n";
         }
         closedir($dh);
     }
