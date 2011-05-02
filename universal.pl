@@ -56,7 +56,7 @@ exit unless $poe;
 ################################################################################
 # Template our YAML configs
 my ($persona, $irc_connection, $xmpp_connection);
-my $config = { INCLUDE_PATH => $personas, INTERPOLATE  => 1 };
+my $config = { INCLUDE_PATH => [ '/etc/jarvis/personas.d', $personas ], INTERPOLATE  => 1 };
 my $template = Template->new($config);
 print Data::Dumper->Dump([$config]);
 ################################################################################
