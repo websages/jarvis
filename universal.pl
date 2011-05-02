@@ -70,8 +70,8 @@ my $hostname = $fqdn;         $hostname=~s/\..*$//;
 my $domain   = $fqdn;         $domain=~s/^[^\.]*\.//;
 my $vars = {
                'SECRET'        => ${ENV{'SECRET'}},
-               'HOSTNAME'      => $hostname;
-               'FQDN'          => $fqdn;
+               'HOSTNAME'      => $hostname,
+               'FQDN'          => $fqdn,
                'IRC_SERVER'    => '127.0.0.1',
                'DOMAIN'        => $domain,
                'XMPP_PASSWORD' => ${ENV{'XMPP_PASSWORD'}},
