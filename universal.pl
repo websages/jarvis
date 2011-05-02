@@ -53,7 +53,7 @@ if(!defined($ENV{'XMPP_PASSWORD'})){
 # get a handle for our builder
 my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
 exit unless $poe;
-
+################################################################################
 # Template our YAML configs
 my ($persona, $irc_connection, $xmpp_connection);
 my $config = {
@@ -63,7 +63,8 @@ my $config = {
                PRE_PROCESS  => 'header',        # prefix each template
                EVAL_PERL    => 1,               # evaluate Perl code blocks
              };
-
+my $template = Template->new($config);
+################################################################################
 # get our fqd, hostname, and domain name
 my $fqdn     = hostname_long;
 my $hostname = $fqdn;         $hostname=~s/\..*$//;
@@ -80,7 +81,7 @@ my $vars = {
 $template->process('system', $vars, \$persona);              $poe->yaml_sess($persona);
 $template->process('system_irc', $vars, \$irc_connection);   $poe->yaml_sess($irc_connection);
 $template->process('system_xmpp', $vars, \$xmpp_connection); $poe->yaml_sess($xmpp_connection) if($jabber_enabled == 1);
-
+################################################################################
 # fire up the kernel
 POE::Kernel->run();
 
