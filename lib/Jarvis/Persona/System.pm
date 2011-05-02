@@ -46,6 +46,7 @@ sub known_personas{
                 closedir($dh);
             }
         }
+    }
 #    $self->{'known_personas'} = $self->indented_yaml(<<"    ...");
 #    ...
 }
