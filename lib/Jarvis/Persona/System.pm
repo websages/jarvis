@@ -8,12 +8,26 @@ use LWP::UserAgent;
 use LDAP::Simple;
 use YAML;
 use Sys::Hostname::Long;
+use Cwd;
 
 sub known_personas{
     my $self=shift;
     my $host=hostname_long();
     $host=~s/\..*//g;
-print STDERR "[ $0 ]";
+    push(@{ $self->{'persona_dirs'} },"/etc/jarvis/personas.d");
+    my $path=$0; 
+    $path=~s/\/[^\/]*$//; 
+    chdir($path); 
+    push(@{ $self->{'persona_dirs'} },$personas=cwd()."/persona.d");
+    foreach my $dir (@{ $self->{'persona_dirs'} }){
+        opendir(my $dh, $some_dir);
+        while(readdir $dh) {
+           next if($_=~m/^\./){
+               print STDERR "[ $_ ]\n";
+           }
+        }
+        closedir($dh);
+    }
     $self->{'known_personas'} = $self->indented_yaml(<<"    ...");
     ...
 }
