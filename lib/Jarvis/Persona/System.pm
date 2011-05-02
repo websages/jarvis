@@ -31,7 +31,7 @@ sub known_personas{
            foreach my $key (keys(%ENV)){
                $var->{$key}=$ENV{$key};
            }
-           $template->process('$file',$vars,\$yaml);
+           $template->process($file,$vars,\$yaml);
            print STDERR "$yaml\n";
         }
         closedir($dh);
