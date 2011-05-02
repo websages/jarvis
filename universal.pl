@@ -56,13 +56,7 @@ exit unless $poe;
 ################################################################################
 # Template our YAML configs
 my ($persona, $irc_connection, $xmpp_connection);
-my $config = {
-               INCLUDE_PATH => $personas,  # or list ref
-               INTERPOLATE  => 1,               # expand "$var" in plain text
-               POST_CHOMP   => 1,               # cleanup whitespace 
-               PRE_PROCESS  => 'header',        # prefix each template
-               EVAL_PERL    => 1,               # evaluate Perl code blocks
-             };
+my $config = { INCLUDE_PATH => $personas, INTERPOLATE  => 1 };
 my $template = Template->new($config);
 print Data::Dumper->Dump([$config]);
 ################################################################################
