@@ -8,6 +8,6 @@ init:
   username: [% HOSTNAME %]
   password: [% XMPP_PASSWORD %]
   channel_list: 
-    - asgard\@conference.[% DOMAIN %]/${hostname}
+    - asgard\@conference.[% DOMAIN %]/[% HOSTNAME %]
   persona: system
 
