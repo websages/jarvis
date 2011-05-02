@@ -64,6 +64,7 @@ my $config = {
                EVAL_PERL    => 1,               # evaluate Perl code blocks
              };
 my $template = Template->new($config);
+print Data::Dumper->Dump([$config]);
 ################################################################################
 # get our fqd, hostname, and domain name
 my $fqdn     = hostname_long;
