@@ -79,7 +79,7 @@ my $vars = {
            };
 # Set up our sessions 
 $template->process('system', $vars, \$persona);              
-print Data::Dumper([$vars,$persona]);
+print Data::Dumper->Dump([$vars,$persona]);
 $poe->yaml_sess($persona);
 
 $template->process('system_irc', $vars, \$irc_connection);   
