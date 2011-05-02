@@ -134,6 +134,7 @@ sub persona_start{
             }
         }
     }
+    $self->known_personas();
     $self->{'megahal'} = new AI::MegaHAL(
                                           'Path'     => $self->{'brainpath'},
                                           'Banner'   => 0,
@@ -141,7 +142,6 @@ sub persona_start{
                                           'Wrap'     => 0,
                                           'AutoSave' => 1
                                         );
-    $self->known_personas();
     $self->peers();
     $kernel->yield('spawn','jarvis');
     return $self;
