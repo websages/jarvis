@@ -95,7 +95,6 @@ sub yaml_sess(){
    my $yaml=shift if @_;
    my $ctor=$self->indented_yaml($yaml);
    $self->object_session( $ctor->{'class'}->new( $ctor->{'init'} ) );
-   print STDERR Data::Dumper->Dump([$ctor->{'class'},$ctor->{'init'}]);
    return $self;
 }
 
@@ -108,7 +107,7 @@ sub connector{
 sub object_session(){
     my $self = shift;
     my $object = shift if @_;
-    return undef unless $object;
+    return undef unless $object; 
     my $object_states = $object->states();
     push( @{ $self->{'sessions'} }, 
           POE::Session->create(
