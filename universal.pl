@@ -55,7 +55,6 @@ my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
 exit unless $poe;
 ################################################################################
 # Template our YAML configs
-my ($persona, $irc_connection, $xmpp_connection);
 my $config = { INCLUDE_PATH => [ '/etc/jarvis/personas.d', $personas ], INTERPOLATE  => 1 };
 my $template = Template->new($config);
 print Data::Dumper->Dump([$config]);
@@ -72,16 +71,13 @@ my $vars = {
                'DOMAIN'        => $domain,
                'XMPP_PASSWORD' => ${ENV{'XMPP_PASSWORD'}},
            };
+my $persona;
 # Set up our sessions 
 $template->process('system', $vars, \$persona) || die $template->error();
-print Data::Dumper->Dump([$vars,$persona]);
-$poe->yaml_sess($persona);
-
-$template->process('system_irc', $vars, \$irc_connection);   
-$poe->yaml_sess($irc_connection);
-
-$template->process('system_xmpp', $vars, \$xmpp_connection); 
-$poe->yaml_sess($xmpp_connection) if($jabber_enabled == 1);
+$poe->yaml_sess($persona->{'persona'});
+foreach my $connector (@{ $persona->{'connectors' }){
+    $poe->yaml_sess($connector);
+}
 ################################################################################
 # fire up the kernel
 POE::Kernel->run();

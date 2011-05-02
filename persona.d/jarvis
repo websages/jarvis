@@ -1,0 +1,21 @@
+ - name: jarvis
+   persona:
+     class: Jarvis::Persona::Jarvis
+     init:
+       alias: jarvis
+       connector: jarvis_irc
+       ldap_domain: websages.com
+       ldap_binddn: cn=$host,ou=Hosts,dc=websages,dc=com
+       ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
+   connectors:
+     - class: Jarvis::IRC
+       init:
+         alias: jarvis_irc
+         persona: jarvis
+         nickname: jarvis
+         ircname: "Just another really vigilant infrastructure sysadmin"
+         server: 127.0.0.1
+         domain: websages.com
+         channel_list:
+           - #puppies
+
