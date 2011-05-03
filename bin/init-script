@@ -69,7 +69,7 @@ git_update(){
             return -1;
         fi
     else
-        (cd ${GIT_REPO}; git pull origin master)
+        (cd ${GIT_REPO}; git pull origin lenny)
     fi
     # This is a temporary hack until the init script is stable:
     NOW=$(md5sum /etc/init.d/jarvis|awk '{print $2}')
