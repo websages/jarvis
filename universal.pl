@@ -38,11 +38,11 @@ use POE::Builder;
 use Sys::Hostname::Long;
 use Cwd;
 ################################################################################
-sub daemonize {
-    defined( my $pid = fork() ) or die "Can't fork: $!\n";
-    exit if $pid;
-    setsid or die "Can't start a new session: $!\n";
-}
+#sub daemonize {
+#    defined( my $pid = fork() ) or die "Can't fork: $!\n";
+#    exit if $pid;
+#    setsid or die "Can't start a new session: $!\n";
+#}
 ################################################################################
 $|++;
 
