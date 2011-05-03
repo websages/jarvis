@@ -161,8 +161,6 @@ $persona->{'init'}->{'known_personas'} = << "...";
           channel_list:
             - #puppies
 ...
-# grab the first persona, ship the rest to the known
-my $system = shift(@{ $persona });
 ################################################################################
 $poe->yaml_sess(YAML::Dump( $persona->{'persona'} ));
 foreach my $connector (@{ $persona->{'persona'}->{'connectors'} }){
