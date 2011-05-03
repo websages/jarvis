@@ -11,48 +11,6 @@ use Sys::Hostname::Long;
 use Cwd;
 use Template;
 
-sub known_personas{
-    my $self=shift;
-    my $host=hostname_long(); $host=~s/\..*//g;
-    push(@{ $self->{'persona_dirs'} },"/etc/jarvis/personas.d");
-    my $path=$0; 
-    print STDERR "PATH: $path\n";
-    $path=~s/\/[^\/]*$//; 
-    chdir($path); 
-    push(@{ $self->{'persona_dirs'} },cwd()."/persona.d");
-    foreach my $dir (@{ $self->{'persona_dirs'} }){
-        opendir(my $dh, $dir);
-        my @files = grep { /^[^\.]/ } readdir($dh);
-        foreach my $file (@files){
-            next if($file eq 'system');
-            if(!defined($self->{'personas'}->{$file})){
-                my $yaml;
-                my $config = { INCLUDE_PATH => $dir, INTERPOLATE  => 1 };
-                my $template = Template->new($config);
-                my $vars;
-                my $vars = {  
-                               'FQDN'          => $self->{'fqdn'},
-                               'HOSTNAME'      => $self->{'hostname'},
-                               'IRC_SERVER'    => $self->{'irc_server'},
-                               'DOMAIN'        => $self->{'ldap_domain'},
-                               'BASEDN'        => $self->{'ldap_basedn'},
-                               'BINDDN'        => $self->{'ldap_binddn'},
-                               'SECRET'        => $self->{'secret'},
-                               'XMPP_PASSWORD' => $self->{'xmpp_password'},
-                           };
-                foreach my $key (keys(%ENV)){
-                    $var->{$key}=$ENV{$key};
-                }
-                $template->process($file,$vars,\$yaml);
-                print STDERR "$yaml\n";
-                closedir($dh);
-            }
-        }
-    }
-#    $self->{'known_personas'} = $self->indented_yaml(<<"    ...");
-#    ...
-}
-    
 sub must {
     my $self = shift;
     return  [ ];
@@ -61,11 +19,12 @@ sub must {
 sub may {
     my $self = shift;
     return  { 
-              'brainpath' => '/dev/shm/brain/system' ,
-              'ldap_domain'  => $self->dnsdomainname(),
-              'ldap_binddn'  => $self->binddn(),
-              'ldap_bindpw'  => $self->secret(),         #only works if run as root, supply instead
-              'peer_group'   => "cn=bot_managed",
+              'brainpath'      => '/dev/shm/brain/system' ,
+              'known_personas' => undef,
+              'ldap_domain'    => $self->dnsdomainname(),
+              'ldap_binddn'    => $self->binddn(),
+              'ldap_bindpw'    => $self->secret(),         #only works if run as root, supply instead
+              'peer_group'     => "cn=bot_managed",
             };
     
 }
@@ -165,7 +124,6 @@ sub persona_start{
                                           'AutoSave' => 1
                                         );
     chdir($oldpwd);
-    $self->known_personas();
     $self->peers();
     $kernel->yield('spawn','jarvis');
     return $self;

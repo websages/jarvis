@@ -3,8 +3,8 @@ persona:
   class: Jarvis::Persona::Crunchy
   init:
     alias: berry
-    ldap_domain: websages.com
-    ldap_binddn: cn=$host,ou=Hosts,dc=websages,dc=com
+    ldap_domain: [% DOMAIN %]
+    ldap_binddn: cn=[% HOSTNAME %],ou=Hosts,[% BASEDN %]
     ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
     twitter_name: capncrunchbot
     password: ${ENV{'TWITTER_PASSWORD'}}
