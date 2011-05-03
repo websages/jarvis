@@ -67,7 +67,7 @@ my $hostname = $fqdn;         $hostname=~s/\..*$//;
 my $domain   = $fqdn;         $domain=~s/^[^\.]*\.//;
 my $basedn   = "dc=".join(",dc=",split(/\./,$domain));
 ################################################################################
-my $persona = << "...";
+my $persona = YAML::Load(<< "...");
 persona:
   class: Jarvis::Persona::System
   init:
@@ -100,7 +100,7 @@ persona:
 ...
 ################################################################################
 # a list of the personas I can spawn goes into known_personas
-$persona->{'persona'}->{'init'}->{'known_personas'} = << "...";
+$persona->{'persona'}->{'init'}->{'known_personas'} = YAML::Load(<< "...");
 ---
   - name: crunchy
     persona:
