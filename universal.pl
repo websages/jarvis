@@ -26,6 +26,7 @@ BEGIN {
       }
 ################################################################################
 # Include our dependencies
+use POSIX 'setsid';
 use Data::Dumper;
 use Jarvis::IRC;
 use Jarvis::Jabber;
@@ -41,7 +42,7 @@ use Cwd;
 #sub daemonize {
 #    defined( my $pid = fork() ) or die "Can't fork: $!\n";
 #    exit if $pid;
-#    setsid or die "Can't start a new session: $!\n";
+#    setsid() or die "Can't start a new session: $!\n";
 #}
 ################################################################################
 $|++;
@@ -64,7 +65,7 @@ exit unless $poe;
 my $fqdn     = hostname_long;
 my $hostname = $fqdn;         $hostname=~s/\..*$//;
 my $domain   = $fqdn;         $domain=~s/^[^\.]*\.//;
-my $basedn   = "dc=".join(",dc=",(split(/\./,$domain));
+my $basedn   = "dc=".join(",dc=",split(/\./,$domain));
 ################################################################################
 my $persona = << "...";
 persona:
