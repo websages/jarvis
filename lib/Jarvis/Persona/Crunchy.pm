@@ -324,6 +324,9 @@ sub check_flickr_blocking{
     warn $@ if $@;
     my $dbh = DBI->connect(@dbi) || print STDERR "$DBI::errstr\n";
     return undef unless (defined($dbh));
+    print STDERR "\n";
+    print Data::Dumper->Dump([ref($dbh),$dbh])."\n";
+    print STDERR "\n";
     my $parser = HTML::Parser->new(
         api_version => 3,
         start_h     => [ 
