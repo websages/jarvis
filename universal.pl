@@ -64,6 +64,7 @@ exit unless $poe;
 my $fqdn     = hostname_long;
 my $hostname = $fqdn;         $hostname=~s/\..*$//;
 my $domain   = $fqdn;         $domain=~s/^[^\.]*\.//;
+my $basedn   = "dc="$domain;         $domain=~s/^[^\.]*\.//;
 ################################################################################
 my $persona = << "...";
 persona:
@@ -99,6 +100,7 @@ persona:
 ################################################################################
 # a list of the personas I can spawn goes into known_personas
 $persona->{'init'}->{'known_personas'} = << "...";
+---
   - name: crunchy
     persona:
       class: Jarvis::Persona::Crunchy
@@ -122,50 +124,51 @@ $persona->{'init'}->{'known_personas'} = << "...";
           channel_list:
             - #soggies
           persona: crunchy
-  - name: berry
-    persona:
-      class: Jarvis::Persona::Crunchy
-      init:
-        alias: berry
-        ldap_domain: websages.com
-        ldap_binddn: cn=${hostname},ou=Hosts,dc=websages,dc=com
-        ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
-        twitter_name: capncrunchbot
-        password: ${ENV{'TWITTER_PASSWORD'}}
-        retry: 150
-        start_twitter_enabled: 1
-    connectors:
-      - class: Jarvis::IRC
-        init:
-          alias: berry_irc
-          nickname: berry
-          ircname: "beta Cap'n Crunchbot"
-          server: 127.0.0.1
-          domain: websages.com
-          channel_list:
-            - #twoggies
-          persona: berry
-  - name: jarvis
-    persona:
-      class: Jarvis::Persona::Jarvis
-      init:
-        alias: jarvis
-        connector: jarvis_irc
-        ldap_domain: websages.com
-        ldap_binddn: cn=${hostname},ou=Hosts,dc=websages,dc=com
-        ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
-    connectors:
-      - class: Jarvis::IRC
-        init:
-          alias: jarvis_irc
-          persona: jarvis
-          nickname: jarvis
-          ircname: "Just another really vigilant infrastructure sysadmin"
-          server: 127.0.0.1
-          domain: websages.com
-          channel_list:
-            - #puppies
 ...
+#  - name: berry
+#    persona:
+#      class: Jarvis::Persona::Crunchy
+#      init:
+#        alias: berry
+#        ldap_domain: websages.com
+#        ldap_binddn: cn=${hostname},ou=Hosts,dc=websages,dc=com
+#        ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
+#        twitter_name: capncrunchbot
+#        password: ${ENV{'TWITTER_PASSWORD'}}
+#        retry: 150
+#        start_twitter_enabled: 1
+#    connectors:
+#      - class: Jarvis::IRC
+#        init:
+#          alias: berry_irc
+#          nickname: berry
+#          ircname: "beta Cap'n Crunchbot"
+#          server: 127.0.0.1
+#          domain: websages.com
+#          channel_list:
+#            - #twoggies
+#          persona: berry
+#  - name: jarvis
+#    persona:
+#      class: Jarvis::Persona::Jarvis
+#      init:
+#        alias: jarvis
+#        connector: jarvis_irc
+#        ldap_domain: websages.com
+#        ldap_binddn: cn=${hostname},ou=Hosts,dc=websages,dc=com
+#        ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
+#    connectors:
+#      - class: Jarvis::IRC
+#        init:
+#          alias: jarvis_irc
+#          persona: jarvis
+#          nickname: jarvis
+#          ircname: "Just another really vigilant infrastructure sysadmin"
+#          server: 127.0.0.1
+#          domain: websages.com
+#          channel_list:
+#            - #puppies
+#...
 ################################################################################
 $poe->yaml_sess(YAML::Dump( $persona->{'persona'} ));
 foreach my $connector (@{ $persona->{'persona'}->{'connectors'} }){
