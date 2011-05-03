@@ -64,7 +64,7 @@ exit unless $poe;
 my $fqdn     = hostname_long;
 my $hostname = $fqdn;         $hostname=~s/\..*$//;
 my $domain   = $fqdn;         $domain=~s/^[^\.]*\.//;
-my $basedn   = "dc="$domain;         $domain=~s/^[^\.]*\.//;
+my $basedn   = "dc=".join(",dc=",(split(/\./,$domain));
 ################################################################################
 my $persona = << "...";
 persona:
@@ -94,7 +94,7 @@ persona:
         username: ${hostname}
         password: ${ENV{'XMPP_PASSWORD'}}
         channel_list:
-          - asgard\@conference.websages.com/${hostname}
+          - asgard\@conference.${domain}/${hostname}
         persona: system
 ...
 ################################################################################
@@ -106,8 +106,8 @@ $persona->{'init'}->{'known_personas'} = << "...";
       class: Jarvis::Persona::Crunchy
       init:
         alias: crunchy
-        ldap_domain: websages.com
-        ldap_binddn: cn=${hostname},ou=Hosts,dc=websages,dc=com
+        ldap_domain: ${domain}
+        ldap_binddn: cn=${hostname},ou=Hosts,${basedn}
         ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
         twitter_name: capncrunchbot
         password: ${ENV{'TWITTER_PASSWORD'}}
@@ -120,7 +120,7 @@ $persona->{'init'}->{'known_personas'} = << "...";
           nickname: crunchy
           ircname: "Cap'n Crunchbot"
           server: 127.0.0.1
-          domain: websages.com
+          domain: ${domain}
           channel_list:
             - #soggies
           persona: crunchy
