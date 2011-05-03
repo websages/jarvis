@@ -55,7 +55,7 @@ my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
 exit unless $poe;
 ################################################################################
 # Template our YAML configs
-my $config = { INCLUDE_PATH => [ '/etc/jarvis/personas.d', $personas ], INTERPOLATE  => 1 };
+my $config = { INCLUDE_PATH => [ '/etc/jarvis/personas.d/templates', $personas ], INTERPOLATE  => 1 };
 my $template = Template->new($config);
 ################################################################################
 # get our fqd, hostname, and domain name
