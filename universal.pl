@@ -61,7 +61,7 @@ my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
 exit unless $poe;
 
 ################################################################################
-# get our fqd, hostname, and domain name
+# get our fqd, hostname, domain name, and base dn (our assumptions)
 my $fqdn     = hostname_long;
 my $hostname = $fqdn;         $hostname=~s/\..*$//;
 my $domain   = $fqdn;         $domain=~s/^[^\.]*\.//;
@@ -100,7 +100,7 @@ persona:
 ...
 ################################################################################
 # a list of the personas I can spawn goes into known_personas
-$persona->{'init'}->{'known_personas'} = << "...";
+$persona->{'persona'}->{'init'}->{'known_personas'} = << "...";
 ---
   - name: crunchy
     persona:
