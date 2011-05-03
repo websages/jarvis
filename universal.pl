@@ -105,7 +105,7 @@ $persona->{'init'}->{'known_personas'} = << "...";
       init:
         alias: crunchy
         ldap_domain: websages.com
-        ldap_binddn: cn=$host,ou=Hosts,dc=websages,dc=com
+        ldap_binddn: cn=${hostname},ou=Hosts,dc=websages,dc=com
         ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
         twitter_name: capncrunchbot
         password: ${ENV{'TWITTER_PASSWORD'}}
@@ -128,7 +128,7 @@ $persona->{'init'}->{'known_personas'} = << "...";
       init:
         alias: berry
         ldap_domain: websages.com
-        ldap_binddn: cn=$host,ou=Hosts,dc=websages,dc=com
+        ldap_binddn: cn=${hostname},ou=Hosts,dc=websages,dc=com
         ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
         twitter_name: capncrunchbot
         password: ${ENV{'TWITTER_PASSWORD'}}
@@ -152,7 +152,7 @@ $persona->{'init'}->{'known_personas'} = << "...";
         alias: jarvis
         connector: jarvis_irc
         ldap_domain: websages.com
-        ldap_binddn: cn=$host,ou=Hosts,dc=websages,dc=com
+        ldap_binddn: cn=${hostname},ou=Hosts,dc=websages,dc=com
         ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
     connectors:
       - class: Jarvis::IRC
