@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+use strict;
 ################################################################################
 # a universal bot for multiple personalities
 #
@@ -44,7 +45,8 @@ sub daemonize {
 }
 ################################################################################
 $|++;
-my $path=$0; $path=~s/\/[^\/]*$//; chdir($path); my $personas=cwd()."/persona.d";
+
+################################################################################
 # disable jabber if we have no xmpp creds
 my $enable_jabber=1;
 if(!defined($ENV{'XMPP_PASSWORD'})){
@@ -52,9 +54,12 @@ if(!defined($ENV{'XMPP_PASSWORD'})){
     print STDERR "no XMPP_PASSWORD, disabling XMPP\n";
 }
 
+################################################################################
 # get a handle for our builder
 my $poe = new POE::Builder({ 'debug' => '0','trace' => '0' });
 exit unless $poe;
+
+################################################################################
 # get our fqd, hostname, and domain name
 my $fqdn     = hostname_long;
 my $hostname = $fqdn;         $hostname=~s/\..*$//;
