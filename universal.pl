@@ -111,10 +111,12 @@ $persona->{'persona'}->{'init'}->{'known_personas'} = YAML::Load(<< "...");
         ldap_domain: ${domain}
         ldap_binddn: cn=${hostname},ou=Hosts,${basedn}
         ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
+        dbi_connect: dbi:mysql:tumble:172.16.0.2
+        dbi_user: nobody
+        start_twitter_enabled: 0
         twitter_name: capncrunchbot
         password: ${ENV{'TWITTER_PASSWORD'}}
         retry: 150
-        start_twitter_enabled: 0
     connectors:
       - class: Jarvis::IRC
         init:

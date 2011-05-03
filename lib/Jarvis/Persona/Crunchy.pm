@@ -27,8 +27,8 @@ sub may {
              'username'        => undef,
              'password'        => undef,
              'retry'           => undef,
-             'dbi_connect'     => 'dbi:mysql:tumble:172.16.0.2',
-             'dbi_user'        => 'nobody',
+             'dbi_connect'     => undef,
+             'dbi_user'        => undef,
 #             'start_twitter_enabled' => 0,
              'dbi_password'    => undef,
            };
@@ -305,6 +305,8 @@ sub check_flickr_blocking{
     my $self = shift;
     my ($map);
     my @dbi;
+    return undef unless(defined($self->{'dbi_connect'}));
+    return undef unless(defined($self->{'dbi_user'}));
     push (@dbi,$self->{'dbi_connect'}) if(defined($self->{'dbi_connect'}));
     push (@dbi,$self->{'dbi_user'}) if(defined($self->{'dbi_user'}));
     push (@dbi,$self->{'dbi_password'}) if(defined($self->{'dbi_password'}));
