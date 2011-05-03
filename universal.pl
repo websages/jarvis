@@ -72,7 +72,8 @@ persona:
   class: Jarvis::Persona::System
   init:
     alias: system
-    trace: 1
+    trace: 0
+    debug: 0
     peer_group: cn=bot_managed
     ldap_bindpw: ${ENV{'SECRET'}}
   connectors:
@@ -130,8 +131,8 @@ $persona->{'persona'}->{'init'}->{'known_personas'} = YAML::Load(<< "...");
       class: Jarvis::Persona::Crunchy
       init:
         alias: berry
-        ldap_domain: websages.com
-        ldap_binddn: cn=${hostname},ou=Hosts,dc=websages,dc=com
+        ldap_domain: ${domain}
+        ldap_binddn: cn=${hostname},ou=Hosts,${basedn}
         ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
         twitter_name: capncrunchbot
         password: ${ENV{'TWITTER_PASSWORD'}}
@@ -144,7 +145,7 @@ $persona->{'persona'}->{'init'}->{'known_personas'} = YAML::Load(<< "...");
           nickname: berry
           ircname: "beta Cap'n Crunchbot"
           server: 127.0.0.1
-          domain: websages.com
+          domain: ${domain}
           channel_list:
             - #twoggies
           persona: berry
@@ -154,8 +155,8 @@ $persona->{'persona'}->{'init'}->{'known_personas'} = YAML::Load(<< "...");
       init:
         alias: jarvis
         connector: jarvis_irc
-        ldap_domain: websages.com
-        ldap_binddn: cn=${hostname},ou=Hosts,dc=websages,dc=com
+        ldap_domain: ${domain}
+        ldap_binddn: cn=${hostname},ou=Hosts,${basedn}
         ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
     connectors:
       - class: Jarvis::IRC
@@ -165,7 +166,7 @@ $persona->{'persona'}->{'init'}->{'known_personas'} = YAML::Load(<< "...");
           nickname: jarvis
           ircname: "Just another really vigilant infrastructure sysadmin"
           server: 127.0.0.1
-          domain: websages.com
+          domain: ${domain}
           channel_list:
             - #puppies
 ...
