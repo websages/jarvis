@@ -16,7 +16,6 @@ fi
 
 RETVAL=0
 . ${DEFAULT_FILE}
-prog="${JARVIS_ROOT}/universal.pl"
 
 
 protect_default_file(){
@@ -103,7 +102,7 @@ runlevel=$(set -- $(runlevel); eval "echo \$$#" )
 
 running()
 {
-        PROCS=$(ps -ef -w|grep -v grep|grep " ${prog}\$"|awk '{print $2'})
+        PROCS=$(ps -ef -w|grep -v grep|grep " ${PROG}\$"|awk '{print $2')
         if [ ! -z "${PROCS}" ];then
             echo "Running pid ${PROCS}"
             return 0
@@ -118,9 +117,9 @@ start()
         protect_default_file
         running
         EXIT=$?
-        if [ ${EXIT} ]; then 
-	    echo -n $"Starting $prog: "
-            su - ${RUN_AS} /bin/bash -c "(cd ${JARVIS_ROOT}; ${prog} > ${JARVIS_LOG} 2>&1 &)"
+        if [ ${EXIT} -eq 0 ]; then 
+	    echo -n $"Starting $PROG: "
+            su - ${RUN_AS} /bin/bash -c "(cd ${JARVIS_ROOT}; ${PROG} > ${JARVIS_LOG} 2>&1 &)"
 	    echo
         fi
 }
@@ -130,9 +129,9 @@ stop()
         protect_default_file
         running
         EXIT=$?
-        if [ ! ${EXIT} ];then
-	    echo -n $"Stopping $prog: "
-            PROCS=$(ps -ef -w|grep -v grep|grep " ${prog}\$"|awk '{print $2'})
+        if [ ${EXIT} -eq 1 ];then
+	    echo -n $"Stopping $PROG: "
+            PROCS=$(ps -ef -w|grep -v grep|grep " ${PROG}\$"|awk '{print $2'})
             kill -15 ${PROCS}
 	    echo
         fi
