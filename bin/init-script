@@ -7,11 +7,9 @@
 #
 # processname: universal.pl
 
-# source function library
-. /etc/rc.d/init.d/functions
-
 # pull in sysconfig settings
-[ -f /etc/sysconfig/jarvis ] && . /etc/sysconfig/jarvis
+if [ -f /etc/sysconfig/jarvis ];then . /etc/sysconfig/jarvis; fi
+if [ -f /etc/default/jarvis ];then . /etc/default/jarvis; fi
 
 RETVAL=0
 prog="${JARVIS_ROOT}/universal.pl"
