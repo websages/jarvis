@@ -5,7 +5,6 @@ use parent 'Jarvis::Persona::Base';
 use IRCBot::Chatbot::Pirate;
 #use POE::Component::Client::Twitter;
 use POE;
-use POSIX qw( setsid );
 use Net::LDAP;
 use Net::DNS;
 use LWP::UserAgent;
@@ -134,7 +133,7 @@ sub input{
         my $pirate=1;
         print STDERR Data::Dumper->Dump([$what]);
         for ( $what ) {
-            /^\s*!*help\s+/             && do { $replies = $self->help($what); last; };
+            /^\s*!*help\s*/             && do { $replies = $self->help($what); last; };
             /\"(.+?)\"\s+--\s*(.+?)$/   && do { $replies = [ $self->quote($what) ]; last; };
             /(https*:\S+)/              && do { $replies = [ $self->link($1, $who) ]; last; };
             /^\s*[Ff]ortune\s*$/           && do { $replies = [ $self->fortune() ]; last; };

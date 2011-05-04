@@ -18,7 +18,7 @@ prog="universal.pl"
 
 export DEFAULT_FILE="/etc/sysconfig/jarvis";
 
-protect_default_fil(e){
+protect_default_file(){
     if [ ! -z "${DEFAULT_FILE}" ]; then
         if [ -f "${DEFAULT_FILE}" ]; then
             if [ "$(stat -c '%U:%G' ${DEFAULT_FILE})" != "root:root" ]; then
@@ -70,6 +70,7 @@ git_update(){
         install -m 0744 ${GIT_REPO}/bin/init-script /etc/init.d/jarvis
     fi
 }
+
 git_rollback(){
     if [ -z ${GIT_ENABLED}]; then
         return -1
