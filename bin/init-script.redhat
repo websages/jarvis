@@ -105,7 +105,7 @@ start()
         ps -ef -w | grep -q "${prog}" && echo "${prog} already running" && exit
         protect_default_file
 	echo -n $"Starting $prog: "
-        su - ${RUN_AS} /bin/bash -c "(cd ${JARVIS_ROOT}; ${prog}) &"
+        su - ${RUN_AS} /bin/bash -c "(cd ${JARVIS_ROOT}; ${prog})" &
 	RETVAL=$?
 	echo
 }
