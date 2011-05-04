@@ -104,6 +104,7 @@ runlevel=$(set -- $(runlevel); eval "echo \$$#" )
 running()
 {
         PROCS=$(ps -ef -w|grep -v grep|grep " ${prog}\$"|awk '{print $2'})
+echo "[${PROCS}]"
         if [ -z "${PROCS}" ];then
             echo "Running pid ${PROCS}"
             return 0
