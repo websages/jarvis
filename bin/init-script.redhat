@@ -106,6 +106,7 @@ start()
         protect_default_file
 	echo -n $"Starting $prog: "
         su - ${RUN_AS} /bin/bash -c "(cd ${JARVIS_ROOT}; ${prog})" &
+        disown
 	RETVAL=$?
 	echo
 }
