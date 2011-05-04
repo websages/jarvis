@@ -115,7 +115,8 @@ running()
 
 start()
 {
-        echo running
+        running
+        echo $?
         if [ running ]; then return $status; fi
         protect_default_file
 	echo -n $"Starting $prog: "
@@ -126,7 +127,8 @@ start()
 
 stop()
 {
-        echo running
+        running
+        echo $?
         if [ ! running ]; then return $status; fi
         protect_default_file
 	echo -n $"Stopping $prog: "
