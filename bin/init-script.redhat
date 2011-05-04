@@ -105,7 +105,7 @@ start()
         ps -ef -w | grep "${prog}" && echo "${prog} already running" && exit
         protect_default_file
 	echo -n $"Starting $prog: "
-        su - ${RUN_AS} /bin/bash -c "(cd ${JARVIS_ROOT}; ${prog})"
+        su - ${RUN_AS} /bin/bash -c "(cd ${JARVIS_ROOT}; ${prog}) &"
 	RETVAL=$?
 	echo
 }
@@ -114,7 +114,7 @@ stop()
 {
         protect_default_file
 	echo -n $"Stopping $prog: "
-        ps -ef -w | grep "${JARVIS_ROOT}/universal.pl" && echo "${JARVIS_ROOT}/universal.pl already running" && exit
+        ps -ef -w | grep "${prog}" && echo "${JARVIS_ROOT}/universal.pl already running" && exit
 	# so the TCP connections are closed cleanly
 	echo
 }
