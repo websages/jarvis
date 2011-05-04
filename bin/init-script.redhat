@@ -114,21 +114,9 @@ stop()
 {
         protect_default_file
 	echo -n $"Stopping $prog: "
-        PROCS=$(ps -ef -w|grep -v grep|grep -q " ${prog}\$"|awk '{print $2'})
-        [ ! -z "${PROCS}" ] && kill -15 $PROCS
-	# so the TCP connections are closed cleanly
-	echo
-}
-
-reload()
-{
-	echo -n $"Reloading $prog: "
-	if [ -n "`pidfileofproc $SSHD`" ] ; then
-	    killproc $SSHD -HUP
-	else
-	    failure $"Reloading $prog"
-	fi
-	RETVAL=$?
+        PROCS=$(ps -ef -w|grep -v grep|grep " ${prog}\$"|awk '{print $2'})
+        [ ! -z "${PROCS}" ] || echo "not running" && exit 1;
+        [ ! -z "${PROCS}" ] && kill -15 ${PROCS}
 	echo
 }
 
@@ -143,26 +131,16 @@ case "$1" in
 		stop
 		start
 		;;
-	reload)
-		reload
-		;;
-	condrestart)
-		if [ -f /var/lock/subsys/sshd ] ; then
-			do_restart_sanity_check
-			if [ "$RETVAL" = 0 ] ; then
-				stop
-				# avoid race
-				sleep 3
-				start
-			fi
-		fi
-		;;
 	status)
-		status -p $PID_FILE openssh-daemon
-		RETVAL=$?
+                PROCS=$(ps -ef -w|grep -v grep|grep " ${prog}\$"|awk '{print $2'})
+                if [ -z "${PROCS}" ];then
+                    echo "Running pid ${PROCS}"
+                else
+                    echo "Not running."
+                fi
 		;;
 	*)
-		echo $"Usage: $0 {start|stop|restart|reload|condrestart|status}"
+		echo $"Usage: $0 {start|stop|restart|status}"
 		RETVAL=1
 esac
 exit $RETVAL
