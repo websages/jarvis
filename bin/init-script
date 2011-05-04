@@ -115,7 +115,8 @@ running()
 
 start()
 {
-        if [ ! running ]; then return $status; fi
+        echo running
+        if [ running ]; then return $status; fi
         protect_default_file
 	echo -n $"Starting $prog: "
         su - ${RUN_AS} /bin/bash -c "(cd ${JARVIS_ROOT}; ${prog} > ${JARVIS_LOG} 2>&1 &)"
@@ -125,6 +126,7 @@ start()
 
 stop()
 {
+        echo running
         if [ ! running ]; then return $status; fi
         protect_default_file
 	echo -n $"Stopping $prog: "
