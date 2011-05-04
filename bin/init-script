@@ -120,7 +120,7 @@ echo "start"
         running
         EXIT=$?
 echo "::$EXIT::";
-        if [ ! ${EXIT} ]; then 
+        if [ ${EXIT} ]; then 
 	    echo -n $"Starting $prog: "
             su - ${RUN_AS} /bin/bash -c "(cd ${JARVIS_ROOT}; ${prog} > ${JARVIS_LOG} 2>&1 &)"
 	    RETVAL=$?
