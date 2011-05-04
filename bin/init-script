@@ -104,7 +104,6 @@ runlevel=$(set -- $(runlevel); eval "echo \$$#" )
 running()
 {
         PROCS=$(ps -ef -w|grep -v grep|grep " ${prog}\$"|awk '{print $2'})
-echo "[${PROCS}]"
         if [ ! -z "${PROCS}" ];then
             echo "Running pid ${PROCS}"
             return 0
@@ -119,6 +118,7 @@ start()
         protect_default_file
         running
         EXIT=$?
+echo "::$EXIT::";
         if [ ! ${EXIT} ]; then 
 	    echo -n $"Starting $prog: "
             su - ${RUN_AS} /bin/bash -c "(cd ${JARVIS_ROOT}; ${prog} > ${JARVIS_LOG} 2>&1 &)"
@@ -132,6 +132,7 @@ stop()
         protect_default_file
         running
         EXIT=$?
+echo "::$EXIT::";
         if [ ${EXIT} ];then
 	    echo -n $"Stopping $prog: "
             PROCS=$(ps -ef -w|grep -v grep|grep " ${prog}\$"|awk '{print $2'})
