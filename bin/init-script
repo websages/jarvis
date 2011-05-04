@@ -123,6 +123,17 @@ stop()
         fi
 	echo
 }
+status()
+{
+        PROCS=$(ps -ef -w|grep -v grep|grep " ${prog}\$"|awk '{print $2'})
+        if [ -z "${PROCS}" ];then
+            echo "Running pid ${PROCS}"
+            return 0
+        else
+            echo "Not running."
+            return 1;
+        fi
+}
 
 case "$1" in
 	start)
@@ -136,14 +147,7 @@ case "$1" in
 		start
 		;;
 	status)
-                PROCS=$(ps -ef -w|grep -v grep|grep " ${prog}\$"|awk '{print $2'})
-                if [ -z "${PROCS}" ];then
-                    echo "Running pid ${PROCS}"
-                    return 0
-                else
-                    echo "Not running."
-                    return 1;
-                fi
+                status
 		;;
 	*)
 		echo $"Usage: $0 {start|stop|restart|status}"
