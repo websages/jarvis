@@ -14,7 +14,7 @@
 [ -f /etc/sysconfig/jarvis ] && . /etc/sysconfig/jarvis
 
 RETVAL=0
-prog="universal.pl"
+prog="${JARVIS_ROOT}/universal.pl"
 
 export DEFAULT_FILE="/etc/sysconfig/jarvis";
 
@@ -102,10 +102,10 @@ runlevel=$(set -- $(runlevel); eval "echo \$$#" )
 
 start()
 {
-        ps -ef -w | grep "${JARVIS_ROOT}/universal.pl" && echo "${JARVIS_ROOT}/universal.pl already running" && exit
+        ps -ef -w | grep "${prog}" && echo "${prog} already running" && exit
         protect_default_file
 	echo -n $"Starting $prog: "
-        su - ${RUN_AS} "(cd ${JARVIS_ROOT}; ${JARVIS_ROOT}/universal.pl)"
+        su - ${RUN_AS} /bin/bash -c "(cd ${JARVIS_ROOT}; ${prog})"
 	RETVAL=$?
 	echo
 }
@@ -114,11 +114,8 @@ stop()
 {
         protect_default_file
 	echo -n $"Stopping $prog: "
+        ps -ef -w | grep "${JARVIS_ROOT}/universal.pl" && echo "${JARVIS_ROOT}/universal.pl already running" && exit
 	# so the TCP connections are closed cleanly
-	if [ "x$runlevel" = x0 -o "x$runlevel" = x6 ] ; then
-	    killall $prog 2>/dev/null
-	fi
-	[ "$RETVAL" = 0 ] && rm -f /var/lock/subsys/sshd
 	echo
 }
 
