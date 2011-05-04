@@ -1,5 +1,6 @@
 # This is a bash shell fragment
 JARVIS_ROOT="/opt/local/jarvis"
+JARVIS_LOG="/var/log/irc/jarvis.log"
 RUN_AS='opt'
 
 # Assumptions about LDAP
