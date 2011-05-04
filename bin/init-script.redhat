@@ -115,7 +115,7 @@ stop()
         protect_default_file
 	echo -n $"Stopping $prog: "
         PROCS=$(ps -ef -w|grep -v grep|grep " ${prog}\$"|awk '{print $2'})
-        if[ -z "${PROCS}" ];then
+        if [ -z "${PROCS}" ]; then
             echo "not running" && exit 1;
         else
             kill -15 ${PROCS}
