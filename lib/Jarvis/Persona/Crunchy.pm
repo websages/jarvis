@@ -564,7 +564,10 @@ sub megahal{
 
 sub fortune{
     my $self=shift;
-    my $fortune=qx( fortune -s );
+    my $fortune=sub { 
+                      if(-x "/usr/games/fortune"){ return qx( /usr/games/fortune -s );}
+                      if(-x "/usr/bin/fortune"){ return qx( /usr/bin/fortune -s );}
+                    }
     $fortune=~s/\n/ /g;
     return $fortune;
 }
