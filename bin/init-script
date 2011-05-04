@@ -115,6 +115,7 @@ running()
 
 start()
 {
+echo "start"
         protect_default_file
         running
         EXIT=$?
@@ -129,6 +130,7 @@ echo "::$EXIT::";
 
 stop()
 {
+echo "stop"
         protect_default_file
         running
         EXIT=$?
