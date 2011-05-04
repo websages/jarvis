@@ -102,7 +102,7 @@ runlevel=$(set -- $(runlevel); eval "echo \$$#" )
 
 start()
 {
-        ps -ef -w | grep "${prog}" && echo "${prog} already running" && exit
+        ps -ef -w | grep -q "${prog}" && echo "${prog} already running" && exit
         protect_default_file
 	echo -n $"Starting $prog: "
         su - ${RUN_AS} /bin/bash -c "(cd ${JARVIS_ROOT}; ${prog}) &"
@@ -114,7 +114,8 @@ stop()
 {
         protect_default_file
 	echo -n $"Stopping $prog: "
-        ps -ef -w | grep "${prog}" && echo "${JARVIS_ROOT}/universal.pl already running" && exit
+        PROCS=$(ps -ef -w|grep -v grep|grep -q " ${prog}\$"|awk '{print $2'})
+        [ ! -z "${PROCS}" ] && kill -15 $PROCS
 	# so the TCP connections are closed cleanly
 	echo
 }
