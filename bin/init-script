@@ -132,7 +132,7 @@ stop()
         protect_default_file
         running
         EXIT=$?
-        if [ ${EXIT} ];
+        if [ ${EXIT} ];then
 	    echo -n $"Stopping $prog: "
             PROCS=$(ps -ef -w|grep -v grep|grep " ${prog}\$"|awk '{print $2'})
             kill -15 ${PROCS}
