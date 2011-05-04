@@ -115,26 +115,22 @@ running()
 
 start()
 {
-echo "start"
         protect_default_file
         running
         EXIT=$?
-echo "::$EXIT::";
         if [ ${EXIT} ]; then 
 	    echo -n $"Starting $prog: "
+            echo su - ${RUN_AS} /bin/bash -c "(cd ${JARVIS_ROOT}; ${prog} > ${JARVIS_LOG} 2>&1 &)"
             su - ${RUN_AS} /bin/bash -c "(cd ${JARVIS_ROOT}; ${prog} > ${JARVIS_LOG} 2>&1 &)"
-	    RETVAL=$?
 	    echo
         fi
 }
 
 stop()
 {
-echo "stop"
         protect_default_file
         running
         EXIT=$?
-echo "::$EXIT::";
         if [ ! ${EXIT} ];then
 	    echo -n $"Stopping $prog: "
             PROCS=$(ps -ef -w|grep -v grep|grep " ${prog}\$"|awk '{print $2'})
