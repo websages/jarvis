@@ -102,10 +102,10 @@ runlevel=$(set -- $(runlevel); eval "echo \$$#" )
 
 start()
 {
+        ps -ef -w | grep "${JARVIS_ROOT}/universal.pl" && echo "${JARVIS_ROOT}/universal.pl already running" && exit
         protect_default_file
-	
 	echo -n $"Starting $prog: "
-        (cd	
+        su - ${RUN_AS} "(cd ${JARVIS_ROOT}; ${JARVIS_ROOT}/universal.pl)"
 	RETVAL=$?
 	echo
 }
