@@ -1,11 +1,7 @@
 # This is a bash shell fragment
-#JARVIS_ROOT="/opt/local/jarvis"
-JARVIS_ROOT="/var/cache/git/jarvis"
-JARVIS_LOG="/var/log/irc/jarvis.log"
 RUN_AS='opt'
-
-chown -R ${RUN_AS} $(dirname ${JARVIS_LOG})
-
+JARVIS_ROOT="/opt/local/jarvis"
+JARVIS_LOG="/var/log/irc/jarvis.log"
 # Assumptions about LDAP
 SECRET="$(/usr/local/sbin/secret)"
 LDAP_DOMAIN="$(dnsdomainname)"

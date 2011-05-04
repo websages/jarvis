@@ -1,5 +1,4 @@
 #!/bin/bash
-#
 # Init file for Jarvis IRC bot
 #
 # chkconfig: 2345 55 25
@@ -8,13 +7,17 @@
 # processname: universal.pl
 
 # pull in sysconfig settings
-if [ -f /etc/sysconfig/jarvis ];then . /etc/sysconfig/jarvis; fi
-if [ -f /etc/default/jarvis ];then . /etc/default/jarvis; fi
+if [ -f /etc/sysconfig/jarvis ];then 
+    export DEFAULT_FILE="/etc/sysconfig/jarvis";
+fi
+if [ -f /etc/default/jarvis ];then 
+    export DEFAULT_FILE="/etc/default/jarvis";
+fi
 
 RETVAL=0
+. ${DEFAULT_FILE}
 prog="${JARVIS_ROOT}/universal.pl"
 
-export DEFAULT_FILE="/etc/sysconfig/jarvis";
 
 protect_default_file(){
     if [ ! -z "${DEFAULT_FILE}" ]; then
