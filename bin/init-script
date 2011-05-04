@@ -119,12 +119,12 @@ start()
         protect_default_file
         running
         EXIT=$?
-        if [ ${EXIT} ]; then return ${EXIT}; fi
-        protect_default_file
-	echo -n $"Starting $prog: "
-        su - ${RUN_AS} /bin/bash -c "(cd ${JARVIS_ROOT}; ${prog} > ${JARVIS_LOG} 2>&1 &)"
-	RETVAL=$?
-	echo
+        if [ ! ${EXIT} ]; then 
+	    echo -n $"Starting $prog: "
+            su - ${RUN_AS} /bin/bash -c "(cd ${JARVIS_ROOT}; ${prog} > ${JARVIS_LOG} 2>&1 &)"
+	    RETVAL=$?
+	    echo
+        fi
 }
 
 stop()
@@ -132,15 +132,12 @@ stop()
         protect_default_file
         running
         EXIT=$?
-        if [ ! ${EXIT} ]; then return ${EXIT}; fi
-	echo -n $"Stopping $prog: "
-        PROCS=$(ps -ef -w|grep -v grep|grep " ${prog}\$"|awk '{print $2'})
-        if [ -z "${PROCS}" ]; then
-            echo "not running" && exit 1;
-        else
+        if [ ${EXIT} ];
+	    echo -n $"Stopping $prog: "
+            PROCS=$(ps -ef -w|grep -v grep|grep " ${prog}\$"|awk '{print $2'})
             kill -15 ${PROCS}
+	    echo
         fi
-	echo
 }
 
 case "$1" in
