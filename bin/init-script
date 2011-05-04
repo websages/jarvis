@@ -135,7 +135,7 @@ echo "stop"
         running
         EXIT=$?
 echo "::$EXIT::";
-        if [ ${EXIT} ];then
+        if [ ! ${EXIT} ];then
 	    echo -n $"Stopping $prog: "
             PROCS=$(ps -ef -w|grep -v grep|grep " ${prog}\$"|awk '{print $2'})
             kill -15 ${PROCS}
