@@ -214,7 +214,7 @@ sub speak{
          $msg->{'conversation'}->{'body'},
          $msg->{'conversation'}->{'id'},
        );
-print STDERR Data::Dumper->Dump([$sender, $respond_event, $msg, $who.': '.$line]);
+print STDERR Data::Dumper->Dump([$sender, $sender_id, $replies]);
     my $direct = $msg->{'conversation'}->{'direct'}||0;
     my $addressed = $msg->{'conversation'}->{'addressed'}||0;
     my $nick;
