@@ -502,6 +502,7 @@ sub authen_reply{
             my @user_count = $self->get_ldap_entry("(uid=$user)");
             if($#user_count >=0){
                 foreach my $user_entry ( $self->get_ldap_entry("(uid=$user)") ){
+                    next if(!defined($user_entry));
                     my @pager_count = $user_entry->get_value('pageremail');
                     if($#pager_count >=0){
                         foreach my $mail ($user_entry->get_value('pageremail') ){
