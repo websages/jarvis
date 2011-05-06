@@ -214,7 +214,6 @@ sub speak{
          $msg->{'conversation'}->{'body'},
          $msg->{'conversation'}->{'id'},
        );
-print STDERR Data::Dumper->Dump([$sender, $sender_id, $replies]);
     my $direct = $msg->{'conversation'}->{'direct'}||0;
     my $addressed = $msg->{'conversation'}->{'addressed'}||0;
     my $nick;
@@ -227,15 +226,14 @@ print STDERR Data::Dumper->Dump([$sender, $sender_id, $replies]);
             }
         }
     }
+    print STDERR Data::Dumper->Dump([$sender_id, $respond_event, $msg, $who, $replies]);
     foreach my $line (@{ $replies }){
         if( defined($line) && ($line ne "") ){ 
             if(ref($where) eq 'ARRAY'){ $where = $where->[0]; } # this was an irc privmsg
             if($addressed == 1){
-                print STDERR Data::Dumper->Dump([$sender_id, $respond_event, $msg, $who.': '.$line]);
                 $kernel->post($sender_id, $respond_event, $msg, $who.': '.$line); 
                 $kernel->post($self->{'logger'}, 'log', "$where <$nick> $who: $line");
             }else{
-                print STDERR Data::Dumper->Dump([$sender_id, $respond_event, $msg, $who.': '.$line]);
                 $kernel->post($sender_id, $respond_event, $msg, $line); 
                 $kernel->post($self->{'logger'}, 'log', "$where <$who> $line");
             }
