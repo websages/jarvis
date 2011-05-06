@@ -5,6 +5,7 @@ JARVIS_LOG="/var/log/irc/jarvis.log"
 PROG="${JARVIS_ROOT}/universal.pl"
 # Assumptions about LDAP
 SECRET="$(/usr/local/sbin/secret)"
+XMPP_PASSWORD="${SECRET}"
 LDAP_DOMAIN="$(dnsdomainname)"
 LDAP_BASEDN="dc=$(echo ${LDAP_DOMAIN}|sed -e 's/\./,dc=/g')"
 LDAP_BINDDN="cn=$(hostname -s),ou=Hosts,${LDAP_BASEDN}"
