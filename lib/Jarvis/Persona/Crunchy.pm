@@ -519,6 +519,7 @@ sub authen_reply{
             }else{
                $r = "$user has no ldap entry\n";
             }
+print STDERR Data::Dumper->Dump([$msg->{'sender_alias'}]);
             $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r); 
         }elsif($msg->{'reason'} eq 'enable_shoutout'){
             $r=$self->toggle_shoutout($user,'enable',$msg);
