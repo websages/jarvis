@@ -333,7 +333,7 @@ sub ldap_search {
     return undef unless(ref($self->{'ldap'}) eq "Net::LDAP");
     $filter = "(objectclass=*)" unless $filter;
     my $servers;
-    print STDERR __LINE__.": searching base: ".$self->basedn()." for ".$filter."\n";
+    print STDERR "line ". __LINE__ .": searching base: ".$self->basedn()." for ".$filter."\n";
     my $records = $self->{'ldap'}->search(
                                            'base'   => "$self->{'basedn'}",
                                            'scope'  => 'sub',
@@ -363,7 +363,7 @@ sub ldap_update{
     if(($mesg->code == 10) && ($mesg->error eq "Referral received")){
         $self->error("Received referral");
         foreach my $ref (@{ $mesg->{'referral'} }){
-            print STDERR __LINE__ . "Got referral to: $ref\n";
+            print STDERR "line ". __LINE__ .": Got referral to: $ref\n";
             if($ref=~m/(ldap.*:.*)\/.*/){
                  my $old_uri = $self->uri;
                  $self->ldap_unbind;                   # remove the old binding
