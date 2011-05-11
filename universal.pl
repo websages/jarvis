@@ -158,7 +158,7 @@ $persona->{'persona'}->{'init'}->{'known_personas'} = YAML::Load(<< "...");
   - name: jarvis
     persona:
       class: Jarvis::Persona::Jarvis
-      persist: 1
+      persist: 0
       init:
         alias: jarvis
         connector: jarvis_irc
