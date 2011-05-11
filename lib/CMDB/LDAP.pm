@@ -366,7 +366,7 @@ sub ldap_update{
             print STDERR __LINE__ . "Got referral to: $ref\n";
             if($ref=~m/(ldap.*:.*)\/.*/){
                  my $old_uri = $self->uri;
-                 $self->unbind;                   # remove the old binding
+                 $self->ldap_unbind;                   # remove the old binding
                  $self->uri($ref);                # update the uri to the referral
                  $self->ldap_update( $entry );    # fire this routine off again, (should unbind on return)
                  $self->uri( $old_uri );          # restore the old (read-only) uri for future binds
