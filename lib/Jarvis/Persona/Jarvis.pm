@@ -226,7 +226,6 @@ sub speak{
             }
         }
     }
-    print STDERR Data::Dumper->Dump([$sender_id, $respond_event, $msg, $who, $replies]);
     foreach my $line (@{ $replies }){
         if( defined($line) && ($line ne "") ){ 
             if(ref($where) eq 'ARRAY'){ $where = $where->[0]; } # this was an irc privmsg
@@ -244,6 +243,7 @@ sub speak{
 sub sets{
     my ($self, $kernel, $heap, $sender, $top, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     my @sets = ( $self->{'cmdb'}->sets_in($top) );
+print STDERR "[ ".join(", ",@sets)." ]\n";
     $kernel->yield('speak', $msg, join(", ",@sets));
 }
 
