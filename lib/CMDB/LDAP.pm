@@ -365,10 +365,12 @@ sub ldap_update{
         foreach my $ref (@{ $mesg->{'referral'} }){
             print STDERR "line ". __LINE__ .": Got referral to: $ref\n";
             if($ref=~m/(ldap.*:.*)\/.*/){
+                 my $new_uri=$1;
                  my $old_uri = $self->uri;
-                 $self->ldap_unbind;                   # remove the old binding
-                 $self->uri($ref);                # update the uri to the referral
+                 $self->ldap_unbind;              # remove the old binding
+                 $self->uri($new_uri);            # update the uri to the referral
                  $self->ldap_update( $entry );    # fire this routine off again, (should unbind on return)
+                 $self->ldap_unbind;              # remove the write binding
                  $self->uri( $old_uri );          # restore the old (read-only) uri for future binds
              }
          }
