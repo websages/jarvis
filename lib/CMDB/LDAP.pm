@@ -308,12 +308,9 @@ sub ldap_bind{
         }
         $self->{'ldap'} = Net::LDAP->new($server) || warn "could not connect to $server $@";
         return undef unless(ref($self->{'ldap'}) eq "Net::LDAP");
-        print STDERR Data::Dumper->Dump([ref($self->{'ldap'})]);
         if(defined($self->binddn) && defined($self->bindpw)){
-print STDERR "binding with  $self->binddn,  $self->bindpw\n";
             $mesg = $self->{'ldap'}->bind( $self->binddn, password => $self->bindpw );
         }else{
-print STDERR "binding anonymously\n";
             $mesg = $self->{'ldap'}->bind( );
         }
         if($mesg->code != 0){ $self->error($server." : ".$mesg->error); }
@@ -336,7 +333,7 @@ sub ldap_search {
     return undef unless(ref($self->{'ldap'}) eq "Net::LDAP");
     $filter = "(objectclass=*)" unless $filter;
     my $servers;
-    print STDERR __LINE__.": searching base: ".$self->basedn()."\n";
+    print STDERR __LINE__.": searching base: ".$self->basedn()." for ".$filter."\n";
     my $records = $self->{'ldap'}->search(
                                            'base'   => "$self->{'basedn'}",
                                            'scope'  => 'sub',
