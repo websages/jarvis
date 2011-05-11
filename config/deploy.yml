@@ -1,6 +1,7 @@
-odin:
-  domain: "root@odin.websages.com"
+loki:
+  domain: "root@loki.websages.com"
   deploy_to: "/opt/local/jarvis"
-  repository: "gitosis@odin.websages.com:jarvis.git"
+  repository: "gitosis@loki.websages.com:jarvis.git"
   branch: "master"
+  post_deploy_script: bin/reinstall
 

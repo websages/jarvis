@@ -3,10 +3,13 @@ use strict;
 ################################################################################
 # a universal bot for multiple personalities
 #
+# all the $ENV varibles should be loaded from /etc/{default,sysconfig}/jarivs
+# by the init script before running this script
+#
 $ENV{'PATH'}='/usr/local/bin:/usr/bin:/bin';
 $ENV{'IFS'}=' \t\n';
 ################################################################################
-# Add local libraries
+# Add local libraries (we install them under us)
 BEGIN { 
         use Cwd;
         my $path=$0;
@@ -67,6 +70,7 @@ my $hostname = $fqdn;         $hostname=~s/\..*$//;
 my $domain   = $fqdn;         $domain=~s/^[^\.]*\.//;
 my $basedn   = "dc=".join(",dc=",split(/\./,$domain));
 ################################################################################
+# This is the base (system) persona that controls the other personas
 my $persona = YAML::Load(<< "...");
 persona:
   class: Jarvis::Persona::System
