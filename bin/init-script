@@ -30,6 +30,7 @@ RETVAL=0
 . ${DEFAULT_FILE}
 export ${JARVIS_EXPORTS}
 
+env | grep LDAP
 
 protect_default_file(){
     if [ ! -z "${DEFAULT_FILE}" ]; then
