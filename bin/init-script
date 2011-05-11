@@ -28,7 +28,11 @@ fi
 
 RETVAL=0
 . ${DEFAULT_FILE}
-export ${JARVIS_EXPORTS}
+
+ENVIRONMENT=""
+for ENV in $(echo ${JARVIS_EXPORTS}); do
+    ENVIRONMENT="${ENVIRONMENT} ${ENV}=$(eval echo \$${ENV})"
+done
 
 protect_default_file(){
     if [ ! -z "${DEFAULT_FILE}" ]; then
@@ -131,7 +135,7 @@ start()
         EXIT=$?
         if [ ${EXIT} -eq 0 ]; then 
 	    echo -n $"Starting $PROG: "
-            su - ${RUN_AS} /bin/bash -c "(cd ${JARVIS_ROOT}; ${PROG} > ${JARVIS_LOG} 2>&1 &)"
+            su - ${RUN_AS} env ${ENVIRONMENT} /bin/bash -c "(cd ${JARVIS_ROOT}; ${PROG} > ${JARVIS_LOG} 2>&1 &)"
 	    echo
         fi
 }
