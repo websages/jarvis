@@ -125,7 +125,7 @@ sub persona_start{
     chdir($oldpwd);
     $self->peers();
     foreach my $persistent (@{$self->{'known_personas'}}){
-        $kernel->yield('spawn', $persistent->{'name'});
+        $kernel->yield('spawn', $persistent->{'name'}) if($persistent->{'persona'}->{'persist'} == 1);
     }
     return $self;
 }
