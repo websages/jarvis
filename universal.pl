@@ -101,7 +101,6 @@ persona:
           - asgard\@conference.${domain}/${hostname}
         persona: system
 ...
-print STDERR ":: $ENV{'LDAP_PASSWORD'} ::\n";
 ################################################################################
 # a list of the personas I can spawn goes into known_personas 
 $persona->{'persona'}->{'init'}->{'known_personas'} = YAML::Load(<< "...");

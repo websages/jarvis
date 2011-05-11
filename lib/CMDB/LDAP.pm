@@ -396,13 +396,10 @@ sub ldap_delete{
 
 sub all_sets{
     my $self = shift;
-print STDERR $self->basedn."\n";
     my $old_basedn=$self->basedn;
     $self->basedn($self->{'setbase'});
-print STDERR $self->basedn."\n";
     my @entries = $self->ldap_search("(objectclass=groupOfUniqueNames)");
     my $sets;
-print STDERR Data::Dumper->Dump([@entries]);
     foreach my $entry (@entries){
         if(defined($entry)){
             my $entry_dn = $entry->dn;
@@ -425,7 +422,6 @@ sub sets_in{
     my $parent = shift if @_;
     my @tops;
     if($parent){
-print STDERR "parent: $parent\n";
         $parent=~s/::$//;
         $parent=~s/^(cn|ou)=//;
         my $dn = $self->set2dn($parent);
@@ -446,7 +442,6 @@ print STDERR "parent: $parent\n";
             }
         }
     }else{
-print STDERR "parent: none\n";
         foreach my $set (@{ $self->all_sets() }){
             my @tmp = split(/::/, $set );
             my $top = shift( @tmp );
@@ -520,7 +515,6 @@ sub entry{
     my $sub_base=join(',',@dn_parts);
     my $old_basedn  = $self->basedn;
     $self->basedn($sub_base);
-    print STDERR "searching base ".$self->basedn()."\n";
     my @entry = $self->ldap_search($filter);
     $self->basedn($old_basedn);
     return @entry;
