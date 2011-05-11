@@ -107,7 +107,7 @@ $persona->{'persona'}->{'init'}->{'known_personas'} = YAML::Load(<< "...");
 ---
   - name: crunchy
     persona:
-      persist: 1
+      persist: 0
       class: Jarvis::Persona::Crunchy
       init:
         alias: crunchy
@@ -133,7 +133,7 @@ $persona->{'persona'}->{'init'}->{'known_personas'} = YAML::Load(<< "...");
           persona: crunchy
   - name: berry
     persona:
-      persist: 1
+      persist: 0
       class: Jarvis::Persona::Crunchy
       init:
         alias: berry
@@ -162,6 +162,7 @@ $persona->{'persona'}->{'init'}->{'known_personas'} = YAML::Load(<< "...");
       init:
         alias: jarvis
         connector: jarvis_irc
+        ldap_uri: ldaps://127.0.0.1:636
         ldap_domain: ${domain}
         ldap_binddn: cn=${hostname},ou=Hosts,${basedn}
         ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
