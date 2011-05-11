@@ -120,6 +120,7 @@ sub object_session(){
                                                                      my ($kernel, $heap) = @_[KERNEL, HEAP];
                                                                      $kernel->post($_[SESSION], "start");
                                                                      # set the session_alias
+print STDERR "Setting alias: ".$object->alias()."\n";
                                                                      $kernel->alias_set( $object->alias() );
                                                                    },
                                                    _stop    => sub {

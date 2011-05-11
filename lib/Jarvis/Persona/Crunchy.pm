@@ -522,10 +522,10 @@ sub authen_reply{
 print STDERR Data::Dumper->Dump([$msg,$r]);
             $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r); 
         }elsif($msg->{'reason'} eq 'enable_shoutout'){
-            $r=$self->toggle_shoutout($user,'enable',$msg);
+            $r = $self->toggle_shoutout($user,'enable',$msg);
             $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r); 
         }elsif($msg->{'reason'} eq 'disable_shoutout'){
-            $r=$self->toggle_shoutout($user,'disable',$msg);
+            $r = $self->toggle_shoutout($user,'disable',$msg);
             $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r); 
         }else{ 
             # authorize request_id in the $heap->{'requests'} queue
