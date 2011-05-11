@@ -38,14 +38,6 @@ sub persona_states{
 
 sub persona_start{
     my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
-print STDERR "================================================================================\n";
-print STDERR Data::Dumper->Dump([{
-                                         'uri'    => $self->{'ldap_uri'},
-                                         'basedn' => $self->{'ldap_basedn'},
-                                         'binddn' => $self->{'ldap_binddn'},
-                                         'bindpw' => $self->{'ldap_bindpw'},
-                       }]);
-print STDERR "================================================================================\n";
     $self->{'cmdb'} = CMDB::LDAP->new({
                                          'uri'    => $self->{'ldap_uri'},
                                          'basedn' => $self->{'ldap_basedn'},

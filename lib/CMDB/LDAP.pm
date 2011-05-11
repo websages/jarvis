@@ -307,7 +307,7 @@ sub ldap_bind{
             $server=$1 if ($server=~m/(^[A-Za-z0-9\-\.\/:]+$)/);
         }
         $self->{'ldap'} = Net::LDAP->new($server) || warn "could not connect to $server $@";
-        return undef unless(ref($self->{'ldap'} eq "Net::LDAP"));
+        return undef unless(ref($self->{'ldap'}) eq "Net::LDAP");
         print STDERR Data::Dumper->Dump([ref($self->{'ldap'})]);
         if(defined($self->binddn) && defined($self->bindpw)){
 print STDERR "binding with  $self->binddn,  $self->bindpw\n";
