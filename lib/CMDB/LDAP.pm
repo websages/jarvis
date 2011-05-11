@@ -310,8 +310,10 @@ sub ldap_bind{
         return undef unless(ref($self->{'ldap'} eq "Net::LDAP"));
         print STDERR Data::Dumper->Dump([ref($self->{'ldap'})]);
         if(defined($self->binddn) && defined($self->bindpw)){
+print STDERR "binding with  $self->binddn,  $self->bindpw\n";
             $mesg = $self->{'ldap'}->bind( $self->binddn, password => $self->bindpw );
         }else{
+print STDERR "binding anonymously\n";
             $mesg = $self->{'ldap'}->bind( );
         }
         if($mesg->code != 0){ $self->error($server." : ".$mesg->error); }
@@ -331,7 +333,6 @@ sub ldap_search {
     my $self = shift;
     my $filter = shift if @_;
     $self->ldap_bind unless $self->{'ldap'};
-print STDERR ref($self->{'ldap'})."\n";
     return undef unless(ref($self->{'ldap'}) eq "Net::LDAP");
     $filter = "(objectclass=*)" unless $filter;
     my $servers;
