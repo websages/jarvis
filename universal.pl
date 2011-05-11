@@ -33,8 +33,6 @@ use POSIX 'setsid';
 use Data::Dumper;
 use Jarvis::IRC;
 use Jarvis::Jabber;
-#use Jarvis::Persona::Minimal;
-#use Jarvis::Persona::MegaHAL;
 use Jarvis::Persona::System;
 use Jarvis::Persona::Crunchy;
 use Jarvis::Persona::Jarvis;
@@ -180,7 +178,12 @@ $persona->{'persona'}->{'init'}->{'known_personas'} = YAML::Load(<< "...");
             - #puppies
 ...
 ###############################################################################
+# Start the system persona
+#
 $poe->yaml_sess(YAML::Dump( $persona->{'persona'} ));
+#
+# add it's connectors
+#
 foreach my $connector (@{ $persona->{'persona'}->{'connectors'} }){
     $poe->yaml_sess(YAML::Dump($connector));
 }
