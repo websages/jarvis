@@ -4,4 +4,43 @@ loki:
   repository: "gitosis@loki.websages.com:jarvis.git"
   branch: "master"
   post_deploy_script: bin/reinstall
+thor:
+  domain: "root@thor.websages.com"
+  deploy_to: "/opt/local/jarvis"
+  repository: "gitosis@thor.websages.com:jarvis.git"
+  branch: "master"
+  post_deploy_script: bin/reinstall
+vili:
+  domain: "root@vili.websages.com"
+  deploy_to: "/opt/local/jarvis"
+  repository: "gitosis@vili.websages.com:jarvis.git"
+  branch: "master"
+  post_deploy_script: bin/reinstall
+odin:
+  domain: "root@odin.websages.com"
+  deploy_to: "/opt/local/jarvis"
+  repository: "gitosis@odin.websages.com:jarvis.git"
+  branch: "master"
+  post_deploy_script: bin/reinstall
+freyr:
+  domain: "root@odin.websages.com"
+  deploy_to: "/opt/local/jarvis"
+  repository: "gitosis@freyr.websages.com:jarvis.git"
+  branch: "master"
+  post_deploy_script: bin/reinstall
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

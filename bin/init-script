@@ -1,4 +1,16 @@
 #!/bin/bash
+### BEGIN INIT INFO
+# Provides:          jarvis
+# Required-Start:    $local_fs $remote_fs
+# Required-Stop:     $local_fs $remote_fs
+# Should-Start:      $all
+# Should-Stop:       $all
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start/stop jarvis
+# Description:       Start/stop jarvis
+### END INIT INFO
+
 # Init file for Jarvis IRC bot
 #
 # chkconfig: 2345 55 25
