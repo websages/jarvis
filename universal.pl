@@ -77,7 +77,7 @@ persona:
     trace: 0
     debug: 0
     peer_group: cn=bot_managed
-    ldap_bindpw: ${ENV{'SECRET'}}
+    ldap_bindpw: $ENV{'SECRET'}
   connectors:
     - class: Jarvis::IRC
       init:
@@ -96,7 +96,7 @@ persona:
         port: 5222
         hostname: ${domain}
         username: ${hostname}
-        password: ${ENV{'XMPP_PASSWORD'}}
+        password: $ENV{'XMPP_PASSWORD'}
         channel_list:
           - asgard\@conference.${domain}/${hostname}
         persona: system
@@ -113,12 +113,12 @@ $persona->{'persona'}->{'init'}->{'known_personas'} = YAML::Load(<< "...");
         alias: crunchy
         ldap_domain: ${domain}
         ldap_binddn: cn=${hostname},ou=Hosts,${basedn}
-        ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
+        ldap_bindpw: $ENV{'LDAP_PASSWORD'}
         dbi_connect: dbi:mysql:tumble:172.16.0.2
         dbi_user: nobody
         start_twitter_enabled: 0
         twitter_name: capncrunchbot
-        password: ${ENV{'TWITTER_PASSWORD'}}
+        password: $ENV{'TWITTER_PASSWORD'}
         retry: 150
     connectors:
       - class: Jarvis::IRC
@@ -139,9 +139,9 @@ $persona->{'persona'}->{'init'}->{'known_personas'} = YAML::Load(<< "...");
         alias: berry
         ldap_domain: ${domain}
         ldap_binddn: cn=${hostname},ou=Hosts,${basedn}
-        ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
+        ldap_bindpw: $ENV{'LDAP_PASSWORD'}
         twitter_name: capncrunchbot
-        password: ${ENV{'TWITTER_PASSWORD'}}
+        password: $ENV{'TWITTER_PASSWORD'}
         retry: 150
         start_twitter_enabled: 1
     connectors:
@@ -165,7 +165,7 @@ $persona->{'persona'}->{'init'}->{'known_personas'} = YAML::Load(<< "...");
         ldap_uri: ldaps://127.0.0.1:636
         ldap_domain: ${domain}
         ldap_binddn: cn=${hostname},ou=Hosts,${basedn}
-        ldap_bindpw: ${ENV{'LDAP_PASSWORD'}}
+        ldap_bindpw: $ENV{'LDAP_PASSWORD'}
     connectors:
       - class: Jarvis::IRC
         init:
