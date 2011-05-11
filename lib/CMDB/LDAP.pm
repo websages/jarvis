@@ -419,6 +419,7 @@ sub sets_in{
     my $self = shift;
     my $parent = shift if @_;
     my @tops;
+print STDERR "parent: $parent\n";
     if($parent){
         $parent=~s/::$//;
         $parent=~s/^(cn|ou)=//;
@@ -440,6 +441,7 @@ sub sets_in{
             }
         }
     }else{
+print STDERR "parent: none\n";
         foreach my $set (@{ $self->all_sets() }){
             my @tmp = split(/::/, $set );
             my $top = shift( @tmp );
