@@ -363,9 +363,9 @@ sub ldap_update{
     if(($mesg->code == 10) && ($mesg->error eq "Referral received")){
         $self->error("Received referral");
         foreach my $ref (@{ $mesg->{'referral'} }){
-            print STDERR "line ". __LINE__ .": Got referral to: $ref\n";
             if($ref=~m/(ldap.*:.*)\/.*/){
                  my $new_uri=$1;
+                 print STDERR "line ". __LINE__ .": Following referral to: $new_uri\n";
                  my $old_uri = $self->uri;
                  $self->ldap_unbind;              # remove the old binding
                  $self->uri($new_uri);            # update the uri to the referral
