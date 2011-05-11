@@ -104,11 +104,12 @@ persona:
         persona: system
 ...
 ################################################################################
-# a list of the personas I can spawn goes into known_personas
+# a list of the personas I can spawn goes into known_personas 
 $persona->{'persona'}->{'init'}->{'known_personas'} = YAML::Load(<< "...");
 ---
   - name: crunchy
     persona:
+      persist: 1
       class: Jarvis::Persona::Crunchy
       init:
         alias: crunchy
@@ -134,6 +135,7 @@ $persona->{'persona'}->{'init'}->{'known_personas'} = YAML::Load(<< "...");
           persona: crunchy
   - name: berry
     persona:
+      persist: 1
       class: Jarvis::Persona::Crunchy
       init:
         alias: berry
@@ -158,6 +160,7 @@ $persona->{'persona'}->{'init'}->{'known_personas'} = YAML::Load(<< "...");
   - name: jarvis
     persona:
       class: Jarvis::Persona::Jarvis
+      persist: 1
       init:
         alias: jarvis
         connector: jarvis_irc
