@@ -44,6 +44,7 @@ sub persona_start{
                                          'binddn' => $self->{'ldap_binddn'},
                                          'bindpw' => $self->{'ldap_bindpw'},
                                        });
+print STDERR "CMDB is:".ref($self->{'cmdb'})."\n";
 
     $self->{'logger'} = POE::Component::Logger->spawn(
         ConfigFile => Log::Dispatch::Config->configure(
@@ -243,7 +244,6 @@ sub speak{
 sub sets{
     my ($self, $kernel, $heap, $sender, $top, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     my @sets = ( $self->{'cmdb'}->sets_in($top) );
-print STDERR "[ ".join(", ",@sets)." ]\n";
     $kernel->yield('speak', $msg, join(", ",@sets));
 }
 

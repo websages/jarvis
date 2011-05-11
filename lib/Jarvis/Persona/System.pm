@@ -26,7 +26,6 @@ sub may {
               'ldap_bindpw'    => $self->secret(),         #only works if run as root, supply instead
               'peer_group'     => "cn=bot_managed",
             };
-    
 }
 
 
