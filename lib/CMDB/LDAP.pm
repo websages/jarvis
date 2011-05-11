@@ -369,8 +369,10 @@ sub ldap_update{
                  my $old_uri = $self->uri;
                  $self->ldap_unbind;              # remove the old binding
                  $self->uri($new_uri);            # update the uri to the referral
+                 $self->ldap_bind;                # bind read_write
                  $self->ldap_update( $entry );    # fire this routine off again, (should unbind on return)
                  $self->ldap_unbind;              # remove the write binding
+                 $self->ldap_bind;                # bind read_only
                  $self->uri( $old_uri );          # restore the old (read-only) uri for future binds
              }
          }
