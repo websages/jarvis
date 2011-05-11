@@ -400,6 +400,7 @@ print STDERR $self->basedn."\n";
 print STDERR $self->basedn."\n";
     my @entries = $self->ldap_search("(objectclass=groupOfUniqueNames)");
     my $sets;
+print STDERR Data::Dumper->Dump([@entries]);
     foreach my $entry (@entries){
         if(defined($entry)){
             my $entry_dn = $entry->dn;
