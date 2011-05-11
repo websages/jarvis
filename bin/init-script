@@ -135,7 +135,7 @@ start()
         EXIT=$?
         if [ ${EXIT} -eq 0 ]; then 
 	    echo -n $"Starting $PROG: "
-            su - ${RUN_AS} env ${ENVIRONMENT} /bin/bash -c "(cd ${JARVIS_ROOT}; ${PROG} > ${JARVIS_LOG} 2>&1 &)"
+            su - ${RUN_AS} /bin/bash -c "(cd ${JARVIS_ROOT};env ${ENVIRONMENT} ${PROG} > ${JARVIS_LOG} 2>&1 &)"
 	    echo
         fi
 }
