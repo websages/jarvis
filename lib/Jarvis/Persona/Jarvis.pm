@@ -242,7 +242,6 @@ sub speak{
 
 sub sets{
     my ($self, $kernel, $heap, $sender, $top, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
-print STDERR "CMDB is:".ref($self->{'cmdb'})."\n";
     my @sets = ( $self->{'cmdb'}->sets_in($top) );
     $kernel->yield('speak', $msg, join(", ",@sets));
 }

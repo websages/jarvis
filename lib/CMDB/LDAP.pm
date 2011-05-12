@@ -533,6 +533,7 @@ sub members{
             foreach my $member (@members){
                 my @heiarchy=split(/,/,$member);
                 my $item = shift(@heiarchy);
+                $item=~s/.*=//;
                 push(@memberitems,$item);
             }
         }
