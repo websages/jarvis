@@ -425,6 +425,7 @@ sub sets_in{
     my @tops;
     if($parent){
         $parent=~s/::$//;
+
         $parent=~s/^(cn|ou)=//;
         my $dn = $self->set2dn($parent);
         return undef unless $dn;
