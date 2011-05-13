@@ -624,6 +624,7 @@ sub rdn{
     push(@entries,@hosts) if @hosts;
     my @sets = $self->ldap_search("(cn=$name)","ou=Sets,".$self->{'basedn'});
     push(@entries,@sets) if @sets;
+
     print STDERR Data::Dumper->Dump([@entries,$#entries]);
     return { result => undef, error => "$name is too ambiguous" };
     return undef;
