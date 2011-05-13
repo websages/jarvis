@@ -406,7 +406,8 @@ sub authen_reply{
                           $self->{'cmdb'}->own($mesg->{'result'},$set);
                       }else{
                           if($self->{'cmdb'}->is_admin("$userid\@$domain")){
-                              $self->{'cmdb'}->own("$userid\@$domain",$set);
+                              my $mesg = $self->{'cmdb'}->rdn("people/$userid"); 
+                              $self->{'cmdb'}->own($mesg->{'result'},$set);
                               $kernel->yield('speak',$msg,"PWN3D!");
                           }else{
                               $kernel->yield('speak',$msg,"you have to be an ldap admin to pwn.");
@@ -428,7 +429,7 @@ sub authen_reply{
                       my $mesg = $self->{'cmdb'}->rdn("$newowner");
                       if($mesg->{'result'}){
                           $self->{'cmdb'}->own($mesg->{'result'},$set);
-                          $kernel->yield('speak',$msg,"$mesg->{'result'}");
+                          $kernel->yield('speak',$msg,"shared $set with $newowner");
                       }
                       if( $mesg->{'error'}){
                           $kernel->yield('speak',$msg,"can't: $mesg->{'error'}");

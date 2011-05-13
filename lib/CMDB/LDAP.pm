@@ -586,6 +586,8 @@ sub owners{
             foreach my $member (@members){
                 my @heiarchy=split(/,/,$member);
                 my $item = shift(@heiarchy);
+                $item=~s/^cn=//;
+                $item=~s/^uid=//;
                 push(@memberitems,$item);
             }
         }
