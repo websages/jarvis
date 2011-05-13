@@ -628,7 +628,9 @@ sub rdn{
     if($#entries < 0){
         return { result => undef, error => "$name not found." };
     }elsif($#entries > 0){ 
-        return { result => undef, error => "$name too ambiguous." };
+        my @choices;
+        foreach my $entry (@entries){ pushr(@choices,$entry->dn)};
+        return { result => undef, error => "$name too ambiguous:".join(", "@choices) };
     }else{
         return { result => $entries[0]->dn, error => undef };
     }
