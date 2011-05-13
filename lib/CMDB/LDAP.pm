@@ -625,8 +625,13 @@ sub rdn{
     my @sets = $self->ldap_search("(cn=$name)","ou=Sets,".$self->{'basedn'});
     push(@entries,@sets) if(defined($sets[0]));
 
-    print STDERR Data::Dumper->Dump([@entries,$#entries]);
-    return { result => undef, error => "$name is too ambiguous" };
+    if($#entries < 0){
+        return { result => undef, error => "$name not found." };
+    }elsif($#entries > 0){ 
+        return { result => undef, error => "$name too ambuguous." };
+    }else{
+        return { result => $entry[0]->dn, error => undef };
+    }
     return undef;
 }
 
