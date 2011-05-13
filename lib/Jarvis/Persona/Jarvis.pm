@@ -160,6 +160,7 @@ sub input{
               /^\s*!*(add)\s+(\S+)\s+to\s+(\S+)/   ||
               /^\s*!*(del)\s+(\S+)\s+from\s+(\S+)/ ||
               /^\s*!*(disown|own|pwn|owners*|who\s*o*wns)\s+(.*)/ 
+              /^\s*!*(share\s+(.*)\s+with\s+(.*)/ 
             ) && 
                 do {   # we hand of this command to the authenticated handler
                        $kernel->post($sender,'authen',$msg);
@@ -345,7 +346,7 @@ sub authen_reply{
          $msg->{'conversation'}->{'body'},
          $msg->{'conversation'}->{'id'},
        );
-    my ($action,$member,$set,$userid,$domain);
+    my ($action,$member,$set,$userid,$domain,$newowner);
     if($actual=~m/(.*)@(.*)/){
         ($userid,$domain) = ($1,$2);
     }
@@ -361,9 +362,10 @@ sub authen_reply{
     ############################################################################
     # Commands that require Authentication & Authorization
             ( 
-              /^\s*!*(add)\s+(\S+)\s+to\s+(\S+)/   ||
-              /^\s*!*(del)\s+(\S+)\s+from\s+(\S+)/ ||
-              /^\s*!*(disown|own|pwn|owners*|who\s*o*wns)\s+(.*)/ 
+              /^\s*!*(add)\s+(\S+)\s+to\s+(\S+)/                  ||
+              /^\s*!*(del)\s+(\S+)\s+from\s+(\S+)/                ||
+              /^\s*!*(disown|own|pwn|owners*|who\s*o*wns)\s+(.*)/ ||
+              /^\s*!*(share)\s+(.*)\s+with\s+(.*)/
             ) && 
          do {
               my @rxargs = ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);
@@ -375,6 +377,9 @@ sub authen_reply{
               }elsif($action =~m /disown|own|pwn|owners|who\s*o*wns/){
                   $set    = $rxargs[1];
                   print STDERR "[ $action ] [ $set ]\n";
+              }elsif($action =~m /share/){
+                  $newowner = $rxargs[1];
+                  $set      = $rxargs[2];
               }
               my @owners = $self->{'cmdb'}->owners($set);
            
@@ -416,6 +421,12 @@ sub authen_reply{
                       }else{
                           $kernel->yield('speak',$msg,"$set is owned by: [ ".join(', ',@owners)." ]. New owners must be added by current owners (no stealing!).");
                       }
+                  }
+              }elsif($action=~m/^\s*!*share$/){
+                  if( grep(/^$uid$/, @owners) ){
+                      $self->{'cmdb'}->own("$newowner\@$domain",$set);
+                  }else{
+                      $kernel->yield('speak',$msg,"$uid has to own $set before sharing it.");
                   }
               ##################################################################
               }elsif($action=~m/^\s*!*(add)$/){
