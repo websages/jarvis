@@ -329,16 +329,16 @@ sub ldap_unbind{
 sub ldap_search {
     my $self = shift;
     my $filter = shift if @_;
+    my $search_base=shift||$self->{'basedn'};
     $self->ldap_bind unless $self->{'ldap'};
     return undef unless(ref($self->{'ldap'}) eq "Net::LDAP");
     $filter = "(objectclass=*)" unless $filter;
     my $servers;
-    print STDERR "line ". __LINE__ .": searching base: ".$self->basedn()." for ".$filter."\n";
-print STDERR "BASEDN: $self->{'basedn'}\n";
+    print STDERR "line ". __LINE__ .": searching base: $search_base for ".$filter."\n";
     my $records = $self->{'ldap'}->search(
-                                           'base'   => "$self->{'basedn'}",
+                                           'base'   => $search_base,
                                            'scope'  => 'sub',
-                                           'filter' => $filter
+                                           'filter' => $filter,
                                          );
     print STDERR __LINE__ ." ".$records->error."\n" if $records->code;
     my $recs;
@@ -399,9 +399,7 @@ sub ldap_delete{
 
 sub all_sets{
     my $self = shift;
-    my $old_basedn=$self->basedn;
-    $self->basedn($self->{'setbase'});
-    my @entries = $self->ldap_search("(objectclass=groupOfUniqueNames)");
+    my @entries = $self->ldap_search("(objectclass=groupOfUniqueNames)",$self->{'setbase'});
     my $sets;
     foreach my $entry (@entries){
         if(defined($entry)){
@@ -414,7 +412,6 @@ sub all_sets{
             push(@{ $sets }, $entry_dn);
         }
     }
-    $self->basedn($old_basedn);
     return $sets if $sets;
     return [];
 }
@@ -499,15 +496,13 @@ sub set2dn{
     }
     chomp(my $old_base = $self->basedn);
     chomp($ou_tree);
-    $self->basedn($ou_tree);
-    my @entries = $self->ldap_search("objectclass=*");
+    my @entries = $self->ldap_search("objectclass=*",$ou_tree);
     foreach my $entry (@entries){
         return undef unless $entry;
         my $dn = $entry->dn."\n";
         chomp($dn);
         if($dn=~m/^([^=]+=$cn+\s*,\s*$ou_tree)$/i){
             my $dn_actual = $1;
-            $self->basedn($old_base);
             return $dn_actual;
         }
     }
@@ -532,10 +527,7 @@ sub entry{
     my @dn_parts=split(/,/,$dn);
     my $filter=shift(@dn_parts);
     my $sub_base=join(',',@dn_parts);
-    my $old_basedn  = $self->basedn;
-    $self->basedn($sub_base);
-    my @entry = $self->ldap_search($filter);
-    $self->basedn($old_basedn);
+    my @entry = $self->ldap_search($filter,$sub_base);
     return @entry;
 }
 
