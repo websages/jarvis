@@ -426,7 +426,6 @@ sub authen_reply{
                       }
                   }
               }elsif($action=~m/^\s*!*share$/){
-print STDERR Data::Dumper->Dump(["owners",@owners]);
                   if( grep(/^$uid$/, @owners) ){
                       my $mesg = $self->{'cmdb'}->rdn("$newowner");
                       if($mesg->{'result'}){
