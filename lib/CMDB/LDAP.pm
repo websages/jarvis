@@ -619,7 +619,7 @@ sub rdn{
     return { result => undef, error => "nothing to look up" } unless $name;
     my @entries;
     my @hosts = $self->ldap_search("(cn=$name)","ou=Hosts,".$self->{'basedn'});
-    push(@entries,@hosts) if(defined($hosts[0]);
+    push(@entries,@hosts) if(defined($hosts[0]));
     my @people = $self->ldap_search("(uid=$name)","ou=People,".$self->{'basedn'});
     push(@entries,@people) if(defined($people[0]));
     my @sets = $self->ldap_search("(cn=$name)","ou=Sets,".$self->{'basedn'});
