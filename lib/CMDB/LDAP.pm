@@ -522,12 +522,20 @@ sub dn2set{
     return  $set_tree.$cn;
 }
 
+sub baseless{
+    my $self=shift;
+    my $dn=shift if @_;
+    return undef unless $dn;
+print STDERR "$dn - $self->{'basedn'} == ";
+    $dn=~s/,$self->{'basedn'}$//;
+print "$dn\n";
+    return $dn;
+}
+
 sub dn2simple{
     my $self=shift;
     my $dn=shift if @_;
-print STDERR "1: $dn <-> $self->{'basedn'}\n";
-    $dn=~s/$self->{'basedn'}$//;
-print STDERR "2: $dn <-> $self->{'basedn'}\n";
+    $dn=$self->baseless($dn);
     my @tree=split(/,/,$dn);
     my $name = shift(@tree);
     $name=~s/^cn=//;
