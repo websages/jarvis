@@ -618,6 +618,39 @@ sub own{
     }
 }
 
+# given a short name, return the relative distinguished name for an item.
+sub rdn{
+    my $self = shift;
+    my $name = shift if @_;
+    return { result => undef, error => "nothing to look up" } unless $name;
+    return { result => undef, error => "$name is too ambiguous" } unless $name;
+}
+
+#sub share{
+#    my $self = shift;
+#    my $item = shift if @_;
+#    my $set = shift if @_;
+##    return undef unless $item;
+#    return undef unless $set;
+#
+#    # get the entry (see if there's only one)
+#    # $dn = "cn=$item,ou=Hosts,dc=".join(',dc=',split(/\./,$domain));
+#    my @owner_entry = $self->entry( "uid=$item,ou=People,dc=".join(',dc=',split(/\./,$domain)) );
+#
+#    my ($rdn,$domain) = split('@',$user);
+#    print STDERR "making $dn an owner of ". $self->set2dn($set)."\n";
+#    foreach my $set (@{ $self->all_sets() }){
+#        if($set=~m/$set$/){  
+#            my @entry = $self->entry( $self->set2dn($set) );
+#            my @owners = $entry[0]->get_value('owner');
+#            push(@owners,$dn) unless grep(/^$dn/,@owners);
+#            $entry[0]->replace( 'owner' => \@owners );
+#            $self->ldap_update($entry[0]);
+#       }
+#    }
+#    return "$item now owns $set";
+#}
+
 sub admins{
     my $self = shift;
     my @entry = $self->entry('cn=LDAP Administrators,ou=Special,'.$self->basedn);
