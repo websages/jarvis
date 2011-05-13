@@ -642,6 +642,8 @@ sub own{
 sub rdn{
     my $self = shift;
     my $name = shift if @_;
+    my @tree = split('/',$name);
+    $name = pop(@tree);
     return { result => undef, error => "nothing to look up" } unless $name;
     my @entries;
     my @hosts = $self->ldap_search("(cn=$name)","ou=Hosts,".$self->{'basedn'});
@@ -656,7 +658,7 @@ sub rdn{
     }elsif($#entries > 0){ 
         my @choices;
         foreach my $entry (@entries){ push(@choices,$self->dn2simple($entry->dn)); }
-        return { result => undef, error => "$name too ambiguous: [".join(", ",@choices)." ]" };
+        return { result => undef, error => "$name too ambiguous: [ ".join(", ",@choices)." ]" };
     }else{
         return { result => $entries[0]->dn, error => undef };
     }

@@ -425,7 +425,6 @@ sub authen_reply{
               }elsif($action=~m/^\s*!*share$/){
                   if( grep(/^$uid$/, @owners) ){
                       my $mesg = $self->{'cmdb'}->rdn("$newowner");
-                      print STDERR Data::Dumper->Dump([$mesg]);
                       $kernel->yield('speak',$msg,"$mesg->{'result'}") if $mesg->{'result'};
                       $kernel->yield('speak',$msg,"Error: $mesg->{'error'}") if $mesg->{'error'};
                   }else{
