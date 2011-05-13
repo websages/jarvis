@@ -451,9 +451,9 @@ sub sets_in{
 
         # return the sub ou's if not a cn
         foreach my $set (@{ $self->all_sets() }){
-            if($set=~m/^${parent}::/){
-                $set=~s/^${parent}:://;
-                my @tmp = split(/::/, $set );
+            if($set=~m/^${parent}\//){
+                $set=~s/^${parent}\///;
+                my @tmp = split(/\//, $set );
                 my $top = shift( @tmp );
                 $top.="::" if $tmp[0];
                 push(@tops,$top) unless grep(/$top/,@tops);
@@ -461,9 +461,9 @@ sub sets_in{
         }
     }else{
         foreach my $set (@{ $self->all_sets() }){
-            my @tmp = split(/::/, $set );
+            my @tmp = split(/\//, $set );
             my $top = shift( @tmp );
-            $top.="::" if $tmp[0];
+            $top.="\/" if $tmp[0];
             push(@tops,$top) unless grep(/$top/,@tops);
         }
     }
@@ -488,7 +488,7 @@ sub sub_sets{
 sub set2dn{
     my $self=shift;
     my $set = shift;
-    my @set_tree = split(/::/,$set);
+    my @set_tree = split(/\//,$set);
     my $cn = pop(@set_tree);
     my $ou_tree;
     if(@set_tree){
@@ -521,7 +521,7 @@ sub dn2set{
     my $cn = shift(@tree);
     $cn=~s/^cn=//;
     map { $_=~s/^ou=// } @tree;
-    my $set_tree = join('::',reverse(@tree))."::" if(@tree);
+    my $set_tree = join('/',reverse(@tree))."/" if(@tree);
     return  $set_tree.$cn;
 }
 
