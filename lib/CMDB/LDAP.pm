@@ -522,6 +522,19 @@ sub dn2set{
     return  $set_tree.$cn;
 }
 
+sub dn2simple{
+    my $self=shift;
+    my $dn=shift if @_;
+    $dn=~s/,$self->{'basedn'}$//;
+    my @tree=split(/,/,$dn);
+    my $name = shift(@tree);
+    $name=~s/^cn=//;
+    $name=~s/^uid=//;
+    map { $_=~s/^ou=// } @tree;
+    my $simple_tree = join('/',reverse(@tree))."/" if(@tree);
+    return $simple_tree.$name;
+}
+
 sub entry{
     my $self=shift;
     my $dn = shift if(@_);
@@ -629,7 +642,7 @@ sub rdn{
         return { result => undef, error => "$name not found." };
     }elsif($#entries > 0){ 
         my @choices;
-        foreach my $entry (@entries){ push(@choices,$entry->dn); }
+        foreach my $entry (@entries){ push(@choices,$self->dn2simple($entry->dn)); }
         return { result => undef, error => "$name too ambiguous:".join(", ",@choices) };
     }else{
         return { result => $entries[0]->dn, error => undef };
