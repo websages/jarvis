@@ -392,13 +392,13 @@ sub authen_reply{
                       $kernel->yield('speak',$msg,"no owners");
                   }
               }elsif($action=~m/^\s*!*(disown)$/){
-                  if( grep(/^uid=$uid$/, @owners) ){
+                  if( grep(/^$uid$/, @owners) ){
                       $self->{'cmdb'}->disown("$userid\@$domain",$set);
                   }else{
                       $kernel->yield('speak',$msg,"$uid isn't an owner of $set");
                   }
               }elsif($action=~m/^\s*!*pwn$/){
-                  if( grep(/^uid=$uid$/, @owners) ){
+                  if( grep(/^$uid$/, @owners) ){
                       $kernel->yield('speak',$msg,"$uid is already an owner of $set");
                   }else{
                       if($#owners == -1){
@@ -416,7 +416,7 @@ sub authen_reply{
                       }
                   }
               }elsif($action=~m/^\s*!*own$/){
-                  if( grep(/^uid=$uid$/, @owners) ){
+                  if( grep(/^$uid$/, @owners) ){
                       $kernel->yield('speak',$msg,"$uid is already an owner of $set");
                   }else{
                       if($#owners == -1){
@@ -427,7 +427,7 @@ sub authen_reply{
                   }
               }elsif($action=~m/^\s*!*share$/){
 print STDERR Data::Dumper->Dump(["owners",@owners]);
-                  if( grep(/^uid=$uid$/, @owners) ){
+                  if( grep(/^$uid$/, @owners) ){
                       my $mesg = $self->{'cmdb'}->rdn("$newowner");
                       if($mesg->{'result'}){
                           $self->{'cmdb'}->own($mesg->{'result'},$set);
