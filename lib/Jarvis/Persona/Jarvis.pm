@@ -155,12 +155,15 @@ sub input{
                       last; 
                    };
         ########################################################################
+        # working with sets
             ( 
               /^\s*!*who\s*am\s*i\s*/                             ||
               /^\s*!*(add)\s+(\S+)\s+to\s+(\S+)/                  ||
               /^\s*!*(del)\s+(\S+)\s+from\s+(\S+)/                ||
               /^\s*!*(disown|own|pwn|owners*|who\s*o*wns)\s+(.*)/ ||
-              /^\s*!*(share)\s+(.*)\s+with\s+(.*)/ 
+              /^\s*!*(share)\s+(.*)\s+with\s+(.*)/                ||
+              /^\s*!*(rmset)\s+(.*)/                              ||
+              /^\s*!*(describe|desc|description|what\s*is)\s+(.*)/    
             ) && 
                 do {   # we hand of this command to the authenticated handler
                        $kernel->post($sender,'authen',$msg);
@@ -180,11 +183,6 @@ sub input{
                 do { $replies = [ "good $1 $who" ] if (($addressed|$direct) == 1); last; };
             /^\s*good\s+(morning|day|evening"afternoon||night)/i && 
                 do { $replies = [ "good $1 $who" ] if (($addressed|$direct) == 1); last; };
-        # Thanks
-            /^\s*(thanks|thank you|thx|ty)\s+$nick\s*/i && 
-                do { $replies = [ "np" ]; last; };
-            /^\s*(thanks|thank you|thx|ty)/i && 
-                do { $replies = [ "np" ] if (($addressed|$direct) == 1); last; };
         ########################################################################
         # Thanks
             /^\s*(thanks|thank you|thx|ty)\s+$nick\s*/i && 
@@ -254,6 +252,7 @@ sub sets{
 sub admins{
     my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     my @admins = ( $self->{'cmdb'}->admins() );
+print STDERR Data::Dumper->Dump(\@admins);
     $kernel->yield('speak', $msg, join(", ",@admins));
 }
 
