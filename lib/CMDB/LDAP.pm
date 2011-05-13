@@ -656,7 +656,7 @@ sub rdn{
     }elsif($#entries > 0){ 
         my @choices;
         foreach my $entry (@entries){ push(@choices,$self->dn2simple($entry->dn)); }
-        return { result => undef, error => "$name too ambiguous:".join(", ",@choices) };
+        return { result => undef, error => "$name too ambiguous: [".join(", ",@choices)." ]" };
     }else{
         return { result => $entries[0]->dn, error => undef };
     }
