@@ -409,7 +409,7 @@ sub all_sets{
             $entry_dn=~s/,ou=$self->{'setou'}.*//;
             $entry_dn = join( ',',( reverse( split(/,/,$entry_dn))));
             $entry_dn=~s/^(ou|cn)=//;         # cns have no identifiers
-            $entry_dn=~s/,\s*(cn|ou)=/::/g;
+            $entry_dn=~s/,\s*(cn|ou)=/\//g;
             push(@{ $sets }, $entry_dn);
         }
     }
@@ -439,7 +439,7 @@ sub sets_in{
     my $parent = shift if @_;
     my @tops;
     if($parent){
-        $parent=~s/::$//;
+        $parent=~s/\/$//;
 
         $parent=~s/^(cn|ou)=//;
         my $dn = $self->set2dn($parent);
@@ -455,7 +455,7 @@ sub sets_in{
                 $set=~s/^${parent}\///;
                 my @tmp = split(/\//, $set );
                 my $top = shift( @tmp );
-                $top.="::" if $tmp[0];
+                $top.="/" if $tmp[0];
                 push(@tops,$top) unless grep(/$top/,@tops);
             }
         }
@@ -543,7 +543,7 @@ sub members{
     my $set_name = shift if @_;
     my @memberitems;
     foreach my $set (@{ $self->all_sets() }){
-        if($set=~m/$set_name$/){  # will match "Cfengine::workstations" or "workstations"
+        if($set=~m/$set_name$/){  
             my @entry = $self->entry( $self->set2dn($set) );
             my @members = $entry[0]->get_value('uniqueMember');
             foreach my $member (@members){
@@ -562,7 +562,7 @@ sub owners{
     my $set_name = shift if @_;
     my @memberitems;
     foreach my $set (@{ $self->all_sets() }){
-        if($set=~m/$set_name$/){  # will match "Cfengine::workstations" or "workstations"
+        if($set=~m/$set_name$/){ 
             my @entry = $self->entry( $self->set2dn($set) );
             my @members = $entry[0]->get_value('owner');
             foreach my $member (@members){
@@ -608,7 +608,7 @@ sub own{
     my $dn = "uid=$uid,ou=People,dc=".join(',dc=',split(/\./,$domain));
     print STDERR "making $dn an owner of ". $self->set2dn($set)."\n";
     foreach my $set (@{ $self->all_sets() }){
-        if($set=~m/$set$/){  # will match "Cfengine::workstations" or "workstations"
+        if($set=~m/$set$/){  
             my @entry = $self->entry( $self->set2dn($set) );
             my @owners = $entry[0]->get_value('owner');
             push(@owners,$dn) unless grep(/^$dn/,@owners);
