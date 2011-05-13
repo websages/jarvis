@@ -156,10 +156,10 @@ sub input{
                    };
         ########################################################################
             ( 
-              /^\s*!*who\s*am\s*i\s*/              ||
-              /^\s*!*(add)\s+(\S+)\s+to\s+(\S+)/   ||
-              /^\s*!*(del)\s+(\S+)\s+from\s+(\S+)/ ||
-              /^\s*!*(disown|own|pwn|owners*|who\s*o*wns)\s+(.*)/ 
+              /^\s*!*who\s*am\s*i\s*/                             ||
+              /^\s*!*(add)\s+(\S+)\s+to\s+(\S+)/                  ||
+              /^\s*!*(del)\s+(\S+)\s+from\s+(\S+)/                ||
+              /^\s*!*(disown|own|pwn|owners*|who\s*o*wns)\s+(.*)/ ||
               /^\s*!*(share\s+(.*)\s+with\s+(.*)/ 
             ) && 
                 do {   # we hand of this command to the authenticated handler
