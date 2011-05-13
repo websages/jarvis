@@ -418,6 +418,21 @@ sub all_sets{
     return [];
 }
 
+# things we target:
+#   - organizationalUnit: used for organization, disambiguation
+#   - groupofUniquenames: used to collect sets of posixAccounts, posixGroups, ipHosts, and other groupofUniquenames
+#   - posixAccount      : this should be our user entries (may not be owned or redeployed)
+#   - ipHost            : this is a host object (may be owned, redeployed )
+# something is either a groupofuniquenames, organizationalunit, ipHost, account
+# sets and objects can be owned, ous cannot
+# objects may be put in sets or ous
+# sets may be put in sets (inheritence) or in Ous
+
+sub is_a{
+    my $self = shift;
+    my $type;
+    return $type;
+}
 
 sub sets_in{
     my $self = shift;
