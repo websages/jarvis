@@ -527,9 +527,7 @@ sub baseless{
     my $dn=shift if @_;
     return undef unless $dn;
     chomp($self->{'basedn'});
-print STDERR "$dn - $self->{'basedn'} == ";
     $dn=~s/,$self->{'basedn'}$//;
-print "$dn\n";
     return $dn;
 }
 
@@ -641,11 +639,12 @@ sub own{
 # given a short name, return the relative distinguished name for an item.
 sub rdn{
     my $self = shift;
-    my $name = shift if @_;
+    my $fullname = shift if @_;
     my @tree = split('/',$name);
-    $name = pop(@tree);
+    my $name = pop(@tree);
     return { result => undef, error => "nothing to look up" } unless $name;
     my @entries;
+
     my @hosts = $self->ldap_search("(cn=$name)","ou=Hosts,".$self->{'basedn'});
     push(@entries,@hosts) if(defined($hosts[0]));
     my @people = $self->ldap_search("(uid=$name)","ou=People,".$self->{'basedn'});
@@ -657,7 +656,13 @@ sub rdn{
         return { result => undef, error => "$name not found." };
     }elsif($#entries > 0){ 
         my @choices;
-        foreach my $entry (@entries){ push(@choices,$self->dn2simple($entry->dn)); }
+        foreach my $entry (@entries){ 
+            my $simple = $self->dn2simple($entry->dn);
+            push(@choices, $simple); 
+            if($simple eq $fullname){
+                return { result => $entry->dn, error => undef };
+            }
+        }
         return { result => undef, error => "$name too ambiguous: [ ".join(", ",@choices)." ]" };
     }else{
         return { result => $entries[0]->dn, error => undef };
