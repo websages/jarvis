@@ -628,7 +628,7 @@ sub rdn{
     if($#entries < 0){
         return { result => undef, error => "$name not found." };
     }elsif($#entries > 0){ 
-        return { result => undef, error => "$name too ambuguous." };
+        return { result => undef, error => "$name too ambiguous." };
     }else{
         return { result => $entries[0]->dn, error => undef };
     }
