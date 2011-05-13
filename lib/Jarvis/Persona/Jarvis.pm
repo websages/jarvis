@@ -425,8 +425,12 @@ sub authen_reply{
               }elsif($action=~m/^\s*!*share$/){
                   if( grep(/^$uid$/, @owners) ){
                       my $mesg = $self->{'cmdb'}->rdn("$newowner");
-                      $kernel->yield('speak',$msg,"$mesg->{'result'}") if $mesg->{'result'};
-                      $kernel->yield('speak',$msg,"Error: $mesg->{'error'}") if $mesg->{'error'};
+                      if($mesg->{'result'}){
+                          $kernel->yield('speak',$msg,"$mesg->{'result'}");
+                      }
+                      if( $mesg->{'error'}){
+                          $kernel->yield('speak',$msg,"can't: $mesg->{'error'}");
+                      }
                   }else{
                       $kernel->yield('speak',$msg,"$uid has to own $set before sharing it.");
                   }
