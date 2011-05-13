@@ -619,12 +619,11 @@ sub rdn{
     return { result => undef, error => "nothing to look up" } unless $name;
     my @entries;
     my @hosts = $self->ldap_search("(cn=$name)","ou=Hosts,".$self->{'basedn'});
-    print STDERR Data::Dumper->Dump([@hosts]);
-    push(@entries,@hosts) if(defined(@hosts));
+    push(@entries,@hosts) if(defined($hosts[0]);
     my @people = $self->ldap_search("(uid=$name)","ou=People,".$self->{'basedn'});
-    push(@entries,@people) if(defined(@people));
+    push(@entries,@people) if(defined($people[0]));
     my @sets = $self->ldap_search("(cn=$name)","ou=Sets,".$self->{'basedn'});
-    push(@entries,@sets) if(defined(@sets));
+    push(@entries,@sets) if(defined($sets[0]));
 
     print STDERR Data::Dumper->Dump([@entries,$#entries]);
     return { result => undef, error => "$name is too ambiguous" };
