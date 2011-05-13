@@ -526,6 +526,7 @@ sub baseless{
     my $self=shift;
     my $dn=shift if @_;
     return undef unless $dn;
+    chomp($self->{'basedn'});
 print STDERR "$dn - $self->{'basedn'} == ";
     $dn=~s/,$self->{'basedn'}$//;
 print "$dn\n";
