@@ -526,7 +526,7 @@ sub dn2simple{
     my $self=shift;
     my $dn=shift if @_;
 print STDERR "1: $dn <-> $self->{'basedn'}\n";
-    $dn=~s/,$self->{'basedn'}$//;
+    $dn=~s/$self->{'basedn'}$//;
 print STDERR "2: $dn <-> $self->{'basedn'}\n";
     my @tree=split(/,/,$dn);
     my $name = shift(@tree);
