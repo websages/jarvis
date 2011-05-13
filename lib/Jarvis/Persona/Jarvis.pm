@@ -378,8 +378,8 @@ sub authen_reply{
                   $set    = $rxargs[1];
                   print STDERR "[ $action ] [ $set ]\n";
               }elsif($action =~m /share/){
-                  $newowner = $rxargs[1];
-                  $set      = $rxargs[2];
+                  $newowner = $rxargs[2];
+                  $set      = $rxargs[1];
               }
               my @owners = $self->{'cmdb'}->owners($set);
            
