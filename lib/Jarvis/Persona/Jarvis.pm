@@ -252,7 +252,6 @@ sub sets{
 sub admins{
     my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     my @admins = ( $self->{'cmdb'}->admins() );
-print STDERR Data::Dumper->Dump(\@admins);
     $kernel->yield('speak', $msg, join(", ",@admins));
 }
 

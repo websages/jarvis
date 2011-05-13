@@ -675,7 +675,10 @@ sub admins{
     my @admins;
     foreach my $um ($entry[0]->get_value('uniqueMember')){
         my @dn_parts=split(/,/,$um);
-        push(@admins,shift(@dn_parts));
+        my $name=shift(@dn_parts);
+        $name=~s/^uid=//;
+        $name=~s/^cn=//;
+        push(@admins,$name);
     }
     return @admins;
 }
