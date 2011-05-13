@@ -630,7 +630,7 @@ sub rdn{
     }elsif($#entries > 0){ 
         return { result => undef, error => "$name too ambuguous." };
     }else{
-        return { result => $entry[0]->dn, error => undef };
+        return { result => $entries[0]->dn, error => undef };
     }
     return undef;
 }
