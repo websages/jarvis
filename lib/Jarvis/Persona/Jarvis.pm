@@ -402,7 +402,8 @@ sub authen_reply{
                       $kernel->yield('speak',$msg,"$uid is already an owner of $set");
                   }else{
                       if($#owners == -1){
-                          $self->{'cmdb'}->own("$userid\@$domain",$set);
+                          my $mesg = $self->{'cmdb'}->rdn("people/$uid");
+                          $self->{'cmdb'}->own($mesg->{'result'},$set);
                       }else{
                           if($self->{'cmdb'}->is_admin("$userid\@$domain")){
                               $self->{'cmdb'}->own("$userid\@$domain",$set);
@@ -426,6 +427,7 @@ sub authen_reply{
                   if( grep(/^$uid$/, @owners) ){
                       my $mesg = $self->{'cmdb'}->rdn("$newowner");
                       if($mesg->{'result'}){
+                          $self->{'cmdb'}->own($mesg->{'result'},$set);
                           $kernel->yield('speak',$msg,"$mesg->{'result'}");
                       }
                       if( $mesg->{'error'}){

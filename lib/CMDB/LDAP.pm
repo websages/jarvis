@@ -618,12 +618,10 @@ sub disown{
 
 sub own{
     my $self = shift;
-    my $user = shift if @_;
+    my $dn = shift if @_;
     my $set = shift if @_;
-    return undef unless $user;
+    return undef unless $dn;
     return undef unless $set;
-    my ($uid,$domain) = split('@',$user);
-    my $dn = "uid=$uid,ou=People,dc=".join(',dc=',split(/\./,$domain));
     print STDERR "making $dn an owner of ". $self->set2dn($set)."\n";
     foreach my $set (@{ $self->all_sets() }){
         if($set=~m/$set$/){  
@@ -667,31 +665,6 @@ sub rdn{
     }
     return undef;
 }
-
-#sub share{
-#    my $self = shift;
-#    my $item = shift if @_;
-#    my $set = shift if @_;
-##    return undef unless $item;
-#    return undef unless $set;
-#
-#    # get the entry (see if there's only one)
-#    # $dn = "cn=$item,ou=Hosts,dc=".join(',dc=',split(/\./,$domain));
-#    my @owner_entry = $self->entry( "uid=$item,ou=People,dc=".join(',dc=',split(/\./,$domain)) );
-#
-#    my ($rdn,$domain) = split('@',$user);
-#    print STDERR "making $dn an owner of ". $self->set2dn($set)."\n";
-#    foreach my $set (@{ $self->all_sets() }){
-#        if($set=~m/$set$/){  
-#            my @entry = $self->entry( $self->set2dn($set) );
-#            my @owners = $entry[0]->get_value('owner');
-#            push(@owners,$dn) unless grep(/^$dn/,@owners);
-#            $entry[0]->replace( 'owner' => \@owners );
-#            $self->ldap_update($entry[0]);
-#       }
-#    }
-#    return "$item now owns $set";
-#}
 
 sub admins{
     my $self = shift;
