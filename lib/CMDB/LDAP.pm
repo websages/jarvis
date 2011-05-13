@@ -623,7 +623,8 @@ sub rdn{
     my $self = shift;
     my $name = shift if @_;
     return { result => undef, error => "nothing to look up" } unless $name;
-    return { result => undef, error => "$name is too ambiguous" } unless $name;
+    return { result => undef, error => "$name is too ambiguous" };
+    return undef;
 }
 
 #sub share{
