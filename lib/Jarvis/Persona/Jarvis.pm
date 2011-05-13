@@ -169,7 +169,7 @@ sub input{
         # Greetings
             /^\s*sup\s+$nick\s*/i && 
                 do { $replies = [ "not much. chillin." ]; last; };
-            /^\s*sup(\.|?)*/i && 
+            /^\s*sup[\.?]*/i && 
                 do { $replies = [ "not much. chillin." ] if (($addressed|$direct) == 1); last; };
             /^\s*hello\s+$nick\s*/i && 
                 do { $replies = [ "hello $who" ]; last; };
