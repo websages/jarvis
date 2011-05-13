@@ -618,12 +618,12 @@ sub rdn{
     my $name = shift if @_;
     return { result => undef, error => "nothing to look up" } unless $name;
     my @entries;
-    my @people = $self->ldap_search("(uid=$name)","ou=People,".$self->{'basedn'});
-    push(@entries,@people) if @people;
     my @hosts = $self->ldap_search("(cn=$name)","ou=Hosts,".$self->{'basedn'});
-    push(@entries,@hosts) if @hosts;
+    push(@entries,@hosts) if $#hosts;
+    my @people = $self->ldap_search("(uid=$name)","ou=People,".$self->{'basedn'});
+    push(@entries,@people) if $#people;
     my @sets = $self->ldap_search("(cn=$name)","ou=Sets,".$self->{'basedn'});
-    push(@entries,@sets) if @sets;
+    push(@entries,@sets) if $#sets;
 
     print STDERR Data::Dumper->Dump([@entries,$#entries]);
     return { result => undef, error => "$name is too ambiguous" };
