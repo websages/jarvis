@@ -334,6 +334,7 @@ sub ldap_search {
     return undef unless(ref($self->{'ldap'}) eq "Net::LDAP");
     $filter = "(objectclass=*)" unless $filter;
     my $servers;
+    chomp($search_base);
     print STDERR "line ". __LINE__ .": searching base: $search_base for ".$filter."\n";
     my $records = $self->{'ldap'}->search(
                                            'base'   => $search_base,
