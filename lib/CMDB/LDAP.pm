@@ -640,18 +640,16 @@ sub own{
 sub rdn{
     my $self = shift;
     my $fullname = shift if @_;
-    my @tree = split('/',$name);
+    my @tree = split('/',$fullname);
     my $name = pop(@tree);
     return { result => undef, error => "nothing to look up" } unless $name;
     my @entries;
-
     my @hosts = $self->ldap_search("(cn=$name)","ou=Hosts,".$self->{'basedn'});
     push(@entries,@hosts) if(defined($hosts[0]));
     my @people = $self->ldap_search("(uid=$name)","ou=People,".$self->{'basedn'});
     push(@entries,@people) if(defined($people[0]));
     my @sets = $self->ldap_search("(cn=$name)","ou=Sets,".$self->{'basedn'});
     push(@entries,@sets) if(defined($sets[0]));
-
     if($#entries < 0){
         return { result => undef, error => "$name not found." };
     }elsif($#entries > 0){ 
