@@ -388,7 +388,7 @@ sub authen_reply{
                   if(defined($owners->{'error'})){
                       $kernel->yield('speak',$msg, $owners->{'error'});
                   }elsif(defined($owners->{'result'})){
-                      $kernel->yield('speak',$msg, $owners->{'result'});
+                      $kernel->yield('speak',$msg, "[ ".join(", ",@{ $owners->{'result'} })." ]");
                   }else{
                       $kernel->yield('speak',$msg, 'no owners');
                   }
