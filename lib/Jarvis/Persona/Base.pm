@@ -31,6 +31,7 @@ sub new {
     # set our required values fron the constructor or the defaults
     foreach my $attr (@{ $self->{'must'} }){
          if(defined($construct->{$attr})){
+             print STDERR __PACKAGE__ ." ". __LINE__ .": ".$self->{$attr} = $construct->{$attr};
              $self->{$attr} = $construct->{$attr};
          }else{
              print STDERR "Required session constructor attribute [$attr] not defined. ";
