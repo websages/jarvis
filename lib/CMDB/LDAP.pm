@@ -341,7 +341,7 @@ sub ldap_search {
                                            'scope'  => 'sub',
                                            'filter' => $filter,
                                          );
-    print STDERR "line". __LINE__ .": ".$records->error."\n" if $records->code;
+    print STDERR "line ". __LINE__ .": ".$records->error."\n" if $records->code;
     my $recs;
     my @entries = $records->entries;
     return @entries if @entries;
@@ -552,7 +552,7 @@ sub entry{
     my @dn_parts=split(/,/,$dn);
     my $filter=shift(@dn_parts);
     my $sub_base=join(',',@dn_parts);
-    print STDERR "line". __LINE__ .": searching $sub_base for $filter\n";
+    print STDERR "line ". __LINE__ .": searching $sub_base for $filter\n";
     my @entry = $self->ldap_search($filter,$sub_base);
     return @entry;
 }
