@@ -427,7 +427,7 @@ sub authen_reply{
                               if(defined($status->{'error'})){
                                   $kernel->yield('speak',$msg, "Error: ".$status->{'error'});
                               }elsif(defined($status->{'result'})){
-                                  if($status->{'result'}=='owned'){
+                                  if($status->{'result'} eq 'owned'){
                                       $kernel->yield('speak',$msg,"PWN3D!");
                                   }
                               }
