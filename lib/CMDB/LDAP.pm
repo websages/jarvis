@@ -603,19 +603,15 @@ sub disown{
     my $owned_dn = $self->rdn($target_set);
     return $owned_dn unless(defined($owned_dn->{'result'}));
     print STDERR "removing $ownerdn from owners of $owned_dn->{'result'}\n";
-#    foreach my $set (@{ $self->all_sets() }){
-#        if($set=~m/^$target_set$/){
-#            my @entry = $self->entry( $self->set2dn($set) );
-#            my @owners = $entry[0]->get_value('owner');
-#            my @newowners=();
-#            while(my $owner = shift(@owners)){
-#                push(@newowners,$owner) unless($owner eq $dn);
-#            }
-#            $entry[0]->replace( 'owner' => \@newowners );
-#            $self->ldap_update($entry[0]);
-#       }
-#    }
-    return { 'result' => "success", 'error' => undef };
+    my @entry = $self->entry( $owned_dn->{'result'} );
+    my @owners = $entry[0]->get_value('owner');
+    my @newowners=();
+    while(my $owner = shift(@owners)){
+        push(@newowners,$owner) unless($owner eq $dn);
+    }
+    $entry[0]->replace( 'owner' => \@newowners );
+    $self->ldap_update($entry[0]);
+    return { 'result' => "disowned", 'error' => undef };
 }
 
 sub own{
