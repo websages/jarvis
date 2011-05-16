@@ -479,8 +479,7 @@ sub authen_reply{
                       $kernel->yield('speak',$msg,"$userid has to own $set before sharing it.");
                   }
               ##################################################################
-              ##################################################################
-              ##################################################################
+              #
               ##################################################################
               }elsif($action=~m/^\s*!*(add)$/){
                   if( grep(/^$userid$/, @{ $owners->{'result'} }) ){
@@ -495,6 +494,7 @@ sub authen_reply{
                       $kernel->yield('speak',$msg,"you don't own $set");
                   }
               }elsif($action=~m/^\s*!*(del)$/){
+print STDERR "Delete\n";
                  if( grep(/^$userid$/, @{ $owners->{'result'} }) ){
                       my $mesg = $self->{'cmdb'}->rdn("$member");
                       if($mesg->{'result'}){
