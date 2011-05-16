@@ -580,7 +580,6 @@ sub owners{
     my $set_name = shift if @_;
     my $dn = $self->rdn($set_name);
     my $memberitems;
-    print STDERR Data::Dumper->Dump([$dn]);
     return $dn if(defined($dn->{'error'}));
     my @entry = $self->entry($dn);
     my @members = $entry[0]->get_value('owner');

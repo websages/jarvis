@@ -384,12 +384,16 @@ sub authen_reply{
            
               ##################################################################
               # for almost any authenticated action you'll need to see who owns it.
-#              if($action=~m/^\s*!*(owners*|who\s*o*wns)$/){
-#                  if(@owners){
-#                      $kernel->yield('speak',$msg, join(", ",@owners));
-#                  }else{
-#                      $kernel->yield('speak',$msg,"no owners");
-#                  }
+              if($action=~m/^\s*!*(owners*|who\s*o*wns)$/){
+                  if(defined($owners->{'error'})){
+                      $kernel->yield('speak',$msg, $owners->{'error'});
+                  }elsif(defined($owners->{'result'})){
+                      if($owners->{'result'} ne ""){
+                          $kernel->yield('speak',$msg, $owners->{'result'});
+                      }else{
+                          $kernel->yield('speak',$msg, 'no owners');
+                      }
+                  }
 #              }elsif($action=~m/^\s*!*(disown)$/){
 #                  if( grep(/^$uid$/, @owners) ){
 #                      $self->{'cmdb'}->disown("$userid\@$domain",$set);
