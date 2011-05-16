@@ -664,14 +664,14 @@ sub deluniquemember{
     return $set_dn unless(defined($set_dn->{'result'}));
     print STDERR __PACKAGE__ ." line ". __LINE__ .": adding $memberdn to $set_dn->{'result'}\n";
     my @entry = $self->entry( $set_dn->{'result'} );
-    my @uniquemembers = $entry[0]->get_value('uniquemember');
+    my @uniquemembers = $entry[0]->get_value('uniqueMember');
     my @newmembers=();
     while(my $member = shift(@uniquemembers)){
         push(@newmembers,$member) unless($member eq $memberdn);
     }
-    my $replace = $entry[0]->replace( 'uniquemember' => \@uniquemembers );
+    my $replace = $entry[0]->replace( 'uniqueMember' => \@uniquemembers );
     my $result = $self->ldap_update($entry[0]);
-    print STDERR  __PACKAGE__ ." line ". __LINE__ .": ". Data::Dumper->Dump([$result->{'ERROR'}]);
+    print STDERR  __PACKAGE__ ." line ". __LINE__ .": \n". Data::Dumper->Dump([$result->{'ERROR'}]);
     return { 'result' => "added", 'error' => undef };
 }
 

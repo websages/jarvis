@@ -159,7 +159,7 @@ sub input{
             ( 
               /^\s*!*who\s*am\s*i\s*/                             ||
               /^\s*!*(add)\s+(\S+)\s+to\s+(\S+)/                  ||
-              /^\s*!*(del)\s+(\S+)\s+from\s+(\S+)/                ||
+              /^\s*!*(del|delete)\s+(\S+)\s+from\s+(\S+)/         ||
               /^\s*!*(disown|own|pwn|owners*|who\s*o*wns)\s+(.*)/ ||
               /^\s*!*(rmset)\s+(.*)/                              ||
               /^\s*!*(share)\s+(.*)\s+with\s+(.*)/                ||
@@ -367,7 +367,7 @@ sub authen_reply{
     # Commands that require Authentication & Authorization
             ( 
               /^\s*!*(add)\s+(\S+)\s+to\s+(\S+)/                  ||
-              /^\s*!*(del)\s+(\S+)\s+from\s+(\S+)/                ||
+              /^\s*!*(del|delete)\s+(\S+)\s+from\s+(\S+)/         ||
               /^\s*!*(disown|own|pwn|owners*|who\s*o*wns)\s+(.*)/ ||
               /^\s*!*(share)\s+(.*)\s+with\s+(.*)/                ||
               /^\s*!*(unshare)\s+(.*)\s+with\s+(.*)/
@@ -378,7 +378,7 @@ sub authen_reply{
               }
               my @rxargs = ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);
               $action = $rxargs[0];
-              if($action =~m /add|del/){
+              if($action =~m /add|del|delete/){
                   $member = $rxargs[1];
                   $set    = $rxargs[2];
                   print STDERR "[ $action ] [ $set ] [ $member ]\n";
@@ -493,8 +493,7 @@ sub authen_reply{
                   }else{
                       $kernel->yield('speak',$msg,"you don't own $set");
                   }
-              }elsif($action=~m/^\s*!*(del)$/){
-print STDERR "Delete\n";
+              }elsif($action=~m/^\s*!*(del|delete)$/){
                  if( grep(/^$userid$/, @{ $owners->{'result'} }) ){
                       my $mesg = $self->{'cmdb'}->rdn("$member");
                       if($mesg->{'result'}){
