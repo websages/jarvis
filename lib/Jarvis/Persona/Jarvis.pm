@@ -437,7 +437,7 @@ sub authen_reply{
                       if($#{ $owners->{'result'} } == -1){
                           my $status = $self->{'cmdb'}->own($dn,$set);
                           if(defined($status->{'error'})){
-                              $kernel->yield('speak',$msg, $status->{'error'});
+                              $kernel->yield('speak',$msg, "Error: ".$status->{'error'});
                           }elsif(defined($status->{'result'})){
                               $kernel->yield('speak',$msg, $status->{'result'});
                           }
