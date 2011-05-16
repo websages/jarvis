@@ -448,7 +448,7 @@ sub authen_reply{
                               $kernel->yield('speak',$msg, $status->{'result'});
                           }
                       }else{
-                          $kernel->yield('speak',$msg,"$set is owned by: [ ".join(', ',@{ $owners->{'result'} })." ]. New owners must be added by current owners (no stealing!).");
+                          $kernel->yield('speak',$msg,"$set will need to be shared with you by: [ ".join(', ',@{ $owners->{'result'} })." ]");
                       }
                   }
 #              }elsif($action=~m/^\s*!*share$/){
