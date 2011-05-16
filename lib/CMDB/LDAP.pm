@@ -664,8 +664,9 @@ sub deluniquemember{
     return $set_dn unless(defined($set_dn->{'result'}));
     print STDERR __PACKAGE__ ." line ". __LINE__ .": adding $memberdn to $set_dn->{'result'}\n";
     my @entry = $self->entry( $set_dn->{'result'} );
-    my @uniquemembers = $entry[0]->get_value('uniqueMember');
     my @newmembers=();
+    my @uniquemembers = $entry[0]->get_value('uniqueMember');
+print STDERR Data::Dumper->Dump([@uniquemembers]);
     while(my $member = shift(@uniquemembers)){
         push(@newmembers,$member) unless($member eq $memberdn);
     }
