@@ -592,7 +592,7 @@ sub owners{
         $item=~s/^uid=//;
         push(@{ $memberitems->{'result'} },$item);
     }
-    return $memberitems->{'result'};
+    return $memberitems;
 }
 
 sub disown{
