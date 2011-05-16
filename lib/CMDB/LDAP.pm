@@ -335,13 +335,13 @@ sub ldap_search {
     $filter = "(objectclass=*)" unless $filter;
     my $servers;
     chomp($search_base);
-    print STDERR "line ". __LINE__ .": searching base: $search_base for ".$filter."\n";
+    print STDERR __PACKAGE__ ."line ". __LINE__ .": searching base: $search_base for ".$filter."\n";
     my $records = $self->{'ldap'}->search(
                                            'base'   => $search_base,
                                            'scope'  => 'sub',
                                            'filter' => $filter,
                                          );
-    print STDERR "line ". __LINE__ .": ".$records->error."\n" if $records->code;
+    print STDERR __PACKAGE__ ."line ". __LINE__ .": ".$records->error."\n" if $records->code;
     my $recs;
     my @entries = $records->entries;
     return @entries if @entries;
@@ -367,7 +367,7 @@ sub ldap_update{
         foreach my $ref (@{ $mesg->{'referral'} }){
             if($ref=~m/(ldap.*:.*)\/.*/){
                  my $new_uri=$1;
-                 print STDERR "line ". __LINE__ .": Following referral to: $new_uri\n";
+                 print STDERR __PACKAGE__ ."line ". __LINE__ .": Following referral to: $new_uri\n";
                  my $old_uri = $self->uri;
                  $self->ldap_unbind;              # remove the old binding
                  $self->uri($new_uri);            # update the uri to the referral
@@ -382,7 +382,7 @@ sub ldap_update{
         $mesg->code && $self->error($mesg->code." ".$mesg->error);
     }
     my $errors=$self->error();
-    print STDERR "line ". __LINE__ .": "."$errors\n" if($errors ne "");
+    print STDERR __PACKAGE__ ."line ". __LINE__ .": "."$errors\n" if($errors ne "");
     return $self;
 }
 
@@ -552,7 +552,7 @@ sub entry{
     my @dn_parts=split(/,/,$dn);
     my $filter=shift(@dn_parts);
     my $sub_base=join(',',@dn_parts);
-    print STDERR "line ". __LINE__ .": searching $sub_base for $filter\n";
+    print STDERR __PACKAGE__ ."line ". __LINE__ .": searching $sub_base for $filter\n";
     my @entry = $self->ldap_search($filter,$sub_base);
     return @entry;
 }
