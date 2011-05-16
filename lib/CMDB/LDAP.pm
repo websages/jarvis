@@ -578,6 +578,8 @@ sub members{
 sub owners{
     my $self = shift;
     my $set_name = shift if @_;
+    my $dn = $self->rdn($set_name);
+print STDERR Data::Dumper->Dump([$dn]);
     my @memberitems;
     foreach my $set (@{ $self->all_sets() }){
         if($set=~m/$set_name$/){ 
