@@ -607,7 +607,7 @@ sub disown{
     my @owners = $entry[0]->get_value('owner');
     my @newowners=();
     while(my $owner = shift(@owners)){
-        push(@newowners,$owner) unless($owner eq $dn);
+        push(@newowners,$owner) unless($owner eq $ownerdn);
     }
     $entry[0]->replace( 'owner' => \@newowners );
     $self->ldap_update($entry[0]);
