@@ -629,7 +629,7 @@ sub own{
     push(@owners,$ownerdn) unless grep(/^$ownerdn/,@owners);
     $entry[0]->replace( 'owner' => @owners );
     my $result = $self->ldap_update($entry[0]);
-    print STDERR Data::Dumper->Dump([$resul->{'ERROR'}]);
+    print STDERR Data::Dumper->Dump([$result->{'ERROR'}]);
     if(grep(/65 attribute.*owner.*not allowed/,@{ $result->{'ERROR'} })){
         return { 'result' => undef, 'error' => "13th amendment violation." };
     }
