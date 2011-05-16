@@ -603,6 +603,7 @@ sub disown{
     my $owned_dn = $self->rdn($target_set);
     return $owned_dn unless(defined($owned_dn->{'result'}));
     print STDERR "removing $ownerdn from owners of $owned_dn->{'result'}\n";
+
     my @entry = $self->entry( $owned_dn->{'result'} );
     my @owners = $entry[0]->get_value('owner');
     my @newowners=();
@@ -616,20 +617,17 @@ sub disown{
 
 sub own{
     my $self = shift;
-    my $dn = shift if @_;
-    my $set = shift if @_;
-    return undef unless $dn;
-    return undef unless $set;
-    print STDERR "making $dn an owner of ". $self->set2dn($set)."\n";
-    foreach my $set (@{ $self->all_sets() }){
-        if($set=~m/$set$/){  
-            my @entry = $self->entry( $self->set2dn($set) );
-            my @owners = $entry[0]->get_value('owner');
-            push(@owners,$dn) unless grep(/^$dn/,@owners);
-            $entry[0]->replace( 'owner' => \@owners );
-            $self->ldap_update($entry[0]);
-       }
-    }
+    my $ownerdn = shift if @_;
+    my $target_set = shift if @_;
+    return undef unless $ownerdn;
+    return undef unless $target_set;
+    my $owned_dn = $self->rdn($target_set);
+    return $owned_dn unless(defined($owned_dn->{'result'}));
+    print STDERR "making $ownerdn an owner of $owned_dn->{'result'}\n";
+    my @entry = $self->entry( $owned_dn->{'result'} );
+    my @owners = $entry[0]->get_value('owner');
+    push(@owners,$ownerdn) unless grep(/^$ownerdn/,@owners);
+    $self->ldap_update($entry[0]);
     return { 'result' => "owned", 'error' => undef };
 }
 
