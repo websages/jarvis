@@ -630,6 +630,7 @@ sub own{
             $self->ldap_update($entry[0]);
        }
     }
+    return { 'result' => "owned", 'error' => undef };
 }
 
 # given a short name, return the relative distinguished name for an item.
