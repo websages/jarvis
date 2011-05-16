@@ -388,11 +388,9 @@ sub authen_reply{
                   if(defined($owners->{'error'})){
                       $kernel->yield('speak',$msg, $owners->{'error'});
                   }elsif(defined($owners->{'result'})){
-                      if($owners->{'result'} ne ""){
-                          $kernel->yield('speak',$msg, $owners->{'result'});
-                      }else{
-                          $kernel->yield('speak',$msg, 'no owners');
-                      }
+                      $kernel->yield('speak',$msg, $owners->{'result'});
+                  }else{
+                      $kernel->yield('speak',$msg, 'no owners');
                   }
 #              }elsif($action=~m/^\s*!*(disown)$/){
 #                  if( grep(/^$uid$/, @owners) ){
