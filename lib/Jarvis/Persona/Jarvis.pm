@@ -348,13 +348,14 @@ sub authen_reply{
     if($actual=~m/(.*)@(.*)/){
         ($userid,$domain) = ($1,$2);
     }
+    my $dn=$self->{'cmdb'}->rdn($userid); 
+print STDERR Data::Dumper->Dump([$dn]);
     $domain=~s/^(znc|irc)\.//; # something more elegant than this please...
-    my $uid="$userid";
     for ( $what ) {
     ############################################################################
          /^\s*!*who\s*am\s*i\s*/ && 
          do {
-              $kernel->yield('speak', $msg, "I see you as $userid\@$domain ($uid).");
+              $kernel->yield('speak', $msg, "I see you as $userid\@$domain ($userid).");
               last;
             };
     ############################################################################
@@ -395,8 +396,8 @@ sub authen_reply{
               }elsif($action=~m/^\s*!*(disown)$/){
                   if(defined($owners->{'error'})){
                       $kernel->yield('speak',$msg, $owners->{'error'});
-                  }elsif( grep(/^$uid$/, @{ $owners->{'result'} }) ){
-                      $self->{'cmdb'}->disown($owners->{'result'},$set);
+                  }elsif( grep(/^[^=]+=$userid$/, @{ $owners->{'result'} }) ){
+                      $self->{'cmdb'}->disown($owners->{'result'}->[0],$set);
                   }else{
                       $kernel->yield('speak',$msg,"$uid isn't an owner of $set");
                   }
