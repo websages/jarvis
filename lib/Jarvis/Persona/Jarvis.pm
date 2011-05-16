@@ -17,7 +17,7 @@ sub may {
     my $self=shift;
     return {
              'log_dir'     => '/var/log/irc',
-             'ldap_uri'    => 'ldaps://127.0.0.1:636',
+             'ldap_uri'    => $ENV{'LDAP_URI'},
              'ldap_basedn' => "dc=".join(",dc=",split(/\./,`dnsdomainname`)),
              'ldap_binddn' => undef, # anonymous bind by default
              'ldap_bindpw' => undef,
