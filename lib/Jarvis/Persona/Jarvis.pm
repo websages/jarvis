@@ -368,7 +368,8 @@ sub authen_reply{
               /^\s*!*(add)\s+(\S+)\s+to\s+(\S+)/                  ||
               /^\s*!*(del)\s+(\S+)\s+from\s+(\S+)/                ||
               /^\s*!*(disown|own|pwn|owners*|who\s*o*wns)\s+(.*)/ ||
-              /^\s*!*(share)\s+(.*)\s+with\s+(.*)/
+              /^\s*!*(share)\s+(.*)\s+with\s+(.*)/                ||
+              /^\s*!*(unshare)\s+(.*)\s+with\s+(.*)/
             ) && 
          do {
               if(!(defined($dn))){ 
@@ -394,7 +395,7 @@ sub authen_reply{
               if($action=~m/^\s*!*(owners*|who\s*o*wns)$/){
                   if(defined($owners->{'error'})){
                       $kernel->yield('speak',$msg, $owners->{'error'});
-                  }elsif(defined($owners->{'result'})){
+                  }elsi(defined($owners->{'result'})){
                       $kernel->yield('speak',$msg, "[ ".join(", ",@{ $owners->{'result'} })." ]");
                   }else{
                       $kernel->yield('speak',$msg, 'no owners');
@@ -448,7 +449,7 @@ sub authen_reply{
                               $kernel->yield('speak',$msg, $status->{'result'});
                           }
                       }else{
-                          $kernel->yield('speak',$msg,"$set is owned by: [ ".join(', ',@{ $owners->{'result'} })." ]. New owners must be added by current owners (no stealing!).");
+                          $kernel->yield('speak',$msg,"$set will need to be shared with you by: [ ".join(', ',@{ $owners->{'result'} })." ]");
                       }
                   }
 #              }elsif($action=~m/^\s*!*share$/){
