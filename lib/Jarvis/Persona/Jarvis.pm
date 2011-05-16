@@ -368,7 +368,8 @@ sub authen_reply{
               /^\s*!*(add)\s+(\S+)\s+to\s+(\S+)/                  ||
               /^\s*!*(del)\s+(\S+)\s+from\s+(\S+)/                ||
               /^\s*!*(disown|own|pwn|owners*|who\s*o*wns)\s+(.*)/ ||
-              /^\s*!*(share)\s+(.*)\s+with\s+(.*)/
+              /^\s*!*(share)\s+(.*)\s+with\s+(.*)/                ||
+              /^\s*!*(unshare)\s+(.*)\s+with\s+(.*)/
             ) && 
          do {
               if(!(defined($dn))){ 

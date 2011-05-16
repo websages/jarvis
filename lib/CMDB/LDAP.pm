@@ -335,7 +335,7 @@ sub ldap_search {
     $filter = "(objectclass=*)" unless $filter;
     my $servers;
     chomp($search_base);
-    print STDERR __PACKAGE__ ."line ". __LINE__ .": searching $search_base for ".$filter."\n";
+    #print STDERR __PACKAGE__ ."line ". __LINE__ .": searching $search_base for ".$filter."\n";
     my $records = $self->{'ldap'}->search(
                                            'base'   => $search_base,
                                            'scope'  => 'sub',
