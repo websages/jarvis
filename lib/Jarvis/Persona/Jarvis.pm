@@ -423,8 +423,14 @@ sub authen_reply{
                           # own the entry if we are an admin
                           my $mesg = $self->{'cmdb'}->rdn("people/$userid"); 
                           if($self->{'cmdb'}->is_admin("$userid\@$domain")){
-                              $self->{'cmdb'}->own($mesg->{'result'},$set);
-                              $kernel->yield('speak',$msg,"PWN3D!");
+                              my $status = $self->{'cmdb'}->own($dn,$set);
+                              if(defined($status->{'error'})){
+                                  $kernel->yield('speak',$msg, "Error: ".$status->{'error'});
+                              }elsif(defined($status->{'result'})){
+                                  if($status->{'result'}=='owned'){
+                                      $kernel->yield('speak',$msg,"PWN3D!");
+                                  }
+                              }
                           }else{
                               $kernel->yield('speak',$msg,"you have to be an ldap admin to pwn.");
                           }

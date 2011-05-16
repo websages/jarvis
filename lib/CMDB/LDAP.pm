@@ -625,7 +625,6 @@ sub own{
     print STDERR __PACKAGE__ ." line ". __LINE__ .": making $ownerdn an owner of $owned_dn->{'result'}\n";
     my @entry = $self->entry( $owned_dn->{'result'} );
 
-
     my @owners = $entry[0]->get_value('owner');
     push(@owners,$ownerdn) unless grep(/^$ownerdn/,@owners);
     my $replace = $entry[0]->replace( 'owner' => @owners );
