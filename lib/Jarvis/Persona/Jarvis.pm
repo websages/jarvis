@@ -389,8 +389,6 @@ sub authen_reply{
                   $set      = $rxargs[1];
               }
               my $owners = $self->{'cmdb'}->owners($set);
-              print STDERR Data::Dumper->Dump([$owners]);
-           
               ##################################################################
               # for almost any authenticated action you'll need to see who owns it.
               if($action=~m/^\s*!*(owners*|who\s*o*wns)$/){
@@ -404,8 +402,8 @@ sub authen_reply{
               }elsif($action=~m/^\s*!*(disown)$/){
                   if(defined($owners->{'error'})){
                       $kernel->yield('speak',$msg, $owners->{'error'});
-                  }elsif( grep(/^[^=]+=$userid$/, @{ $owners->{'result'} }) ){
-                      $self->{'cmdb'}->disown($owners->{'result'}->[0],$set);
+                  }elsif( grep(/^$userid$/, @{ $owners->{'result'} }) ){
+                      $self->{'cmdb'}->disown($dn,$set);
                   }else{
                       $kernel->yield('speak',$msg,"$userid isn't an owner of $set");
                   }
