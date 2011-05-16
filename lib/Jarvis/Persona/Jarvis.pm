@@ -399,6 +399,11 @@ sub authen_reply{
                   }else{
                       $kernel->yield('speak',$msg, 'no owners');
                   }
+
+
+
+
+
               }elsif($action=~m/^\s*!*(disown)$/){
                   if(defined($owners->{'error'})){
                       $kernel->yield('speak',$msg, $owners->{'error'});
@@ -431,13 +436,14 @@ sub authen_reply{
 #                      }
 #                  }
               }elsif($action=~m/^\s*!*own$/){
-                  if( grep(/^$userid$/, @owners) ){
+                  if( grep(/^$userid$/, @{ $owners->{'result'} }) ){
                       $kernel->yield('speak',$msg,"$userid is already an owner of $set");
                   }else{
-                      if($#owners == -1){
+                      if($#{ $owners->{'result'} } == -1){
+                          print STDERR "making $dn an owner of $set\n";
                           $self->{'cmdb'}->own("$userid\@$domain",$set);
                       }else{
-                          $kernel->yield('speak',$msg,"$set is owned by: [ ".join(', ',@owners)." ]. New owners must be added by current owners (no stealing!).");
+                          $kernel->yield('speak',$msg,"$set is owned by: [ ".join(', ',@{ $owners->{'result'} })." ]. New owners must be added by current owners (no stealing!).");
                       }
                   }
 #              }elsif($action=~m/^\s*!*share$/){
