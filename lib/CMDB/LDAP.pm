@@ -615,6 +615,7 @@ sub disown{
 #            $self->ldap_update($entry[0]);
 #       }
 #    }
+    return { 'result' => "success", 'error' => undef };
 }
 
 sub own{
