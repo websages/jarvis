@@ -601,7 +601,7 @@ sub disown{
     return undef unless $ownerdn;
     return undef unless $target_set;
 
-    print STDERR "removing $dn from owners of ". $self->set2dn($target_set)."\n";
+    print STDERR "removing $ownerdn from owners of ". $self->set2dn($target_set)."\n";
 #    foreach my $set (@{ $self->all_sets() }){
 #        if($set=~m/^$target_set$/){
 #            my @entry = $self->entry( $self->set2dn($set) );
