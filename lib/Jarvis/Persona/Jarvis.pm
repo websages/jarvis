@@ -399,14 +399,14 @@ print STDERR Data::Dumper->Dump([$dn]);
                   }elsif( grep(/^[^=]+=$userid$/, @{ $owners->{'result'} }) ){
                       $self->{'cmdb'}->disown($owners->{'result'}->[0],$set);
                   }else{
-                      $kernel->yield('speak',$msg,"$uid isn't an owner of $set");
+                      $kernel->yield('speak',$msg,"$userid isn't an owner of $set");
                   }
 #              }elsif($action=~m/^\s*!*pwn$/){
-#                  if( grep(/^$uid$/, @owners) ){
-#                      $kernel->yield('speak',$msg,"$uid is already an owner of $set");
+#                  if( grep(/^$userid$/, @owners) ){
+#                      $kernel->yield('speak',$msg,"$userid is already an owner of $set");
 #                  }else{
 #                      if($#owners == -1){
-#                          my $mesg = $self->{'cmdb'}->rdn("people/$uid");
+#                          my $mesg = $self->{'cmdb'}->rdn("people/$userid");
 #                          $self->{'cmdb'}->own($mesg->{'result'},$set);
 #                      }else{
 #                          # own the entry if we are an admin
@@ -420,8 +420,8 @@ print STDERR Data::Dumper->Dump([$dn]);
 #                      }
 #                  }
 #              }elsif($action=~m/^\s*!*own$/){
-#                  if( grep(/^$uid$/, @owners) ){
-#                      $kernel->yield('speak',$msg,"$uid is already an owner of $set");
+#                  if( grep(/^$userid$/, @owners) ){
+#                      $kernel->yield('speak',$msg,"$userid is already an owner of $set");
 #                  }else{
 #                      if($#owners == -1){
 #                          $self->{'cmdb'}->own("$userid\@$domain",$set);
@@ -430,7 +430,7 @@ print STDERR Data::Dumper->Dump([$dn]);
 #                      }
 #                  }
 #              }elsif($action=~m/^\s*!*share$/){
-#                  if( grep(/^$uid$/, @owners) ){
+#                  if( grep(/^$userid$/, @owners) ){
 #                      my $mesg = $self->{'cmdb'}->rdn("$newowner");
 #                      if($mesg->{'result'}){
 #                          $self->{'cmdb'}->own($mesg->{'result'},$set);
@@ -440,17 +440,17 @@ print STDERR Data::Dumper->Dump([$dn]);
 #                          $kernel->yield('speak',$msg,"can't: $mesg->{'error'}");
 #                      }
 #                  }else{
-#                      $kernel->yield('speak',$msg,"$uid has to own $set before sharing it.");
+#                      $kernel->yield('speak',$msg,"$userid has to own $set before sharing it.");
 #                  }
 #              ##################################################################
 #              }elsif($action=~m/^\s*!*(add)$/){
-#                  if( grep(/^$uid$/, @owners) ){
+#                  if( grep(/^$userid$/, @owners) ){
 #                      $kernel->yield('speak',$msg,"icanhaz add routine?");
 #                  }else{
 #                      $kernel->yield('speak',$msg,"you don't own $set");
 #                  }
 #              }elsif($action=~m/^\s*!*(del)$/){
-#                  if( grep(/^$uid$/, @owners) ){
+#                  if( grep(/^$userid$/, @owners) ){
 #                      $kernel->yield('speak',$msg,"icanhas del routine?");
 #                  }else{
 #                      $kernel->yield('speak',$msg,"you don't own $set");
@@ -472,7 +472,7 @@ print STDERR Data::Dumper->Dump([$dn]);
 #                                                     }) unless $self->{'authorize'};
 #              my $authorized = 0;
 #              foreach my $owner ( $self->{'authorize'}->owners($set) ){
-#                  if($owner eq "uid=$userid"){ $authorized =1; }
+#                  if($owner eq "userid=$userid"){ $authorized =1; }
 #                  print STDERR "$owner == uid=$userid\n";
 #              }
 #                  print STDERR "authorized == $authorized \n";
