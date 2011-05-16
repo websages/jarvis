@@ -404,7 +404,7 @@ sub authen_reply{
                       $kernel->yield('speak',$msg, $owners->{'error'});
                   }elsif( grep(/^$userid$/, @{ $owners->{'result'} }) ){
                       my $status = $self->{'cmdb'}->disown($dn,$set);
-                      if($defined($status->{'error'})){
+                      if(defined($status->{'error'})){
                           $kernel->yield('speak',$msg, $status->{'error'});
                       }
                   }else{
