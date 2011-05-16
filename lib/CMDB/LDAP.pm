@@ -628,7 +628,8 @@ sub own{
     my @owners = $entry[0]->get_value('owner');
     push(@owners,$ownerdn) unless grep(/^$ownerdn/,@owners);
     $entry[0]->replace( 'owner' => @owners );
-    $self->ldap_update($entry[0]);
+    my $result = $self->ldap_update($entry[0]);
+    print STDERR Data::Dumper->Dump([$result,ref($result)]);
     return { 'result' => "owned", 'error' => undef };
 }
 
