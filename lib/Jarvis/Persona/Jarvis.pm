@@ -379,80 +379,84 @@ sub authen_reply{
                   $newowner = $rxargs[2];
                   $set      = $rxargs[1];
               }
-              my @owners = $self->{'cmdb'}->owners($set);
+              my $owners = $self->{'cmdb'}->owners($set);
+              print STDERR Data::Dumper->Dump([$owners]);
            
               ##################################################################
               # for almost any authenticated action you'll need to see who owns it.
-              if($action=~m/^\s*!*(owners*|who\s*o*wns)$/){
-                  if(@owners){
-                      $kernel->yield('speak',$msg, join(", ",@owners));
-                  }else{
-                      $kernel->yield('speak',$msg,"no owners");
-                  }
-              }elsif($action=~m/^\s*!*(disown)$/){
-                  if( grep(/^$uid$/, @owners) ){
-                      $self->{'cmdb'}->disown("$userid\@$domain",$set);
-                  }else{
-                      $kernel->yield('speak',$msg,"$uid isn't an owner of $set");
-                  }
-              }elsif($action=~m/^\s*!*pwn$/){
-                  if( grep(/^$uid$/, @owners) ){
-                      $kernel->yield('speak',$msg,"$uid is already an owner of $set");
-                  }else{
-                      if($#owners == -1){
-                          my $mesg = $self->{'cmdb'}->rdn("people/$uid");
-                          $self->{'cmdb'}->own($mesg->{'result'},$set);
-                      }else{
-                          # own the entry if we are an admin
-                          my $mesg = $self->{'cmdb'}->rdn("people/$userid"); 
-                          if($self->{'cmdb'}->is_admin("$userid\@$domain")){
-                              $self->{'cmdb'}->own($mesg->{'result'},$set);
-                              $kernel->yield('speak',$msg,"PWN3D!");
-                          }else{
-                              $kernel->yield('speak',$msg,"you have to be an ldap admin to pwn.");
-                          }
-                      }
-                  }
-              }elsif($action=~m/^\s*!*own$/){
-                  if( grep(/^$uid$/, @owners) ){
-                      $kernel->yield('speak',$msg,"$uid is already an owner of $set");
-                  }else{
-                      if($#owners == -1){
-                          $self->{'cmdb'}->own("$userid\@$domain",$set);
-                      }else{
-                          $kernel->yield('speak',$msg,"$set is owned by: [ ".join(', ',@owners)." ]. New owners must be added by current owners (no stealing!).");
-                      }
-                  }
-              }elsif($action=~m/^\s*!*share$/){
-                  if( grep(/^$uid$/, @owners) ){
-                      my $mesg = $self->{'cmdb'}->rdn("$newowner");
-                      if($mesg->{'result'}){
-                          $self->{'cmdb'}->own($mesg->{'result'},$set);
-                          $kernel->yield('speak',$msg,"shared $set with $newowner");
-                      }
-                      if( $mesg->{'error'}){
-                          $kernel->yield('speak',$msg,"can't: $mesg->{'error'}");
-                      }
-                  }else{
-                      $kernel->yield('speak',$msg,"$uid has to own $set before sharing it.");
-                  }
-              ##################################################################
-              }elsif($action=~m/^\s*!*(add)$/){
-                  if( grep(/^$uid$/, @owners) ){
-                      $kernel->yield('speak',$msg,"icanhaz add routine?");
-                  }else{
-                      $kernel->yield('speak',$msg,"you don't own $set");
-                  }
-              }elsif($action=~m/^\s*!*(del)$/){
-                  if( grep(/^$uid$/, @owners) ){
-                      $kernel->yield('speak',$msg,"icanhas del routine?");
-                  }else{
-                      $kernel->yield('speak',$msg,"you don't own $set");
-                  }
-              }else{
-                  $kernel->yield('speak',$msg,"huh?");
-              }
-    ############################################################################
+#              if($action=~m/^\s*!*(owners*|who\s*o*wns)$/){
+#                  if(@owners){
+#                      $kernel->yield('speak',$msg, join(", ",@owners));
+#                  }else{
+#                      $kernel->yield('speak',$msg,"no owners");
+#                  }
+#              }elsif($action=~m/^\s*!*(disown)$/){
+#                  if( grep(/^$uid$/, @owners) ){
+#                      $self->{'cmdb'}->disown("$userid\@$domain",$set);
+#                  }else{
+#                      $kernel->yield('speak',$msg,"$uid isn't an owner of $set");
+#                  }
+#              }elsif($action=~m/^\s*!*pwn$/){
+#                  if( grep(/^$uid$/, @owners) ){
+#                      $kernel->yield('speak',$msg,"$uid is already an owner of $set");
+#                  }else{
+#                      if($#owners == -1){
+#                          my $mesg = $self->{'cmdb'}->rdn("people/$uid");
+#                          $self->{'cmdb'}->own($mesg->{'result'},$set);
+#                      }else{
+#                          # own the entry if we are an admin
+#                          my $mesg = $self->{'cmdb'}->rdn("people/$userid"); 
+#                          if($self->{'cmdb'}->is_admin("$userid\@$domain")){
+#                              $self->{'cmdb'}->own($mesg->{'result'},$set);
+#                              $kernel->yield('speak',$msg,"PWN3D!");
+#                          }else{
+#                              $kernel->yield('speak',$msg,"you have to be an ldap admin to pwn.");
+#                          }
+#                      }
+#                  }
+#              }elsif($action=~m/^\s*!*own$/){
+#                  if( grep(/^$uid$/, @owners) ){
+#                      $kernel->yield('speak',$msg,"$uid is already an owner of $set");
+#                  }else{
+#                      if($#owners == -1){
+#                          $self->{'cmdb'}->own("$userid\@$domain",$set);
+#                      }else{
+#                          $kernel->yield('speak',$msg,"$set is owned by: [ ".join(', ',@owners)." ]. New owners must be added by current owners (no stealing!).");
+#                      }
+#                  }
+#              }elsif($action=~m/^\s*!*share$/){
+#                  if( grep(/^$uid$/, @owners) ){
+#                      my $mesg = $self->{'cmdb'}->rdn("$newowner");
+#                      if($mesg->{'result'}){
+#                          $self->{'cmdb'}->own($mesg->{'result'},$set);
+#                          $kernel->yield('speak',$msg,"shared $set with $newowner");
+#                      }
+#                      if( $mesg->{'error'}){
+#                          $kernel->yield('speak',$msg,"can't: $mesg->{'error'}");
+#                      }
+#                  }else{
+#                      $kernel->yield('speak',$msg,"$uid has to own $set before sharing it.");
+#                  }
+#              ##################################################################
+#              }elsif($action=~m/^\s*!*(add)$/){
+#                  if( grep(/^$uid$/, @owners) ){
+#                      $kernel->yield('speak',$msg,"icanhaz add routine?");
+#                  }else{
+#                      $kernel->yield('speak',$msg,"you don't own $set");
+#                  }
+#              }elsif($action=~m/^\s*!*(del)$/){
+#                  if( grep(/^$uid$/, @owners) ){
+#                      $kernel->yield('speak',$msg,"icanhas del routine?");
+#                  }else{
+#                      $kernel->yield('speak',$msg,"you don't own $set");
+#                  }
+#              }else{
+#                  $kernel->yield('speak',$msg,"huh?");
+#              }
+#    ############################################################################
+
+
+
               ##################################################################
 #              $self->{'authorize'} = CMDB::LDAP->new({
 #                                                       'uri'    => $self->{'ldap_uri'},

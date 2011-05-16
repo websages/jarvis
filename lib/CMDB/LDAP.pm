@@ -579,22 +579,19 @@ sub owners{
     my $self = shift;
     my $set_name = shift if @_;
     my $dn = $self->rdn($set_name);
-print STDERR Data::Dumper->Dump([$dn]);
-    my @memberitems;
-    foreach my $set (@{ $self->all_sets() }){
-        if($set=~m/$set_name$/){ 
-            my @entry = $self->entry( $self->set2dn($set) );
-            my @members = $entry[0]->get_value('owner');
-            foreach my $member (@members){
-                my @heiarchy=split(/,/,$member);
-                my $item = shift(@heiarchy);
-                $item=~s/^cn=//;
-                $item=~s/^uid=//;
-                push(@memberitems,$item);
-            }
-        }
+    my $memberitems;
+    print STDERR Data::Dumper->Dump([$dn]);
+    return $dn if(defined($dn->{'error'}));
+    my @entry = $self->entry($dn);
+    my @members = $entry[0]->get_value('owner');
+    foreach my $member (@members){
+        my @heiarchy=split(/,/,$member);
+        my $item = shift(@heiarchy);
+        $item=~s/^cn=//;
+        $item=~s/^uid=//;
+        push(@{ $memberitems->{'result'} },$item);
     }
-    return @memberitems;
+    return $memberitems;
 }
 
 sub disown{
