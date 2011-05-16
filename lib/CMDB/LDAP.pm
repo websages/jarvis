@@ -635,6 +635,7 @@ print STDERR "================\n";
     print STDERR __PACKAGE__ ." line ". __LINE__ .": ". Data::Dumper->Dump([$replace]);
 
     my $result = $self->ldap_update($entry[0]);
+    print STDERR  __PACKAGE__ ." line ". __LINE__ .": ". Data::Dumper->Dump([$result->{'ERROR'}]);
     if(grep(/65 attribute.*owner.*not allowed/,@{ $result->{'ERROR'} })){
         return { 'result' => undef, 'error' => "13th Amendment violation." };
     }
