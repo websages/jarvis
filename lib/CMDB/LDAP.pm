@@ -335,7 +335,7 @@ sub ldap_search {
     $filter = "(objectclass=*)" unless $filter;
     my $servers;
     chomp($search_base);
-    print STDERR __PACKAGE__ ."line ". __LINE__ .": searching base: $search_base for ".$filter."\n";
+    print STDERR __PACKAGE__ ."line ". __LINE__ .": searching $search_base for ".$filter."\n";
     my $records = $self->{'ldap'}->search(
                                            'base'   => $search_base,
                                            'scope'  => 'sub',
@@ -381,7 +381,7 @@ sub ldap_update{
     }else{
         $mesg->code && $self->error($mesg->code." ".$mesg->error);
     }
-    my $errors=$self->error();
+    my $errors = $self->error();
     print STDERR __PACKAGE__ ."line ". __LINE__ .": "."$errors\n" if($errors ne "");
     return $self;
 }
@@ -552,7 +552,6 @@ sub entry{
     my @dn_parts=split(/,/,$dn);
     my $filter=shift(@dn_parts);
     my $sub_base=join(',',@dn_parts);
-    print STDERR __PACKAGE__ ."line ". __LINE__ .": searching $sub_base for $filter\n";
     my @entry = $self->ldap_search($filter,$sub_base);
     return @entry;
 }
@@ -626,8 +625,10 @@ sub own{
     print STDERR __PACKAGE__ ." line ". __LINE__ .": making $ownerdn an owner of $owned_dn->{'result'}\n";
     my @entry = $self->entry( $owned_dn->{'result'} );
     my @owners = $entry[0]->get_value('owner');
+print STDERR __LINE__ . Data::Dumper->Dump([$entry[0]->get_value('owner')]);
     push(@owners,$ownerdn) unless grep(/^$ownerdn/,@owners);
     $entry[0]->replace( 'owner' => @owners );
+print STDERR __LINE__ . Data::Dumper->Dump([$entry[0]->get_value('owner')]);
     my $result = $self->ldap_update($entry[0]);
     if(grep(/65 attribute.*owner.*not allowed/,@{ $result->{'ERROR'} })){
         return { 'result' => undef, 'error' => "13th Amendment violation." };
