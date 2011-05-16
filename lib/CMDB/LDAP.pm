@@ -583,10 +583,8 @@ sub owners{
     my $memberitems;
     return $dn if(defined($dn->{'error'}));
     my @entry = $self->entry($dn->{'result'});
-    print STDERR Data::Dumper->Dump(\@entry);
-
-
     my @members = $entry[0]->get_value('owner');
+
     foreach my $member (@members){
         my @heiarchy=split(/,/,$member);
         my $item = shift(@heiarchy);
@@ -594,7 +592,7 @@ sub owners{
         $item=~s/^uid=//;
         push(@{ $memberitems->{'result'} },$item);
     }
-    return $memberitems;
+    return $memberitems->{'result'};
 }
 
 sub disown{
