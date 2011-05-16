@@ -452,19 +452,19 @@ sub authen_reply{
                           $kernel->yield('speak',$msg,"$set will need to be shared with you by: [ ".join(', ',@{ $owners->{'result'} })." ]");
                       }
                   }
-#              }elsif($action=~m/^\s*!*share$/){
-#                  if( grep(/^$userid$/, @owners) ){
-#                      my $mesg = $self->{'cmdb'}->rdn("$newowner");
-#                      if($mesg->{'result'}){
-#                          $self->{'cmdb'}->own($mesg->{'result'},$set);
-#                          $kernel->yield('speak',$msg,"shared $set with $newowner");
-#                      }
-#                      if( $mesg->{'error'}){
-#                          $kernel->yield('speak',$msg,"can't: $mesg->{'error'}");
-#                      }
-#                  }else{
-#                      $kernel->yield('speak',$msg,"$userid has to own $set before sharing it.");
-#                  }
+              }elsif($action=~m/^\s*!*share$/){
+                  if( grep(/^$userid$/, @{ $owners->{'result'} }) ){
+                      my $mesg = $self->{'cmdb'}->rdn("$newowner");
+                      if($mesg->{'result'}){
+                          $self->{'cmdb'}->own($mesg->{'result'},$set);
+                          $kernel->yield('speak',$msg,"shared $set with $newowner");
+                      }
+                      if( $mesg->{'error'}){
+                          $kernel->yield('speak',$msg,"can't: $mesg->{'error'}");
+                      }
+                  }else{
+                      $kernel->yield('speak',$msg,"$userid has to own $set before sharing it.");
+                  }
 #              ##################################################################
 #              }elsif($action=~m/^\s*!*(add)$/){
 #                  if( grep(/^$userid$/, @owners) ){
