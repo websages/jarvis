@@ -666,12 +666,10 @@ sub deluniquemember{
     my @entry = $self->entry( $set_dn->{'result'} );
     my @newmembers=();
     my @uniquemembers = $entry[0]->get_value('uniqueMember');
-print STDERR Data::Dumper->Dump([@uniquemembers]);
     while(my $member = shift(@uniquemembers)){
         push(@newmembers,$member) unless($member eq $memberdn);
     }
-    my $replace = $entry[0]->replace( 'uniqueMember' => \@uniquemembers );
-print STDERR Data::Dumper->Dump([ $entry[0] ]);
+    my $replace = $entry[0]->replace( 'uniqueMember' => \@newmembers );
     my $result = $self->ldap_update($entry[0]);
     print STDERR  __PACKAGE__ ." line ". __LINE__ .": \n". Data::Dumper->Dump([$result->{'ERROR'}]);
     return { 'result' => "added", 'error' => undef };
