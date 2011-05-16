@@ -385,7 +385,7 @@ sub authen_reply{
               }elsif($action =~m /disown|own|pwn|owners|who\s*o*wns/){
                   $set    = $rxargs[1];
                   print STDERR "[ $action ] [ $set ]\n";
-              }elsif($action =~m /share/){
+              }elsif($action =~m /share|unshare/){
                   $newowner = $rxargs[2];
                   $set      = $rxargs[1];
               }
@@ -465,6 +465,20 @@ sub authen_reply{
                   }else{
                       $kernel->yield('speak',$msg,"$userid has to own $set before sharing it.");
                   }
+              }elsif($action=~m/^\s*!*unshare$/){
+                  if( grep(/^$userid$/, @{ $owners->{'result'} }) ){
+                      my $mesg = $self->{'cmdb'}->rdn("$newowner");
+                      if($mesg->{'result'}){
+                          $self->{'cmdb'}->disown($mesg->{'result'},$set);
+                          $kernel->yield('speak',$msg,"unshared $set with $newowner");
+                      }
+                      if( $mesg->{'error'}){
+                          $kernel->yield('speak',$msg,"can't: $mesg->{'error'}");
+                      }
+                  }else{
+                      $kernel->yield('speak',$msg,"$userid has to own $set before sharing it.");
+                  }
+#              ##################################################################
 #              ##################################################################
 #              }elsif($action=~m/^\s*!*(add)$/){
 #                  if( grep(/^$userid$/, @owners) ){
