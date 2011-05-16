@@ -480,19 +480,28 @@ sub authen_reply{
                       $kernel->yield('speak',$msg,"$userid has to own $set before sharing it.");
                   }
               ##################################################################
+              ##################################################################
+              ##################################################################
+              ##################################################################
               }elsif($action=~m/^\s*!*(add)$/){
                   if( grep(/^$userid$/, @{ $owners->{'result'} }) ){
-                      $kernel->yield('speak',$msg,"icanhaz add routine?");
+                      my $mesg = $self->{'cmdb'}->rdn("$member");
+                      if($mesg->{'result'}){
+                          $self->{'cmdb'}->adduniquemember($mesg->{'result'},$set);
+                          $kernel->yield('speak',$msg,"added $member to $set");
+                      }elsif( $mesg->{'error'}){
+                          $kernel->yield('speak',$msg,"can't: $mesg->{'error'}");
+                      }
                   }else{
                       $kernel->yield('speak',$msg,"you don't own $set");
                   }
               }elsif($action=~m/^\s*!*(del)$/){
-                 if( grep(/^$userid$/, @{ $owners->{'result'} }) ){
-                      $kernel->yield('speak',$msg,"icanhas del routine?");
-                  }else{
-                      $kernel->yield('speak',$msg,"you don't own $set");
-                  }
-              }else{
+#                 if( grep(/^$userid$/, @{ $owners->{'result'} }) ){
+#                      $kernel->yield('speak',$msg,"icanhas del routine?");
+#                  }else{
+#                      $kernel->yield('speak',$msg,"you don't own $set");
+#                  }
+#              }else{
                   $kernel->yield('speak',$msg,"huh?");
               }
             };

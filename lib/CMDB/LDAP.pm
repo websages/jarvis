@@ -635,6 +635,26 @@ sub own{
     return { 'result' => "owned", 'error' => undef };
 }
 
+sub adduniquemember{
+    my $self = shift;
+    my $member = shift if @_;
+    my $target_set = shift if @_;
+    return undef unless $member;
+    return undef unless $target_set;
+    my $set_dn = $self->rdn($target_set);
+    return $set_dn unless(defined($owned_dn->{'result'}));
+    print STDERR __PACKAGE__ ." line ". __LINE__ .": adding $member to $set_dn->{'result'}\n";
+    my @entry = $self->entry( $set_dn->{'result'} );
+
+    my @uniquemembers = $entry[0]->get_value('uniquemember');
+    push(@uniquemembers,$member) unless grep(/^$member/,@uniquemembers);
+    my $replace = $entry[0]->replace( 'uniquemember' => \@uniquemembers );
+    my $result = $self->ldap_update($entry[0]);
+    print STDERR  __PACKAGE__ ." line ". __LINE__ .": ". Data::Dumper->Dump([$result->{'ERROR'}]);
+    return { 'result' => "added", 'error' => undef };
+}
+
+# given a short name, return the relative distinguished name for an item.
 # given a short name, return the relative distinguished name for an item.
 sub rdn{
     my $self = shift;
