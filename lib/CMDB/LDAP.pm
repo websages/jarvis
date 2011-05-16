@@ -642,7 +642,7 @@ sub adduniquemember{
     return undef unless $member;
     return undef unless $target_set;
     my $set_dn = $self->rdn($target_set);
-    return $set_dn unless(defined($owned_dn->{'result'}));
+    return $set_dn unless(defined($set_dn->{'result'}));
     print STDERR __PACKAGE__ ." line ". __LINE__ .": adding $member to $set_dn->{'result'}\n";
     my @entry = $self->entry( $set_dn->{'result'} );
 
