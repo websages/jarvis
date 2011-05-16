@@ -356,7 +356,7 @@ print STDERR Data::Dumper->Dump([$dn]);
          /^\s*!*who\s*am\s*i\s*/ && 
          do {
               if(defined($dn->{'error'}})){
-                  $kernel->yield('speak', $msg, "Can't tell: $dn->{'error'}");
+                  $kernel->yield('speak', $msg, "Can't tell: $dn->{'error'}; Operations requiring authentication will fail.");
               }else{
                   $kernel->yield('speak', $msg, "I see you as $userid\@$domain ($userid) [$dn->{'result'}].");
               }
