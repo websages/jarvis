@@ -600,8 +600,9 @@ sub disown{
     my $target_set = shift if @_;
     return undef unless $ownerdn;
     return undef unless $target_set;
-
-    print STDERR "removing $ownerdn from owners of ". $self->set2dn($target_set)."\n";
+    my $owned_dn = $self->rdn($target_set);
+    return $owned_dn unless(defined($target_set->{'result'}));
+    print STDERR "removing $ownerdn from owners of ". $self->rdn($target_set->{'result'})."\n";
 #    foreach my $set (@{ $self->all_sets() }){
 #        if($set=~m/^$target_set$/){
 #            my @entry = $self->entry( $self->set2dn($set) );

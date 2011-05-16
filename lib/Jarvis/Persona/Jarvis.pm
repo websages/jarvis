@@ -403,7 +403,10 @@ sub authen_reply{
                   if(defined($owners->{'error'})){
                       $kernel->yield('speak',$msg, $owners->{'error'});
                   }elsif( grep(/^$userid$/, @{ $owners->{'result'} }) ){
-                      $self->{'cmdb'}->disown($dn,$set);
+                      my $status = $self->{'cmdb'}->disown($dn,$set);
+                      if($defined($status->{'error'})){
+                          $kernel->yield('speak',$msg, $status->{'error'});
+                      }
                   }else{
                       $kernel->yield('speak',$msg,"$userid isn't an owner of $set");
                   }
