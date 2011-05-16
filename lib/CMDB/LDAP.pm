@@ -552,6 +552,7 @@ sub entry{
     my @dn_parts=split(/,/,$dn);
     my $filter=shift(@dn_parts);
     my $sub_base=join(',',@dn_parts);
+    print STDERR __LINE__ ."Searchin $sub_base for $filter\n";
     my @entry = $self->ldap_search($filter,$sub_base);
     return @entry;
 }
@@ -582,6 +583,8 @@ sub owners{
     my $memberitems;
     return $dn if(defined($dn->{'error'}));
     my @entry = $self->entry($dn);
+
+
     my @members = $entry[0]->get_value('owner');
     foreach my $member (@members){
         my @heiarchy=split(/,/,$member);
