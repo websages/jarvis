@@ -631,7 +631,7 @@ sub own{
 print STDERR "================\n";
 print STDERR Data::Dumper->Dump(\@owners);
 print STDERR "================\n";
-    my $replace = $entry[0]->replace( 'owner' => @owners );
+    my $replace = $entry[0]->replace( 'owner' => \@owners );
     print STDERR __PACKAGE__ ." line ". __LINE__ .": ". Data::Dumper->Dump([$replace]);
 
     my $result = $self->ldap_update($entry[0]);
