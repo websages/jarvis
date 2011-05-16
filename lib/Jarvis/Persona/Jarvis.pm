@@ -348,17 +348,17 @@ sub authen_reply{
     if($actual=~m/(.*)@(.*)/){
         ($userid,$domain) = ($1,$2);
     }
-    my $dn=$self->{'cmdb'}->rdn($userid); 
-print STDERR Data::Dumper->Dump([$dn]);
+    my $user_dn=$self->{'cmdb'}->rdn($userid); 
+    my $dn = $user_dn->{'result'};
     $domain=~s/^(znc|irc)\.//; # something more elegant than this please...
     for ( $what ) {
     ############################################################################
          /^\s*!*who\s*am\s*i\s*/ && 
          do {
-              if(defined($dn->{'error'})){
-                  $kernel->yield('speak', $msg, "Can't tell: $dn->{'error'}; Operations requiring authentication will fail.");
+              if(defined($user_dn->{'error'})){
+                  $kernel->yield('speak', $msg, "Can't tell: $user_dn->{'error'}; Operations requiring authentication will fail.");
               }else{
-                  $kernel->yield('speak', $msg, "I see you as $userid\@$domain ($userid) [$dn->{'result'}].");
+                  $kernel->yield('speak', $msg, "I see you as $userid\@$domain ($userid) [$user_dn->{'result'}].");
               }
               last;
             };
@@ -371,6 +371,10 @@ print STDERR Data::Dumper->Dump([$dn]);
               /^\s*!*(share)\s+(.*)\s+with\s+(.*)/
             ) && 
          do {
+              if(!(defined($dn))){ 
+                  $kernel->yield('speak',$msg, "Cannot authenticate $userid. Who are you?" );
+                  last; 
+              }
               my @rxargs = ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);
               $action = $rxargs[0];
               if($action =~m /add|del/){
