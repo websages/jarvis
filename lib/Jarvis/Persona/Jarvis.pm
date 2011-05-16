@@ -359,6 +359,7 @@ print STDERR Data::Dumper->Dump([$dn]);
                   $kernel->yield('speak', $msg, "Can't tell: $dn->{'error'}");
               }else{  
                   $kernel->yield('speak', $msg, "I see you as $userid\@$domain ($userid) [$dn->{'result'}].");
+              }
               last;
             };
     ############################################################################
