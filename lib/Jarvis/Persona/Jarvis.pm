@@ -161,8 +161,9 @@ sub input{
               /^\s*!*(add)\s+(\S+)\s+to\s+(\S+)/                  ||
               /^\s*!*(del)\s+(\S+)\s+from\s+(\S+)/                ||
               /^\s*!*(disown|own|pwn|owners*|who\s*o*wns)\s+(.*)/ ||
-              /^\s*!*(share)\s+(.*)\s+with\s+(.*)/                ||
               /^\s*!*(rmset)\s+(.*)/                              ||
+              /^\s*!*(share)\s+(.*)\s+with\s+(.*)/                ||
+              /^\s*!*(unshare)\s+(.*)\s+with\s+(.*)/              ||
               /^\s*!*(describe|desc|description|what\s*is)\s+(.*)/    
             ) && 
                 do {   # we hand of this command to the authenticated handler
