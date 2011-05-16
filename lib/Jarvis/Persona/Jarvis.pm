@@ -393,7 +393,9 @@ sub authen_reply{
                       $kernel->yield('speak',$msg, 'no owners');
                   }
               }elsif($action=~m/^\s*!*(disown)$/){
-                  if( grep(/^$uid$/, @{ $owners->{'result'} }) ){
+                  if(defined($owners->{'error'})){
+                      $kernel->yield('speak',$msg, $owners->{'error'});
+                  }elsif( grep(/^$uid$/, @{ $owners->{'result'} }) ){
                       $self->{'cmdb'}->disown("$userid\@$domain",$set);
                   }else{
                       $kernel->yield('speak',$msg,"$uid isn't an owner of $set");
