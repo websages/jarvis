@@ -238,7 +238,7 @@ sub speak{
                 $kernel->post($self->{'logger'}, 'log', "$where <$nick> $who: $line");
             }else{
                 $kernel->post($sender_id, $respond_event, $msg, $line); 
-                $kernel->post($self->{'logger'}, 'log', "$where <$who> $line");
+                $kernel->post($self->{'logger'}, 'log', "$where <$nick> $line");
             }
         }
     }
