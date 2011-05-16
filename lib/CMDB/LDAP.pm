@@ -623,10 +623,11 @@ sub own{
     return undef unless $target_set;
     my $owned_dn = $self->rdn($target_set);
     return $owned_dn unless(defined($owned_dn->{'result'}));
-    print STDERR "making $ownerdn an owner of $owned_dn->{'result'}\n";
+    print STDERR __PACKAGE__ ." line ". __LINE__ .": making $ownerdn an owner of $owned_dn->{'result'}\n";
     my @entry = $self->entry( $owned_dn->{'result'} );
     my @owners = $entry[0]->get_value('owner');
     push(@owners,$ownerdn) unless grep(/^$ownerdn/,@owners);
+    $entry[0]->replace( 'owner' => @owners );
     $self->ldap_update($entry[0]);
     return { 'result' => "owned", 'error' => undef };
 }
