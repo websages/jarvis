@@ -624,12 +624,17 @@ sub own{
     return $owned_dn unless(defined($owned_dn->{'result'}));
     print STDERR __PACKAGE__ ." line ". __LINE__ .": making $ownerdn an owner of $owned_dn->{'result'}\n";
     my @entry = $self->entry( $owned_dn->{'result'} );
-    my @owners = $entry[0]->get_value('owner');
+
+
 print STDERR __PACKAGE__ ." line ". __LINE__ .": ". Data::Dumper->Dump([$entry[0]->get_value('owner')]);
+    my @owners = $entry[0]->get_value('owner');
+print STDERR __PACKAGE__ ." line ". __LINE__ .": ". Data::Dumper->Dump(['owners',@owners]);
     push(@owners,$ownerdn) unless grep(/^$ownerdn/,@owners);
-print STDERR __PACKAGE__ ." line ". __LINE__ .": ". Data::Dumper->Dump([@owners]);
+print STDERR __PACKAGE__ ." line ". __LINE__ .": ". Data::Dumper->Dump(['owners',@owners]);
     $entry[0]->replace( 'owner' => @owners );
 print STDERR __PACKAGE__ ." line ". __LINE__ .": ". Data::Dumper->Dump([$entry[0]->get_value('owner')]);
+
+
     my $result = $self->ldap_update($entry[0]);
     if(grep(/65 attribute.*owner.*not allowed/,@{ $result->{'ERROR'} })){
         return { 'result' => undef, 'error' => "13th Amendment violation." };
