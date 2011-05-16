@@ -479,59 +479,24 @@ sub authen_reply{
                   }else{
                       $kernel->yield('speak',$msg,"$userid has to own $set before sharing it.");
                   }
-#              ##################################################################
-#              ##################################################################
-#              }elsif($action=~m/^\s*!*(add)$/){
-#                  if( grep(/^$userid$/, @owners) ){
-#                      $kernel->yield('speak',$msg,"icanhaz add routine?");
-#                  }else{
-#                      $kernel->yield('speak',$msg,"you don't own $set");
-#                  }
-#              }elsif($action=~m/^\s*!*(del)$/){
-#                  if( grep(/^$userid$/, @owners) ){
-#                      $kernel->yield('speak',$msg,"icanhas del routine?");
-#                  }else{
-#                      $kernel->yield('speak',$msg,"you don't own $set");
-#                  }
-#              }else{
-#                  $kernel->yield('speak',$msg,"huh?");
-#              }
-#    ############################################################################
-
-
-
               ##################################################################
-#              $self->{'authorize'} = CMDB::LDAP->new({
-#                                                       'uri'    => $self->{'ldap_uri'},
-#                                                       'basedn' => $self->{'ldap_basedn'},
-#                                                       'binddn' => $self->{'ldap_binddn'},
-#                                                       'bindpw' => $self->{'ldap_bindpw'},
-#                                                       'setou'  => 'Sets',
-#                                                     }) unless $self->{'authorize'};
-#              my $authorized = 0;
-#              foreach my $owner ( $self->{'authorize'}->owners($set) ){
-#                  if($owner eq "userid=$userid"){ $authorized =1; }
-#                  print STDERR "$owner == uid=$userid\n";
-#              }
-#                  print STDERR "authorized == $authorized \n";
-#              if($authorized == 1){
-#                  $kernel->post(
-#                                 $msg->{'sender_alias'},
-#                                 $msg->{'reply_event'}, 
-#                                 $msg, 
-#                                 "adding $member to $set"
-#                               );
-#              }else{
-#                  $kernel->post(
-#                                 $msg->{'sender_alias'},
-#                                 $msg->{'reply_event'}, 
-#                                 $msg, 
-#                                 "You don't own $set"
-#                               );
+              }elsif($action=~m/^\s*!*(add)$/){
+                  if( grep(/^$userid$/, @{ $owners->{'result'} }) ){
+                      $kernel->yield('speak',$msg,"icanhaz add routine?");
+                  }else{
+                      $kernel->yield('speak',$msg,"you don't own $set");
+                  }
+              }elsif($action=~m/^\s*!*(del)$/){
+                 if( grep(/^$userid$/, @{ $owners->{'result'} }) ){
+                      $kernel->yield('speak',$msg,"icanhas del routine?");
+                  }else{
+                      $kernel->yield('speak',$msg,"you don't own $set");
+                  }
+              }else{
+                  $kernel->yield('speak',$msg,"huh?");
               }
-              last;
             };
-    ############################################################################
+         #######################################################################
          /.*/ && 
          do {
               print STDERR "not sure what to do with /$what/ (no match)\n"; 
