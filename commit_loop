@@ -3,7 +3,7 @@ COMMIT_MSG="looping" ;
 while [ "${COMMIT_MSG}" != "q" ]; do 
     clear ; 
     echo "${COMMIT_MSG}"; 
-    git commit -a -m "${COMMIT_MSG}" && git push && wd deploy --to=loki; 
+    git commit -a -m "${COMMIT_MSG}" && git push && wd deploy --to=hercules; 
     echo -n "Commit: "; 
     OLD="${COMMIT_MSG}"; 
     read COMMIT_MSG; 

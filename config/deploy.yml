@@ -28,6 +28,28 @@ freyr:
   repository: "gitosis@freyr.websages.com:jarvis.git"
   branch: "master"
   post_deploy_script: bin/reinstall
+hercules:
+  domain: "root@hercules.eftdomain.net"
+  deploy_to: "/opt/local/jarvis"
+  repository: "gitosis@freyr.websages.com:jarvis.git"
+  branch: "master"
+  post_deploy_script: bin/reinstall
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
