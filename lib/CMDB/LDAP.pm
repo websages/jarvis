@@ -341,7 +341,7 @@ sub ldap_search {
                                            'scope'  => 'sub',
                                            'filter' => $filter,
                                          );
-    print STDERR __LINE__ ." ".$records->error."\n" if $records->code;
+    print STDERR "line". __LINE__ .": ".$records->error."\n" if $records->code;
     my $recs;
     my @entries = $records->entries;
     return @entries if @entries;
@@ -382,7 +382,7 @@ sub ldap_update{
         $mesg->code && $self->error($mesg->code." ".$mesg->error);
     }
     my $errors=$self->error();
-    print STDERR __LINE__ ." "."$errors\n" if($errors ne "");
+    print STDERR "line ". __LINE__ .": "."$errors\n" if($errors ne "");
     return $self;
 }
 
@@ -552,7 +552,7 @@ sub entry{
     my @dn_parts=split(/,/,$dn);
     my $filter=shift(@dn_parts);
     my $sub_base=join(',',@dn_parts);
-    print STDERR __LINE__ ."Searching $sub_base for $filter\n";
+    print STDERR "line". __LINE__ .": searching $sub_base for $filter\n";
     my @entry = $self->ldap_search($filter,$sub_base);
     return @entry;
 }
@@ -584,7 +584,6 @@ sub owners{
     return $dn if(defined($dn->{'error'}));
     my @entry = $self->entry($dn->{'result'});
     my @members = $entry[0]->get_value('owner');
-
     foreach my $member (@members){
         my @heiarchy=split(/,/,$member);
         my $item = shift(@heiarchy);

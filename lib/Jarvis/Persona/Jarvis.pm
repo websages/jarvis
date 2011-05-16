@@ -392,12 +392,12 @@ sub authen_reply{
                   }else{
                       $kernel->yield('speak',$msg, 'no owners');
                   }
-#              }elsif($action=~m/^\s*!*(disown)$/){
-#                  if( grep(/^$uid$/, @owners) ){
-#                      $self->{'cmdb'}->disown("$userid\@$domain",$set);
-#                  }else{
-#                      $kernel->yield('speak',$msg,"$uid isn't an owner of $set");
-#                  }
+              }elsif($action=~m/^\s*!*(disown)$/){
+                  if( grep(/^$uid$/, @{ owners->{'result'} }) ){
+                      $self->{'cmdb'}->disown("$userid\@$domain",$set);
+                  }else{
+                      $kernel->yield('speak',$msg,"$uid isn't an owner of $set");
+                  }
 #              }elsif($action=~m/^\s*!*pwn$/){
 #                  if( grep(/^$uid$/, @owners) ){
 #                      $kernel->yield('speak',$msg,"$uid is already an owner of $set");
