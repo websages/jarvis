@@ -626,14 +626,10 @@ sub own{
     my @entry = $self->entry( $owned_dn->{'result'} );
 
 
-print STDERR __PACKAGE__ ." line ". __LINE__ .": ". Data::Dumper->Dump([$entry[0]->get_value('owner')]);
     my @owners = $entry[0]->get_value('owner');
-print STDERR __PACKAGE__ ." line ". __LINE__ .": ". Data::Dumper->Dump(['owners',@owners]);
     push(@owners,$ownerdn) unless grep(/^$ownerdn/,@owners);
-print STDERR __PACKAGE__ ." line ". __LINE__ .": ". Data::Dumper->Dump(['owners',@owners]);
-    $entry[0]->replace( 'owner' => @owners );
-print STDERR __PACKAGE__ ." line ". __LINE__ .": ". Data::Dumper->Dump([$entry[0]->get_value('owner')]);
-
+    my $replace = $entry[0]->replace( 'owner' => @owners );
+    print STDERR __PACKAGE__ ." line ". __LINE__ .": ". Data::Dumper->Dump([$replace]);
 
     my $result = $self->ldap_update($entry[0]);
     if(grep(/65 attribute.*owner.*not allowed/,@{ $result->{'ERROR'} })){
