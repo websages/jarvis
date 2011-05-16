@@ -439,7 +439,7 @@ sub authen_reply{
                   if( grep(/^$userid$/, @{ $owners->{'result'} }) ){
                       $kernel->yield('speak',$msg,"$userid is already an owner of $set");
                   }else{
-print STDERR "line ". __LINE__ ": \n".Data::Dumper->Dump([$owners]);
+print STDERR "line ". __LINE__ .": \n". Data::Dumper->Dump([$owners]);
                       if($#{ $owners->{'result'} } == -1){
                           print STDERR "making $dn an owner of $set\n";
                           $self->{'cmdb'}->own("$userid\@$domain",$set);
