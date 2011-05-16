@@ -329,7 +329,7 @@ sub ldap_unbind{
 sub ldap_search {
     my $self = shift;
     my $filter = shift if @_;
-    my $search_base=shift||$self->{'basedn'};
+    my $search_base = shift||$self->{'basedn'};
     $self->ldap_bind unless $self->{'ldap'};
     return undef unless(ref($self->{'ldap'}) eq "Net::LDAP");
     $filter = "(objectclass=*)" unless $filter;
