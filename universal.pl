@@ -172,11 +172,11 @@ $persona->{'persona'}->{'init'}->{'known_personas'} = YAML::Load(<< "...");
           alias: jarvis_irc
           persona: jarvis
           nickname: jarvis
-          ircname: "Just another really vigilant infrastructure sysadmin"
+          ircname: "Just Another Really Vigilant Infrastructure Sysadmin"
           server: 127.0.0.1
           domain: ${domain}
           channel_list:
-            - #puppies
+            - #infrastructure
 ...
 ###############################################################################
 # Start the system persona
