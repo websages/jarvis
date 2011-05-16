@@ -670,6 +670,7 @@ sub deluniquemember{
         push(@newmembers,$member) unless($member eq $memberdn);
     }
     my $replace = $entry[0]->replace( 'uniqueMember' => \@uniquemembers );
+print Data::Dumper->Dump([$entry[0]);
     my $result = $self->ldap_update($entry[0]);
     print STDERR  __PACKAGE__ ." line ". __LINE__ .": \n". Data::Dumper->Dump([$result->{'ERROR'}]);
     return { 'result' => "added", 'error' => undef };
