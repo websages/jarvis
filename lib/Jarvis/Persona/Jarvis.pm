@@ -412,24 +412,24 @@ sub authen_reply{
                   }else{
                       $kernel->yield('speak',$msg,"$userid isn't an owner of $set");
                   }
-#              }elsif($action=~m/^\s*!*pwn$/){
-#                  if( grep(/^$userid$/, @owners) ){
-#                      $kernel->yield('speak',$msg,"$userid is already an owner of $set");
-#                  }else{
-#                      if($#owners == -1){
-#                          my $mesg = $self->{'cmdb'}->rdn("people/$userid");
-#                          $self->{'cmdb'}->own($mesg->{'result'},$set);
-#                      }else{
-#                          # own the entry if we are an admin
-#                          my $mesg = $self->{'cmdb'}->rdn("people/$userid"); 
-#                          if($self->{'cmdb'}->is_admin("$userid\@$domain")){
-#                              $self->{'cmdb'}->own($mesg->{'result'},$set);
-#                              $kernel->yield('speak',$msg,"PWN3D!");
-#                          }else{
-#                              $kernel->yield('speak',$msg,"you have to be an ldap admin to pwn.");
-#                          }
-#                      }
-#                  }
+              }elsif($action=~m/^\s*!*pwn$/){
+                  if( grep(/^$userid$/, @{ $owners->{'result'} }) ){
+                      $kernel->yield('speak',$msg,"$userid is already an owner of $set");
+                  }else{
+                      if($#{ $owners->{'result'} } == -1){
+                          my $mesg = $self->{'cmdb'}->rdn("people/$userid");
+                          $self->{'cmdb'}->own($mesg->{'result'},$set);
+                      }else{
+                          # own the entry if we are an admin
+                          my $mesg = $self->{'cmdb'}->rdn("people/$userid"); 
+                          if($self->{'cmdb'}->is_admin("$userid\@$domain")){
+                              $self->{'cmdb'}->own($mesg->{'result'},$set);
+                              $kernel->yield('speak',$msg,"PWN3D!");
+                          }else{
+                              $kernel->yield('speak',$msg,"you have to be an ldap admin to pwn.");
+                          }
+                      }
+                  }
               }elsif($action=~m/^\s*!*own$/){
                   if( grep(/^$userid$/, @{ $owners->{'result'} }) ){
                       $kernel->yield('speak',$msg,"$userid is already an owner of $set");
