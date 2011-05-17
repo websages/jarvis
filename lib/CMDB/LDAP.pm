@@ -653,7 +653,7 @@ sub adduniquemember{
     push(@uniquemembers,$member) unless grep(/^$member/,@uniquemembers);
     my $replace = $entry[0]->replace( 'uniquemember' => \@uniquemembers );
     my $result = $self->ldap_update($entry[0]);
-    print STDERR  __PACKAGE__ ." line ". __LINE__ .": ". Data::Dumper->Dump([$result->{'ERROR'}]);
+    #print STDERR  __PACKAGE__ ." line ". __LINE__ .": ". Data::Dumper->Dump([$result->{'ERROR'}]);
     return { 'result' => "added", 'error' => undef };
 }
 
@@ -694,6 +694,9 @@ print STDERR "$name\n";
     push(@entries,@people) if(defined($people[0]));
     my @sets = $self->ldap_search("(cn=$name)","ou=Sets,".$self->{'basedn'});
     push(@entries,@sets) if(defined($sets[0]));
+    my @sets = $self->ldap_search("(ou=$name)","ou=Sets,".$self->{'basedn'});
+    push(@entries,@sets) if(defined($sets[0]));
+print Data::Dumper->Dump(\@entries);
     if($#entries < 0){
         return { result => undef, error => "$name not found." };
     }elsif($#entries > 0){ 
