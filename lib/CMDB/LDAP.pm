@@ -573,7 +573,6 @@ sub members{
         }
 
     }
-print STDERR Data::Dumper->Dump([\@memberitems]);
     return @memberitems;
 }
 
@@ -712,7 +711,8 @@ sub rdn{
 
 sub admins{
     my $self = shift;
-    my @entry = $self->entry('cn=LDAP Administrators,ou=Special,'.$self->basedn);
+    #my @entry = $self->entry('cn=LDAP Administrators,ou=Special,'.$self->basedn);
+    my @entry = $self->entry('cn=Directory Administrators,'.$self->basedn);
     return undef unless $entry[0];
     my @admins;
     foreach my $um ($entry[0]->get_value('uniqueMember')){
