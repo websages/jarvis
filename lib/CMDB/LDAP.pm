@@ -449,7 +449,6 @@ print STDERR Data::Dumper->Dump([$dn]);
         return undef unless defined($dn);
         #return the members if it's a cn
         if($dn=~m/^cn/){
-print STDERR CN
 print STDERR Data::Dumper->Dump([$self->members($parent)]);
             return $self->members($parent);
         }
