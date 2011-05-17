@@ -450,6 +450,8 @@ sub sets_in{
             return $self->members($dn);
         }
 
+print STDERR "is an ou\n";
+
         # return the sub ou's if not a cn
         foreach my $set (@{ $self->all_sets() }){
             if($set=~m/^${parent}\//){
