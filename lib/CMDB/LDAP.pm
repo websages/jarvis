@@ -442,10 +442,12 @@ print STDERR Data::Dumper->Dump([$parent]);
         $parent=~s/\/$//;
 
         $parent=~s/^(cn|ou)=//;
-        my $dn = $self->set2dn($parent);
+        my $dn = $self->rdn($parent);
+print STDERR Data::Dumper->Dump([$dn]);
         return undef unless $dn;
         #return the members if it's a cn
         if($dn=~m/^cn/){
+print STDERR Data::Dumper->Dump([$self->members($parent)]);
             return $self->members($parent);
         }
 
