@@ -437,7 +437,6 @@ sub sets_in{
     my $self = shift;
     my $parent = shift if @_;
     my @tops;
-print STDERR Data::Dumper->Dump([$parent]);
     if($parent){
         $parent=~s/\/$//;
 
@@ -445,12 +444,10 @@ print STDERR Data::Dumper->Dump([$parent]);
         my $rdn = $self->rdn($parent);
         my $dn = $rdn->{'result'};
         $dn=~s/,\s+/,/g;
-print STDERR Data::Dumper->Dump([$dn]);
         return undef unless defined($dn);
         #return the members if it's a cn
         if($dn=~m/^cn/){
-print STDERR Data::Dumper->Dump([$self->members($parent)]);
-            return $self->members($parent);
+            return $self->members($dn);
         }
 
         # return the sub ou's if not a cn
@@ -563,20 +560,20 @@ sub entry{
 
 sub members{
     my $self = shift;
-    my $set_name = shift if @_;
+    my $set_dn = shift if @_;
     my @memberitems;
-    foreach my $set (@{ $self->all_sets() }){
-        if($set=~m/$set_name$/){  
-            my @entry = $self->entry( $self->set2dn($set) );
-            my @members = $entry[0]->get_value('uniqueMember');
-            foreach my $member (@members){
-                my @heiarchy=split(/,/,$member);
-                my $item = shift(@heiarchy);
-                $item=~s/.*=//;
-                push(@memberitems,$item);
-            }
+    my @entries = $self->entries($set_dn);
+    foreach my $entry (@entries){
+        my @members = $entry[0]->get_value('uniqueMember');
+        foreach my $member (@members){
+            my @heiarchy=split(/,/,$member);
+            my $item = shift(@heiarchy);
+            $item=~s/.*=//;
+            push(@memberitems,$item);
         }
+
     }
+print STDERR Data::Dumper->Dump([\@memberitems]);
     return @memberitems;
 }
 
