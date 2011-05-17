@@ -562,7 +562,7 @@ sub members{
     my $self = shift;
     my $set_dn = shift if @_;
     my @memberitems;
-    my @entries = $self->entries($set_dn);
+    my @entries = $self->entry($set_dn);
     foreach my $entry (@entries){
         my @members = $entry->get_value('uniqueMember');
         foreach my $member (@members){
