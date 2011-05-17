@@ -437,6 +437,7 @@ sub sets_in{
     my $self = shift;
     my $parent = shift if @_;
     my @tops;
+print STDERR Data::Dumper->Dump([$parent]);
     if($parent){
         $parent=~s/\/$//;
 

@@ -34,35 +34,3 @@ hercules:
   repository: "gitosis@freyr.websages.com:jarvis.git"
   branch: "master"
   post_deploy_script: bin/reinstall
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
