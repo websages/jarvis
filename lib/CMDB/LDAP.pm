@@ -685,7 +685,6 @@ sub rdn{
     my $fullname = shift if @_;
     my @tree = split('/',$fullname);
     my $name = pop(@tree);
-print STDERR "$name\n";
     return { result => undef, error => "nothing to look up" } unless $name;
     my @entries;
     my @hosts = $self->ldap_search("(cn=$name)","ou=Hosts,".$self->{'basedn'});
@@ -696,7 +695,6 @@ print STDERR "$name\n";
     push(@entries,@sets) if(defined($sets[0]));
     my @sets = $self->ldap_search("(ou=$name)","ou=Sets,".$self->{'basedn'});
     push(@entries,@sets) if(defined($sets[0]));
-print Data::Dumper->Dump(\@entries);
     if($#entries < 0){
         return { result => undef, error => "$name not found." };
     }elsif($#entries > 0){ 
