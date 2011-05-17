@@ -685,6 +685,7 @@ sub rdn{
     my $fullname = shift if @_;
     my @tree = split('/',$fullname);
     my $name = pop(@tree);
+print STDERR "$name\n";
     return { result => undef, error => "nothing to look up" } unless $name;
     my @entries;
     my @hosts = $self->ldap_search("(cn=$name)","ou=Hosts,".$self->{'basedn'});
