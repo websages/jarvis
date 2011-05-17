@@ -564,7 +564,7 @@ sub members{
     my @memberitems;
     my @entries = $self->entries($set_dn);
     foreach my $entry (@entries){
-        my @members = $entry[0]->get_value('uniqueMember');
+        my @members = $entry->get_value('uniqueMember');
         foreach my $member (@members){
             my @heiarchy=split(/,/,$member);
             my $item = shift(@heiarchy);
