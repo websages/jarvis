@@ -364,7 +364,7 @@ sub ldap_update{
     my $self = shift;
     my $entry = shift if @_;
     return undef unless $entry;
-    print STDERR "updating: [". $entry->dn."]\n";
+    #print STDERR "updating: [". $entry->dn."]\n";
     $self->ldap_bind unless $self->{'ldap'};
     my $mesg = $entry->update( $self->{'ldap'} );
     if(($mesg->code == 10) && ($mesg->error eq "Referral received")){
@@ -372,7 +372,7 @@ sub ldap_update{
         foreach my $ref (@{ $mesg->{'referral'} }){
             if($ref=~m/(ldap.*:.*)\/.*/){
                  my $new_uri=$1;
-                 print STDERR __PACKAGE__ ."line ". __LINE__ .": Following referral to: $new_uri\n";
+                 #print STDERR __PACKAGE__ ."line ". __LINE__ .": Following referral to: $new_uri\n";
                  my $old_uri = $self->uri;
                  $self->ldap_unbind;              # remove the old binding
                  $self->uri($new_uri);            # update the uri to the referral
@@ -387,7 +387,7 @@ sub ldap_update{
         $mesg->code && $self->error($mesg->code." ".$mesg->error);
     }
     my $errors = $self->error();
-    print STDERR __PACKAGE__ ." line ". __LINE__ .": "."$errors\n" if($errors ne "");
+    #print STDERR __PACKAGE__ ." line ". __LINE__ .": "."$errors\n" if($errors ne "");
     return $self;
 }
 
@@ -448,6 +448,7 @@ sub sets_in{
 
         $parent=~s/^(cn|ou)=//;
         my $rdn = $self->rdn($parent);
+print STDERR Data::Dumper->Dump([$parent,$rdn]);
         my $dn = $rdn->{'result'};
         $dn=~s/,\s+/,/g;
         return undef unless defined($dn);
@@ -565,7 +566,7 @@ sub set_delete{
         shift(@rdn_tree);
         my $sub_rdn=join(',',@rdn_tree);
         while(!$self->has_children($sub_rdn)){
-            print STDERR "Deleting $sub_rdn for lack of children\n";
+            #print STDERR "Deleting $sub_rdn for lack of children\n";
             my @empty_entries = $self->entry($sub_rdn);
             foreach my $entry(@empty_entries){ # there can be only one.
                 $self->ldap_delete($entry);
@@ -727,7 +728,7 @@ sub disown{
     return undef unless $target_set;
     my $owned_dn = $self->rdn($target_set);
     return $owned_dn unless(defined($owned_dn->{'result'}));
-    print STDERR "removing $ownerdn from owners of $owned_dn->{'result'}\n";
+    #print STDERR "removing $ownerdn from owners of $owned_dn->{'result'}\n";
 
     my @entry = $self->entry( $owned_dn->{'result'} );
     my @owners = $entry[0]->get_value('owner');
@@ -748,7 +749,7 @@ sub own{
     return undef unless $target_set;
     my $owned_dn = $self->rdn($target_set);
     return $owned_dn unless(defined($owned_dn->{'result'}));
-    print STDERR __PACKAGE__ ." line ". __LINE__ .": making $ownerdn an owner of $owned_dn->{'result'}\n";
+    #print STDERR __PACKAGE__ ." line ". __LINE__ .": making $ownerdn an owner of $owned_dn->{'result'}\n";
     my @entry = $self->entry( $owned_dn->{'result'} );
 
     my @owners = $entry[0]->get_value('owner');
@@ -769,12 +770,12 @@ sub adduniquemember{
     return undef unless $target_set;
     my $set_dn = $self->rdn($target_set);
     return $set_dn unless(defined($set_dn->{'result'}));
-    print STDERR __PACKAGE__ ." line ". __LINE__ .": adding $member to $set_dn->{'result'}\n";
+    #print STDERR __PACKAGE__ ." line ". __LINE__ .": adding $member to $set_dn->{'result'}\n";
     my @entry = $self->entry( $set_dn->{'result'} );
 
     my @uniquemembers = $entry[0]->get_value('uniquemember');
     # once we add the first member, we want to remove ourself (the create placeholder) as a member
-    push(@uniquemembers,$member) unless (grep(/^$member/,@uniquemembers)||grep(/^$set_dn/,@uniquemembers));
+    push(@uniquemembers,$member) unless grep(/^$member/,@uniquemembers);
     my $replace = $entry[0]->replace( 'uniquemember' => \@uniquemembers );
     my $result = $self->ldap_update($entry[0]);
     #print STDERR  __PACKAGE__ ." line ". __LINE__ .": ". Data::Dumper->Dump([$result->{'ERROR'}]);
@@ -789,7 +790,7 @@ sub deluniquemember{
     return undef unless $target_set;
     my $set_dn = $self->rdn($target_set);
     return $set_dn unless(defined($set_dn->{'result'}));
-    print STDERR __PACKAGE__ ." line ". __LINE__ .": adding $memberdn to $set_dn->{'result'}\n";
+    #print STDERR __PACKAGE__ ." line ". __LINE__ .": adding $memberdn to $set_dn->{'result'}\n";
     my @entry = $self->entry( $set_dn->{'result'} );
     my @newmembers=();
     my @uniquemembers = $entry[0]->get_value('uniqueMember');
