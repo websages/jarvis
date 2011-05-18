@@ -441,12 +441,12 @@ sub is_a{
 
 sub sets_in{
     my $self = shift;
-    my $parent = shift if @_;
-    my @tops;
-    if($parent){
-        $parent=~s/\/$//;
-        $parent=~s/^(cn|ou)=//;
-#        my $rdn = $self->rdn($parent);
+#    my $parent = shift if @_;
+#    my @tops;
+#    if($parent){
+#        $parent=~s/\/$//;
+#        $parent=~s/^(cn|ou)=//;
+##        my $rdn = $self->rdn($parent);
 #        return $rdn if(defined($rdn->{'error'}));
 #        my $dn = $rdn->{'result'};
 #        $dn=~s/,\s+/,/g;
@@ -472,7 +472,7 @@ sub sets_in{
 #            $top.="\/" if $tmp[0];
 #            push(@tops,$top) unless grep(/$top/,@tops);
 #        }
-    }
+#    }
 #    return { 'result' => join(', ',@tops), 'error' => undef };
 }
 
