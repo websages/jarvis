@@ -354,7 +354,7 @@ sub ldap_add{
     my $self = shift;
     my $entry = shift if @_;
     return undef unless $entry;
-    print STDERR "adding: ". $entry->dn."\n";
+    print STDERR "adding: [". $entry->dn."]\n";
     $entry->add;
     $self->ldap_update($entry);
     return $self;
@@ -498,6 +498,7 @@ sub set_add{
     my @tree = split('/',$set);
     my $cn = pop(@tree);
     my $rdn = "ou=$self->{'setou'},$self->{'basedn'}";
+    chomp($rdn);
     foreach my $ou (@tree){
         $rdn="ou=$ou,$rdn";
         unless($self->dn_exists($rdn)){
