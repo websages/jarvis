@@ -823,10 +823,6 @@ sub rdn{
     push(@entries,@people) if(defined($people[0]));
 
     # are we talking about a set?
-    my @sets = $self->ldap_search("(cn=$name)",$relative."ou=Sets,".$self->{'basedn'});
-    push(@entries,@sets) if(defined($sets[0]));
-    my @sets = $self->ldap_search("(ou=$name)",$relative."ou=Sets,".$self->{'basedn'});
-    push(@entries,@sets) if(defined($sets[0]));
     my @sets = $self->ldap_search("(cn=$name)","ou=Sets,".$self->{'basedn'});
     push(@entries,@sets) if(defined($sets[0]));
     my @sets = $self->ldap_search("(ou=$name)","ou=Sets,".$self->{'basedn'});
