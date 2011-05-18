@@ -356,7 +356,8 @@ sub ldap_add{
     return undef unless $entry;
     print STDERR "adding: ". $entry->dn."\n";
     $entry->add;
-    $self->ldap_update($entry);
+    my $result=$self->ldap_update($entry);
+    $result->code && warn __PACKAGE__." ".__LINE__ ": failed to add entry: ", $result->error ;
     return $self;
 }
 
