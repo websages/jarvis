@@ -347,7 +347,7 @@ sub authen_reply{
          $msg->{'conversation'}->{'body'},
          $msg->{'conversation'}->{'id'},
        );
-    my ($action,$member,$set,$userid,$domain,$newowner);
+    my ($action, $subaction, $member,$set,$userid,$domain,$newowner);
     if($actual=~m/(.*)@(.*)/){
         ($userid,$domain) = ($1,$2);
     }
