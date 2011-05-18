@@ -249,8 +249,8 @@ sub speak{
 sub sets{
     my ($self, $kernel, $heap, $sender, $top, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     my $result = ( $self->{'cmdb'}->sets_in($top) );
-    $kernel->yield('speak', $msg, $result->{'response'} if $result->{'response'};
-    $kernel->yield('speak', $msg, "Error: $result->{'response'}" if $result->{'error'};
+    $kernel->yield('speak', $msg, $result->{'response'}) if $result->{'response'};
+    $kernel->yield('speak', $msg, "Error: $result->{'response'}") if $result->{'error'};
 }
 
 sub admins{
