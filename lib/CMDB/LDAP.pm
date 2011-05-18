@@ -330,6 +330,8 @@ sub ldap_search {
     my $self = shift;
     my $filter = shift if @_;
     my $search_base = shift||$self->{'basedn'};
+    my $scope = shift if @_;
+    $scope = 'sub' unless(defined($scope));
     $self->ldap_bind unless $self->{'ldap'};
     return undef unless(ref($self->{'ldap'}) eq "Net::LDAP");
     $filter = "(objectclass=*)" unless $filter;
@@ -338,10 +340,10 @@ sub ldap_search {
     #print STDERR __PACKAGE__ ."line ". __LINE__ .": searching $search_base for ".$filter."\n";
     my $records = $self->{'ldap'}->search(
                                            'base'   => $search_base,
-                                           'scope'  => 'sub',
+                                           'scope'  => $scope,
                                            'filter' => $filter,
                                          );
-    print STDERR __PACKAGE__ ."line ". __LINE__ .": ".$records->error."\n" if $records->code;
+    #print STDERR __PACKAGE__ ." line ". __LINE__ .": ".$records->error."\n" if $records->code;
     my $recs;
     my @entries = $records->entries;
     return @entries if @entries;
@@ -390,7 +392,8 @@ sub ldap_delete{
     my $self = shift;
     my $entry = shift if @_;
     return undef unless $entry;
-    $self->ldap_update($entry->delete);
+    $entry->delete;
+    $self->ldap_update($entry);
     return $self;
 }
 
@@ -449,9 +452,6 @@ sub sets_in{
         if($dn=~m/^cn/){
             return $self->members($dn);
         }
-
-print STDERR "is an ou\n";
-
         # return the sub ou's if not a cn
         foreach my $set (@{ $self->all_sets() }){
             if($set=~m/^${parent}\//){
@@ -485,6 +485,106 @@ sub sub_sets{
         }
     }
     return @children; 
+}
+
+sub set_add{
+    my $self = shift;
+    my $set = shift if @_;
+    return { 'result' => undef, 'error' => 'no set defined' } unless $set;
+    my @tree = split('/',$set);
+    my $cn = pop(@tree);
+    my $rdn = "ou=$self->{'setou'},$self->{'basedn'}";
+    foreach my $ou (@tree){
+        $rdn="ou=$ou,$rdn";
+        unless($self->dn_exists($rdn)){
+            $self->create_ou($rdn);
+        }
+    }
+    if($self->dn_exists("cn=$cn,$rdn")){
+        return { 'result' => undef, 'error' => 'already exists' };     
+    }else{
+        $self->create_groupofuniquenames("cn=$cn,$rdn");
+        return { 'result' => 'created', 'error' => undef } if($self->dn_exists("cn=$cn,$rdn"));     
+        return { 'result' => undef, 'error' => 'failed to create' };     
+    }
+}
+
+sub create_groupofuniquenames{
+    my $self = shift;
+    my $dn = shift if @_;
+    return undef unless $dn;
+    my @tree = split(/,/,$dn);
+    my $cn = shift(@tree);
+    $cn=~s/^cn=//;
+    my $entry = Net::LDAP::Entry->new;
+    $entry->dn($dn);
+    $entry->add (
+                  'objectclass' => [ 'groupOfUniqueNames',  'top' ],
+                  'cn'          => [ $cn ],
+                  'description' => [ 'a new set with no description' ],
+                  'uniqueMember' => [ $dn ], # this is a mandatory field, so we add ourself
+                );
+    $self->ldap_update($entry);
+    return undef;
+}
+
+sub create_ou{
+    my $self = shift;
+    my $dn = shift if @_;
+    return undef unless $dn;
+    my @tree = split(/,/,$dn);
+    my $ou = shift(@tree);
+    $ou=~s/^ou=//;
+    my $entry = Net::LDAP::Entry->new;
+    $entry->dn($dn);
+    $entry->add (
+                  'objectclass' => [ 'organizationalUnit',  'top' ],
+                  'ou'          => [ $ou ],
+                );
+    $self->ldap_update($entry);
+}
+
+sub set_delete{
+    my $self = shift;
+    my $set = shift if @_;
+    return undef unless $set;
+    my $rdn = $self->rdn($set);
+    return undef unless $rdn->{'result'};
+    if($self->dn_exists($rdn->{'result'})){
+        my @entries = $self->entry($rdn->{'result'});
+        foreach my $entry(@entries){ # there can be only one.
+            $self->ldap_delete($entry);
+        }
+        ############################################
+        # delete empty organizationalUnits above it:
+        my @rdn_tree=split(/,/,$rdn->{'result'});
+        shift(@rdn_tree);
+        my $sub_rdn=join(',',@rdn_tree);
+        while(!$self->has_children($sub_rdn)){
+            print STDERR "Deleting $sub_rdn for lack of children\n";
+            my @empty_entries = $self->entry($sub_rdn);
+            foreach my $entry(@empty_entries){ # there can be only one.
+                $self->ldap_delete($entry);
+            }
+            @rdn_tree=split(/,/,$sub_rdn);
+            shift(@rdn_tree);
+            $sub_rdn=join(',',@rdn_tree);
+        }
+        ############################################
+        return { 'result' => 'deleted', 'error' => undef } unless($self->dn_exists($rdn));     
+        return { 'result' => undef, 'error' => 'failed to delete' };     
+    }else{
+        return { 'result' => undef, 'error' => 'does not exist' };     
+    }
+    return undef;
+}
+
+sub dn_exists{
+    my $self = shift;
+    my $dn = shift if @_;
+    my @entries = $self->entry($dn);
+    return 1 if(defined($entries[0]));
+    return 0;
 }
 
 # we lose information converting a dn to a set, so we have to recover it here.
@@ -558,6 +658,25 @@ sub entry{
     my $sub_base=join(',',@dn_parts);
     my @entry = $self->ldap_search($filter,$sub_base);
     return @entry;
+}
+
+sub children_of{
+    my $self=shift;
+    my $dn = shift if(@_);
+    my @entries = $self->ldap_search("(objectclass=*)",$dn,'one');
+    my @children;
+    foreach my $entry (@entries){
+        push(@children,$entry->dn) if(defined($entry));
+    }
+    return @children;
+}
+
+sub has_children{
+    my $self=shift;
+    my $dn = shift if(@_);
+    my @children = $self->children_of($dn);
+    return 0 if ($#children <0);
+    return 1;
 }
 
 sub members{
@@ -679,21 +798,22 @@ sub deluniquemember{
 }
 
 # given a short name, return the relative distinguished name for an item.
-# given a short name, return the relative distinguished name for an item.
 sub rdn{
     my $self = shift;
     my $fullname = shift if @_;
     my @tree = split('/',$fullname);
     my $name = pop(@tree);
+    my $relative='';
+    $relative="ou=".join(",ou=",reverse(@tree))."," if($#tree > -1);
     return { result => undef, error => "nothing to look up" } unless $name;
     my @entries;
-    my @hosts = $self->ldap_search("(cn=$name)","ou=Hosts,".$self->{'basedn'});
+    my @hosts = $self->ldap_search("(cn=$name)",$relative."ou=Hosts,".$self->{'basedn'});
     push(@entries,@hosts) if(defined($hosts[0]));
-    my @people = $self->ldap_search("(uid=$name)","ou=People,".$self->{'basedn'});
+    my @people = $self->ldap_search("(uid=$name)",$relative."ou=People,".$self->{'basedn'});
     push(@entries,@people) if(defined($people[0]));
-    my @sets = $self->ldap_search("(cn=$name)","ou=Sets,".$self->{'basedn'});
+    my @sets = $self->ldap_search("(cn=$name)",$relative."ou=Sets,".$self->{'basedn'});
     push(@entries,@sets) if(defined($sets[0]));
-    my @sets = $self->ldap_search("(ou=$name)","ou=Sets,".$self->{'basedn'});
+    my @sets = $self->ldap_search("(ou=$name)",$relative."ou=Sets,".$self->{'basedn'});
     push(@entries,@sets) if(defined($sets[0]));
     if($#entries < 0){
         return { result => undef, error => "$name not found." };
@@ -715,10 +835,18 @@ sub rdn{
 
 sub admins{
     my $self = shift;
-    #my @entry = $self->entry('cn=LDAP Administrators,ou=Special,'.$self->basedn);
     my @entry = $self->entry('cn=Directory Administrators,'.$self->basedn);
     return undef unless $entry[0];
     my @admins;
+    foreach my $um ($entry[0]->get_value('uniqueMember')){
+        my @dn_parts=split(/,/,$um);
+        my $name=shift(@dn_parts);
+        $name=~s/^uid=//;
+        $name=~s/^cn=//;
+        push(@admins,$name);
+    }
+    # support either fds or slapd
+    my @entry = $self->entry('cn=LDAP Administrators,ou=Special,'.$self->basedn);
     foreach my $um ($entry[0]->get_value('uniqueMember')){
         my @dn_parts=split(/,/,$um);
         my $name=shift(@dn_parts);

@@ -157,13 +157,15 @@ sub input{
         ########################################################################
         # working with sets
             ( 
-              /^\s*!*who\s*am\s*i\s*/                             ||
-              /^\s*!*(add)\s+(\S+)\s+to\s+(\S+)/                  ||
-              /^\s*!*(del|delete|rm|remove)\s+(\S+)\s+from\s+(\S+)/         ||
-              /^\s*!*(disown|own|pwn|owners*|who\s*o*wns)\s+(.*)/ ||
-              /^\s*!*(rmset)\s+(.*)/                              ||
-              /^\s*!*(share)\s+(.*)\s+with\s+(.*)/                ||
-              /^\s*!*(unshare)\s+(.*)\s+with\s+(.*)/              ||
+              /^\s*!*who\s*am\s*i\s*/                               ||
+              /^\s*!*(set)\s+(create|add)\s+(\S+)/                  ||
+              /^\s*!*(set)\s+(delete|del|remove|rm)\s+(\S+)/        ||
+              /^\s*!*(add)\s+(\S+)\s+to\s+(\S+)/                    ||
+              /^\s*!*(del|delete|rm|remove)\s+(\S+)\s+from\s+(\S+)/ ||
+              /^\s*!*(disown|own|pwn|owners*|who\s*o*wns)\s+(.*)/   ||
+              /^\s*!*(rmset)\s+(.*)/                                ||
+              /^\s*!*(share)\s+(.*)\s+with\s+(.*)/                  ||
+              /^\s*!*(unshare)\s+(.*)\s+with\s+(.*)/                ||
               /^\s*!*(describe|desc|description|what\s*is)\s+(.*)/    
             ) && 
                 do {   # we hand of this command to the authenticated handler
@@ -366,10 +368,12 @@ sub authen_reply{
     ############################################################################
     # Commands that require Authentication & Authorization
             ( 
-              /^\s*!*(add)\s+(\S+)\s+to\s+(\S+)/                  ||
-              /^\s*!*(del|delete|rm|remove)\s+(\S+)\s+from\s+(\S+)/         ||
-              /^\s*!*(disown|own|pwn|owners*|who\s*o*wns)\s+(.*)/ ||
-              /^\s*!*(share)\s+(.*)\s+with\s+(.*)/                ||
+              /^\s*!*(add)\s+(\S+)\s+to\s+(\S+)/                    ||
+              /^\s*!*(set)\s+(create|add)\s+(\S+)/                  ||
+              /^\s*!*(set)\s+(delete|del|remove|rm)\s+(\S+)/        ||
+              /^\s*!*(del|delete|rm|remove)\s+(\S+)\s+from\s+(\S+)/ ||
+              /^\s*!*(disown|own|pwn|owners*|who\s*o*wns)\s+(.*)/   ||
+              /^\s*!*(share)\s+(.*)\s+with\s+(.*)/                  ||
               /^\s*!*(unshare)\s+(.*)\s+with\s+(.*)/
             ) && 
          do {
@@ -388,7 +392,11 @@ sub authen_reply{
               }elsif($action =~m /share|unshare/){
                   $newowner = $rxargs[2];
                   $set      = $rxargs[1];
+              }elsif($action =~m /set/){
+                  $subaction = $rxargs[1];
+                  $set       = $rxargs[2];
               }
+              ##################################################################
               my $owners = $self->{'cmdb'}->owners($set);
               ##################################################################
               # for almost any authenticated action you'll need to see who owns it.
@@ -504,6 +512,26 @@ sub authen_reply{
                       }
                   }else{
                       $kernel->yield('speak',$msg,"you don't own $set");
+                  }
+              }elsif($action=~m/^\s*!*(set)$/){
+                  if($subaction=~m/^\s*!*(create|add)$/){
+                      my $mesg = $self->{'cmdb'}->set_add($set);
+                      $kernel->yield('speak',$msg,$mesg->{'result'}) if $mesg->{'result'};
+                      $kernel->yield('speak',$msg,$mesg->{'error'}) if $mesg->{'error'};
+                      $self->{'cmdb'}->own($dn,$set);
+                  }elsif($subaction=~m/^\s*!*(delete|del|remove|rm)$/){
+                      if( grep(/^$userid$/, @{ $owners->{'result'} }) ){
+                          if($owners->{'result'} > 0){
+                              $kernel->yield('speak',$msg,"you're not the only owner of $set");
+                          }else{
+                              my $mesg = $self->{'cmdb'}->set_delete($set);
+                              $kernel->yield('speak',$msg,$mesg->{'result'}) if $mesg->{'result'};
+                              $kernel->yield('speak',$msg,$mesg->{'error'}) if $mesg->{'error'};
+                              
+                          }
+                      }else{
+                          $kernel->yield('speak',$msg,"you don't own $set");
+                      }
                   }
               }else{
                   $kernel->yield('speak',$msg,"huh?");

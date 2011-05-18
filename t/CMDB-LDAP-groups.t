@@ -16,7 +16,7 @@ my $groups = CMDB::LDAP->new($creds);
 my @sets = @{ $groups->all_sets() };
 foreach $set (@sets){
     print "[ $set ]: \n";
-    foreach my $member ($groups->members($set)){
+    foreach my $member ($groups->members($groups->set2dn($set))){
         print "  - $member\n";
     }
 }
