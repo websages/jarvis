@@ -821,6 +821,11 @@ sub rdn{
     push(@entries,@sets) if(defined($sets[0]));
     my @sets = $self->ldap_search("(ou=$name)",$relative."ou=Sets,".$self->{'basedn'});
     push(@entries,@sets) if(defined($sets[0]));
+    my @sets = $self->ldap_search("(cn=$name)","ou=Sets,".$self->{'basedn'});
+    push(@entries,@sets) if(defined($sets[0]));
+    my @sets = $self->ldap_search("(ou=$name)","ou=Sets,".$self->{'basedn'});
+    push(@entries,@sets) if(defined($sets[0]));
+
     if($#entries < 0){
         return { result => undef, error => "$name not found." };
     }elsif($#entries > 0){ 
