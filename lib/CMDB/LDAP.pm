@@ -447,7 +447,7 @@ sub sets_in{
         $parent=~s/\/$//;
         $parent=~s/^(cn|ou)=//;
         my $rdn = $self->rdn($parent);
-        return $result if $result->{'error'};
+        return $rdn if $rdn->{'error'};
         my $dn = $rdn->{'result'};
         $dn=~s/,\s+/,/g;
         return { 'result' => undef, 'error' => 'dn not found' } unless defined($dn);
