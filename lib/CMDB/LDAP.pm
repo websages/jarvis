@@ -364,10 +364,10 @@ sub ldap_update{
     my $self = shift;
     my $entry = shift if @_;
     return undef unless $entry;
-    print STDERR "updating: ". $entry->dn."\n";
+    print STDERR "updating: [". $entry->dn."]\n";
+    print STDERR Data::Dumper->Dump([$entry]);
     $self->ldap_bind unless $self->{'ldap'};
     my $mesg = $entry->update( $self->{'ldap'} );
-    print STDERR "updating: ". Data::Dumper->Dump([$mesg]);
     if(($mesg->code == 10) && ($mesg->error eq "Referral received")){
         $self->error("Received referral");
         foreach my $ref (@{ $mesg->{'referral'} }){
