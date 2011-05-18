@@ -364,6 +364,7 @@ sub ldap_update{
     my $self = shift;
     my $entry = shift if @_;
     return undef unless $entry;
+
     $self->ldap_bind unless $self->{'ldap'};
     my $mesg = $entry->update( $self->{'ldap'} );
     if(($mesg->code == 10) && ($mesg->error eq "Referral received")){
@@ -543,7 +544,7 @@ sub create_ou{
                   'objectclass' => [ 'organizationalUnit',  'top' ],
                   'ou'          => [ $ou ],
                 );
-    $self->ldap_add($entry);
+    my $result = $self->ldap_add($entry);
 }
 
 sub set_delete{
