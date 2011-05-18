@@ -473,7 +473,7 @@ sub sets_in{
             push(@tops,$top) unless grep(/$top/,@tops);
         }
     }
-    return { 'result' => join(', ',@tops), 'error' => undef }
+    return { 'result' => join(', ',@tops), 'error' => undef };
 }
 
 sub sub_sets{
