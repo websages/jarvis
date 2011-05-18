@@ -362,6 +362,7 @@ sub ldap_update{
     my $self = shift;
     my $entry = shift if @_;
     return undef unless $entry;
+    print STDERR $entry->dn."\n";
     $self->ldap_bind unless $self->{'ldap'};
     my $mesg = $entry->update( $self->{'ldap'} );
     if(($mesg->code == 10) && ($mesg->error eq "Referral received")){
@@ -384,7 +385,7 @@ sub ldap_update{
         $mesg->code && $self->error($mesg->code." ".$mesg->error);
     }
     my $errors = $self->error();
-    print STDERR __PACKAGE__ ."line ". __LINE__ .": "."$errors\n" if($errors ne "");
+    print STDERR __PACKAGE__ ." line ". __LINE__ .": "."$errors\n" if($errors ne "");
     return $self;
 }
 
