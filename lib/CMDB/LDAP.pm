@@ -356,8 +356,7 @@ sub ldap_add{
     return undef unless $entry;
     print STDERR "adding: ". $entry->dn."\n";
     $entry->add;
-    my $result=$self->ldap_update($entry);
-    print STDERR __PACKAGE__." ". __LINE__ .": failed to add entry: ". $result->error if($result->code);
+    $self->ldap_update($entry);
     return $self;
 }
 
@@ -367,7 +366,13 @@ sub ldap_update{
     return undef unless $entry;
 
     $self->ldap_bind unless $self->{'ldap'};
-    my $mesg = $entry->update( $self->{'ldap'} );
+
+    my $mesg;
+    if($self->dn_exists($entry->dn)){
+        $mesg = $entry->update( $self->{'ldap'} );
+    }else{
+        $mesg = $self->{'ldap'}->add($entry);
+    }
     if(($mesg->code == 10) && ($mesg->error eq "Referral received")){
         $self->error("Received referral");
         foreach my $ref (@{ $mesg->{'referral'} }){
