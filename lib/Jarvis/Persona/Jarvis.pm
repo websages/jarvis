@@ -518,7 +518,7 @@ sub authen_reply{
                       my $mesg = $self->{'cmdb'}->set_add($set);
                       $kernel->yield('speak',$msg,$mesg->{'result'}) if $mesg->{'result'};
                       $kernel->yield('speak',$msg,$mesg->{'error'}) if $mesg->{'error'};
-                      #$self->{'cmdb'}->own($dn,$set);
+                      $self->{'cmdb'}->own($dn,$set);
                   }elsif($subaction=~m/^\s*!*(delete|del|remove|rm)$/){
                       if( grep(/^$userid$/, @{ $owners->{'result'} }) ){
                           if($#{ $owners->{'result'} } > 0){
