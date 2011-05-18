@@ -773,7 +773,8 @@ sub adduniquemember{
     my @entry = $self->entry( $set_dn->{'result'} );
 
     my @uniquemembers = $entry[0]->get_value('uniquemember');
-    push(@uniquemembers,$member) unless grep(/^$member/,@uniquemembers);
+    # once we add the first member, we want to remove ourself (the create placeholder) as a member
+    push(@uniquemembers,$member) unless (grep(/^$member/,@uniquemembers)||grep(/^$set_dn/,@uniquemembers));
     my $replace = $entry[0]->replace( 'uniquemember' => \@uniquemembers );
     my $result = $self->ldap_update($entry[0]);
     #print STDERR  __PACKAGE__ ." line ". __LINE__ .": ". Data::Dumper->Dump([$result->{'ERROR'}]);
