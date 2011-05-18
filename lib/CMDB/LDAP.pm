@@ -362,7 +362,6 @@ sub ldap_update{
     my $self = shift;
     my $entry = shift if @_;
     return undef unless $entry;
-    print STDERR $entry->dn."\n";
     $self->ldap_bind unless $self->{'ldap'};
     my $mesg = $entry->update( $self->{'ldap'} );
     if(($mesg->code == 10) && ($mesg->error eq "Referral received")){
@@ -525,7 +524,7 @@ sub create_groupofuniquenames{
                   'description' => [ 'a new set with no description' ],
                   'uniqueMember' => [ $dn ], # this is a mandatory field, so we add ourself
                 );
-    $self->ldap_update($entry);
+    $self->ldap_add($entry);
     return undef;
 }
 
@@ -542,7 +541,7 @@ sub create_ou{
                   'objectclass' => [ 'organizationalUnit',  'top' ],
                   'ou'          => [ $ou ],
                 );
-    $self->ldap_update($entry);
+    $self->ldap_add($entry);
 }
 
 sub set_delete{
