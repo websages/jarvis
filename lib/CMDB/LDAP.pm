@@ -456,15 +456,15 @@ sub sets_in{
             return { 'result', join(', ',@{ $self->members($dn) }), 'error' => undef };
         }
         # return the sub ou's if not a cn
-        foreach my $set (@{ $self->all_sets() }){
-            if($set=~m/^${parent}\//){
-                $set=~s/^${parent}\///;
-                my @tmp = split(/\//, $set );
-                my $top = shift( @tmp );
-                $top.="/" if $tmp[0];
-                push(@tops,$top) unless grep(/$top/,@tops);
-            }
-        }
+#        foreach my $set (@{ $self->all_sets() }){
+#            if($set=~m/^${parent}\//){
+#                $set=~s/^${parent}\///;
+#                my @tmp = split(/\//, $set );
+#                my $top = shift( @tmp );
+#                $top.="/" if $tmp[0];
+#                push(@tops,$top) unless grep(/$top/,@tops);
+#            }
+#        }
 #    }else{
 #        foreach my $set (@{ $self->all_sets() }){
 #            my @tmp = split(/\//, $set );
@@ -472,7 +472,7 @@ sub sets_in{
 #            $top.="\/" if $tmp[0];
 #            push(@tops,$top) unless grep(/$top/,@tops);
 #        }
-#    }
+    }
 #    return { 'result' => join(', ',@tops), 'error' => undef };
 }
 
