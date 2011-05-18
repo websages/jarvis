@@ -445,13 +445,12 @@ sub sets_in{
     my @tops;
     if($parent){
         $parent=~s/\/$//;
-
         $parent=~s/^(cn|ou)=//;
         my $rdn = $self->rdn($parent);
-print STDERR Data::Dumper->Dump([$parent,$rdn]);
+        return $result if $result->{'error'};
         my $dn = $rdn->{'result'};
         $dn=~s/,\s+/,/g;
-        return undef unless defined($dn);
+        return { 'result' => undef, 'error' => 'dn not found' } unless defined($dn);
         #return the members if it's a cn
         if($dn=~m/^cn/){
             return $self->members($dn);
@@ -474,7 +473,7 @@ print STDERR Data::Dumper->Dump([$parent,$rdn]);
             push(@tops,$top) unless grep(/$top/,@tops);
         }
     }
-    return @tops;
+    return { 'result' => join(', ',@tops), 'error' => undef }
 }
 
 sub sub_sets{
@@ -813,10 +812,16 @@ sub rdn{
     $relative="ou=".join(",ou=",reverse(@tree))."," if($#tree > -1);
     return { result => undef, error => "nothing to look up" } unless $name;
     my @entries;
+    
+    # are we talking about a host?
     my @hosts = $self->ldap_search("(cn=$name)",$relative."ou=Hosts,".$self->{'basedn'});
     push(@entries,@hosts) if(defined($hosts[0]));
+
+    # are we talking about a person?
     my @people = $self->ldap_search("(uid=$name)",$relative."ou=People,".$self->{'basedn'});
     push(@entries,@people) if(defined($people[0]));
+
+    # are we talking about a set?
     my @sets = $self->ldap_search("(cn=$name)",$relative."ou=Sets,".$self->{'basedn'});
     push(@entries,@sets) if(defined($sets[0]));
     my @sets = $self->ldap_search("(ou=$name)",$relative."ou=Sets,".$self->{'basedn'});
