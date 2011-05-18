@@ -446,15 +446,15 @@ sub sets_in{
     if($parent){
         $parent=~s/\/$//;
         $parent=~s/^(cn|ou)=//;
-        my $rdn = $self->rdn($parent);
-        return $rdn if(defined($rdn->{'error'}));
-        my $dn = $rdn->{'result'};
-        $dn=~s/,\s+/,/g;
-        return { 'result' => undef, 'error' => 'dn not found' } unless defined($dn);
-        #return the members if it's a cn
-        if($dn=~m/^cn/){
-            return { 'result', join(', ',@{ $self->members($dn) }), 'error' => undef };
-        }
+#        my $rdn = $self->rdn($parent);
+#        return $rdn if(defined($rdn->{'error'}));
+#        my $dn = $rdn->{'result'};
+#        $dn=~s/,\s+/,/g;
+#        return { 'result' => undef, 'error' => 'dn not found' } unless defined($dn);
+#        #return the members if it's a cn
+#        if($dn=~m/^cn/){
+#            return { 'result', join(', ',@{ $self->members($dn) }), 'error' => undef };
+#        }
         # return the sub ou's if not a cn
 #        foreach my $set (@{ $self->all_sets() }){
 #            if($set=~m/^${parent}\//){
