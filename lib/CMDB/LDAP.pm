@@ -453,7 +453,7 @@ sub sets_in{
         return { 'result' => undef, 'error' => 'dn not found' } unless defined($dn);
         #return the members if it's a cn
         if($dn=~m/^cn/){
-            return { 'result' => join(', ',@{ $self->members($dn)) , 'error' => undef };
+            return { 'result' => join(', ',@{ $self->members($dn) }) , 'error' => undef };
         }
         # return the sub ou's if not a cn
         foreach my $set (@{ $self->all_sets() }){
