@@ -333,14 +333,6 @@ sub invite{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     my ($nick,$ident) = split(/!/,$args[0]) if $args[0];
     print STDERR "invited to $args[1] by $ident ($nick)\n";
-    $kernel->yield('channel_add', 
-                   {
-                     'alias'        => $self->alias(),
-                     'channel'      => $args[1],
-                     'nick'         => $self->{'nickname'},
-                     'output_event' => 'say_public',
-                   }
-                  );
     $kernel->post($sender->ID,'join',$args[1]);
 }
 

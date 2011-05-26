@@ -178,27 +178,25 @@ sub irc_001 {
     # specified server.
     my $sender_heap = $sender->get_heap();
     #print "Connected to ", $sender_heap->server_name(), "\n";
-    for(@{ $self->{'channel_list'} }){
-        # notify the persona that we're adding the channel and nick 
-        # or there is no way for the persona to know what he's called in what channels
-        $kernel->post(
-                       $self->{'persona'}, 
-                       'channel_add', 
-                       { 
-                         alias          => $self->alias(),
-                         channel        => $_,
-                         nick           => $self->{'nickname'},
-                         'output_event' => 'say_public',
-                       }
-                     );
-        # we join our channels
-        $self->{'irc_client'}->yield( join => $_ );
-    }
+    for(@{ $self->{'channel_list'} }){ $kernel->yield('join',$_); }
     return;
 }
 
 sub join{
     my ($self, $kernel, $heap, $sender, $channel, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    # notify the persona that we're adding the channel and nick 
+    # or there is no way for the persona to know what he's called in what channels
+    $kernel->post(
+                   $self->{'persona'}, 
+                   'channel_add', 
+                   { 
+                     alias          => $self->alias(),
+                     channel        => $channel,
+                     nick           => $self->{'nickname'},
+                     'output_event' => 'say_public',
+                   }
+                 );
+    # we join our channels
     $self->{'irc_client'}->yield( join => $channel );
 }
 
