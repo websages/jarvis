@@ -63,6 +63,7 @@ sub new {
                           'authen',
                           'irc_whois',
                           'irc_join',
+                          'join',
                           'elevate_priv',
                           'channel_members',
                           'irc_318',
@@ -194,6 +195,11 @@ sub irc_001 {
         $self->{'irc_client'}->yield( join => $_ );
     }
     return;
+}
+
+sub join{
+    my ($self, $kernel, $heap, $sender, $channel, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    $self->{'irc_client'}->yield( join => $channel );
 }
 
 sub irc_public {
