@@ -158,10 +158,10 @@ sub input{
         # working with sets
             ( 
               /^\s*!*who\s*am\s*i\s*/                               ||
-              /^\s*!*(set)\s+(create|add)\s+(\S+)/                  ||
-              /^\s*!*(set)\s+(delete|del|remove|rm)\s+(\S+)/        ||
-              /^\s*!*(add)\s+(\S+)\s+to\s+(\S+)/                    ||
-              /^\s*!*(del|delete|rm|remove)\s+(\S+)\s+from\s+(\S+)/ ||
+              /^\s*!*(set)\s+(create|add)\s+(.*)/                   ||
+              /^\s*!*(set)\s+(delete|del|remove|rm)\s+(.*)/         ||
+              /^\s*!*(add)\s+(.*)\s+to\s+(.*)/                     ||
+              /^\s*!*(del|delete|rm|remove)\s+(.*)\s+from\s+(.*)/   ||
               /^\s*!*(disown|own|pwn|owners*|who\s*o*wns)\s+(.*)/   ||
               /^\s*!*(rmset)\s+(.*)/                                ||
               /^\s*!*(share)\s+(.*)\s+with\s+(.*)/                  ||
@@ -370,10 +370,10 @@ sub authen_reply{
     ############################################################################
     # Commands that require Authentication & Authorization
             ( 
-              /^\s*!*(add)\s+(\S+)\s+to\s+(.*)/                    ||
-              /^\s*!*(set)\s+(create|add)\s+(\S+)/                  ||
-              /^\s*!*(set)\s+(delete|del|remove|rm)\s+(\S+)/        ||
-              /^\s*!*(del|delete|rm|remove)\s+(\S+)\s+from\s+(.*)/ ||
+              /^\s*!*(add)\s+(.*)\s+to\s+(.*)/                    ||
+              /^\s*!*(set)\s+(create|add)\s+(.*)/                  ||
+              /^\s*!*(set)\s+(delete|del|remove|rm)\s+(.*)/        ||
+              /^\s*!*(del|delete|rm|remove)\s+(.*)\s+from\s+(.*)/ ||
               /^\s*!*(disown|own|pwn|owners*|who\s*o*wns)\s+(.*)/   ||
               /^\s*!*(share)\s+(.*)\s+with\s+(.*)/                  ||
               /^\s*!*(unshare)\s+(.*)\s+with\s+(.*)/
