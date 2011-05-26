@@ -370,10 +370,10 @@ sub authen_reply{
     ############################################################################
     # Commands that require Authentication & Authorization
             ( 
-              /^\s*!*(add)\s+(\S+)\s+to\s+(\S+)/                    ||
+              /^\s*!*(add)\s+(\S+)\s+to\s+(.*)/                    ||
               /^\s*!*(set)\s+(create|add)\s+(\S+)/                  ||
               /^\s*!*(set)\s+(delete|del|remove|rm)\s+(\S+)/        ||
-              /^\s*!*(del|delete|rm|remove)\s+(\S+)\s+from\s+(\S+)/ ||
+              /^\s*!*(del|delete|rm|remove)\s+(\S+)\s+from\s+(.*)/ ||
               /^\s*!*(disown|own|pwn|owners*|who\s*o*wns)\s+(.*)/   ||
               /^\s*!*(share)\s+(.*)\s+with\s+(.*)/                  ||
               /^\s*!*(unshare)\s+(.*)\s+with\s+(.*)/
