@@ -517,6 +517,7 @@ sub authen_reply{
                   }
               }elsif($action=~m/^\s*!*(set)$/){
                   if($subaction=~m/^\s*!*(create|add)$/){
+print STDERR Data::Dumper->Dump([$subaction,$set]);
                       my $mesg = $self->{'cmdb'}->set_add($set);
                       $kernel->yield('speak',$msg,$mesg->{'result'}) if $mesg->{'result'};
                       $kernel->yield('speak',$msg,$mesg->{'error'}) if $mesg->{'error'};
