@@ -177,7 +177,6 @@ $persona->{'persona'}->{'init'}->{'known_personas'} = YAML::Load(<< "...");
           domain: ${domain}
           channel_list:
             - #infrastructure
-            - #drtest
 ...
 ###############################################################################
 # Start the system persona
