@@ -333,6 +333,8 @@ sub invite{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     my ($nick,$ident) = split(/!/,$args[0]) if $args[0];
     print STDERR "invited to $args[1] by $ident ($nick)\n";
+    print STDERR Data::Dumper->Dump([$sender->ID,'irc_join',$args[1]]);
+    $kernel->post($sender->ID,'irc_join',$args[1] );
 }
 
 ################################################################################
