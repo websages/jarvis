@@ -334,7 +334,7 @@ sub invite{
     my ($nick,$ident) = split(/!/,$args[0]) if $args[0];
     print STDERR "invited to $args[1] by $ident ($nick)\n";
     print STDERR Data::Dumper->Dump([$sender,$sender->ID,'irc_join',$args[1]]);
-    $kernel->post($sender->ID,'irc_join',$args[1] );
+    $kernel->post($sender->ID,'join',$args[1] );
 }
 
 ################################################################################
