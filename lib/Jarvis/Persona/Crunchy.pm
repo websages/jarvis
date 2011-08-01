@@ -583,8 +583,7 @@ sub link{
     my $agent = LWP::UserAgent->new();
     $agent->agent( 'Mozilla/5.0' );
     $url =~ s/\&/\%26/g;
-    $url =~ s/#/\%23/g;
-    $url =~ s/!/\%21/g;
+    $url =~ s/#!\///g; # just remove these and it "should" get you where you want to go"
     my $response = $agent->get("http://tumble.wcyd.org/irclink/?user=". $nick . "&source=irc&url=$url");
     if ( $response->content eq '0' ) {
         print STDERR "Invalid link: $url\n";
