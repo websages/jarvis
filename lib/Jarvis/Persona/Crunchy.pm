@@ -580,9 +580,11 @@ sub link{
     return undef unless $url;
     return undef unless $nick;
     return undef if $url =~ m#^https://gist.github.com#i;
+    print STDERR "[ $url ]\n";
     my $agent = LWP::UserAgent->new();
     $agent->agent( 'Mozilla/5.0' );
     $url =~ s/\&/\%26/g;
+    $url =~ s/#/\%23/g;
     $url =~ s/#!\///g; # just remove these and it "should" get you where you want to go"
     my $response = $agent->get("http://tumble.wcyd.org/irclink/?user=". $nick . "&source=irc&url=$url");
     if ( $response->content eq '0' ) {
