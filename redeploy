@@ -1,0 +1,6 @@
+#!/bin/bash
+wd deploy --to=vili
+wd deploy --to=loki
+wd deploy --to=thor
+wd deploy --to=freyr
+wd deploy --to=odin
