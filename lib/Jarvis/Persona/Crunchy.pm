@@ -601,8 +601,19 @@ sub quote{
     my $line=shift if @_;
     my ($quote, $author);
     if($line=~m/^\s*\"(.+?)\"\s+--\s*(.+?)$/){
-        $quote  = encode_entities($1);
-        $author = encode_entities($2);
+        my $replacement = {
+                            '<' => '&lt;',
+                            '>' => '&gt;',
+                            '"' => '&quot;',
+                          };
+        $quote  = $1;
+        for my $symbol (keys(%{ $replacement })){
+            $quote=~s/$symbol/$replacement->{$symbol}/g;
+        }
+        $author = $2;
+        for my $symbol (keys(%{ $replacement })){
+            $author=~s/$symbol/$replacement->{$symbol}/g;
+        }
     }
     return undef unless $quote;
     return undef unless $author;
