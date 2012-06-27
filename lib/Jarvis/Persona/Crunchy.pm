@@ -15,6 +15,7 @@ use DBI;
 use HTML::Parser;
 use LWP::Simple;
 use XML::Twig;
+use HTML::Entities;
 
 sub may {
     my $self=shift;
@@ -600,8 +601,8 @@ sub quote{
     my $line=shift if @_;
     my ($quote, $author);
     if($line=~m/^\s*\"(.+?)\"\s+--\s*(.+?)$/){
-        $quote  = $1;
-        $author = $2;
+        $quote  = encode_entities($1);
+        $author = encode_entities($2);
     }
     return undef unless $quote;
     return undef unless $author;
