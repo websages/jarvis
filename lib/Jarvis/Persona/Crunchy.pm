@@ -134,12 +134,11 @@ sub input{
         my $pirate=1;
         print STDERR Data::Dumper->Dump([$what]);
         for ( $what ) {
-            /^\s*!*help\s*/             && do { $replies = $self->help($what); last; };
-            /\"(.+?)\"\s+--\s*(.+?)$/   && do { $replies = [ $self->quote($what) ]; last; };
-            /!(https*:\S+)/              && do { last; };
-            /(https*:\S+)/              && do { $replies = [ $self->link($1, $who) ]; last; };
-            /^\s*[Ff]ortune\s*$/           && do { $replies = [ $self->fortune() ]; last; };
-            /^!shoutout\s*(.*)/         && do { $replies = [ $self->shoutout($1,$who) ]; last; };
+            /^\s*!*help\s*/              && do { $replies = $self->help($what); last; };
+            /\"(.+?)\"\s+--\s*(.+?)$/    && do { $replies = [ $self->quote($what) ]; last; };
+             /(https*:\S+)/ && !/^!http/ && do { $replies = [ $self->link($1, $who) ]; last; };
+            /^\s*[Ff]ortune\s*$/         && do { $replies = [ $self->fortune() ]; last; };
+            /^!shoutout\s*(.*)/          && do { $replies = [ $self->shoutout($1,$who) ]; last; };
             /^!enable\s+shoutouts.*/     && do {
                                                 $msg->{'reason'}='enable_shoutout';
                                                 $kernel->post($sender, 'authen', $msg);
