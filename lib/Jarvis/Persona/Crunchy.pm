@@ -901,7 +901,7 @@ sub help {
                                  ],
                   'link'      => [
                                    "description: Add a link to tumble",
-                                   "syntax/use : Cut and paste a link into irc, stupid.",
+                                   "syntax/use : Cut and paste a link into irc, stupid. !http(s) to ignore a link.",
                                  ],
                   'shoutout'  => [
                                    "description: Send a textpage to everyone",
