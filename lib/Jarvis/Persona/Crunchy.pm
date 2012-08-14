@@ -246,8 +246,8 @@ sub input{
                                                 $replies = [ $list->[ int(rand(6)) ] ]; 
                                                 last; 
                                               };
+            /#crunchymail:/             && do { $replies = [ "copy: $what" ] if($direct); last;  };
             /.*/                        && do { 
-                                                print STDERR "-=[ $what | $direct ]=-\n";
                                                 $replies = [ $self->megahal($what) ] if($direct); last; 
                                               };
             /.*/                        && do { last; };
