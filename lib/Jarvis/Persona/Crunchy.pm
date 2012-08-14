@@ -825,7 +825,7 @@ sub shoutout{
 # Begin Standings
 ################################################################################
 sub standings{
-    my $self=shift;
+    my $self = shift;
     use HTML::TableExtract;
     use LWP::Simple;
     use Data::Dumper;
@@ -850,7 +850,7 @@ sub standings{
              }
         }
     }
-    return $self->{'standings'};
+    return @{ $self->{'standings'} };
 }
 ################################################################################
 # End Standings
