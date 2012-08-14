@@ -233,6 +233,9 @@ sub say_public {
 
 sub irc_public_reply{
     my ($self, $kernel, $heap, $sender, $msg, $what) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
+    print STDERR ".oO(irc_public_reply)\n";
+    print STDERR Data::Dumper->Dump([$msg,$what]);
+    print STDERR ".oO(irc_public_reply)\n";
     my ( $who, $channel ) = ( $msg->{'conversation'}->{'nick'}, $msg->{'conversation'}->{'room'} );
     $self->{'irc_client'}->yield( privmsg => [ $channel ] => $what );
 }
