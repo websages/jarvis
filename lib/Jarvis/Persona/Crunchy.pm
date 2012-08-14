@@ -246,7 +246,7 @@ sub input{
                                                 last; 
                                               };
             /\[(#.*)!(.*)\]\s+(.*)/             && do { 
-                                                 my ($room, $from, $sms) = ($1, $2, $3)
+                                                 my ($room, $from, $sms) = ($1, $2, $3);
                                                  $replies = [ "copy: $what" ] if($direct);
                                                  print STDERR Data::Dumper->Dump([$what, $replies, $direct, $msg, $room, $from, $sms]);
                                                  last;
