@@ -850,7 +850,7 @@ sub standings{
              }
         }
     }
-    return $self;
+    return $self->{'standings'};
 }
 ################################################################################
 # End Standings
