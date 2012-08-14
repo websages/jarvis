@@ -252,10 +252,11 @@ sub input{
                                                  $txtmsg->{'sender_alias'}           = $msg->{'sender_alias'};
                                                  $txtmsg->{'reply_event'}            = 'irc_public_reply';
                                                  $txtmsg->{'conversation'}->{'nick'} = $msg->{'conversation'}->{'nick'};
+                                                 $txtmsg->{'conversation'}->{'direct'} = 0;
                                                  $txtmsg->{'conversation'}->{'room'} = $room;
                                                  $txtmsg->{'conversation'}->{'body'} = $sms;
                                                  $txtmsg->{'conversation'}->{'id'}   = $msg->{'conversation'}->{'id'};
-                                                 print STDERR Data::Dumper->Dump([ $msg, $txtmsg ]);
+                                                 print STDERR Data::Dumper->Dump([ $txtmsg, $sms ]);
                                                  $kernel->post($sender, $respond_event, $txtmsg, $sms); 
                                                  last;
                                                };
