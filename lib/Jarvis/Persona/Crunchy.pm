@@ -838,6 +838,8 @@ sub standings{
     my ($table) = $te->tables;
     print join("\t", @headers), "\n";
 
+    my $header = sprintf "%-20s %-5s %-5s %-7s %-6s %-7s\n", '', 'W', 'L', ' Pct', 'GB', 'L10';
+    push(@{ $self->{'standings'} }, $header);
     for my $row ($te->rows ) {
         map{ $_= '' unless(defined($_)); } @$row;
         map{ $_=~s/\x{a0}//g ;} @$row;
