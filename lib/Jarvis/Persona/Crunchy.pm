@@ -245,8 +245,9 @@ sub input{
                                                 $replies = [ $list->[ int(rand(6)) ] ]; 
                                                 last; 
                                               };
-            /\[(#.*)!(.*)\]\s+(.*)/             && do { 
+            /\[(#.*)!(.*)\]\s+(.*)/     && do { 
                                                  my ($room, $from, $sms) = ($1, $2, $3);
+                                                 my $txtmsg = {};
                                                  $replies = [ "copy: $what" ] if($direct); # reply to stop the procmail script from re-trying
                                                  print STDERR Data::Dumper->Dump([$what, $replies, $direct, $msg, $room, $from, $sms]);
                                                  $txtmsg->{'sender_alias'} = $msg->{'sender_alias'};
