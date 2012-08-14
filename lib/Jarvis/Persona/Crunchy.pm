@@ -256,7 +256,7 @@ sub input{
                                                  $txtmsg->{'conversation'}->{'room'} = [ $room ];
                                                  $txtmsg->{'conversation'}->{'body'} = $sms;
                                                  $txtmsg->{'conversation'}->{'id'}   = $msg->{'id'};
-                                                 $kernel->post($sender, $respond_event, $textmsg, $sms); 
+                                                 $kernel->post($sender, $respond_event, $txtmsg, $sms); 
                                                  last;
                                                };
             /.*/                        && do { 
