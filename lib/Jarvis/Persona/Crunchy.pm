@@ -246,9 +246,10 @@ sub input{
                                                 $replies = [ $list->[ int(rand(6)) ] ]; 
                                                 last; 
                                               };
-            /#crunchymail:/             && do { 
-                                                 $replies = [ "copy: $what" ] if($direct); last;  
+            /crunchymail:/             && do { 
+                                                 $replies = [ "copy: $what" ] if($direct);
                                                  print STDERR Data::Dumper->Dump([$what, $replies, $direct]);
+                                                 last;
                                                };
             /.*/                        && do { 
                                                 $replies = [ $self->megahal($what) ] if($direct); last; 
