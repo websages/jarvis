@@ -252,7 +252,7 @@ sub input{
                                                  $txtmsg->{'sender_alias'}           = $msg->{'sender_alias'};
                                                  $txtmsg->{'reply_event'}            = 'irc_public_reply';
                                                  $txtmsg->{'conversation'}->{'nick'} = $msg->{'conversation'}->{'nick'};
-                                                 $txtmsg->{'conversation'}->{'room'} = [ $room ];
+                                                 $txtmsg->{'conversation'}->{'room'} = $room;
                                                  $txtmsg->{'conversation'}->{'body'} = $sms;
                                                  $txtmsg->{'conversation'}->{'id'}   = $msg->{'conversation'}->{'id'};
                                                  print STDERR Data::Dumper->Dump([ $msg, $txtmsg ]);
