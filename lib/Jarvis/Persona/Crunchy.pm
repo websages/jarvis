@@ -268,6 +268,7 @@ sub input{
             foreach my $line (@{ $replies }){
                 $line=piratespeak($line) if $pirate;
                 if($msg->{'conversation'}->{'direct'} == 0){
+                    print STDERR Data::Dumper->Dump([ $msg, $line ]);
                     if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $who.': '.$line); }
                 }else{
                     if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $line); } 
