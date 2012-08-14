@@ -249,13 +249,13 @@ sub input{
                                                  my ($room, $from, $sms) = ($1, $2, $3);
                                                  my $txtmsg = {};
                                                  $replies = [ "copy: $what" ] if($direct); # reply to stop the procmail script from re-trying
-                                                 print STDERR Data::Dumper->Dump([$what, $replies, $direct, $msg, $room, $from, $sms]);
                                                  $txtmsg->{'sender_alias'}           = $msg->{'sender_alias'};
                                                  $txtmsg->{'reply_event'}            = $msg->{'reply_event'};
                                                  $txtmsg->{'conversation'}->{'nick'} = $msg->{'nick'};
                                                  $txtmsg->{'conversation'}->{'room'} = [ $room ];
                                                  $txtmsg->{'conversation'}->{'body'} = $sms;
                                                  $txtmsg->{'conversation'}->{'id'}   = $msg->{'id'};
+                                                 print STDERR Data::Dumper->Dump([ $msg, $txtmsg ]);
                                                  $kernel->post($sender, $respond_event, $txtmsg, $sms); 
                                                  last;
                                                };
