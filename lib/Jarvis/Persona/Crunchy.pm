@@ -245,9 +245,10 @@ sub input{
                                                 $replies = [ $list->[ int(rand(6)) ] ]; 
                                                 last; 
                                               };
-            /crunchymail:/             && do { 
+            /\[(#.*)!(.*)\]\s+(.*)/             && do { 
+                                                 my ($room, $from, $sms) = ($1, $2, $3)
                                                  $replies = [ "copy: $what" ] if($direct);
-                                                 print STDERR Data::Dumper->Dump([$what, $replies, $direct, $msg]);
+                                                 print STDERR Data::Dumper->Dump([$what, $replies, $direct, $msg, $room, $from, $sms]);
                                                  last;
                                                };
             /.*/                        && do { 
