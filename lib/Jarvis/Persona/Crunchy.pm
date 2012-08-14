@@ -250,7 +250,7 @@ sub input{
                                                  my $txtmsg = {};
                                                  $replies = [ "copy: $what" ] if($direct); # reply to stop the procmail script from re-trying
                                                  $txtmsg->{'sender_alias'}           = $msg->{'sender_alias'};
-                                                 $txtmsg->{'reply_event'}            = $msg->{'reply_event'};
+                                                 $txtmsg->{'reply_event'}            = 'irc_public_reply';
                                                  $txtmsg->{'conversation'}->{'nick'} = $msg->{'conversation'}->{'nick'};
                                                  $txtmsg->{'conversation'}->{'room'} = [ $room ];
                                                  $txtmsg->{'conversation'}->{'body'} = $sms;
