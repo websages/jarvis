@@ -256,7 +256,6 @@ sub input{
                                                  $txtmsg->{'conversation'}->{'room'} = $room;
                                                  $txtmsg->{'conversation'}->{'body'} = $sms;
                                                  $txtmsg->{'conversation'}->{'id'}   = $msg->{'conversation'}->{'id'};
-                                                 print STDERR Data::Dumper->Dump([ $txtmsg->{'sender_alias'}, 'irc_public_reply', $txtmsg, "[$from] $sms" ]);
                                                  $kernel->post($txtmsg->{'sender_alias'}, 'irc_public_reply', $txtmsg, "[$from] $sms"); 
                                                  last;
                                                };
