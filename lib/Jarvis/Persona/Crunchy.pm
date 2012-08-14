@@ -132,7 +132,6 @@ sub input{
         }
         my $replies=[];
         my $pirate=1;
-        print STDERR Data::Dumper->Dump([$what]);
         for ( $what ) {
             /^\s*!*help\s*/              && do { $replies = $self->help($what); last; };
             /\"(.+?)\"\s+--\s*(.+?)$/    && do { $replies = [ $self->quote($what) ]; last; };
@@ -248,7 +247,7 @@ sub input{
                                               };
             /crunchymail:/             && do { 
                                                  $replies = [ "copy: $what" ] if($direct);
-                                                 print STDERR Data::Dumper->Dump([$what, $replies, $direct]);
+                                                 print STDERR Data::Dumper->Dump([$what, $replies, $direct, $msg]);
                                                  last;
                                                };
             /.*/                        && do { 
