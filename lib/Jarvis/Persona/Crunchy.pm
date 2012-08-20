@@ -845,6 +845,7 @@ sub standings{
     use HTML::TableExtract;
     use LWP::Simple;
     use Data::Dumper;
+    @{ $self->{'standings'} = [];
     my $response = get( 'http://sports.yahoo.com/mlb/standings');
     die "Couldn't get it!" unless defined $response;
 
