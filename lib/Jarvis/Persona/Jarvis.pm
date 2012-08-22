@@ -193,6 +193,21 @@ sub input{
             /^\s*(thanks|thank you|thx|ty)/i && 
                 do { $replies = [ "np" ] if (($addressed|$direct) == 1); last; };
         ########################################################################
+            /\[(#.*)!(.*)\]\s+(.*)/     && do {
+                                                 my ($room, $from, $sms) = ($1, $2, $3);
+                                                 my $txtmsg = {};
+                                                 $replies = [ "OK" ] if($direct); # reply to stop the procmail script from re-trying
+                                                 $txtmsg->{'sender_alias'}           = $msg->{'sender_alias'};
+                                                 $txtmsg->{'reply_event'}            = 'irc_public_reply';
+                                                 $txtmsg->{'conversation'}->{'nick'} = $msg->{'conversation'}->{'nick'};
+                                                 $txtmsg->{'conversation'}->{'direct'} = 0;
+                                                 $txtmsg->{'conversation'}->{'room'} = $room;
+                                                 $txtmsg->{'conversation'}->{'body'} = $sms;
+                                                 $txtmsg->{'conversation'}->{'id'}   = $msg->{'conversation'}->{'id'};
+                                                 $kernel->post($txtmsg->{'sender_alias'}, 'irc_public_reply', $txtmsg, "[$from] $sms");
+                                                 last;
+                                               };
+        ########################################################################
             /.*/ && 
                  do { $replies = [ "i don't understand"] if(($addressed|$direct) == 1); last; };
         ########################################################################
