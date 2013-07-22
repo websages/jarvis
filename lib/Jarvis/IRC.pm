@@ -85,6 +85,16 @@ sub new {
     #                      irc_public_reply     => 'irc_public_reply',
     #                      irc_private_reply    => 'irc_private_reply',
     #                   };
+print STDERR Data::Dumper->Dump([{
+                                                        nick     => $construct->{'nickname'},
+                                                        ircname  => $construct->{'ircname'},
+                                                        server   => $construct->{'server'},
+                                                        port     => $construct->{'port'},
+                                                        username => $construct->{'username'},
+                                                        password => $construct->{'password'},
+                                                        usessl   => $construct->{'usessl'},
+                                 }]                     ) ;
+        or $self->error("Cannot connect to IRC $construct->{'server'} $!");
     $self->{'irc_client'} = POE::Component::IRC->spawn(
                                                         nick     => $construct->{'nickname'},
                                                         ircname  => $construct->{'ircname'},

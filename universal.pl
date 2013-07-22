@@ -89,17 +89,17 @@ persona:
         channel_list:
           - #asgard
         persona: system
-    - class: Jarvis::Jabber
-      init:
-        alias: ${hostname}_xmpp
-        ip: ${hostname}.${domain}
-        port: 5222
-        hostname: ${domain}
-        username: ${hostname}
-        password: $ENV{'XMPP_PASSWORD'}
-        channel_list:
-          - asgard\@conference.${domain}/${hostname}
-        persona: system
+#    - class: Jarvis::Jabber
+#      init:
+#        alias: ${hostname}_xmpp
+#        ip: ${hostname}.${domain}
+#        port: 5222
+#        hostname: ${domain}
+#        username: ${hostname}
+#        password: $ENV{'XMPP_PASSWORD'}
+#        channel_list:
+#          - asgard\@conference.${domain}/${hostname}
+#        persona: system
 ...
 ################################################################################
 # a list of the personas I can spawn goes into known_personas 
