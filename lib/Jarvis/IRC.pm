@@ -22,7 +22,7 @@ sub new {
    my $self = {}; 
    my $construct = shift if @_;
     # list of required constructor elements
-    $self->{'must'} = ["channel_list","nickname","alias","persona","domain","usessl"];
+    $self->{'must'} = ["channel_list","nickname","alias","persona","domain"];
 
     # hash of optional constructor elements (key), and their default (value) if not specified
     $self->{'may'} = { };
