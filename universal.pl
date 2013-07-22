@@ -127,6 +127,10 @@ $persona->{'persona'}->{'init'}->{'known_personas'} = YAML::Load(<< "...");
           nickname: crunchy
           ircname: "Cap'n Crunchbot"
           server: 127.0.0.1
+          port: 8080
+          usessl: 1
+          username: $ENV{'USER_ACCOUNT'}
+          password: $ENV{'USER_PASSWORD'}
           domain: ${domain}
           channel_list:
             - #soggies
