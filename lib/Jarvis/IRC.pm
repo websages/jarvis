@@ -94,7 +94,6 @@ print STDERR Data::Dumper->Dump([{
                                                         password => $construct->{'password'},
                                                         usessl   => $construct->{'usessl'},
                                  }]                     ) ;
-        or $self->error("Cannot connect to IRC $construct->{'server'} $!");
     $self->{'irc_client'} = POE::Component::IRC->spawn(
                                                         nick     => $construct->{'nickname'},
                                                         ircname  => $construct->{'ircname'},
