@@ -74,18 +74,7 @@ sub new {
                           'irc_quit',
                           'invite',
                         ];
-    #$self->{'states'} = { 
-    #                      start                => 'start',
-    #                      stop                 => 'stop',
-    #                      irc_default          => 'irc_default',
-    #                      irc_001              => 'irc_001',
-    #                      irc_public           => 'irc_public',
-    #                      irc_ping             => 'irc_ping',
-    #                      irc_msg              => 'irc_msg',
-    #                      irc_public_reply     => 'irc_public_reply',
-    #                      irc_private_reply    => 'irc_private_reply',
-    #                   };
-print STDERR Data::Dumper->Dump([{
+    print STDERR Data::Dumper->Dump([{
                                                         nick     => $construct->{'nickname'},
                                                         ircname  => $construct->{'ircname'},
                                                         server   => $construct->{'server'},
@@ -93,7 +82,7 @@ print STDERR Data::Dumper->Dump([{
                                                         username => $construct->{'username'},
                                                         password => $construct->{'password'},
                                                         usessl   => $construct->{'usessl'},
-                                 }]                     ) ;
+                                 }]);
     $self->{'irc_client'} = POE::Component::IRC->spawn(
                                                         nick     => $construct->{'nickname'},
                                                         ircname  => $construct->{'ircname'},
