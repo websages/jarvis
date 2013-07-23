@@ -85,6 +85,9 @@ persona:
         nickname: ${hostname}
         ircname: ${fqdn}
         server: 127.0.0.1
+        port: 8080
+        username: $ENV{'USER_ACCOUNT'}
+        password: $ENV{'USER_PASSWORD'}
         domain: ${domain}
         usessl: 0
         channel_list:
