@@ -22,10 +22,15 @@ sub new {
    my $self = {}; 
    my $construct = shift if @_;
     # list of required constructor elements
-    $self->{'must'} = ["channel_list","nickname","alias","persona","domain","usessl","username","password","port"];
+    $self->{'must'} = ["channel_list","nickname","alias","persona","domain"];
 
     # hash of optional constructor elements (key), and their default (value) if not specified
-    $self->{'may'} = { };
+    $self->{'may'} = { 
+                       port => 6667,  
+                       username => undef,
+                       password => undef,
+                       usessl => undef, 
+                     };
 
     # set our required values fron the constructor or the defaults
     foreach my $attr (@{ $self->{'must'} }){
