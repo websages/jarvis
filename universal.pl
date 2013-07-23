@@ -86,8 +86,8 @@ persona:
         ircname: ${fqdn}
         server: 127.0.0.1
         port: 8080
-        username: $ENV{'USER_ACCOUNT'}
-        password: $ENV{'USER_PASSWORD'}
+        username: $ENV{'IRC_ACCOUNT'}
+        password: $ENV{'IRC_PASSWORD'}
         domain: ${domain}
         usessl: 0
         channel_list:
@@ -122,8 +122,8 @@ $persona->{'persona'}->{'init'}->{'known_personas'} = YAML::Load(<< "...");
           server: 127.0.0.1
           port: 8080
           usessl: 1
-          username: $ENV{'USER_ACCOUNT'}
-          password: $ENV{'USER_PASSWORD'}
+          username: $ENV{'IRC_ACCOUNT'}
+          password: $ENV{'IRC_PASSWORD'}
           domain: ${domain}
           channel_list:
             - #soggies
