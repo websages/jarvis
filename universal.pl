@@ -86,7 +86,6 @@ persona:
         ircname: ${fqdn}
         server: 127.0.0.1
         domain: ${domain}
-        usessl: 1
         channel_list:
           - #asgard
         persona: system
