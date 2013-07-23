@@ -33,6 +33,7 @@ sub new {
              $self->{$attr} = $construct->{$attr};
          }else{
              print STDERR "Required session constructor attribute [$attr] not defined. ";
+             print Data::Dumper->Dump([$construct]);
              print STDERR "Unable to define ". __PACKAGE__ ." object\n";
              return undef;
          }
