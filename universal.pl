@@ -89,7 +89,7 @@ persona:
         username: $ENV{'IRC_ACCOUNT'}
         password: $ENV{'IRC_PASSWORD'}
         domain: ${domain}
-        usessl: 0
+        usessl: 1
         channel_list:
           - #asgard
         persona: system
