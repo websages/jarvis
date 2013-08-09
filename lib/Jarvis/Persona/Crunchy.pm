@@ -199,6 +199,7 @@ sub input{
                                         && do { $replies = [ "Unison!" ]; last; };
             /unison/i                   && do { $replies = [ "The Way To Global Business Excellence!" ]; last; };
             /beer/i                     && do {
+                                                $pirate=0;
                                                 eval {
                                                        if($direct){
                                                                     use LWP::Simple;
@@ -217,6 +218,7 @@ sub input{
                                                     
                                               };
             /brewery/i                 && do {
+                                                $pirate=0;
                                                 eval {
                                                        if($direct){
                                                                     use LWP::Simple;
