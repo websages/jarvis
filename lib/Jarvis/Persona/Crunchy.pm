@@ -209,7 +209,12 @@ sub input{
                                                                     $replies = [ $json->{'data'}{'name'} ];
                                                                   }
                                                      };
-                                                     warn $@ if $@;
+                                                     if($@){
+                                                         warn $@;
+                                                     }else{
+                                                         last;
+                                                     }
+                                                    
                                               };
             /badger/                    && do { 
                                                 my $list = [ 
