@@ -202,34 +202,12 @@ sub input{
                                                 eval {
                                                        if($direct){ 
                                                                     use WWW::Mechanize;
-                                                                    my $url='http://www.servingbeers.com/alcohol/'.['a'.. 'z']->[int(rand(26)+1)].'.html';
-                                                                    my ($beers, $pages);
+                                                                    use JSON qw( decode_json );
+                                                                    my $url='http://api.brewerydb.com/v2/beer/random?key=4e1a74fd095edd633a56222807054c62';
                                                                     my $mech = WWW::Mechanize->new();
                                                                     $mech->get( $url );
-                                                                    foreach my $link ( $mech->links() ){
-                                                                        if($link->url()=~m/\/alcohol\/[0-9]+\//){
-                                                                            push(@{ $beers }, $link);
-                                                                        }
-                                                                        if($link->url()=~m/\/alcohol\/[a-z]_[0-9]+.html/){
-                                                                            $mech->get( $link->url() ) unless $link->text() eq "Next";
-                                                                            foreach my $link ( $mech->links() ){
-                                                                                if($link->url()=~m/\/alcohol\/[0-9]+\//){
-                                                                                    push(@{ $beers }, $link);
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                    my $choice=undef;
-                                                                    my $counter=0;
-                                                                    while( (!defined($choice)) && ($counter++ < 3)){
-                                                                        $choice=$beers->[int(rand( $#{$beers} )+1)]; 
-                                                                    }
-                                                                    if(defined($choice)){
-                                                                        $replies = [ $choice->text() ];
-                                                                        $pirate=0;
-                                                                        last;
-                                                                      }
-                                                                  }
+                                                                    my $json = decode_json($mech->res()->content);
+                                                                    $replies = $json->{'data'}{'name'}
                                                      };
                                                      warn $@ if $@;
                                               };
