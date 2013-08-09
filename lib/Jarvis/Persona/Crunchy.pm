@@ -205,9 +205,10 @@ sub input{
                                                                     use JSON qw( decode_json );
                                                                     my $url='http://api.brewerydb.com/v2/beer/random?key=4e1a74fd095edd633a56222807054c62';
                                                                     my $mech = WWW::Mechanize->new();
-                                                                    $mech->get( $url );
-                                                                    my $json = decode_json($mech->res()->content);
-                                                                    $replies = $json->{'data'}{'name'}
+                                                                    my $res = $mech->get( $url );
+                                                                    my $content = $res->decoded_content;
+                                                                    my $json = decode_json($res->decoded_content);
+                                                                    $replies = $json->{'data'}{'name'};
                                                      };
                                                      warn $@ if $@;
                                               };
