@@ -201,14 +201,13 @@ sub input{
             /beer/i                     && do { 
                                                 eval {
                                                        if($direct){ 
-                                                                    use WWW::Mechanize;
+                                                                    use LWP::Simple;
                                                                     use JSON qw( decode_json );
                                                                     my $url='http://api.brewerydb.com/v2/beer/random?key=4e1a74fd095edd633a56222807054c62';
-                                                                    my $mech = WWW::Mechanize->new();
-                                                                    my $res = $mech->get( $url );
-                                                                    my $content = $res->decoded_content;
-                                                                    my $json = decode_json($res->decoded_content);
-                                                                    $replies = $json->{'data'}{'name'};
+                                                                    my $content = get( $url );
+                                                                    my $json = decode_json($content);
+                                                                    $replies = [ $json->{'data'}{'name'} ];
+                                                                  }
                                                      };
                                                      warn $@ if $@;
                                               };
