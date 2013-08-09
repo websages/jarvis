@@ -209,12 +209,14 @@ sub input{
                                                                     my $content = $res->decoded_content;
                                                                     my $json = decode_json($res->decoded_content);
                                                                     $replies = $json->{'data'}{'name'};
+                                                                }
                                                      };
                                                      warn $@ if $@;
+
                                               };
             /brewery/i                     && do { 
                                                 eval {
-                                                       if($direct){ 
+                                                       if($direct){
                                                                     use WWW::Mechanize;
                                                                     use JSON qw( decode_json );
                                                                     my $url='http://api.brewerydb.com/v2/brewery/random?key=4e1a74fd095edd633a56222807054c62';
@@ -222,7 +224,8 @@ sub input{
                                                                     my $res = $mech->get( $url );
                                                                     my $content = $res->decoded_content;
                                                                     my $json = decode_json($res->decoded_content);
-                                                                    $replies = $json->{'data'}{'name'};
+                                                                    $replies = $json->{'data'}{'name'};                                                        
+                                                       } 
                                                      };
                                                      warn $@ if $@;
                                               };
