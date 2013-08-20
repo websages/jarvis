@@ -217,7 +217,7 @@ sub input{
                                                      }
                                                     
                                               };
-            /c\[\]/                     && do {
+            /(\\0_c\[\]|c\[\])/i        && do {
                                                 $pirate=0;
                                                 $direct=1;
                                                 eval {
