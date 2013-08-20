@@ -96,7 +96,7 @@ $persona->{'persona'}->{'init'}->{'known_personas'} = YAML::Load(<< "...");
 ---
   - name: crunchy
     persona:
-      persist: 0
+      persist: 1
       class: Jarvis::Persona::Crunchy
       init:
         alias: crunchy
