@@ -217,9 +217,9 @@ sub input{
                                                      }
                                                     
                                               };
-            /(\\0_c\[\]|c\[\])/i        && do {
+            /c\[\]/i                    && do {
                                                 $pirate=0;
-                                                $direct=1;
+                                                $direct=1 if(m/\\0_/);
                                                 eval {
                                                        use LWP::Simple;
                                                        use JSON qw( decode_json );
