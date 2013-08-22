@@ -229,6 +229,15 @@ sub input{
                                                      };
                                                      warn $@ if $@;
                                               };
+            /flip.*or.*/                && do {
+                                                my $range = 100;
+                                                my $random_number = int(rand($range));
+                                                if ($random_number >= 50){
+                                                  $replies = $1;
+                                                } else {
+                                                  $replies = $2
+                                                }
+                                              }
             /badger/                    && do { 
                                                 my $list = [ 
                                                              "badger badger badger",
