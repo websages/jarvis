@@ -255,7 +255,8 @@ sub input{
                                                      warn $@ if $@;
 
                                               };
-            /flip\s+(.*)\s+or\s+(.*)/   && do {
+            /flip\s+(.*)\s+or\s+(.*)\s*?*/   && do {
+                                                print STDERR "$1 || $2\n";
                                                 my $range = 100;
                                                 my $random_number = int(rand($range));
                                                 if ($random_number >= 50){
