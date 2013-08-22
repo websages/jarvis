@@ -195,14 +195,14 @@ sub input{
                                                 $kernel->post($sender, 'authen', $msg);
                                                 last;
                                               };
-            /flip\s+(.*)\s+or\s+(.*)\s*\?*/   && do {
-                                                print STDERR "$1 || $2\n";
+            /(flip|should\s+(i|we))\s+(.*)\s+or\s+(.*)\s*\?*/   && do {
+                                                print STDERR "$1 , $2, $3, [ $4, $5 ]\n";
                                                 my $range = 100;
                                                 my $random_number = int(rand($range));
                                                 if ($random_number >= 50){
-                                                  $replies = [ $1 ];
+                                                  $replies = [ "you should $3" ];
                                                 } else {
-                                                  $replies = [ $2 ];
+                                                  $replies = [ "you should $4" ];
                                                 }
                                               };
             /global business excellence/i
