@@ -255,7 +255,7 @@ sub input{
                                                      warn $@ if $@;
 
                                               };
-            /flip.*or.*/                && do {
+            /flip(.*)or(.*)/            && do {
                                                 my $range = 100;
                                                 my $random_number = int(rand($range));
                                                 if ($random_number >= 50){
