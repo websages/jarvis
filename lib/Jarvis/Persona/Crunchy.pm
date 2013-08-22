@@ -231,7 +231,7 @@ sub input{
                                                 if ($random_number >= 50){
                                                   $replies = $1;
                                                 } else {
-                                                  $replies = $2
+                                                  $replies = $2;
                                                 }
                                               };
             /badger/                    && do { 
