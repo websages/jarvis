@@ -210,6 +210,29 @@ sub input{
                                                                   }
                                                      };
                                                      warn $@ if $@;
+
+                                              };
+            /brewery/i                     && do { 
+                                                eval {
+                                                       if($direct){
+                                                                    use LWP::Simple;
+                                                                    use JSON qw( decode_json );
+                                                                    my $url='http://api.brewerydb.com/v2/brewery/random?key=4e1a74fd095edd633a56222807054c62';
+                                                                    my $content = get( $url );
+                                                                    my $json = decode_json($content);
+                                                                    $replies = [ $json->{'data'}{'name'} ];
+                                                       } 
+                                                     };
+                                                     warn $@ if $@;
+                                              };
+            /flip.*or.*/                && do {
+                                                my $range = 100;
+                                                my $random_number = int(rand($range));
+                                                if ($random_number >= 50){
+                                                  $replies = $1;
+                                                } else {
+                                                  $replies = $2;
+                                                }
                                               };
             /badger/                    && do { 
                                                 my $list = [ 
