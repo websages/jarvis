@@ -195,6 +195,16 @@ sub input{
                                                 $kernel->post($sender, 'authen', $msg);
                                                 last;
                                               };
+            /flip\s+(.*)\s+or\s+(.*)\s*\?*/   && do {
+                                                print STDERR "$1 || $2\n";
+                                                my $range = 100;
+                                                my $random_number = int(rand($range));
+                                                if ($random_number >= 50){
+                                                  $replies = [ $1 ];
+                                                } else {
+                                                  $replies = [ $2 ];
+                                                }
+                                              };
             /global business excellence/i
                                         && do { $replies = [ "Unison!" ]; last; };
             /unison/i                   && do { $replies = [ "The Way To Global Business Excellence!" ]; last; };
@@ -254,16 +264,6 @@ sub input{
                                                      }
                                                      warn $@ if $@;
 
-                                              };
-            /flip\s+(.*)\s+or\s+(.*)\s*\?*/   && do {
-                                                print STDERR "$1 || $2\n";
-                                                my $range = 100;
-                                                my $random_number = int(rand($range));
-                                                if ($random_number >= 50){
-                                                  $replies = [ $1 ];
-                                                } else {
-                                                  $replies = [ $2 ];
-                                                }
                                               };
             /badger/                    && do { 
                                                 my $list = [ 
