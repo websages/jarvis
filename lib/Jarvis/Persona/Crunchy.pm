@@ -207,7 +207,7 @@ sub input{
                                                                     my $content = get( $url );
                                                                     my $json = decode_json($content);
                                                                     $replies = [ $json->{'data'}{'name'} ];
-                                                                }
+                                                                  }
                                                      };
                                                      warn $@ if $@;
 
