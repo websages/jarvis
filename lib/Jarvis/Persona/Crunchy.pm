@@ -196,7 +196,7 @@ sub input{
                                                 last;
                                               };
             /(flip|should\s+(i|we))\s+(.*)\s+or\s+(.*)\s*\?*/   && do {
-                                                print STDERR "$1 , $2, $3, [ $4, $5 ]\n";
+                                                print STDERR "$1 , $2, [ $3, $4 ]\n";
                                                 my $range = 100;
                                                 my $random_number = int(rand($range));
                                                 if ($random_number >= 50){
