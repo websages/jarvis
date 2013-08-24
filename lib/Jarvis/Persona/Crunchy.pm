@@ -200,11 +200,13 @@ sub input{
                                                 my $range = 100;
                                                 my $random_number = int(rand($range));
                                                 if ($random_number >= 50){
-                                                  $3=~s/[\s\?]*$//g;
-                                                  $replies = [ "you should $3" ];
+                                                  my $answer = $3;
+                                                  $answer=~s/[\s\?]*$//g;
+                                                  $replies = [ "you should $answer" ];
                                                 } else {
-                                                  $4=~s/[\s\?]*$//g;
-                                                  $replies = [ "you should $4" ];
+                                                  my $answer = $4;
+                                                  $answer=~s/[\s\?]*$//g;
+                                                  $replies = [ "you should $answer" ];
                                                 }
                                               };
             /global business excellence/i
