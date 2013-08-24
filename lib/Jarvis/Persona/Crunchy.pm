@@ -195,13 +195,15 @@ sub input{
                                                 $kernel->post($sender, 'authen', $msg);
                                                 last;
                                               };
-            /(flip|should\s+(i|we))\s+(.*)\s+or\s+(.*)\s*\?*/i   && do {
+            /(flip|should\s+(i|we))\s+(.*)\s+or\s+(.*)/i   && do {
                                                 print STDERR "$1 , $2, [ $3, $4 ]\n";
                                                 my $range = 100;
                                                 my $random_number = int(rand($range));
                                                 if ($random_number >= 50){
+                                                  $3=~s/[\s\?]*$//g;
                                                   $replies = [ "you should $3" ];
                                                 } else {
+                                                  $4=~s/[\s\?]*$//g;
                                                   $replies = [ "you should $4" ];
                                                 }
                                               };
