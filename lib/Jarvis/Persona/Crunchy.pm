@@ -218,7 +218,7 @@ sub input{
                                                                     my $url="http://www.whiskybase.com/whiskies.php?whiskyid=$rid";
                                                                     my $content = get( $url );
                                                                     my $title = "Too drunk!";
-                                                                    if ($content =~ /meta property="og:title" content="(.*)"/) {
+                                                                    if ($content =~ /meta property="og:title" content="([^"]*)"/) {
                                                                       $title = $1;
                                                                     }
                                                                     $replies = [ $title ];
