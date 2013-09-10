@@ -208,6 +208,29 @@ sub input{
             /global business excellence/i
                                         && do { $replies = [ "Unison!" ]; last; };
             /unison/i                   && do { $replies = [ "The Way To Global Business Excellence!" ]; last; };
+            /scotch/i                   && do {
+                                                $pirate=0;
+                                                eval {
+                                                       if($direct){
+                                                                    use LWP::Simple;
+                                                                    use JSON qw( decode_json );
+                                                                    my $rid = int(rand(44375)) + 1;
+                                                                    my $url="http://www.whiskybase.com/whiskies.php?whiskyid=$rid";
+                                                                    my $content = get( $url );
+                                                                    my $title = "Too drunk!";
+                                                                    if ($content =~ /meta property="og:title" content="(.*)"/) {
+                                                                      $title = $1;
+                                                                    }
+                                                                    $replies = [ $title ];
+                                                                  }
+                                                     };
+                                                     if($@){
+                                                         warn $@;
+                                                     }else{
+                                                         last;
+                                                     }
+                                                    
+                                              };
             /beer/i                     && do {
                                                 $pirate=0;
                                                 eval {
