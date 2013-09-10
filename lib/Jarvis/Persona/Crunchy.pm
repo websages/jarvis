@@ -878,31 +878,36 @@ sub shoutout{
 ################################################################################
 sub standings{
     my $self = shift;
-    use HTML::TableExtract;
-    use LWP::Simple;
     use Data::Dumper;
+    use LWP::Simple;
+    use HTML::TreeBuilder;
+
     $self->{'standings'} = [];
     my $response = get( 'http://sports.yahoo.com/mlb/standings');
     die "Couldn't get it!" unless defined $response;
 
-    my @headers = qw( East W L Pct GB Home Road RS RA Diff Streak L10 );
-    my $te = HTML::TableExtract->new( headers => \@headers );
-    $te->parse($response);
-    my ($table) = $te->tables;
-    print join("\t", @headers), "\n";
-
-    my $header = sprintf "%-20s %-5s %-5s %-7s %-6s %-7s\n", '', 'W', 'L', ' Pct', 'GB', 'L10';
+    my $header = sprintf "%-20s %-5s %-5s %-7s %-6s %-7s", '', 'W', 'L', ' Pct', 'GB', 'L10';
     push(@{ $self->{'standings'} }, $header);
-    for my $row ($te->rows ) {
-        map{ $_= '' unless(defined($_)); } @$row;
-        map{ $_=~s/\x{a0}//g ;} @$row;
-        if(@$row){
-             my ($team, $wins, $losses, $pct, $gb, $home, $road, $rs, $ra, $diff, $streak, $l10) = @$row;
-             if ( $team =~m/Chicago Cubs|Atlanta Braves|New York Mets|Washington Nationals/){
-                  my $q = sprintf "%-20s %-5s %-5s %-7s %-6s %-7s\n", $team, $wins, $losses, $pct, $gb, $l10;
-                  $q=~s/\s+$//;
-                  push(@{ $self->{'standings'} }, $q);
-             }
+
+    my $tree = HTML::TreeBuilder->new; # empty tree
+    $tree->parse_content($response);
+    # print "Hey, here's a dump of the parse tree:\n";
+    my $elements = $tree->elementify;
+    my @tables = $elements->find_by_tag_name("table");
+    my @lines;
+    foreach my $table (@tables) {
+        @lines = split(/\n\n/,$table->format);
+        map { $_=~s/^\s+//; chomp($_); } @lines;
+        shift(@lines);
+        while($#lines > 0){
+            my ($team, $wins, $losses, $pct, $gb, $home, $road, $streak, $rs, $ra, $diff, $l10 ) = @lines[0..11];
+            # print STDERR "$team, $wins, $losses, $pct, $gb, $home, $road, $streak, $rs, $ra, $diff, $l10 \n";
+            if ( $team =~m/Atlanta|Washington|Chi Cubs|NY Mets/){
+                 my $q = sprintf "%-20s %-5s %-5s %-7s %-6s %-7s\n", $team, $wins, $losses, $pct, $gb, $l10;
+                 $q=~s/\s+$//;
+                 push(@{ $self->{'standings'} }, $q);
+            }
+            foreach (0..11){ shift(@lines); }
         }
     }
     return @{ $self->{'standings'} };
