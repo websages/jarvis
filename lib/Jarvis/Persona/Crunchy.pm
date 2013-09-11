@@ -135,7 +135,7 @@ sub input{
         for ( $what ) {
             /^\s*!*help\s*/              && do { $replies = $self->help($what); last; };
             /\"(.+?)\"\s+--\s*(.+?)$/    && do { $replies = [ $self->quote($what) ]; last; };
-             /(https*:\S+)/ && !/^!http/ && do { $replies = [ $self->link($1, $who) ]; last; };
+             /(https*:\S+)/ && !/!http/  && do { $replies = [ $self->link($1, $who) ]; last; };
             /^\s*[Ff]ortune\s*$/         && do { $replies = [ $self->fortune() ]; last; };
             /^!shoutout\s*(.*)/          && do { $replies = [ $self->shoutout($1,$who) ]; last; };
             /^!enable\s+shoutouts.*/     && do {
