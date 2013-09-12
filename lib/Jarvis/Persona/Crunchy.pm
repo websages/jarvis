@@ -212,7 +212,7 @@ sub input{
             /global business excellence/i
                                         && do { $replies = [ "Unison!" ]; last; };
             /unison/i                   && do { $replies = [ "The Way To Global Business Excellence!" ]; last; };
-            /scotch/i                   && do {
+            /(scotch|\\_\/)/i           && do {
                                                 $pirate=0;
                                                 eval {
                                                        if($direct){
