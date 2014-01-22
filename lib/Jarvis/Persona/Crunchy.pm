@@ -677,6 +677,7 @@ sub link{
     my $nick=shift if @_;
     return undef unless $url;
     return undef unless $nick;
+    return undef if ($nick =~ /crunchy/ );
     # return undef if $url =~ m#^https://gist.github.com#i; # ! should get this now
     print STDERR "[ $url ]\n";
     my $agent = LWP::UserAgent->new();
