@@ -137,6 +137,8 @@ sub input{
             /\"(.+?)\"\s+--\s*(.+?)$/    && do { $replies = [ $self->quote($what) ]; last; };
              /(https*:\S+)/ && !/!http/  && do { $replies = [ $self->link($1, $who) ]; last; };
             /^\s*[Ff]ortune\s*$/         && do { $replies = [ $self->fortune() ]; last; };
+            /^!legacy-bot-deploy\s*$/    && do { $replies = [ $self->deploy() ]; last; };
+            /^!legacy-bot-reload\s*$/    && do { $replies = [ $self->reload() ]; last; };
             /^!shoutout\s*(.*)/          && do { $replies = [ $self->shoutout($1,$who) ]; last; };
             /^!enable\s+shoutouts.*/     && do {
                                                 $msg->{'reason'}='enable_shoutout';
@@ -671,6 +673,28 @@ sub fortune{
     return $fortune;
 }
 
+sub deploy{
+    my $self=shift;
+    my $output;
+    if(-x "/usr/local/bin/legacy-bot-reload") {
+        # We have to use SSH because sudo is effed on freyr
+        $output = qx(ssh -i /home/opt/.ssh/id_rsa_deploy root\@localhost "/usr/local/bin/legacy-bot-reload deploy");
+    }
+    return $output;
+}
+
+sub reload{
+    my $self=shift;
+    my $output;
+    if(-x "/usr/local/bin/legacy-bot-reload") {
+        # We have to use SSH because sudo is effed on freyr
+        $output = qx(ssh -i /home/opt/.ssh/id_rsa_reload root\@localhost "/usr/local/bin/legacy-bot-reload reload");
+    }
+    return $output;
+}
+
+
+
 sub link{
     my $self=shift;
     my $url=shift if @_;
@@ -1011,6 +1035,14 @@ sub help {
                   'tumble'    => [
                                    "description: Our tumblelog",
                                    "syntax/use : http://tumble.wcyd.org/",
+                                 ],
+                 'legacy-bot-deploy'    => [
+                                   'description: redeploy classic perl crunchy after pulling from github',
+                                   'syntax/use : !legacy-bot-deploy',
+                                 ],
+                 'legacy-bot-reload'    => [
+                                   'description: reload classic perl crunchy',
+                                   'syntax/use : !legacy-bot-reload',
                                  ],
 #                  'twitter'   => [
 #                                   "description: enable/disable twitter",
