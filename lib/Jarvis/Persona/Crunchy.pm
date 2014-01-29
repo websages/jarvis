@@ -80,7 +80,7 @@ sub persona_start{
     if($self->{'ldap_enabled'} == 1){
         print STDERR "[ ".$self->error()." ]" if $self->{'ERROR'};
     }
-#    $self->{'cfg'} = { 
+#    $self->{'cfg'} = {
 #                       'screenname' => $self->{'twitter_name'},
 #                       'username'   => $self->{'twitter_name'},
 #                       'password'   => $self->{'password'},
@@ -101,7 +101,7 @@ sub delay_flickr{
     $_[KERNEL]->delay('delay_flickr',300);
 }
 ################################################################################
-# Here is what you must provide: 
+# Here is what you must provide:
 #   A function named "input" that takes $what and $directly_addressed
 #   as arguments, that will regex out the appropriate commands and act on them.
 #   It should return a list reference to the list of one-line replies.
@@ -111,7 +111,7 @@ sub input{
     my ($self, $kernel, $heap, $sender, $msg) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0];
     # un-wrap the $msg
     my ( $sender_alias, $respond_event, $who, $where, $what, $id ) =
-       ( 
+       (
          $msg->{'sender_alias'},
          $msg->{'reply_event'},
          $msg->{'conversation'}->{'nick'},
@@ -150,12 +150,12 @@ sub input{
                                               };
 #            /^!enable\s+twitter.*/      && do {
 #                                                $kernel->post($self->alias(), 'enable_twitter',$who);
-#                                                $replies = [ "enabled" ]; 
+#                                                $replies = [ "enabled" ];
 #                                                last;
 #                                              };
 #            /^!disable\s+twitter.*/      && do {
 #                                                $kernel->post($self->alias(), 'disable_twitter',$who);
-#                                                $replies = [ "disabled" ]; 
+#                                                $replies = [ "disabled" ];
 #                                                last;
 #                                              };
             /^!flickr*/                 && do { $kernel->post($self->alias(), 'check_flickr'); last; };
@@ -175,9 +175,9 @@ sub input{
 #            /^!*follow\s+\@(.\S+)/      && do { $replies =  [ $self->twitter_follow($1,1) ]; last; };
 #            /^!*unfollow\s+\@(.\S+)/    && do { $replies =  [ $self->twitter_follow($1,0) ]; last; };
 #            /^!*tweet\s+(.*)/           && do {
-#                                                $kernel->post($self->alias(),'new_tweet',$1); 
+#                                                $kernel->post($self->alias(),'new_tweet',$1);
 #                                                $replies=[ "tweeterfish'd." ];
-#                                                last; 
+#                                                last;
 #                                              };
             /^!*\s*who\s*am\s*i[?\s]*/  && do {
                                                 $pirate=0;
@@ -186,7 +186,7 @@ sub input{
                                                 last;
                                               };
             /^!*\s*who\s*.*\s*is\s+(\S+)\s*$/
-                                        && do { 
+                                        && do {
                                                 my $target=$1;
                                                 $target=~s/[\.,!\?]*$//;
                                                 $pirate=0;
@@ -271,7 +271,7 @@ sub input{
                                                      }else{
                                                          last;
                                                      }
-                                                    
+
                                               };
             /c\[\]/i                    && do {
                                                 $pirate=0;
@@ -289,7 +289,7 @@ sub input{
                                                      }else{
                                                          last;
                                                      }
-                                                    
+
                                               };
             /brewery/i                 && do {
                                                 $pirate=0;
@@ -297,7 +297,7 @@ sub input{
                                                        if($direct){
                                                                     use LWP::Simple;
                                                                     use JSON qw( decode_json );
-                                                                    my $url='http://api.brewerydb.com/v2/brewery/random?key=4e1a74fd095edd633a56222807054c62'; 
+                                                                    my $url='http://api.brewerydb.com/v2/brewery/random?key=4e1a74fd095edd633a56222807054c62';
                                                                     my $content = get( $url );
                                                                     my $json = decode_json($content);
                                                                     $replies = [ $json->{'data'}{'name'} ];
@@ -311,8 +311,8 @@ sub input{
                                                      warn $@ if $@;
 
                                               };
-            /badger/                    && do { 
-                                                my $list = [ 
+            /badger/                    && do {
+                                                my $list = [
                                                              "badger badger badger",
                                                              "badger badger badger",
                                                              "badger badger badger",
@@ -320,10 +320,10 @@ sub input{
                                                              "mushroom mushroom",
                                                              "SNAAAAKE OOOOOH IT'S A SNAAAAAAKE!",
                                                            ];
-                                                $replies = [ $list->[ int(rand(6)) ] ]; 
-                                                last; 
+                                                $replies = [ $list->[ int(rand(6)) ] ];
+                                                last;
                                               };
-            /\[(#.*)!(.*)\]\s+(.*)/     && do { 
+            /\[(#.*)!(.*)\]\s+(.*)/     && do {
                                                  my ($room, $from, $sms) = ($1, $2, $3);
                                                  my $txtmsg = {};
                                                  $replies = [ "copy: $what" ] if($direct); # reply to stop the procmail script from re-trying
@@ -334,46 +334,46 @@ sub input{
                                                  $txtmsg->{'conversation'}->{'room'} = $room;
                                                  $txtmsg->{'conversation'}->{'body'} = $sms;
                                                  $txtmsg->{'conversation'}->{'id'}   = $msg->{'conversation'}->{'id'};
-                                                 $kernel->post($txtmsg->{'sender_alias'}, 'irc_public_reply', $txtmsg, "[$from] $sms"); 
+                                                 $kernel->post($txtmsg->{'sender_alias'}, 'irc_public_reply', $txtmsg, "[$from] $sms");
                                                  last;
                                                };
-            /.*/                        && do { 
-                                                $replies = [ $self->megahal($what) ] if($direct); last; 
+            /.*/                        && do {
+                                                $replies = [ $self->megahal($what) ] if($direct); last;
                                               };
             /.*/                        && do { last; };
         }
-        if($direct == 1){             
+        if($direct == 1){
             foreach my $line (@{ $replies }){
                 $line=piratespeak($line) if $pirate;
                 if($msg->{'conversation'}->{'direct'} == 0){
                     print STDERR Data::Dumper->Dump([ $msg, $line ]);
                     if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $who.': '.$line); }
                 }else{
-                    if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $line); } 
+                    if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $line); }
                 }
             }
         }else{
             foreach my $line (@{ $replies }){
                 $line=piratespeak($line) if $pirate;
-                if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $line); } 
+                if( defined($line) && ($line ne "") ){ $kernel->post($sender, $respond_event, $msg, $line); }
             }
         }
     }
     return $self->{'alias'};
 }
 ################################################################################
-# 
+#
 ################################################################################
 
 ################################################################################
-# 
+#
 ################################################################################
 sub check_flickr{
     my ($self, $kernel, $heap, $sender, @args) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
     POE::Session->create(
                           options => { debug => 0, trace => 0},
                           object_states => [
-                                             $self => { 
+                                             $self => {
                                                        _start           => "check_flickr_start",
                                                        do_nonblock      => "do_nonblock",
                                                        got_child_stdout => "on_child_stdout",
@@ -424,7 +424,7 @@ sub check_flickr_blocking{
     return undef unless(ref($dbh) ne '');
     my $parser = HTML::Parser->new(
         api_version => 3,
-        start_h     => [ 
+        start_h     => [
                          sub {
                                my ( $self, $tag, $attr ) = @_;
                                my $link = $_;
@@ -440,8 +440,8 @@ sub check_flickr_blocking{
                                my $exists = $dbh->do( qq{ SELECT imageID FROM image WHERE md5sum = '$md5sum' } ) ||
                                    print STDERR "$DBI::errstr\n";
                                unless ( $exists == 1 ) {
-                                   my $sth = $dbh->prepare( 
-                                       qq{ INSERT INTO image ( title, link, url, md5sum) VALUES ( ?,?,?,?) } ) || 
+                                   my $sth = $dbh->prepare(
+                                       qq{ INSERT INTO image ( title, link, url, md5sum) VALUES ( ?,?,?,?) } ) ||
                                            print STDERR "$DBI::errstr\n";
                                     my $rv = $sth->execute(
                                                             $attr->{'alt'}, $link, $attr->{'src'}, $md5sum
@@ -449,7 +449,7 @@ sub check_flickr_blocking{
                                     print STDERR Data::Dumper->Dump([$rv]);
                                }
                            },
-                         "self,tagname,attr" 
+                         "self,tagname,attr"
                        ],
                        report_tags => [ qw( img ) ]
     );
@@ -470,7 +470,7 @@ sub do_nonblock{
     # Signal events include the process ID.
     $heap->{children_by_pid}{$child->PID} = $child;
     print( "Child pid ", $child->PID, " started as wheel ", $child->ID, ".\n");
-}  
+}
     # Wheel event, including the wheel's ID.
 sub on_child_stdout {
     my ($self, $kernel, $heap, $sender, $stdout_line, $wheel_id) = @_[OBJECT, KERNEL, HEAP, SENDER, ARG0 .. $#_];
@@ -554,7 +554,7 @@ sub ldap_srv_records{
 }
 
 ################################################################################
-# when you send an 'authen' event with a message bundle ($msg) to the connector 
+# when you send an 'authen' event with a message bundle ($msg) to the connector
 # it should make a best-effort attempt to figure out who the actual user behind
 # the nick is, and it will reply to 'authen_reply' of the requesting session
 # along with the $msg. The $msg sent to authen on the connector should contain
@@ -574,14 +574,14 @@ sub authen_reply{
             }else{
                $r = "I don't know who $msg->{'conversation'}->{'nick'} is.\n";
             }
-            $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r); 
+            $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r);
         }elsif($msg->{'reason'} eq 'whois'){
             if(defined($user)){
                $r = "I see $msg->{'conversation'}->{'nick'} as: $user";
             }else{
                $r = "I don't know who $msg->{'conversation'}->{'nick'} is.\n";
             }
-            $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r); 
+            $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r);
         }elsif($msg->{'reason'} eq 'channel_join'){
             my ($u,$d) = split('@',$user);
             if($d eq $self->{'ldap_domain'}){
@@ -592,7 +592,7 @@ sub authen_reply{
             }
         }elsif($msg->{'reason'} eq 'tell_request'){
             $user=~s/\@.*//;
-            # if the nick didn't translate to a userid, they may not be logged in, 
+            # if the nick didn't translate to a userid, they may not be logged in,
             # but the request may have been for a userid, so let's try to look that up...
             if(!defined($user)){
                 $user = $msg->{'conversation'}->{'nick'};
@@ -604,8 +604,8 @@ sub authen_reply{
                     my @pager_count = $user_entry->get_value('pageremail');
                     if($#pager_count >=0){
                         foreach my $mail ($user_entry->get_value('pageremail') ){
-                            my $mx = Mail::Send->new(Subject => $msg->{'conversation'}->{'originator'},To => "$mail"); 
-                            my $mail_fh = $mx->open; 
+                            my $mx = Mail::Send->new(Subject => $msg->{'conversation'}->{'originator'},To => "$mail");
+                            my $mail_fh = $mx->open;
                             print $mail_fh $msg->{'conversation'}->{'body'};
                             $mail_fh->close;
                         }
@@ -618,14 +618,14 @@ sub authen_reply{
                $r = "$user has no ldap entry\n";
             }
 print STDERR Data::Dumper->Dump([$msg,$r]);
-            $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r); 
+            $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r);
         }elsif($msg->{'reason'} eq 'enable_shoutout'){
             $r = $self->toggle_shoutout($user,'enable',$msg);
-            $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r); 
+            $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r);
         }elsif($msg->{'reason'} eq 'disable_shoutout'){
             $r = $self->toggle_shoutout($user,'disable',$msg);
-            $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r); 
-        }else{ 
+            $kernel->post($msg->{'sender_alias'}, $msg->{'reply_event'}, $msg, $r);
+        }else{
             # authorize request_id in the $heap->{'requests'} queue
             print STDERR "implement authorization request queue\n";
         }
@@ -649,7 +649,7 @@ sub channel_join{
    $kernel->post($sender,'authen',$msg);
 }
 ################################################################################
-# 
+#
 ################################################################################
 
 
@@ -854,16 +854,16 @@ sub toggle_shoutout{
             my $tmp = shift (@users);
             if($action_user eq $tmp){
                 $found = 1;
-                if($action ne 'disable'){ 
-                    push(@users,$tmp); 
-                }else{ 
-                    $modified = 1; 
+                if($action ne 'disable'){
+                    push(@users,$tmp);
+                }else{
+                    $modified = 1;
                 }
             }else{
-                push(@users,$tmp); 
+                push(@users,$tmp);
             }
         }
-        if($action eq 'enable'){ 
+        if($action eq 'enable'){
             if($found == 0){
                 push(@users,$action_user);
                 $modified = 1;
@@ -871,18 +871,18 @@ sub toggle_shoutout{
                 $r = "$action_user is already in cn=shoutout (you're already good to go)";
             }
         }
-        if($action eq 'disable'){ 
+        if($action eq 'disable'){
             if($found == 0){
                 $r = "$action_user is not in cn=shoutout (you're already removed)";
             }
         }
         if($modified == 1){
-            $entry->replace('uniqueMember' => \@users);    
+            $entry->replace('uniqueMember' => \@users);
             $self->update({'entry' => $entry});
             $r = "cn=shoutouts modified.";
         }
     }
-    return $r; 
+    return $r;
 }
 
 sub shoutout{
@@ -902,8 +902,8 @@ sub shoutout{
             push(@list,$user);
             foreach my $user_entry ( $self->get_ldap_entry("(uid=$user)") ){
                 foreach my $mail ($user_entry->get_value('pageremail') ){
-                    my $mx = Mail::Send->new(Subject=> "shoutout![$originator]", To => "$mail"); 
-                    my $mail_fh = $mx->open; 
+                    my $mx = Mail::Send->new(Subject=> "shoutout![$originator]", To => "$mail");
+                    my $mail_fh = $mx->open;
                     print $mail_fh $shoutout;
                     $mail_fh->close;
                 }
@@ -966,7 +966,7 @@ sub help {
     my $self = shift;
     my $line = shift;
     my $help = {
-                 'fortune'    => [ 
+                 'fortune'    => [
                                    'description: Display a random fortune',
                                    'syntax/use : fortune',
                                  ],
@@ -1082,9 +1082,9 @@ sub help {
 #                               'new_tweet',
 #                               "\@".
 #                                   $tweet->{'user'}->{'screen_name'}.
-#                                   " ". 
+#                                   " ".
 #                                   piratespeak( $self->megahal( $nonick_text ) )
-#                             ); 
+#                             );
 #            }
 #        }
 #    }
