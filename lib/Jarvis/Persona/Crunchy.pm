@@ -211,8 +211,6 @@ sub input{
                                                   $replies = [ "you should $answer" ];
                                                 }
                                               };
-            /global business excellence/i
-                                        && do { $replies = [ "Unison!" ]; last; };
             /scotch/i                   && do {
                                                 $pirate=0;
                                                 eval {
