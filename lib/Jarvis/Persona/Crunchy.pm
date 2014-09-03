@@ -197,6 +197,7 @@ sub input{
                                                 $kernel->post($sender, 'authen', $msg);
                                                 last;
                                               };
+            /^\s*!/                      && do { last; }; # ignore any non !help line that starts with !
             /(flip|should\s+(i|we))\s+(.*)\s+or\s+(.*)/i   && do {
                                                 print STDERR "$1 , $2, [ $3, $4 ]\n";
                                                 my $range = 100;
@@ -253,8 +254,8 @@ sub input{
                                                          last;
                                                      }
                                               };
-            /badger/                    && do { 
-                                                my $list = [ 
+            /badger/                    && do {
+                                                my $list = [
                                                              "badger badger badger",
                                                              "badger badger badger",
                                                              "badger badger badger",
