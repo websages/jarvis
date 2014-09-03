@@ -133,10 +133,11 @@ sub input{
         my $replies=[];
         my $pirate=1;
         for ( $what ) {
+            ####################################################################
+            # ! commands go first so we can ignore hubot commands after
+            # we should endeavor to move these ! commands into crunchy-ng first
+            ####################################################################
             /^\s*!*help\s*/              && do { $replies = $self->help($what); last; };
-            /\"(.+?)\"\s+--\s*(.+?)$/    && do { $replies = [ $self->quote($what) ]; last; };
-             /(https*:\S+)/ && !/!http/  && do { $replies = [ $self->link($1, $who) ]; last; };
-            /^\s*[Ff]ortune\s*$/         && do { $replies = [ $self->fortune() ]; last; };
             /^!legacy-bot-deploy\s*$/    && do { $replies = [ $self->deploy() ]; last; };
             /^!legacy-bot-reload\s*$/    && do { $replies = [ $self->reload() ]; last; };
             /^!shoutout\s*(.*)/          && do { $replies = [ $self->shoutout($1,$who) ]; last; };
@@ -198,6 +199,12 @@ sub input{
                                                 last;
                                               };
             /^\s*!/                      && do { last; }; # ignore any non !help line that starts with !
+            ####################################################################
+            #  non ! commands belowe here. kthx.
+            ####################################################################
+            /\"(.+?)\"\s+--\s*(.+?)$/    && do { $replies = [ $self->quote($what) ]; last; };
+             /(https*:\S+)/ && !/!http/  && do { $replies = [ $self->link($1, $who) ]; last; };
+            /^\s*[Ff]ortune\s*$/         && do { $replies = [ $self->fortune() ]; last; };
             /(flip|should\s+(i|we))\s+(.*)\s+or\s+(.*)/i   && do {
                                                 print STDERR "$1 , $2, [ $3, $4 ]\n";
                                                 my $range = 100;
