@@ -138,12 +138,9 @@ sub input{
             # we should endeavor to move these ! commands into crunchy-ng first
             ####################################################################
             /^\s*!*help\s*/              && do { $replies = $self->help($what); last; };
-            /\"(.+?)\"\s+--\s*(.+?)$/    && do { $replies = [ $self->quote($what) ]; last; };
             /(https*:\S+)/ && !/^!http/ && !/irclink/ && do {$replies = [ $self->link($1, $who) ]; last; };
-            /^\s*[Ff]ortune\s*$/         && do { $replies = [ $self->fortune() ]; last; };
             /^!legacy-bot-deploy\s*$/    && do { $replies = [ $self->deploy() ]; last; };
             /^!legacy-bot-reload\s*$/    && do { $replies = [ $self->reload() ]; last; };
-
             /^!shoutout\s*(.*)/          && do { $replies = [ $self->shoutout($1,$who) ]; last; };
             /^!enable\s+shoutouts.*/     && do {
                                                 $msg->{'reason'}='enable_shoutout';
@@ -155,7 +152,6 @@ sub input{
                                                 $kernel->post($sender, 'authen', $msg);
                                                 last;
                                               };
-
             /^!flickr*/                 && do { $kernel->post($self->alias(), 'check_flickr'); last; };
             /^!weather\s+(.+?)$/        && do { $replies = [ qx( ruby /usr/local/bin/weather.rb $1 )]; last; };
             /^!stock\s+(.+?)$/        && do { $replies = [ qx( ruby /usr/local/bin/stock.rb $1 )]; last; };
@@ -170,7 +166,6 @@ sub input{
                                                 $kernel->post($sender,'authen',$msg);
                                               };
             /^!standings\s*(.*)/        && do { @{ $replies } = $self->standings(); $pirate=0; last; };
-
             /^!*\s*who\s*am\s*i[?\s]*/  && do {
                                                 $pirate=0;
                                                 $msg->{'reason'}='whoami';
