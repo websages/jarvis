@@ -10,7 +10,7 @@ $ENV{'PATH'}='/usr/local/bin:/usr/bin:/bin';
 $ENV{'IFS'}=' \t\n';
 ################################################################################
 # Add local libraries (we install them under us)
-BEGIN { 
+BEGIN {
         use Cwd;
         my $path=$0;
         $path=~s/\/[^\/]*$//;
@@ -30,6 +30,7 @@ BEGIN {
 ################################################################################
 # Include our dependencies
 use POSIX 'setsid';
+use local::lib;
 use Data::Dumper;
 use Jarvis::IRC;
 use Jarvis::Jabber;
@@ -91,7 +92,7 @@ persona:
         persona: system
 ...
 ################################################################################
-# a list of the personas I can spawn goes into known_personas 
+# a list of the personas I can spawn goes into known_personas
 $persona->{'persona'}->{'init'}->{'known_personas'} = YAML::Load(<< "...");
 ---
   - name: crunchy
