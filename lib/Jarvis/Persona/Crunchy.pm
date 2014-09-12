@@ -138,7 +138,6 @@ sub input{
             # we should endeavor to move these ! commands into crunchy-ng first
             ####################################################################
             /^\s*!*help\s*/              && do { $replies = $self->help($what); last; };
-            /(https*:\S+)/ && !/^!http/ && !/irclink/ && do {$replies = [ $self->link($1, $who) ]; last; };
             /^!legacy-bot-deploy\s*$/    && do { $replies = [ $self->deploy() ]; last; };
             /^!legacy-bot-reload\s*$/    && do { $replies = [ $self->reload() ]; last; };
             /^!shoutout\s*(.*)/          && do { $replies = [ $self->shoutout($1,$who) ]; last; };
@@ -187,7 +186,7 @@ sub input{
             #  non ! commands belowe here. kthx.
             ####################################################################
             /\"(.+?)\"\s+--\s*(.+?)$/    && do { $replies = [ $self->quote($what) ]; last; };
-             /(https*:\S+)/ && !/!http/  && do { $replies = [ $self->link($1, $who) ]; last; };
+            /(https*:\S+)/ && !/!http/  && !/irclink/ && do { $replies = [ $self->link($1, $who) ]; last; };
             /^\s*[Ff]ortune\s*$/         && do { $replies = [ $self->fortune() ]; last; };
             /(flip|should\s+(i|we))\s+(.*)\s+or\s+(.*)/i   && do {
                                                 print STDERR "$1 , $2, [ $3, $4 ]\n";
