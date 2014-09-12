@@ -151,16 +151,6 @@ sub input{
                                                 $kernel->post($sender, 'authen', $msg);
                                                 last;
                                               };
-#            /^!enable\s+twitter.*/      && do {
-#                                                $kernel->post($self->alias(), 'enable_twitter',$who);
-#                                                $replies = [ "enabled" ];
-#                                                last;
-#                                              };
-#            /^!disable\s+twitter.*/      && do {
-#                                                $kernel->post($self->alias(), 'disable_twitter',$who);
-#                                                $replies = [ "disabled" ];
-#                                                last;
-#                                              };
             /^!flickr*/                 && do { $kernel->post($self->alias(), 'check_flickr'); last; };
             /^!weather\s+(.+?)$/        && do { $replies = [ qx( ruby /usr/local/bin/weather.rb $1 )]; last; };
             /^!stock\s+(.+?)$/        && do { $replies = [ qx( ruby /usr/local/bin/stock.rb $1 )]; last; };
@@ -175,13 +165,6 @@ sub input{
                                                 $kernel->post($sender,'authen',$msg);
                                               };
             /^!standings\s*(.*)/        && do { @{ $replies } = $self->standings(); $pirate=0; last; };
-#            /^!*follow\s+\@(.\S+)/      && do { $replies =  [ $self->twitter_follow($1,1) ]; last; };
-#            /^!*unfollow\s+\@(.\S+)/    && do { $replies =  [ $self->twitter_follow($1,0) ]; last; };
-#            /^!*tweet\s+(.*)/           && do {
-#                                                $kernel->post($self->alias(),'new_tweet',$1);
-#                                                $replies=[ "tweeterfish'd." ];
-#                                                last;
-#                                              };
             /^!*\s*who\s*am\s*i[?\s]*/  && do {
                                                 $pirate=0;
                                                 $msg->{'reason'}='whoami';
@@ -203,7 +186,7 @@ sub input{
             #  non ! commands belowe here. kthx.
             ####################################################################
             /\"(.+?)\"\s+--\s*(.+?)$/    && do { $replies = [ $self->quote($what) ]; last; };
-             /(https*:\S+)/ && !/!http/  && do { $replies = [ $self->link($1, $who) ]; last; };
+            /(https*:\S+)/ && !/!http/  && !/irclink/ && do { $replies = [ $self->link($1, $who) ]; last; };
             /^\s*[Ff]ortune\s*$/         && do { $replies = [ $self->fortune() ]; last; };
             /(flip|should\s+(i|we))\s+(.*)\s+or\s+(.*)/i   && do {
                                                 print STDERR "$1 , $2, [ $3, $4 ]\n";
