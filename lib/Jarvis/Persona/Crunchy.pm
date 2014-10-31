@@ -900,7 +900,7 @@ sub standings{
         while($#lines > 0){
             my ($team, $wins, $losses, $pct, $gb, $home, $road, $streak, $rs, $ra, $diff, $l10 ) = @lines[0..11];
             # print STDERR "$team, $wins, $losses, $pct, $gb, $home, $road, $streak, $rs, $ra, $diff, $l10 \n";
-            if ( $team =~m/Atlanta|Washington|Chi Cubs|NY Mets/){
+            if ( $team =~m/Atlanta|Washington|Chi Cubs|NY Mets|San Francisco/){
                  my $q = sprintf "%-20s %-5s %-5s %-7s %-6s %-7s\n", $team, $wins, $losses, $pct, $gb, $l10;
                  $q=~s/\s+$//;
                  push(@{ $self->{'standings'} }, $q);
