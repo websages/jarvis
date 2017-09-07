@@ -164,7 +164,6 @@ sub input{
                                                 $msg->{'conversation'}->{'body'}  = $message;
                                                 $kernel->post($sender,'authen',$msg);
                                               };
-            /^!standings\s*(.*)/        && do { @{ $replies } = $self->standings(); $pirate=0; last; };
             /^!*\s*who\s*am\s*i[?\s]*/  && do {
                                                 $pirate=0;
                                                 $msg->{'reason'}='whoami';
@@ -872,49 +871,6 @@ sub shoutout{
 ################################################################################
 
 ################################################################################
-# Begin Standings
-################################################################################
-sub standings{
-    my $self = shift;
-    use Data::Dumper;
-    use LWP::Simple;
-    use HTML::TreeBuilder;
-
-    $self->{'standings'} = [];
-    my $response = get( 'http://sports.yahoo.com/mlb/standings');
-    die "Couldn't get it!" unless defined $response;
-
-    my $header = sprintf "%-20s %-5s %-5s %-7s %-6s %-7s", '', 'W', 'L', ' Pct', 'GB', 'L10';
-    push(@{ $self->{'standings'} }, $header);
-
-    my $tree = HTML::TreeBuilder->new; # empty tree
-    $tree->parse_content($response);
-    # print "Hey, here's a dump of the parse tree:\n";
-    my $elements = $tree->elementify;
-    my @tables = $elements->find_by_tag_name("table");
-    my @lines;
-    foreach my $table (@tables) {
-        @lines = split(/\n\n/,$table->format);
-        map { $_=~s/^\s+//; chomp($_); } @lines;
-        shift(@lines);
-        while($#lines > 0){
-            my ($team, $wins, $losses, $pct, $gb, $home, $road, $streak, $rs, $ra, $diff, $l10 ) = @lines[0..11];
-            # print STDERR "$team, $wins, $losses, $pct, $gb, $home, $road, $streak, $rs, $ra, $diff, $l10 \n";
-            if ( $team =~m/Atlanta|Washington|Chi Cubs|NY Mets|San Francisco/){
-                 my $q = sprintf "%-20s %-5s %-5s %-7s %-6s %-7s\n", $team, $wins, $losses, $pct, $gb, $l10;
-                 $q=~s/\s+$//;
-                 push(@{ $self->{'standings'} }, $q);
-            }
-            foreach (0..11){ shift(@lines); }
-        }
-    }
-    return @{ $self->{'standings'} };
-}
-################################################################################
-# End Standings
-################################################################################
-
-################################################################################
 # Begin Help
 ################################################################################
 sub help {
@@ -942,10 +898,6 @@ sub help {
                                    "syntax/use : !shoutout beer @ bbh now, bitches.",
                                    "enable : !enable shoutout",
                                    "disable : !disable shoutout",
-                                 ],
-                  'standings' => [
-                                   "description: Baseball standings",
-                                   "syntax/use : To piss off Heath.",
                                  ],
                   'weather'   => [
                                    "description: Weather report",
