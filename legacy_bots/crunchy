@@ -388,10 +388,13 @@ sub ircHandleMsg {
             my $url = $1;
 
             my $agent;
+	    
+	    # TODO: Make this an environment variable
+	    my $agentString = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.16; rv:84.0) Gecko/20100101 Firefox/84.0'
 
             unless ( $agent = $arg{'heap'}->{'useragent'} ) {
                 $agent = LWP::UserAgent->new();
-                $agent->agent( 'Mozilla/5.0' );
+                $agent->agent( $agentString );
                 $arg{'heap'}->{'useragent'} = $agent;
             }
 
