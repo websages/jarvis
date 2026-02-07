@@ -384,64 +384,8 @@ sub ircHandleMsg {
             next;
         };
 
-        /(http:\S+)/ and do {
-            my $url = $1;
-
-            my $agent;
-	    
-	    # TODO: Make this an environment variable
-	    my $agentString = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.16; rv:84.0) Gecko/20100101 Firefox/84.0'
-
-            unless ( $agent = $arg{'heap'}->{'useragent'} ) {
-                $agent = LWP::UserAgent->new();
-                $agent->agent( $agentString );
-                $arg{'heap'}->{'useragent'} = $agent;
-            }
-
-            $url =~ s/\&/\%26/g;
-
-            my $response = $agent->get(
-                "http://tumble.wcyd.org/irclink/?user="
-                . $arg{'nick'}
-                . "&source=irc&url=$url"
-            );
-
-            if ( $response->content eq '0' ) {
-                $r = 'Invalid link!'
-            }
-            else {
-                $r = 'http://tumble.wcyd.org/irclink/?' . $response->content;
-            }
-
-            next;
-        };
-
-        /\"(.+?)\"\s--(.+?)$/ and do {
-            my $quote  = $1;
-            my $author = $2;
-
-            my $agent;
-
-            unless ($agent = $arg{'heap'}->{'useragent'}) {
-                $agent = LWP::UserAgent->new();
-                $agent->agent( 'Mozilla/5.0' );
-                $arg{'heap'}->{'useragent'} = $agent;
-            }   
-
-            $quote  =~ s/\&/\%26/g;
-            $author =~ s/\&/\%26/g;
-
-            my $response = $agent->get(
-                'http://tumble.wcyd.org/quote/?quote='
-                . "$quote"
-               . "&author=$author"
-            );
-
-            next;
-        };
-
         /(.*)/ and do {
-            $r = lc $megahal->do_reply( $_ );
+           $r = lc $megahal->do_reply( $_ );
            undef $r;
            next;
        };
