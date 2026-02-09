@@ -184,8 +184,6 @@ sub input{
             ####################################################################
             #  non ! commands belowe here. kthx.
             ####################################################################
-            /\"(.+?)\"\s+--\s*(.+?)$/    && do { $replies = [ $self->quote($what) ]; last; };
-            /(https*:\S+)/ && !/!http/  && !/irclink/ && do { $replies = [ $self->link($1, $who) ]; last; };
             /^\s*[Ff]ortune\s*$/         && do { $replies = [ $self->fortune() ]; last; };
             /(flip|should\s+(i|we))\s+(.*)\s+or\s+(.*)/i   && do {
                                                 print STDERR "$1 , $2, [ $3, $4 ]\n";
@@ -625,60 +623,6 @@ sub reload{
 
 
 
-sub link{
-    my $self=shift;
-    my $url=shift if @_;
-    my $nick=shift if @_;
-    return undef unless $url;
-    return undef unless $nick;
-    return undef if ($nick =~ /crunchy/ );
-    # return undef if $url =~ m#^https://gist.github.com#i; # ! should get this now
-    print STDERR "[ $url ]\n";
-    my $agent = LWP::UserAgent->new();
-    $agent->agent( 'Mozilla/5.0' );
-    $url =~ s/\&/\%26/g;
-    $url =~ s/#/\%23/g;
-    $url =~ s/#!\///g; # just remove these and it "should" get you where you want to go"
-    my $response = $agent->get("http://tumble.wcyd.org/irclink/?user=". $nick . "&source=irc&url=$url");
-    if ( $response->content eq '0' ) {
-        print STDERR "Invalid link: $url\n";
-        return 'Invalid link!'
-    }else{
-        return 'http://tumble.wcyd.org/irclink/?' . $response->content;
-    }
-}
-
-sub quote{
-    my $self=shift;
-    my $line=shift if @_;
-    my ($quote, $author);
-    if($line=~m/^\s*\"(.+?)\"\s+--\s*(.+?)$/){
-        my $replacement = {
-                            '<' => '&lt;',
-                            '>' => '&gt;',
-                            '"' => '&quot;',
-                          };
-        $quote  = $1;
-        for my $symbol (keys(%{ $replacement })){
-            $quote=~s/$symbol/$replacement->{$symbol}/g;
-        }
-        $author = $2;
-        for my $symbol (keys(%{ $replacement })){
-            $author=~s/$symbol/$replacement->{$symbol}/g;
-        }
-    }
-    return undef unless $quote;
-    return undef unless $author;
-    # tumble interprets these literally /*FIXME*/
-    #$quote  =~ s/</\&lt;/g;  $author =~ s/</\&lt;/g;
-    #$quote  =~ s/>/\&gt;/g;  $author =~ s/>/\&gt;/g;
-    $quote  =~ s/\&/\%26/g; $author =~ s/\&/\%26/g;
-    $quote  =~ s/;/\%3b/g;  $author =~ s/\;/\%3b/g;
-    my $agent = LWP::UserAgent->new();
-    $agent->agent( 'Mozilla/5.0' );
-    my $response = $agent->get('http://tumble.wcyd.org/quote/?quote=' . "$quote" . "&author=$author");
-    return "quote added" if($response->is_success);
-}
 
 ################################################################################
 # End Micellaneous events
@@ -885,14 +829,6 @@ sub help {
                                    "description: Add an image to tumble",
                                    "syntax/use : e-mail to tumble\@wcyd.org",
                                  ],
-                  'quote'     => [
-                                   "description: Add a quote to tumble",
-                                   "syntax/use : \"Quote quote quote...\" -- Author",
-                                 ],
-                  'link'      => [
-                                   "description: Add a link to tumble",
-                                   "syntax/use : Cut and paste a link into irc, stupid. !http(s) to ignore a link.",
-                                 ],
                   'shoutout'  => [
                                    "description: Send a textpage to everyone",
                                    "syntax/use : !shoutout beer @ bbh now, bitches.",
@@ -914,10 +850,6 @@ sub help {
                   'tell'      => [
                                    "description: Send a textpage to an individual",
                                    "syntax/use : !tell james: you are a fag.",
-                                 ],
-                  'tumble'    => [
-                                   "description: Our tumblelog",
-                                   "syntax/use : http://tumble.wcyd.org/",
                                  ],
                  'legacy-bot-deploy'    => [
                                    'description: redeploy classic perl crunchy after pulling from github',
